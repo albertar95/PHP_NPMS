@@ -28,14 +28,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
     public function AddUser(Users $User)
     {
         $User->Password = Hash::make($User->Password);
-        $User->save();
+        return $User->save();
     }
     public function GetUserDTOs(int $pagesize = 10) :Collection
     {
         $result = new Collection();
         if ($pagesize != 0)
         {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',true)->take($pagesize);
+            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->take($pagesize);
             foreach ($tmpUsers as $User)
             {
                 $result->push(DataMapper::MapToUserDTO($User));
@@ -43,7 +43,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         else
         {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',true);
+            $tmpUsers = $this->model->all()->where('IsDisabled','=',0);
             foreach ($tmpUsers as $User)
             {
                 $result->push(DataMapper::MapToUserDTO($User));

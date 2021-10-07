@@ -346,16 +346,16 @@ class DataMapper
         {
             $result = new userDTO();
             $result->NidUser = $user->NidUser;
-            $result->Username = $user->Username;
+            $result->Username = $user->UserName;
             $result->Password = $user->Password;
             $result->FirstName = $user->FirstName;
             $result->LastName = $user->LastName;
             $result->CreateDate = $user->CreateDate;
             $result->LastLoginDate = $user->LastLoginDate;
             $result->IncorrectPasswordCount = $user->IncorrectPasswordCount;
-            $result->IsLockedOut = $user->IsLockedOut;
-            $result->IsDisabled = $user->IsDisabled;
-            $result->IsAdmin = $user->IsAdmin;
+            $result->IsLockedOut = boolval($user->IsLockedOut);
+            $result->IsDisabled = boolval($user->IsDisabled);
+            $result->IsAdmin = boolval($user->IsAdmin);
             $result->ProfilePicture = $user->ProfilePicture;
             return $result;
         }

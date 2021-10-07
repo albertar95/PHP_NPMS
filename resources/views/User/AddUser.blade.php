@@ -26,7 +26,8 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
                     </div>
-                    <form class="user" enctype="application/x-www-form-urlencoded" id="AddUserForm">
+                    <form class="user" id="AddUserForm">
+                        @csrf
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="FirstName" name="FirstName"
@@ -71,12 +72,12 @@
                         </button>
                         <hr />
                     </form>
-                    @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
+                    {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
                     {
                         <a href="@Url.Action("Users","Home")" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
                             لیست کاربران
                         </a>
-                    }
+                    } --}}
                     <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <p style="text-align:right;" id="SuccessMessage"></p>
@@ -108,7 +109,7 @@
                     }
                     $.ajax(
                         {
-                            url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' + 'User/AddUser',
+                            url: '/submitadduser',
                             type: 'post',
                             datatype: 'json',
                             data: data,

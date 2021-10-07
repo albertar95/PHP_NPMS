@@ -139,6 +139,7 @@ class NPMSController extends Controller
         $repo = new UserRepository(new Users());
         $User = DataMapper::MapToUser($User);
         $repo->AddUser($User);
+        return $User;
     }
     public function GetUserDTOById(string $UserId)
     {

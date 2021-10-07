@@ -13,11 +13,11 @@ class userDTO extends Model
     public string $Password;
     public string $FirstName;
     public string $LastName;
-    public DateTime $CreateDate;
-    public DateTime $LastLoginDate;
-    public int $IncorrectPasswordCount;
-    public Boolean $IsLockedOut;
-    public Boolean $IsDisabled;
-    public Boolean $IsAdmin;
+    public string $CreateDate;
+    public ?string $LastLoginDate;
+    public ?int $IncorrectPasswordCount;
+    public bool $IsLockedOut;
+    public bool $IsDisabled;
+    public bool $IsAdmin;
     public string $ProfilePicture;
 }

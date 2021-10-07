@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -11,21 +12,16 @@ class UserController extends Controller
     {
         return view('User.AddUser');
     }
+    public function SubmitAddUser(Request $user)
+    {
+        $api = new NPMSController();
+        return $api->AddUser($user);
+    }
     public function Users()
     {
-        // List<UserDTO> result = new List<UserDTO>();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = client.GetAsync("User/GetAllUsers?Pagesize=0").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         result = response.Content.ReadAsAsync<List<UserDTO>>().Result;
-        //     }
-        // }
-        // return View(result);
-        return view('User.Users');
+        $api = new NPMSController();
+        $Users = $api->GetAllUsers(0);
+        return view('User.Users',compact('Users'));
     }
     public function UserDetail(string $NidUser)
     {

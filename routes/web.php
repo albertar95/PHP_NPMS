@@ -89,13 +89,14 @@ Route::get("complexsearch",[SearchController::class,"ComplexSearch"])->name('sea
 
 //user routes
 Route::get("adduser",[UserController::class,"AddUser"])->name('user.AddUser');
+Route::post("submitadduser",[UserController::class,"SubmitAddUser"])->name('user.SubmitAddUser');
 Route::get("users",[UserController::class,"Users"])->name('user.Users');
-Route::get("userdetail",[UserController::class,"UserDetail"])->name('user.UserDetail');
+Route::get("userdetail/{NidUser}",[UserController::class,"UserDetail"])->name('user.UserDetail');
 Route::get("uploadthisfile",[UserController::class,"UploadThisFile"])->name('user.UploadThisFile');
-Route::get("disableuser",[UserController::class,"DisableUser"])->name('user.DisableUser');
+Route::get("disableuser/{NidUser}",[UserController::class,"DisableUser"])->name('user.DisableUser');
 Route::get("edituser",[UserController::class,"EditUser"])->name('user.EditUser');
 Route::get("submitedituser",[UserController::class,"SubmitEditUser"])->name('user.SubmitEditUser');
-Route::get("usersourcechange",[UserController::class,"UserSourceChange"])->name('user.UserSourceChange');
+Route::get("usersourcechange/{SourceId}",[UserController::class,"UserSourceChange"])->name('user.UserSourceChange');
 Route::get("userpermissions",[UserController::class,"UserPermissions"])->name('user.UserPermissions');
 Route::get("userpermissiondetail",[UserController::class,"UserPermissionDetail"])->name('user.UserPermissionDetail');
 Route::get("managepermission",[UserController::class,"ManagePermission"])->name('user.ManagePermission');
