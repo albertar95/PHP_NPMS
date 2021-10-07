@@ -31,8 +31,6 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
-
 class NPMSController extends Controller
 {
     //scholar section
@@ -306,19 +304,17 @@ class NPMSController extends Controller
     {
         $repo = new ProjectRepository(new Projects());
         $unit = DataMapper::MapToUnit($unit);
-        return $repo->AddUnit($unit);
+        $repo->AddUnit($unit);
     }
     public function UpdateUnit(Request $unit)
     {
         $repo = new ProjectRepository(new Projects());
-        $unit->NidUnit = Str::uuid();
         $unit = DataMapper::MapToUnit($unit);
         return $repo->UpdateUnit($unit);
     }
     public function AddUnitGroup(Request $unitGroup)
     {
         $repo = new ProjectRepository(new Projects());
-        $unitGroup->NidGroup = Str::uuid();
         $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
         return $repo->AddUnitGroup($unitGroup);
     }

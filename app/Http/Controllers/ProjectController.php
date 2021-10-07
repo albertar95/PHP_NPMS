@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\NPMSController;
 use App\Models\Projects;
 use App\Models\Scholars;
 use Illuminate\Http\Request;
-use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
 {
@@ -101,47 +100,58 @@ class ProjectController extends Controller
     }
     public function SubmitUnitForm(Request $unit)
     {
-        $api = new NPMSController();
-        $result = new JsonResults();
-        if(empty($unit->NidUnit))
-        {
-            $unitname = $api->AddUnit($unit);
-            $result->Message = sprintf("یگان با نام %s با موفقیت ایجاد گردید",$unitname);
-        }else
-        {
-            $unitname = $api->UpdateUnit($unit);
-            $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unitname);
-        }
-        $units = $api->GetAllUnits();
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 1;
-        $mbivm->Units = $units;
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
-        $result->HasValue = true;
-        $result->AltProp = $unit->NidUnit;
-        return response()->json($result);
+        // bool state = false;
+        // string message = "";
+        // string html = "";
+        // if(unit.NidUnit == Guid.Empty)//add
+        // {
+        //     using (var client = new HttpClient())
+        //     {
+        //         client.BaseAddress = new Uri(ApiBaseAddress);
+        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        //         unit.NidUnit = Guid.NewGuid();
+        //         var response = client.PostAsJsonAsync("BaseInfo/AddUnit", unit).Result;
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             state = true;
+        //             message = $"یگان با نام {unit.Title} با موفقیت ایجاد گردید";
+        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
+        //             if (UnitResponse.IsSuccessStatusCode)
+        //             {
+        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() {  TblId = 1, Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result };
+        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables",mbivm);
+        //             }
+        //         }
+        //         else
+        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+        //     }
+        // }
+        // else //edit
+        // {
+        //     using (var client = new HttpClient())
+        //     {
+        //         client.BaseAddress = new Uri(ApiBaseAddress);
+        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateUnit", unit).Result;
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             state = true;
+        //             message = $"یگان با نام {unit.Title} با موفقیت ویرایش گردید";
+        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
+        //             if (UnitResponse.IsSuccessStatusCode)
+        //             {
+        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 1, Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result };
+        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
+        //             }
+        //         }
+        //         else
+        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+        //     }
+        // }
+        // return Json(new JsonResults() {  HasValue = state, Message = message, Html = html, AltProp = unit.NidUnit.ToString()});
     }
     public function SubmitUnitGroupForm(Request $unitGroup)
     {
-        $api = new NPMSController();
-        $result = new JsonResults();
-        if(empty($unitGroup->NidUnit))
-        {
-            $unitname = $api->AddUnitGroup($unitGroup);
-            $result->Message = sprintf("گروه با نام %s با موفقیت ایجاد گردید",$unitname);
-        }else
-        {
-            $unitname = $api->UpdateUnitGroup($unitGroup);
-            $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitname);
-        }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 2;
-        $mbivm->Units = $api->GetAllUnits();
-        $mbivm->UnitGroups = $api->GetAllUnitGroups();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
-        $result->HasValue = true;
-        // $result->AltProp = $unit->NidUnit;
-        return response()->json($result);
         // bool state = false;
         // string message = "";
         // string html = "";
