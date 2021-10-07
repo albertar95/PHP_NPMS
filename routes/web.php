@@ -54,14 +54,14 @@ Route::post("submitoreintationform",[ProjectController::class,"SubmitOreintation
 Route::post("submitcollegeform",[ProjectController::class,"SubmitCollegeForm"])->name('project.SubmitCollegeForm');
 Route::post("submitmillitform",[ProjectController::class,"SubmitMillitForm"])->name('project.SubmitMillitForm');
 Route::post("submitcollabform",[ProjectController::class,"SubmitCollabForm"])->name('project.SubmitCollabForm');
-Route::post("submitdeleteunit",[ProjectController::class,"SubmitDeleteUnit"])->name('project.SubmitDeleteUnit');
-Route::post("submitdeleteunitgroup",[ProjectController::class,"SubmitDeleteUnitGroup"])->name('project.SubmitDeleteUnitGroup');
-Route::post("submitdeletegrade",[ProjectController::class,"SubmitDeleteGrade"])->name('project.SubmitDeleteGrade');
-Route::post("submitdeletemajor",[ProjectController::class,"SubmitDeleteMajor"])->name('project.SubmitDeleteMajor');
-Route::post("submitdeleteoreintation",[ProjectController::class,"SubmitDeleteOreintation"])->name('project.SubmitDeleteOreintation');
-Route::post("submitdeletecollege",[ProjectController::class,"SubmitDeleteCollege"])->name('project.SubmitDeleteCollege');
-Route::post("submitdeletemillit",[ProjectController::class,"SubmitDeleteMillit"])->name('project.SubmitDeleteMillit');
-Route::post("submitdeletecollab",[ProjectController::class,"SubmitDeleteCollab"])->name('project.SubmitDeleteCollab');
+Route::post("submitdeleteunit/{NidUnit}",[ProjectController::class,"SubmitDeleteUnit"])->name('project.SubmitDeleteUnit');
+Route::post("submitdeleteunitgroup/{NidUnitGroup}",[ProjectController::class,"SubmitDeleteUnitGroup"])->name('project.SubmitDeleteUnitGroup');
+Route::post("submitdeletegrade/{NidGrade}",[ProjectController::class,"SubmitDeleteGrade"])->name('project.SubmitDeleteGrade');
+Route::post("submitdeletemajor/{NidMajor}",[ProjectController::class,"SubmitDeleteMajor"])->name('project.SubmitDeleteMajor');
+Route::post("submitdeleteoreintation/{NidOreintation}",[ProjectController::class,"SubmitDeleteOreintation"])->name('project.SubmitDeleteOreintation');
+Route::post("submitdeletecollege/{NidCollege}",[ProjectController::class,"SubmitDeleteCollege"])->name('project.SubmitDeleteCollege');
+Route::post("submitdeletemillit/{NidMillit}",[ProjectController::class,"SubmitDeleteMillit"])->name('project.SubmitDeleteMillit');
+Route::post("submitdeletecollab/{NidCollab}",[ProjectController::class,"SubmitDeleteCollab"])->name('project.SubmitDeleteCollab');
 
 //report routes
 Route::get("statisticreports",[ReportController::class,"StatisticReports"])->name('report.StatisticReports');

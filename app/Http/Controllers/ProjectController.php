@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\NPMSController;
 use App\Models\Projects;
 use App\Models\Scholars;
 use Illuminate\Http\Request;
+use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
 {
@@ -100,740 +101,412 @@ class ProjectController extends Controller
     }
     public function SubmitUnitForm(Request $unit)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if(unit.NidUnit == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         unit.NidUnit = Guid.NewGuid();
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddUnit", unit).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"یگان با نام {unit.Title} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //             if (UnitResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() {  TblId = 1, Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables",mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateUnit", unit).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"یگان با نام {unit.Title} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //             if (UnitResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 1, Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() {  HasValue = state, Message = message, Html = html, AltProp = unit.NidUnit.ToString()});
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($unit->NidUnit))
+        {
+            $unitname = $api->AddUnit($unit);
+            $result->Message = sprintf("یگان با نام %s با موفقیت ایجاد گردید",$unitname);
+        }else
+        {
+            $unitname = $api->UpdateUnit($unit);
+            $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unitname);
+        }
+        $units = $api->GetAllUnits();
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 1;
+        $mbivm->Units = $units;
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        $result->AltProp = $unit->NidUnit;
+        return response()->json($result);
     }
     public function SubmitUnitGroupForm(Request $unitGroup)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (unitGroup.NidGroup == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         unitGroup.NidGroup = Guid.NewGuid();
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddUnitGroup", unitGroup).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"گروه با نام {unitGroup.Title} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 2;
-        //             if (UnitResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result;
-        //             }
-        //             HttpResponseMessage UnitGroupResponse = client.GetAsync($"Project/GetAllUnitGroups").Result;
-        //             if (UnitGroupResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.UnitGroups = UnitGroupResponse.Content.ReadAsAsync<List<UnitGroupDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateUnitGroup", unitGroup).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"گروه با نام {unitGroup.Title} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 2;
-        //             if (UnitResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result;
-        //             }
-        //             HttpResponseMessage UnitGroupResponse = client.GetAsync($"Project/GetAllUnitGroups").Result;
-        //             if (UnitGroupResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.UnitGroups = UnitGroupResponse.Content.ReadAsAsync<List<UnitGroupDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($unitGroup->NidGroup))
+        {
+            $unitgroupname = $api->AddUnitGroup($unitGroup);
+            $result->Message = sprintf("گروه با نام %s با موفقیت ایجاد گردید",$unitgroupname);
+        }else
+        {
+            $unitgroupname = $api->UpdateUnitGroup($unitGroup);
+            $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitgroupname);
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 2;
+        $mbivm->Units = $api->GetAllUnits();
+        $mbivm->UnitGroups = $api->GetAllUnitGroups();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        // $result->AltProp = $unit->NidUnit;
+        return response()->json($result);
     }
     public function SubmitGradeForm(Request $grade)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (grade.NidSetting == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         grade.NidSetting = Guid.NewGuid();
-        //         var Valueresponse = client.GetAsync($"BaseInfo/GenerateSettingValue?index=1").Result;
-        //         if (Valueresponse.IsSuccessStatusCode)
-        //             grade.SettingValue = Valueresponse.Content.ReadAsAsync<JsonResults>().Result.Message;
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddSetting",grade).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"مقطع تحصیلی با نام {grade.SettingTitle} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage GradeResponse = client.GetAsync($"Scholar/GetGrades").Result;
-        //             if (GradeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 3, Grades = GradeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateSetting", grade).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"مقطع تحصیلی با نام {grade.SettingTitle} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage GradeResponse = client.GetAsync($"Scholar/GetGrades").Result;
-        //             if (GradeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 3, Grades = GradeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($grade->NidSetting))
+        {
+            $grade->SettingValue = $api->GenerateSettingValue(1);
+            if($api->AddSetting($grade))
+            {
+                $result->Message = sprintf("مقطع تحصیلی با نام %s با موفقیت ایجاد گردید",$grade->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }else
+        {
+            if($api->UpdateSetting($grade))
+            {
+                $result->Message = sprintf("مقطع تحصیلی با نام %s با موفقیت ویرایش گردید",$grade->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 3;
+        $mbivm->Grades = $api->GetGrades();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function SubmitMajorForm(Request $major)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (major.NidMajor == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         major.NidMajor = Guid.NewGuid();
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddMajor", major).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"رشته تحصیلی با نام {major.Title} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //             if (MajorResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 4, Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateMajor", major).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"رشته تحصیلی با نام {major.Title} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //             if (MajorResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 4, Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html, AltProp = major.NidMajor.ToString() });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($major->NidMajor))
+        {
+            $api->AddMajor($major);
+            $result->Message = sprintf("رشته تحصیلی با نام %s با موفقیت ایجاد گردید",$major->Title);
+        }else
+        {
+            $api->UpdateMajor($major);
+            $result->Message = sprintf("رشته تحصیلی با نام %s با موفقیت ویرایش گردید",$major->Title);
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 4;
+        $mbivm->Majors = $api->GetMajors();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        $result->AltProp = $major->NidMajor;
+        return response()->json($result);
     }
     public function SubmitOreintationForm(Request $oreintation)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (oreintation.NidOreintation == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         oreintation.NidOreintation = Guid.NewGuid();
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddOreintation", oreintation).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"گرایش با نام {oreintation.Title} با موفقیت ایجاد گردید";
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 5;
-        //             HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //             if (MajorResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result;
-        //             }
-        //             HttpResponseMessage OreintationResponse = client.GetAsync($"Scholar/GetOrientations").Result;
-        //             if (OreintationResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Oreintations = OreintationResponse.Content.ReadAsAsync<List<OreintationDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateOreintation", oreintation).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"گرایش با نام {oreintation.Title} با موفقیت ویرایش گردید";
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 5;
-        //             HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //             if (MajorResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result;
-        //             }
-        //             HttpResponseMessage OreintationResponse = client.GetAsync($"Scholar/GetOrientations").Result;
-        //             if (OreintationResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Oreintations = OreintationResponse.Content.ReadAsAsync<List<OreintationDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($oreintation->NidOreintation))
+        {
+            $api->AddOreintation($oreintation);
+            $result->Message = sprintf("گرایش با نام %s با موفقیت ایجاد گردید",$oreintation->Title);
+        }else
+        {
+            $api->UpdateOreintation($oreintation);
+            $result->Message = sprintf("گرایش با نام %s با موفقیت ویرایش گردید",$oreintation->Title);
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 5;
+        $mbivm->Majors = $api->GetMajors();
+        $mbivm->Oreintations = $api->GetOrientations();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function SubmitCollegeForm(Request $college)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (college.NidSetting == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         college.NidSetting = Guid.NewGuid();
-        //         var Valueresponse = client.GetAsync($"BaseInfo/GenerateSettingValue?index=2").Result;
-        //         if (Valueresponse.IsSuccessStatusCode)
-        //             college.SettingValue = Valueresponse.Content.ReadAsAsync<JsonResults>().Result.Message;
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddSetting", college).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"دانشکده با نام {college.SettingTitle} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage collegeResponse = client.GetAsync($"Scholar/GetColleges").Result;
-        //             if (collegeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 6, Colleges = collegeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateSetting", college).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"دانشکده با نام {college.SettingTitle} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage collegeResponse = client.GetAsync($"Scholar/GetColleges").Result;
-        //             if (collegeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 6, Colleges = collegeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($college->NidSetting))
+        {
+            $college->SettingValue = $api->GenerateSettingValue(2);
+            if($api->AddSetting($college))
+            {
+                $result->Message = sprintf("دانشکده با نام %s با موفقیت ایجاد گردید",$college->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }else
+        {
+            if($api->UpdateSetting($college))
+            {
+                $result->Message = sprintf("دانشکده با نام %s با موفقیت ویرایش گردید",$college->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 6;
+        $mbivm->Grades = $api->GetColleges();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function SubmitMillitForm(Request $millit)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (millit.NidSetting == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         millit.NidSetting = Guid.NewGuid();
-        //         var Valueresponse = client.GetAsync($"BaseInfo/GenerateSettingValue?index=3").Result;
-        //         if (Valueresponse.IsSuccessStatusCode)
-        //             millit.SettingValue = Valueresponse.Content.ReadAsAsync<JsonResults>().Result.Message;
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddSetting", millit).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"وضعیت خدمتی با نام {millit.SettingTitle} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage millitResponse = client.GetAsync($"Scholar/GetMillitaryStatuses").Result;
-        //             if (millitResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 7, MillitaryStatuses = millitResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateSetting", millit).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"وضعیت خدمتی با نام {millit.SettingTitle} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage millitResponse = client.GetAsync($"Scholar/GetMillitaryStatuses").Result;
-        //             if (millitResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 7, MillitaryStatuses = millitResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($millit->NidSetting))
+        {
+            $millit->SettingValue = $api->GenerateSettingValue(3);
+            if($api->AddSetting($millit))
+            {
+                $result->Message = sprintf("وضعیت خدمت با نام %s با موفقیت ایجاد گردید",$millit->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }else
+        {
+            if($api->UpdateSetting($millit))
+            {
+                $result->Message = sprintf("وضعیت خدمت با نام %s با موفقیت ویرایش گردید",$millit->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 7;
+        $mbivm->Grades = $api->GetMillitaryStatuses();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function SubmitCollabForm(Request $collab)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // if (collab.NidSetting == Guid.Empty)//add
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         collab.NidSetting = Guid.NewGuid();
-        //         var Valueresponse = client.GetAsync($"BaseInfo/GenerateSettingValue?index=4").Result;
-        //         if (Valueresponse.IsSuccessStatusCode)
-        //             collab.SettingValue = Valueresponse.Content.ReadAsAsync<JsonResults>().Result.Message;
-        //         var response = client.PostAsJsonAsync("BaseInfo/AddSetting", collab).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"نوع همکاری با نام {collab.SettingTitle} با موفقیت ایجاد گردید";
-        //             HttpResponseMessage collabResponse = client.GetAsync($"Scholar/GetCollaborationTypes").Result;
-        //             if (collabResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 8, CollaborationTypes = collabResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // else //edit
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         var response = client.PostAsJsonAsync("BaseInfo/UpdateSetting", collab).Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             state = true;
-        //             message = $"نوع همکاری با نام {collab.SettingTitle} با موفقیت ویرایش گردید";
-        //             HttpResponseMessage collabResponse = client.GetAsync($"Scholar/GetCollaborationTypes").Result;
-        //             if (collabResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 8, CollaborationTypes = collabResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($collab->NidSetting))
+        {
+            $collab->SettingValue = $api->GenerateSettingValue(4);
+            if($api->AddSetting($collab))
+            {
+                $result->Message = sprintf("نوع همکاری با نام %s با موفقیت ایجاد گردید",$collab->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }else
+        {
+            if($api->UpdateSetting($collab))
+            {
+                $result->Message = sprintf("نوع همکاری با نام %s با موفقیت ویرایش گردید",$collab->SettingTitle);
+            }else
+            {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                return response()->json($result);
+            }
+        }
+        $mbivm = new ManageBaseInfoViewModel();
+        $mbivm->TblId = 8;
+        $mbivm->Grades = $api->GetCollaborationTypes();
+        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function SubmitDeleteUnit(string $NidUnit)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteUnit?NidUnit={NidUnit}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         switch (res.Message)
-        //         {
-        //             case "1":
-        //                 message = "یگان مورد نظر دارای گروه می باشد.امکان حذف وجود ندارد";
-        //                 break;
-        //             case "2":
-        //                 state = true;
-        //                 message = "یگان با موفقیت حذف گردید";
-        //                 HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //                 if (UnitResponse.IsSuccessStatusCode)
-        //                 {
-        //                     ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 1, Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result };
-        //                     html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //                 }
-        //                 break;
-        //             case "3":
-        //                 message = "خطا در سرور لطفا مجددا امتحان کنید";
-        //                 break;
-        //         }
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $tmpResult = $api->DeleteUnit($NidUnit);
+        $tmpstatus = json_decode($tmpResult->getContent(),true)['Message'];
+        $result->HasValue = false;
+        switch($tmpstatus)
+        {
+            case "1":
+                $result->Message = "یگان مورد نظر دارای گروه می باشد.امکان حذف وجود ندارد";
+                return response()->json($result);
+                break;
+            case "2":
+                $result->HasValue = true;
+                $result->Message = "یگان با موفقیت حذف گردید";
+                $mbivm = new ManageBaseInfoViewModel();
+                $mbivm->TblId = 1;
+                $mbivm->Units = $api->GetAllUnits();
+                $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+                return response()->json($result);
+                break;
+            case "3":
+                $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                return response()->json($result);
+                break;
+        }
     }
     public function SubmitDeleteUnitGroup(string $NidUnitGroup)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteUnitGroup?NidUnitGroup={NidUnitGroup}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if(res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "گروه با موفقیت حذف گردید";
-        //             HttpResponseMessage UnitResponse = client.GetAsync($"Project/GetAllUnits").Result;
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 2;
-        //             if (UnitResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Units = UnitResponse.Content.ReadAsAsync<List<UnitDTO>>().Result;
-        //             }
-        //             HttpResponseMessage UnitGroupResponse = client.GetAsync($"Project/GetAllUnitGroups").Result;
-        //             if (UnitGroupResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.UnitGroups = UnitGroupResponse.Content.ReadAsAsync<List<UnitGroupDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteUnitGroup($NidUnitGroup);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "گروه با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 1;
+            $mbivm->Units = $api->GetAllUnits();
+            $mbivm->UnitGroups = $api->GetAllUnitGroups();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function SubmitDeleteGrade(string $NidGrade)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteSetting?NidSetting={NidGrade}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "مقطع تحصیلی با موفقیت حذف گردید";
-        //             HttpResponseMessage GradeResponse = client.GetAsync($"Scholar/GetGrades").Result;
-        //             if (GradeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 3, Grades = GradeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteSetting($NidGrade);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "مقطع تحصیلی با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 3;
+            $mbivm->Grades = $api->GetGrades();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function SubmitDeleteMajor(string $NidMajor)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteMajor?NidMajor={NidMajor}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         switch (res.Message)
-        //         {
-        //             case "1":
-        //                 message = "رشته تحصیلی مورد نظر دارای گرایش می باشد.امکان حذف وجود ندارد";
-        //                 break;
-        //             case "2":
-        //                 state = true;
-        //                 message = "رشته تحصیلی با موفقیت حذف گردید";
-        //                 HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //                 if (MajorResponse.IsSuccessStatusCode)
-        //                 {
-        //                     ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 4, Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result };
-        //                     html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //                 }
-        //                 break;
-        //             case "3":
-        //                 message = "خطا در سرور لطفا مجددا امتحان کنید";
-        //                 break;
-        //         }
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $tmpResult = $api->DeleteMajor($NidMajor);
+        $tmpstatus = json_decode($tmpResult->getContent(),true)['Message'];
+        $result->HasValue = false;
+        switch($tmpstatus)
+        {
+            case "1":
+                $result->Message = "رشته تحصیلی مورد نظر دارای گرایش می باشد.امکان حذف وجود ندارد";
+                return response()->json($result);
+                break;
+            case "2":
+                $result->HasValue = true;
+                $result->Message = "رشته تحصیلی با موفقیت حذف گردید";
+                $mbivm = new ManageBaseInfoViewModel();
+                $mbivm->TblId = 4;
+                $mbivm->Majors = $api->GetMajors();
+                $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+                return response()->json($result);
+                break;
+            case "3":
+                $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                return response()->json($result);
+                break;
+        }
     }
     public function SubmitDeleteOreintation(string $NidOreintation)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteOreintation?NidOreintation={NidOreintation}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "گرایش با موفقیت حذف گردید";
-        //             ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel();
-        //             mbivm.TblId = 5;
-        //             HttpResponseMessage MajorResponse = client.GetAsync($"Scholar/GetMajors").Result;
-        //             if (MajorResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Majors = MajorResponse.Content.ReadAsAsync<List<MajorDTO>>().Result;
-        //             }
-        //             HttpResponseMessage OreintationResponse = client.GetAsync($"Scholar/GetOrientations").Result;
-        //             if (OreintationResponse.IsSuccessStatusCode)
-        //             {
-        //                 mbivm.Oreintations = OreintationResponse.Content.ReadAsAsync<List<OreintationDTO>>().Result;
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteOreintation($NidOreintation);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "گرایش با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 5;
+            $mbivm->Majors = $api->GetMajors();
+            $mbivm->Oreintations = $api->GetOrientations();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function SubmitDeleteCollege(string $NidCollege)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteSetting?NidSetting={NidCollege}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "دانشکده با موفقیت حذف گردید";
-        //             HttpResponseMessage collegeResponse = client.GetAsync($"Scholar/GetColleges").Result;
-        //             if (collegeResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 6, Colleges = collegeResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteSetting($NidCollege);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "دانشکده با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 3;
+            $mbivm->Colleges = $api->GetColleges();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function SubmitDeleteMillit(string $NidMillit)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteSetting?NidSetting={NidMillit}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "وضعیت خدمت با موفقیت حذف گردید";
-        //             HttpResponseMessage millitResponse = client.GetAsync($"Scholar/GetMillitaryStatuses").Result;
-        //             if (millitResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 7, MillitaryStatuses = millitResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteSetting($NidMillit);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "وضعیت خدمت با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 7;
+            $mbivm->MillitaryStatuses = $api->GetMillitaryStatuses();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function SubmitDeleteCollab(string $NidCollab)
     {
-        // bool state = false;
-        // string message = "";
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"BaseInfo/DeleteSetting?NidSetting={NidCollab}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         JsonResults res = response.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (res.HasValue)
-        //         {
-        //             state = true;
-        //             message = "نوع همکاری با موفقیت حذف گردید";
-        //             HttpResponseMessage collabResponse = client.GetAsync($"Scholar/GetCollaborationTypes").Result;
-        //             if (collabResponse.IsSuccessStatusCode)
-        //             {
-        //                 ManageBaseInfoViewModel mbivm = new ManageBaseInfoViewModel() { TblId = 8, CollaborationTypes = collabResponse.Content.ReadAsAsync<List<Setting>>().Result };
-        //                 html = JsonResults.RenderViewToString(this.ControllerContext, "_BaseInfoTables", mbivm);
-        //             }
-        //         }
-        //         else
-        //             message = "خطا در سرور. لطفا مجددا امتحان کنید";
-        //     }
-        //     else
-        //         message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-        // }
-        // return Json(new JsonResults() { HasValue = state, Message = message, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = false;
+        $tmpResult = $api->DeleteSetting($NidCollab);
+        if(json_decode($tmpResult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $result->Message = "نوع همکاری با موفقیت حذف گردید";
+            $mbivm = new ManageBaseInfoViewModel();
+            $mbivm->TblId = 8;
+            $mbivm->CollaborationTypes = $api->GetCollaborationTypes();
+            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            return response()->json($result);
+        }else
+        {
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
 }

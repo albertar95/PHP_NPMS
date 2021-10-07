@@ -31,6 +31,7 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 class NPMSController extends Controller
 {
     //scholar section
@@ -303,8 +304,9 @@ class NPMSController extends Controller
     public function AddUnit(Request $unit)
     {
         $repo = new ProjectRepository(new Projects());
+        $unit->NidUnit = Str::uuid();
         $unit = DataMapper::MapToUnit($unit);
-        $repo->AddUnit($unit);
+        return $repo->AddUnit($unit);
     }
     public function UpdateUnit(Request $unit)
     {
@@ -315,6 +317,7 @@ class NPMSController extends Controller
     public function AddUnitGroup(Request $unitGroup)
     {
         $repo = new ProjectRepository(new Projects());
+        $unitGroup->NidGroup = Str::uuid();
         $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
         return $repo->AddUnitGroup($unitGroup);
     }
@@ -351,6 +354,7 @@ class NPMSController extends Controller
     public function AddSetting(Request $setting)
     {
         $repo = new ProjectRepository(new Projects());
+        $setting->NidSetting = Str::uuid();
         $setting = DataMapper::MapToSetting($setting);
         return $repo->AddSetting($setting);
     }
@@ -404,7 +408,7 @@ class NPMSController extends Controller
     public function GenerateSettingValue(int $index)
     {
         $repo = new ProjectRepository(new Projects());
-        return response()->json(['Message'=>$repo->GenerateSettingId($index)]);
+        return $repo->GenerateSettingId($index);
     }
 
     //search section
