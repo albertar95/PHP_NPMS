@@ -1,0 +1,319 @@
+<?php
+
+namespace App\Domains\Repositories;
+
+use App\Domains\Eloquent\BaseRepository;
+use App\Domains\Interfaces\IProjectRepository;
+use App\DTOs\DataMapper;
+use App\DTOs\projectDetailDTO;
+use App\DTOs\projectDTO;
+use App\DTOs\projectInitialDTO;
+use App\DTOs\unitGroupDTO;
+use App\Models\Majors;
+use App\Models\Oreintations;
+use App\Models\Projects;
+use App\Models\Scholars;
+use App\Models\Settings;
+use App\Models\UnitGroups;
+use App\Models\Units;
+use Brick\Math\BigInteger;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+class ProjectRepository extends BaseRepository implements IProjectRepository
+{
+    public function __construct(Projects $model)
+    {
+        parent::__construct($model);
+    }
+    public function GetProjectInitials(int $pagesize = 100):Collection
+    {
+        $result = new Collection();
+        if($pagesize != 0)
+        {
+            $tmpProject = $this->model->all()->take($pagesize);
+            foreach ($tmpProject as $prj)
+            {
+                $result->push(DataMapper::MapToProjectInitialDTO($prj));
+            }
+        }else
+        {
+            $tmpProject = $this->model->all();
+            foreach ($tmpProject as $prj)
+            {
+                $result->push(DataMapper::MapToProjectInitialDTO($prj));
+            }
+        }
+        // return $result;
+        return $this->model->all();
+    }
+    public function AddProjectInitial(projectInitialDTO $projectInitial):bool
+    {
+        $tmpProject = DataMapper::MapToProjectFromProjectInitialDTO($projectInitial);
+        $tmpProject->save();
+        return true;
+    }
+    public function ProjectProgress(Projects $project) :bool
+    {
+        $project->save();
+        return true;
+    }
+    public function GetProjectDTOById(string $NidProject):projectDTO
+    {
+        return DataMapper::MapToProjectDTO($this->model->all()->where('NidProject','=',$NidProject)->firstOrFail());
+    }
+    public function GetProjectDetailDTOById(string $NidProject):projectDetailDTO
+    {
+        $tmpDetail = DataMapper::MapToProjectDetailDTO(Projects::all()->where('NidProject','=',$NidProject)->firstOrFail());
+        if(!is_null($tmpDetail))
+        {
+            $tmpDetail->GroupTitle = $this->GetUnitGroupById($tmpDetail->GroupId)->Title;
+            $tmpDetail->UnitTitle = $this->GetUnitById($tmpDetail->UnitId)->Title;
+            return $tmpDetail;
+        }else
+        {
+            return new projectDetailDTO();
+        }
+    }
+    public function GetUnits(int $pagesize = 100):Collection
+    {
+        $result = new Collection();
+        if ($pagesize == 0)
+        {
+            $tmpUnits = Units::all();
+            foreach ($tmpUnits as $uni)
+            {
+                $result->push(DataMapper::MapToUnitDTO($uni));
+            }
+        }
+        else
+        {
+            $tmpUnits = Units::all()->take($pagesize);
+            foreach ($tmpUnits as $uni)
+            {
+                $result->push(DataMapper::MapToUnitDTO($uni));
+            }
+        }
+        return $result;
+        // return Units::all();
+    }
+    public function GetUnitGroups(int $pagesize = 100) :Collection
+    {
+        $result = new Collection();
+        if ($pagesize == 0)
+        {
+            $tmpUnitGroups = UnitGroups::all();
+            foreach ($tmpUnitGroups as $uni)
+            {
+                $result->push(DataMapper::MapToUnitGroupDTO($uni));
+            }
+        }
+        else
+        {
+            $tmpUnitGroups = UnitGroups::all()->take($pagesize);
+            foreach ($tmpUnitGroups as $uni)
+            {
+                $result->push(DataMapper::MapToUnitGroupDTO($uni));
+            }
+        }
+        return $result;
+    }
+    public function GetProjectScholars(int $pagesize = 100):Collection
+    {
+        $result = new Collection();
+        if($pagesize == 0)
+        {
+            // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false);
+            $tmpUnitGroups = Scholars::where('IsDeleted','=',null)->orWhere('IsDeleted','=',false);
+            foreach ($tmpUnitGroups as $sch)
+            {
+                $result->push(DataMapper::MapToScholarListDTO($sch));
+            }
+        }
+        else
+        {
+            // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false)->take($pagesize);
+            $tmpUnitGroups = Scholars::where('IsDeleted','=',null)->orWhere('IsDeleted','=',false)->take($pagesize);
+            foreach ($tmpUnitGroups as $sch)
+            {
+                $result->push(DataMapper::MapToScholarListDTO($sch));
+            }
+        }
+        return $result;
+    }
+    public function GetProjectById(string $NidProject):Projects
+    {
+        return $this->model->all()->where('NidProject','=',$NidProject)->firstOrFail();
+    }
+    public function GenerateProjectNumber():BigInteger
+    {
+        if($this->model->all()->count() > 0)
+        {
+            return BigInteger::of($this->model->all()->max('ProjectNumber') + 1);
+        }
+        else
+        {
+            return BigInteger::of(1001);
+        }
+    }
+    public function CheckForUnitGroupExist(string $NidUnit) :bool
+    {
+        return UnitGroups::all()->where('UnitId','=',$NidUnit)->exists();
+    }
+    public function CheckForOreintationExist(string $NidMajor):bool
+    {
+        return Oreintations::all()->where('MajorId','=',$NidMajor)->exists();
+    }
+    public function GetUnitById(string $NidUnit):Units
+    {
+        return Units::all()->where('NidUnit','=',$NidUnit)->firstOrFail();
+    }
+    public function GetUnitGroupById(string $NidUnitGroup):UnitGroups
+    {
+        return UnitGroups::all()->where('NidGroup','=',$NidUnitGroup)->firstOrFail();
+    }
+    public function GetMajorById(string $NidMajor) :Majors
+    {
+        return Majors::all()->where('NidMajor','=',$NidMajor)->firstOrFail();
+    }
+    public function GetOreintationById(string $NidOreintation):Oreintations
+    {
+        return Oreintations::all()->where('NidOreintation','=',$NidOreintation)->firstOrFail();
+    }
+    public function GetSettingById(string $NidSetting):Settings
+    {
+        return Settings::all()->where('NidSetting','=',$NidSetting)->firstOrFail();
+    }
+    public function GenerateSettingId(int $Type):int
+    {
+        $result = 1;
+        switch ($Type)
+        {
+            case 1://grade
+                if (Settings::all()->where('SettingKey','=','GradeId')->exists())
+                    $result = Settings::all()->where('SettingKey','=','GradeId')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                break;
+            case 2://college
+                if (Settings::all()->where('SettingKey','=','College')->exists())
+                    $result = Settings::all()->where('SettingKey','=','College')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                break;
+            case 3://millit
+                if (Settings::all()->where('SettingKey','=','MillitaryStatus')->exists())
+                    $result = Settings::all()->where('SettingKey','=','MillitaryStatus')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                break;
+            case 4://collab
+                if (Settings::all()->where('SettingKey','=','CollaborationType')->exists())
+                    $result = Settings::all()->where('SettingKey','=','CollaborationType')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                break;
+        }
+        return $result;
+    }
+    public function ProjectStatusCalc(Projects $project) :int
+    {
+        $result = 0;
+        if (!empty($project->SecurityLetterDate))
+            $result += 5;
+        if (!empty($project->Advisor) && !empty($project->Supervisor))
+            $result += 5;
+        if (!empty($project->ImploymentDate))
+            $result += 5;
+        if (!empty($project->TenPercentLetterDate))
+            $result += 5;
+        if (!empty($project->ThirtyPercentLetterDate))
+            $result += 15;
+        if (!empty($project->SixtyPercentLetterDate))
+            $result += 20;
+        if (!empty($project->ThesisDefenceDate))
+            $result += 20;
+        if (!empty($project->Editor))
+            $result += 5;
+        if (!empty($project->Commision))
+            $result += 5;
+        if ($project->TitleApproved != null && $project->TitleApproved == true)
+            $result += 5;
+        if ($project->HasBookPublish != null && $project->HasBookPublish == true)
+            $result += 5;
+        if ($project->FinalApprove != null && $project->FinalApprove == true)
+            $result += 5;
+        return $result;
+    }
+    public function AddUnit(Units $unit)
+    {
+        $unit->save();
+        return $unit->Title;
+    }
+    public function UpdateUnit(Units $unit)
+    {
+        return $unit->save();
+    }
+    public function DeleteUnit(Units $unit)
+    {
+        return $unit->delete();
+    }
+    public function AddUnitGroup(UnitGroups $unitgroup)
+    {
+        return $unitgroup->save();
+    }
+    public function UpdateUnitGroup(UnitGroups $unitgroup)
+    {
+        return $unitgroup->save();
+    }
+    public function DeleteUnitGroup(UnitGroups $unitgroup)
+    {
+        return $unitgroup->delete();
+    }
+    public function AddMajor(Majors $major)
+    {
+        return $major->save();
+    }
+    public function UpdateMajor(Majors $major)
+    {
+        return $major->save();
+    }
+    public function DeleteMajor(Majors $major)
+    {
+        return $major->delete();
+    }
+    public function AddOreintation(Oreintations $oreintation)
+    {
+        return $oreintation->save();
+    }
+    public function UpdateOreintation(Oreintations $oreintation)
+    {
+        return $oreintation->save();
+    }
+    public function DeleteOreintation(Oreintations $oreintation)
+    {
+        return $oreintation->delete();
+    }
+    public function AddSetting(Settings $setting)
+    {
+        return $setting->save();
+    }
+    public function UpdateSetting(Settings $setting)
+    {
+        return $setting->save();
+    }
+    public function DeleteSetting(Settings $setting)
+    {
+        return $setting->delete();
+    }
+    public function UpdateProject(Projects $project)
+    {
+        return $project->save();
+    }
+    public function AddProject(Projects $project)
+    {
+        return $project->save();
+    }
+}
+
+class ProjectRepositoryFactory
+{
+    public static function GetProjectRepositoryObj():IProjectRepository
+    {
+        return new ProjectRepository(new Projects());
+    }
+
+}
