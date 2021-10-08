@@ -52,11 +52,9 @@
                     </tfoot>
                     <tbody>
                         @foreach ($Report as $rpt)
-                        {
                             <tr>
-                                <td>{{ $rpt->ReportName }}</td>
-                                @switch ({{ $rpt->ContextId }})
-                                {
+                                <td>{{ $rpt->ReportName }}{{ $rpt->NidReport }}</td>
+                                @switch ($rpt->ContextId)
                                     @case(1)
                                         <td>محقق</td>
                                         @break
@@ -71,7 +69,7 @@
                                         @break
                                 @endswitch
                                 <td>
-                                    <a href="{{ link_to_route('report.ExecuteReport','',[$NidReport = $rpt->NidReport]) }}" class="btn btn-outline-success">اجرای گزارش</a>
+                                    <a href="executereport/{{ $rpt->NidReport }}" class="btn btn-outline-success">اجرای گزارش</a>
                                     <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')">حذف</button>
                                 </td>
                             </tr>

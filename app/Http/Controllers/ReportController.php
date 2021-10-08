@@ -2,71 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\Repositories\ReportRawData;
+use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
     public function StatisticReports()
     {
-        // List<ReportDTO> reports = new List<ReportDTO>();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"Report/GetStatisticsReports").Result;
-        //     if (response.IsSuccessStatusCode)
-        //         reports = response.Content.ReadAsAsync<List<ReportDTO>>().Result;
-        // }
-        // return View(reports);
-        return view('Report.StatisticReports');
+        $api = new NPMSController();
+        $Report = $api->GetStatisticsReports();
+        // $result = new JsonResults();
+        // $result->HasValue = true;
+        // $result->Html = view('User._UserDetail',compact('Users'))->render();
+        // return response()->json($result);
+        return view('Report.StatisticReports',compact('Report'));
     }
     public function ExecuteReport(string $NidReport)
     {
-        // ReportViewModel rvm = new ReportViewModel();
-        // ReportDTO report = new ReportDTO();
-        // List<ReportParameterDTO> inps = new List<ReportParameterDTO>();
-        // List<ReportParameterDTO> outs = new List<ReportParameterDTO>();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var response = client.GetAsync($"Report/GetReportById?NidReport={NidReport}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         report = response.Content.ReadAsAsync<ReportDTO>().Result;
-        //         var response2 = client.GetAsync($"Report/GetReportsInput?NidReport={NidReport}").Result;
-        //         if(response2.IsSuccessStatusCode)
-        //             inps = response2.Content.ReadAsAsync<List<ReportParameterDTO>>().Result;
-        //         var response3 = client.GetAsync($"Report/GetReportsOutput?NidReport={NidReport}").Result;
-        //         if(response3.IsSuccessStatusCode)
-        //             outs = response3.Content.ReadAsAsync<List<ReportParameterDTO>>().Result;
-        //     }
-        // }
-        // rvm.report = report;
-        // rvm.inputs = inps;
-        // rvm.outputs = outs;
-        // return View(rvm);
-        return view('Report.ExecuteReport');
+        $api = new NPMSController();
+        $report = $api->GetReportById($NidReport);
+        $inputs = $api->GetReportsInput($NidReport);
+        $outputs = $api->GetReportsOutput($NidReport);
+        return view('Report.ExecuteReport',compact('report','inputs','outputs'));
     }
-    public function SubmitStatisticsReport(string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues)
+    public function SubmitStatisticsReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     DataAccessLibrary.Repositories.ReportRawData rrd = new DataAccessLibrary.Repositories.ReportRawData() {  NidReport = NidReport, paramsKey = PrameterKeys, paramsValue = ParameterValues};
-        //     HttpResponseMessage response = client.PostAsJsonAsync("Report/StatisticsReport", rrd).Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         DataAccessLibrary.Repositories.ReportResultData res = response.Content.ReadAsAsync<DataAccessLibrary.Repositories.ReportResultData>().Result;
-        //         res.OutputKey = OutPutValues;
-        //         return Json(new JsonResults() {  HasValue = true, Html = JsonResults.RenderViewToString(ControllerContext, "_ReportResult", res) });
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false, Html = JsonResults.RenderViewToString(ControllerContext, "_ReportResult", null) });
-        //     }
-        // }
+        $api = new NPMSController();
+        $reportrawdata = new ReportRawData();
+        $reportrawdata->NidReport = $report->NidReport;
+        $reportrawdata->paramsKey = $report->PrameterKeys;
+        $reportrawdata->paramsValue = $report->ParameterValues;
+        $reportresult = $api->GetStatisticsReport($reportrawdata);
+        $reportresult->OutputKey = $report->OutPutValues;
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Html = view('User._ReportResult',compact('reportresult'))->render();
+        return response()->json($result);
+        return view('Report.ExecuteReport',compact('report','inputs','outputs'));
     }
     public function ChartReports()
     {

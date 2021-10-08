@@ -11,6 +11,6 @@ class reportParameterDTO extends Model
     public string $ReportId;
     public string $ParameterKey;
     public string $ParameterValue;
-    public Boolean $IsDeleted;
+    public bool $IsDeleted;
     public int $Type;//tiny int
 }

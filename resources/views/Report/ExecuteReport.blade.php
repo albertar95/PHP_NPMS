@@ -23,17 +23,17 @@
             <div class="col-lg-12">
                 <div class="p-5">
                     <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">{{ $ReportName }}</h1>
+                        <h1 class="h4 text-gray-900 mb-4">{{ $report->ReportName }}</h1>
                     </div>
-                    @if (!is_null($inputs))
-                        {{ $round = $inputs->Count / 3; }}
+                    @if (!empty($inputs))
+                        {{ $round = $inputs->count() / 3; }}
                     @endif
                     <form class="user" id="ExecuteReportForm">
                         <input type="text" class="form-control form-control-user" value="{{ $report->NidReport }}" id="NidReport" hidden>
                         @for ($i = 0; $i <= $round; $i++)
-                            @if (!is_null($inputs))
+                            @if (!empty($inputs))
                                 <div class="form-group row" style="display:flex;">
-                                    @foreach ($inputs.orderBy('NidParameter')->skip($i*3)->take(3) as $inp)
+                                    @foreach ($inputs->sortBy('NidParameter')->skip($i*3)->take(3) as $inp)
                                     <div class="col-sm-4" style="text-align:right;">
                                         <div style="display:flex;">
                                             {{-- @Html.Partial("_ExecuteReportPartial",new Tuple<int,string>(Model.report.ContextId,inp.ParameterKey)) --}}
@@ -131,7 +131,7 @@
                 });
                 $.ajax(
                     {
-                        url: '@Url.Action("SubmitStatisticsReport", "Home")',
+                        url: '/submitstatisticsreport',
                         type: 'post',
                         datatype: 'json',
                         data: { NidReport: $("#NidReport").val(), PrameterKeys: paramKeys, ParameterValues: paramVals, OutPutValues:selectedOutputs },

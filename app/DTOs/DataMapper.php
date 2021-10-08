@@ -465,8 +465,8 @@ class DataMapper
             $result->NidParameter = $reportParameter->NidParameter;
             $result->ReportId = $reportParameter->ReportId;
             $result->ParameterKey = $reportParameter->ParameterKey;
-            $result->ParameterValue = $reportParameter->ParameterValue;
-            $result->IsDeleted = $reportParameter->IsDeleted;
+            $result->ParameterValue = $reportParameter->ParameterValue ?? "";
+            $result->IsDeleted = boolval($reportParameter->IsDeleted);
             $result->Type = $reportParameter->Type;
             return $result;
         }

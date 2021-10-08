@@ -65,7 +65,7 @@ Route::post("submitdeletecollab/{NidCollab}",[ProjectController::class,"SubmitDe
 
 //report routes
 Route::get("statisticreports",[ReportController::class,"StatisticReports"])->name('report.StatisticReports');
-Route::get("executereport",[ReportController::class,"ExecuteReport"])->name('report.ExecuteReport');
+Route::get("executereport/{NidReport}",[ReportController::class,"ExecuteReport"])->name('report.ExecuteReport');
 Route::post("submitstatisticsreport",[ReportController::class,"SubmitStatisticsReport"])->name('report.SubmitStatisticsReport');
 Route::get("chartreports",[ReportController::class,"ChartReports"])->name('report.ChartReports');
 Route::get("customreports",[ReportController::class,"CustomReports"])->name('report.CustomReports');
