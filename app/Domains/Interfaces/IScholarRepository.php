@@ -15,7 +15,7 @@ interface IScholarRepository
     public function GetMillitaryStatuses(int $Pagesize = 10, bool $IncludeDeleted = false):Collection;
     public function GetMajors(int $Pagesize = 10):Collection;
     public function GetOreintations(int $Pagesize = 10):Collection;
-    public function GetOreintationByMajorId(string $MajorId, int $Pagesize = 10) :Collection;
+    public function GetOreintationByMajorId(string $MajorId, int $Pagesize = 10);
     public function GetScholarDTOById(string $ScholarId):scholarDTO;
     public function GetScholarById(string $ScholarId):Scholars;
     public function GetScholars(int $Pagesize = 10):Collection;

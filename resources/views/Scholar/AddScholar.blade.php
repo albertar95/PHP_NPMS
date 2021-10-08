@@ -68,7 +68,7 @@
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId" id="MajorSlt" style="padding:0 .75rem;">
                                     <option value="0" disabled selected>رشته تحصیلی</option>
                                     @foreach ($Majors->sortBy('Title') as $mjr)
-                                        <option value="{{ $mls->NidMajor }}">{{ $mls->Title }}</option>
+                                        <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -238,7 +238,7 @@
                     $("#OrentationSlt").html('')
                     $.ajax(
                         {
-                            url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' + 'scholar/GetOreintationsByMajorId?MajorId=' + this.value,
+                            url: '/api/' + 'scholar/getoreintationsbymajorid/' + this.value,
                             type: 'get',
                             datatype: 'json',
                             success: function (result) {

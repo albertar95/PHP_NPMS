@@ -29,7 +29,7 @@ Route::get("scholar/getmajors",[NPMSController::class,"GetMajors"]);
 Route::get("scholar/getorientations",[NPMSController::class,"GetOrientations"]);
 Route::get("scholar/getscholar",[NPMSController::class,"GetScholar"]);
 Route::get("scholar/getscholardto",[NPMSController::class,"GetScholarDTO"]);
-Route::get("scholar/getoreintationsbymajorid",[NPMSController::class,"GetOreintationsByMajorId"]);
+Route::get("scholar/getoreintationsbymajorid/{MajorId}",[NPMSController::class,"GetOreintationsByMajorId"]);
 Route::get("scholar/getallscholars",[NPMSController::class,"GetAllScholars"]);
 Route::get("scholar/getallscholarlists",[NPMSController::class,"GetAllScholarLists"]);
 Route::get("scholar/getallscholardetails",[NPMSController::class,"GetAllScholarDetails"]);

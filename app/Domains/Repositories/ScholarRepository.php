@@ -135,7 +135,7 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
         }
         return $result;
     }
-    public function GetOreintationByMajorId(string $MajorId, int $Pagesize = 10) :Collection
+    public function GetOreintationByMajorId(string $MajorId, int $Pagesize = 10)
     {
         $result = new Collection();
         $tmpOrientation = Oreintations::all()->where('MajorId','=',$MajorId)->take($Pagesize);
@@ -143,7 +143,7 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
         {
             $result->push(DataMapper::MapToOreintationDTO($orien));
         }
-        return $result;
+        return response()->json($result);
     }
     public function GetScholarDTOById(string $ScholarId):scholarDTO
     {
