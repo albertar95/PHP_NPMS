@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Domains\Repositories\ReportRawData;
 use App\Http\Controllers\Api\NPMSController;
+use App\Models\ReportParameters;
+use App\Models\Reports;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 class ReportController extends Controller
 {
     public function StatisticReports()
@@ -39,7 +42,7 @@ class ReportController extends Controller
         $result->HasValue = true;
         $result->Html = view('User._ReportResult',compact('reportresult'))->render();
         return response()->json($result);
-        return view('Report.ExecuteReport',compact('report','inputs','outputs'));
+        // return view('Report.ExecuteReport',compact('report','inputs','outputs'));
     }
     public function ChartReports()
     {
@@ -51,60 +54,67 @@ class ReportController extends Controller
     }
     public function CustomReportContextChanged(int $ContextId)
     {
-        // return Json(new JsonResults() { HasValue = true, Html = JsonResults.RenderViewToString(this.ControllerContext, "_CustomReportPartial", ContextId) });
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Html = view('User._CustomReportPartial',compact('ContextId'))->render();
+        return response()->json($result);
     }
-    public function SubmitAddCustomReport(string $Name,int $ContextId,int $FieldId,array $Inputs,array $Outputs)
+    public function SubmitAddCustomReport(Request $report)//string $Name,int $ContextId,int $FieldId,array $Inputs,array $Outputs
     {
-        // Report newReport = new Report() {  NidReport = Guid.NewGuid(), ContextId = ContextId, FieldId = FieldId, ReportName = Name};
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = client.PostAsJsonAsync("Report/AddReport", newReport).Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         List<ReportParameter> inputs = new List<ReportParameter>();
-        //         foreach (var inp in Inputs)
-        //         {
-        //             inputs.Add(new ReportParameter() {  IsDeleted = false, NidParameter = Guid.NewGuid(), ParameterKey = inp, ReportId = newReport.NidReport, Type = 0});
-        //         }
-        //         foreach (var outp in Outputs)
-        //         {
-        //             inputs.Add(new ReportParameter() { IsDeleted = false, NidParameter = Guid.NewGuid(), ParameterKey = outp, ReportId = newReport.NidReport, Type = 1 });
-        //         }
-        //         HttpResponseMessage response2 = client.PostAsJsonAsync("Report/AddReportParameters", inputs).Result;
-        //         HttpResponseMessage response3 = client.PostAsJsonAsync("Report/AddReportParameters", Outputs).Result;
-        //         if (response2.IsSuccessStatusCode && response3.IsSuccessStatusCode)
-        //         {
-        //             return Json(new JsonResults() { HasValue = true, Message = $"گزارش با نام {Name} با موفقیت ایجاد گردید" });
-        //         }
-        //         else
-        //         {
-        //             return Json(new JsonResults() { HasValue = false, Message = "خطا در سرور.لطفا مجددا امتحان نمایید" });
-        //         }
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false, Message = "خطا در سرور.لطفا مجددا امتحان نمایید" });
-        //     }
-        // }
+        $report = new Reports();
+        $report->NidReport = Str::uuid();
+        $report->ContextId = $report->ContextId;
+        $report->FieldId = $report->FieldId;
+        $report->ReportName = $report->Name;
+        $api = new NPMSController();
+        if($api->AddReport($report))
+        {
+            $inps = new Collection();
+            foreach ($report->Inputs as $repInp) {
+                $newIn = new ReportParameters();
+                $newIn->IsDeleted = false;
+                $newIn->NidParameter = Str::uuid();
+                $newIn->ParameterKey = $repInp;
+                $newIn->ReportId = $report->NidReport;
+                $newIn->Type = 0;
+            }
+            $outs = new Collection();
+            foreach ($report->Outputs as $repOut) {
+                $newIn = new ReportParameters();
+                $newIn->IsDeleted = false;
+                $newIn->NidParameter = Str::uuid();
+                $newIn->ParameterKey = $repOut;
+                $newIn->ReportId = $report->NidReport;
+                $newIn->Type = 1;
+            }
+            $api->AddReportParameters($outs);
+            $api->AddReportParameters($inps);
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $result->Message = sprintf("گزارش با نام %s با موفقیت ایجاد گردید",$report->ReportName);
+            return response()->json($result);
+        }else
+        {
+            $result = new JsonResults();
+            $result->HasValue = false;
+            $result->Message = "خطا در سرور.لطفا مجددا امتحان نمایید";
+            return response()->json($result);
+        }
     }
     public function DeleteReport(string $NidReport)
     {
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage deleteReportResult = client.GetAsync($"Report/DeleteReport?NidReport={NidReport}").Result;
-        //     if (deleteReportResult.IsSuccessStatusCode)
-        //     {
-        //         TempData["DeleteReportSuccessMessage"] = $"گزارش با موفقیت حذف گردید";
-        //         return Json(new JsonResults() { HasValue = true });
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false });
-        //     }
-        // }
+        $api = new NPMSController();
+        if($api->DeleteReport($NidReport))
+        {
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $result->Message = "گزارش با موفقیت حذف گردید";
+            return response()->json($result);
+        }else
+        {
+            $result = new JsonResults();
+            $result->HasValue = false;
+            return response()->json($result);
+        }
     }
 }
