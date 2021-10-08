@@ -22,12 +22,12 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
-                @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
+                {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
                 {
                     <div dir="ltr">
                         <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="@Url.Action("Users","Home")">&larr; بازگشت</a>
                     </div>
-                }
+                } --}}
                 <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <p style="text-align:right;" id="SuccessMessage"></p>
@@ -40,15 +40,15 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
                     </div>
-                    @using (Html.BeginForm("SubmitEditUser", "Home", FormMethod.Post, new { id = "EditUserForm" }))
-                    {
-                        {{-- @Html.HiddenFor(p => p.CreateDate)
-                        @Html.HiddenFor(p => p.LastLoginDate)
-                        @Html.HiddenFor(p => p.IncorrectPasswordCount)
-                        @Html.HiddenFor(p => p.IsDisabled)
-                        @Html.HiddenFor(p => p.IsLockedOut)
-                        @Html.HiddenFor(p => p.LastLoginDate)
-                        @Html.HiddenFor(p => p.NidUser) --}}
+                    <form class="user" action="{{ route('user.SubmitEditUser') }}" id="EditUserForm" method="POST">
+                        @csrf
+                        <input id="CreateDate" name="CreateDate" type="text" hidden >
+                        <input id="LastLoginDate" name="LastLoginDate" type="text" hidden >
+                        <input id="IncorrectPasswordCount" name="IncorrectPasswordCount" type="text" hidden >
+                        <input id="IsDisabled" name="IsDisabled" type="text" hidden >
+                        <input id="IsLockedOut" name="IsLockedOut" type="text" hidden >
+                        <input id="LastLoginDate" name="LastLoginDate" type="text" hidden >
+                        <input id="NidUser" name="NidUser" type="text" hidden >
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="FirstName" name="FirstName"
@@ -72,19 +72,18 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile()" id="ProfilePictureUpload" name="ProfilePictureUpload">
-                                <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture" value="@Model.ProfilePicture" hidden>
+                                <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture" value="{{ $User->ProfilePicture }}" hidden>
                                 <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
                                     تغییر پروفایل کاربر
                                 </label>
                                 <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
                             </div>
                             <div class="col-sm-6" style="display:flex;">
-                                @if (!isEmptyOrNull($User->ProfilePicture))
+                                @if (!empty($User->ProfilePicture))
                                     {{ $imgSrc = string.spintf("data:image/jpg;base64,%s", $User->ProfilePicture); }}
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe">
                                         <img src="{{ $imgSrc }}" id="userImg" style="width:100%;height:200px;" />
                                     </div>
-                                @endif
                                 @else
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe" hidden>
                                         <img src="" id="userImg" style="width:100%;height:200px;" />
@@ -94,14 +93,11 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                @if (Model.IsAdmin)
-                                {
+                                @if ($User->IsAdmin)
                                     <input class="form-check-input" type="checkbox" style="margin-right:1.2rem;" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" id="IsAdmin" name="IsAdmin" value="true" checked>
-                                }
-                                else
-                                {
+                                @else
                                     <input class="form-check-input" type="checkbox" style="margin-right:1.2rem;" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" id="IsAdmin" name="IsAdmin" value="false">
-                                }
+                                @endforelse
                                 <label class="form-check-label" for="IsAdmin" style="margin-right:2.4rem;">
                                     کاربر ادمین باشد؟
                                 </label>
@@ -114,7 +110,7 @@
                         <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block" style="width:25%;margin:auto;">
                             ذخیره اطلاعات
                         </button>
-                                    }
+                    </form>
                     <hr />
                 </div>
             </div>

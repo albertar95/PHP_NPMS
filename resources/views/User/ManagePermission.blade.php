@@ -33,18 +33,20 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اعمال دسترسی به کاربر</h1>
                     </div>
+                    <input type="text" value="{{ $User->NidUser }}" id="NidUser" hidden>
+                    <input type="text" value="{{ $User->Username }}" id="Username" hidden>
                         <div class="form-group row" style="text-align:right;">
                         <div class="col-sm-2" style="padding:.5rem;">
                             <label>نام کاربری : </label>
                         </div>
                         <div class="col-sm-4">
-                            <label class="form-control">@Model.User.Username</label>
+                            <label class="form-control">{{ $User->Username }}</label>
                         </div>
                         <div class="col-sm-2" style="padding:.5rem;">
                             <label>مشخصات کاربر : </label>
                         </div>
                         <div class="col-sm-4">
-                            <label class="form-control" id="txtUserInfo">{{ $User->FirstName &nbsp; $User->LastName }}</label>
+                            <label class="form-control" id="txtUserInfo">{{ $User->FirstName}}{{ $User->LastName }}</label>
                         </div>
                     </div>
                           <div class="form-group row" style="text-align:right;">
@@ -52,24 +54,25 @@
                             <label>دسترسی ها : </label>
                         </div>
                     </div>
-                    {{ $counter = $Resources->Count / 3; }}
+                    {{ $counter = $Resources->count() / 3; }}
                     @for ($i = 0; $i < $counter; $i++)
                     {
                         <div class="form-group row" style="text-align:right;">
-                            @foreach ($Resources.Where('ClassLevel','=',1)->orderBy('SortNumber')->skip($i * 3)->take(3))
+                            {{ $tmp1 = $Resources->where('ClassLevel','=',1)->sortBy('SortNumber')->skip($i * 3)->take(3); }}
+                            @foreach ($tmp1 as $res)
                                 <div class="col-sm-4">
                                         @if ($UserPermissions->Where('ResourceId','=',$res->NidResource)->count() > 0)
                                             <div class="row" style="display:flex;">
                                                 <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res->NidResource }}" class="form-control checkbox" checked />
-                                                <label for="{{ $res->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res->SortNumber . $res->ResourceName }}</label>
+                                                <label for="{{ $res->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res->SortNumber}}.{{ $res->ResourceName  }}</label>
                                             </div>
                                             @if ($Resources->where('ClassLevel','=',2)->where('ParentId','=','NidResource')->count() > 0)
-                                                @foreach ($resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->orderBy('SortNumber') as $res1)
+                                            {{ $tmp2 =$resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber'); }}
+                                                @foreach ($tmp2 as $res1)
                                                     <div class="row" style="display:flex;padding-right:1.5rem;">
                                                         @if ($UserPermissions->Where('ResourceId','=',$res1->NidResource)->count() > 0)
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="@res1.ParentId" checked />
                                                             <label for="{{ $res1->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res1->ResourceName }}</label>
-                                                        @endif
                                                         @else
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="@res1.ParentId" />
                                                             <label for="{{ $res1->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res1->ResourceName }}</label>
@@ -77,19 +80,18 @@
                                                     </div>
                                                 @endforeach
                                             @endif
-                                        @endif
                                         @else
                                             <div class="row" style="display:flex;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="@res.NidResource" class="form-control checkbox" />
-                                                <label for="@res.NidResource" style="margin:.45rem .45rem 0 0">@res.SortNumber . @res.ResourceName</label>
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res->NidResource }}" class="form-control checkbox" />
+                                                <label for="{{ $res->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res->SortNumber}}.{{ $res->ResourceName  }}</label>
                                             </div>
-                                            @if ($Resources->Where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->count() > 0)
-                                                @foreach ($Resources->Where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->orderBy('SortNumber') as $res1)
+                                            @if ($Resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->count() > 0)
+                                            {{ $tmp3 = $Resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber'); }}
+                                                @foreach ($tmp3 as $res1)
                                                     <div class="row" style="display:flex;padding-right:1.5rem;">
                                                         @if ($UserPermissions->where('ResourceId','=',$res1->NidResource)->count() > 0)
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="{{ $res1->ParentId }}" checked disabled />
                                                             <label for="{{ $res1->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res1->ResourceName }}</label>
-                                                        @endif
                                                         @else
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="{{ $res1->ParentId }}" disabled />
                                                             <label for="{{ $res1->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res1->ResourceName }}</label>
@@ -160,10 +162,10 @@
                 });
                 $.ajax(
                     {
-                        url: '@Url.Action("EditUserPermission","Home")',
-                        type: 'post',
+                        url: '/edituserpermission',
+                        type: 'get',
                         datatype: 'json',
-                        data: { ResourceIds: selectedResources, UserId: '@Model.User.NidUser', UserInfo: '@Model.User.Username' },
+                        data: { ResourceIds: selectedResources, UserId: $('#NidUser').val(), UserInfo: $('#Username').val() },
                         success: function (result)
                         {
                             if(!result.HasValue)

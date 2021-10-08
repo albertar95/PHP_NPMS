@@ -1,8 +1,3 @@
-
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +31,7 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background:url(@Url.Content("~/Content/img/Logo/nepajalogo.png"));background-size:85% 85%;background-position:center;background-repeat:no-repeat;"></div>
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background:url({{ URL('Content/img/Logo/nepajalogo.png') }});background-size:85% 85%;background-position:center;background-repeat:no-repeat;"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -107,7 +102,7 @@
             {
                 $.ajax(
                     {
-                        url: '@Url.Action("SubmitLogin","Home")',
+                        url: '/SubmitLogin',
                         type: 'post',
                         datatype: 'json',
                         data: { Username: $("#txtUsername").val(), Password: $("#txtPassword").val() },

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\NPMSController;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use resources\ViewModels\ManagePermissionViewModel;
 
 class UserController extends Controller
 {
@@ -25,18 +27,12 @@ class UserController extends Controller
     }
     public function UserDetail(string $NidUser)
     {
-        // UserDTO result = new UserDTO();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = client.GetAsync($"User/GetUserDTOById?UserId={NidUser}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         result = response.Content.ReadAsAsync<UserDTO>().Result;
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = true, Html = JsonResults.RenderViewToString(this.ControllerContext, "_UserDetail", result) });
+        $api = new NPMSController();
+        $Users = $api->GetUserDTOById($NidUser);
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Html = view('User._UserDetail',compact('Users'))->render();
+        return response()->json($result);
     }
     public function UploadThisFile()
     {
@@ -63,48 +59,35 @@ class UserController extends Controller
     }
     public function DisableUser(string $NidUser)
     {
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage disableUserResult = client.GetAsync($"user/DisableUserById?UserId={NidUser}").Result;
-        //     if (disableUserResult.IsSuccessStatusCode)
-        //     {
-        //         var tmpresult = disableUserResult.Content.ReadAsAsync<JsonResults>().Result;
-        //         if (tmpresult.HasValue == true)
-        //         {
-        //             HttpResponseMessage getUserDTOResult = client.GetAsync($"User/GetUserDTOById?UserId={NidUser}").Result;
-        //             if (getUserDTOResult.IsSuccessStatusCode)
-        //             {
-        //                 var tmpUser = getUserDTOResult.Content.ReadAsAsync<UserDTO>().Result;
-        //                 TempData["DisableUserSuccessMessage"] = $"کاربر با نام کاربری {tmpUser.Username} با موفقیت غیرفعال گردید";
-        //             }
-        //             else
-        //                 TempData["DisableUserSuccessMessage"] = $"کاربر با موفقیت غیرفعال گردید";
-        //             return Json(new JsonResults() { HasValue = true });
-        //         }
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = false, Message = "خطا در انجام عملیات.لطفا مجددا امتحان کنید" });
+        $api = new NPMSController();
+        $tmpresult = $api->DisableUserById($NidUser);
+        $result = new JsonResults();
+        if(json_decode($tmpresult->getContent(),true)['HasValue'])
+        {
+            $result->HasValue = true;
+            $tmpUser = $api->DisableUserById($NidUser);
+            $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید",$tmpUser->Username);
+            return response()->json($result);
+        }else
+        {
+            $result->HasValue = false;
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            return response()->json($result);
+        }
     }
     public function EditUser(string $NidUser)
     {
-        // UserDTO result = new UserDTO();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserDTOResult = client.GetAsync($"user/GetUserDTOById?UserId={NidUser}").Result;
-        //     if (UserDTOResult.IsSuccessStatusCode)
-        //     {
-        //         result = UserDTOResult.Content.ReadAsAsync<UserDTO>().Result;
-        //     }
-        // }
-        // return View(result);
-        return view('User.EditUser');
+        $api = new NPMSController();
+        $User = $api->GetUserDTOById($NidUser);
+        return view('User.EditUser',compact('User'));
     }
     public function SubmitEditUser(Request $User)
     {
+        $api = new NPMSController();
+        if($api->UpdateUser($User))
+        {
+            redirect('Users');
+        }
         // using (var client = new HttpClient())
         // {
         //     client.BaseAddress = new Uri(ApiBaseAddress);
@@ -121,106 +104,49 @@ class UserController extends Controller
     }
     public function UserSourceChange(int $SourceId)
     {
-        // List<UserDTO> result = new List<UserDTO>();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserDTOResponse = client.GetAsync($"user/GetCustomUsers?SourceId={SourceId}").Result;
-        //     if(UserDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         result = UserDTOResponse.Content.ReadAsAsync<List<UserDTO>>().Result;
-        //     }
-        // }
-        // return Json(new JsonResults() { Html = JsonResults.RenderViewToString(this.ControllerContext,"_UserTable",result)});
+        $api = new NPMSController();
+        $Users = $api->GetCustomUsers($SourceId);
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Html = view('User._UserTable',$Users)->render();
+        return response()->json($result);
     }
     public function UserPermissions()
     {
-        // List<UserInPermissionDTO> result = new List<UserInPermissionDTO>();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserDTOResponse = client.GetAsync($"UserPermission/GetAllUserPermissionUsers").Result;
-        //     if (UserDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         result = UserDTOResponse.Content.ReadAsAsync<List<UserInPermissionDTO>>().Result;
-        //     }
-        // }
-        // return View(result);
-        return view('User.UserPermissions');
+        $api = new NPMSController();
+        $Users = $api->GetAllUserPermissionUsers();
+        return view('User.UserPermissions',compact('Users'));
     }
     public function UserPermissionDetail(string $NidUser)
     {
-        // ManagePermissionViewModel mpvm = new ManagePermissionViewModel();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserPermissionDTOResponse = client.GetAsync($"UserPermission/GetAllUserPermissions?NidUser={NidUser}").Result;
-        //     if (UserPermissionDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         mpvm.UserPermissions = UserPermissionDTOResponse.Content.ReadAsAsync<List<UserPermissionDTO>>().Result;
-        //     }
-        //     HttpResponseMessage UserInPermissionDTOResponse = client.GetAsync($"UserPermission/GetUserInPermissionById?NidUser={NidUser}").Result;
-        //     if (UserInPermissionDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         mpvm.User = UserInPermissionDTOResponse.Content.ReadAsAsync<UserInPermissionDTO>().Result;
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = true, Html = JsonResults.RenderViewToString(this.ControllerContext, "_UserPermissionDetail",mpvm) });
+        $api = new NPMSController();
+        $UserPermissions = $api->GetAllUserPermissions($NidUser);
+        $User = $api->GetUserInPermissionById($NidUser);
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Html = view('User._UserPermissionDetail',compact('UserPermissions','User'))->render();
+        return response()->json($result);
     }
     public function ManagePermission(string $NidUser)
     {
-        // ManagePermissionViewModel mpvm = new ManagePermissionViewModel();
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserPermissionDTOResponse = client.GetAsync($"UserPermission/GetAllUserPermissions?NidUser={NidUser}").Result;
-        //     if (UserPermissionDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         mpvm.UserPermissions = UserPermissionDTOResponse.Content.ReadAsAsync<List<UserPermissionDTO>>().Result;
-        //     }
-        //     HttpResponseMessage UserInPermissionDTOResponse = client.GetAsync($"UserPermission/GetUserInPermissionById?NidUser={NidUser}").Result;
-        //     if (UserInPermissionDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         mpvm.User = UserInPermissionDTOResponse.Content.ReadAsAsync<UserInPermissionDTO>().Result;
-        //     }
-        //     HttpResponseMessage ResourceDTOResponse = client.GetAsync($"UserPermission/GetAllResources").Result;
-        //     if (ResourceDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         mpvm.Resources = ResourceDTOResponse.Content.ReadAsAsync<List<ResourceDTO>>().Result;
-        //     }
-        // }
-        // return View(mpvm);
-        return view('User.ManagePermission');
+        $api = new NPMSController();
+        $UserPermissions = $api->GetAllUserPermissions($NidUser);
+        $User = $api->GetUserInPermissionById($NidUser);
+        $Resources = $api->GetAllResources();
+        return view('User.ManagePermission',compact('UserPermissions','User','Resources'));
     }
-    public function EditUserPermission(array $ResourceIds,string $UserId,string $UserInfo)
+    public function EditUserPermission(Request $permissions)//array $ResourceIds,string $UserId,string $UserInfo
     {
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = null;
-        //     if (ResourceIds != null)
-        //     {
-        //         response = client.GetAsync($"UserPermission/UpdateUserUserPermissions?NidUser={UserId}&Resources={string.Join(",", ResourceIds)}").Result;
-        //     }
-        //     else
-        //     {
-        //         response = response = client.GetAsync($"UserPermission/UpdateUserUserPermissions?NidUser={UserId}&Resources={""}").Result;
-        //     }
-        //     if(response.IsSuccessStatusCode)
-        //     {
-        //         TempData["EditUserPermissionSuccessMessage"] = $"دسترسی های کاربری {UserInfo} با موفقیت اعمال گردید";
-        //         return Json(new JsonResults() { HasValue = true });
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false });
-        //     }
-        // }
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if($api->UpdateUserUserPermissions($permissions->UserId,join(',',$permissions->ResourceIds)))
+        {
+            $result->HasValue = true;
+        }else
+        {
+            $result->HasValue = false;
+        }
+        return response()->json($result);
     }
     // [AllowAnonymous]
     public function Login()
@@ -234,7 +160,7 @@ class UserController extends Controller
         return view('User._LoadingPage');
     }
     // [AllowAnonymous]
-    public function SubmitLogin(string $Username,string $Password)
+    public function SubmitLogin(Request $logindata)//string $Username,string $Password
     {
         // bool IsLogin = false;
         // string LoginMessage = "";

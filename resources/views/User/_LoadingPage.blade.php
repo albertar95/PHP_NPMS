@@ -1,4 +1,3 @@
-@model Guid
 <!DOCTYPE html>
 
 <html>
@@ -26,8 +25,8 @@
         $(function () {
             $.ajax(
                 {
-                    url: '@Url.Action("SetLoginData", "Home")',
-                    type: 'post',
+                    url: '/setlogindata',
+                    type: 'get',
                     datatype: 'json',
                     data: { Niduser: $("#userid").val() },
                     success: function (result) {

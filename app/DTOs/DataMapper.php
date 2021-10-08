@@ -366,15 +366,15 @@ class DataMapper
     }
     public static function MapToUserInPermissionDTO(Users $user)
     {
+        $result = new userInPermissionDTO();
+        $result->NidUser = $user->NidUser;
+        $result->Username = $user->UserName;
+        $result->FirstName = $user->FirstName;
+        $result->LastName = $user->LastName;
+        $result->IsAdmin = boolval($user->IsAdmin);
+        return $result;
         try
         {
-            $result = new userInPermissionDTO();
-            $result->NidUser = $user->NidUser;
-            $result->Username = $user->Username;
-            $result->FirstName = $user->FirstName;
-            $result->LastName = $user->LastName;
-            $result->IsAdmin = $user->IsAdmin;
-            return $result;
         }
         catch (\Exception)
         {

@@ -1,7 +1,7 @@
 @extends('Layouts.app')
 
 @section('Content')
-@model List<DataAccessLibrary.DTOs.UserInPermissionDTO>
+{{-- @model List<DataAccessLibrary.DTOs.UserInPermissionDTO>
 
     @{
         ViewBag.Title = "مدیریت دسترسی ها";
@@ -16,7 +16,7 @@
         {
             slvm1.UserPermissions = new List<Guid>();
         }
-    }
+    } --}}
 
 
     <div class="card shadow mb-4">
@@ -55,31 +55,28 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach (var sch in Model)
-                        {
+                        @foreach ($Users as $user)
                             <tr>
-                                <td>@sch.FirstName &nbsp; @sch.LastName</td>
-                                <td>@sch.Username</td>
-                                @if (sch.IsAdmin == false)
-                                {
+                                <td>{{ $user->FirstName }} {{ $user->LastName }}</td>
+                                <td>{{ $user->Username }}</td>
+                                @if ($user->IsAdmin == false)
                                     <td>کاربر عادی</td>
-                                }
-                                else
-                                {
+                                @else
                                     <td>کاربر ادمین</td>
-                                }
+                                @endforelse
                                 <td>
-                                    @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "PermissionManage").FirstOrDefault().Id))
+                                    {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "PermissionManage").FirstOrDefault().Id))
                                     {
-                                        <a href="@Url.Action("ManagePermission","Home",new { NidUser = sch.NidUser})" class="btn btn-info">اعمال دسترسی</a>
+                                        <a href="{{ route('user.ManagePermission') }}/{{ $user->NidUser }}" class="btn btn-info">اعمال دسترسی</a>
                                     }
                                     @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "UserPermissionDetail").FirstOrDefault().Id))
                                     {
                                         <button class="btn btn-secondary" onclick="ShowModal('@sch.NidUser')">جزییات</button>
-                                    }
+                                    } --}}
+                                    <button class="btn btn-secondary" onclick="ShowModal('{{ $user->NidUser }}')">جزییات</button>
                                 </td>
                             </tr>
-                          }
+                          @endforeach
                     </tbody>
                 </table>
             </div>
@@ -103,15 +100,13 @@
             </div>
         </div>
     </div>
-    @section styles
-        {
-        <link href="@Url.Content("~/Content/vendor/datatables/dataTables.bootstrap4.min.css")" rel="stylesheet">
-    }
-    @section scripts
-        {
-        <script src="@Url.Content("~/Content/vendor/datatables/jquery.dataTables.min.js")"></script>
-        <script src="@Url.Content("~/Content/vendor/datatables/dataTables.bootstrap4.min.js")"></script>
-        <script src="@Url.Content("~/Content/js/demo/datatables-demo.js")"></script>
+    @section('styles')
+        <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    @endsection
+    @section('scripts')
+        <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
         <script type="text/javascript">
             $(function ()
             {
@@ -133,10 +128,9 @@
             function ShowModal(NidUser) {
                 $.ajax(
                     {
-                        url: '@Url.Action("UserPermissionDetail", "Home")',
-                        type: 'post',
+                        url: '/userpermissiondetail/' + NidUser,
+                        type: 'get',
                         datatype: 'json',
-                        data: { NidUser: NidUser },
                         success: function (result) {
                             if (result.HasValue) {
                                 $("#UserPermissionModalBody").html(result.Html)
@@ -147,6 +141,6 @@
                     })
             }
         </script>
-    }
+    @endsection
 
 @endsection

@@ -11,5 +11,5 @@ class userInPermissionDTO extends Model
     public string $Username;
     public string $FirstName;
     public string $LastName;
-    public Boolean $IsAdmin;
+    public bool $IsAdmin;
 }

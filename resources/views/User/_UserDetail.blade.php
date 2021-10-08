@@ -2,10 +2,9 @@
     <div class="form-group row" style="text-align:right;">
               <div class="col-sm-6" style="padding:.5rem;">
                   <div class="frame">
-                      @if (!is_null($ProfilePicture))
-                          {{ $imgSrc = string.sprintf("data:image/jpg;base64,%s", $ProfilePicture); }}
+                      @if (!is_null($Users->ProfilePicture))
+                          {{ $imgSrc = sprintf("data:image/jpg;base64,%s", $Users->ProfilePicture); }}
                           <img src="{{ $imgSrc }}" style="width:100%;height:10rem;" />
-                      @endif
                       @else
                         <img src="" style="width:100%;height:10rem;" alt="بدون نمایه" />
                       @endforelse
@@ -15,7 +14,7 @@
                 <label>نام کاربری : </label>
             </div>
             <div class="col-sm-4">
-                <label class="form-control">@Model.Username</label>
+                <label class="form-control">{{ $Users->Username }}</label>
             </div>
         </div>
     <div class="form-group row" style="text-align:right;">
@@ -23,13 +22,13 @@
             <label>نام : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">@Model.FirstName</label>
+            <label class="form-control">{{ $Users->FirstName }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>نام خانوادگی : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">@Model.LastName</label>
+            <label class="form-control">{{ $Users->LastName }}</label>
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
@@ -42,16 +41,15 @@
             <label>تاریخ ایجاد کاربر : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">@Create</label>
+            <label class="form-control">{{ $Users->CreateDate }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>تاریخ آخرین ورود به سیستم : </label>
         </div>
         <div class="col-sm-4">
-            @if (!is_null($LastLoginDate))
-            {
-                <label class="form-control">{{ $Login }}</label>
-            }
+            @if (!empty($Users->LastLoginDate))
+                <label class="form-control">{{ $LastLoginDate }}</label>
+            @endif
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
@@ -59,9 +57,8 @@
             <label>نوع کاربر : </label>
         </div>
         <div class="col-sm-4">
-            @if ($IsAdmin)
+            @if ($Users->IsAdmin)
                 <label class="form-control">کاربر ادمین</label>
-            @endif
             @else
                 <label class="form-control">کاربر عادی</label>
             @endforelse
@@ -70,7 +67,7 @@
             <label>تعداد کلمه عبور اشتباه وارد شده : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">{{ $IncorrectPasswordCount }}</label>
+            <label class="form-control">{{ $Users->IncorrectPasswordCount }}</label>
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
@@ -78,12 +75,11 @@
             <label>وضعیت کاربر : </label>
         </div>
         <div class="col-sm-4">
-            @if ($IsDisabled)
+            @if ($Users->IsDisabled)
                 <label class="form-control">غیر فعال</label>
-            @endif
-            @elseif ($IsLockedOut)
+            @elseif ($Users->IsLockedOut)
                 <label class="form-control">کاربر تعلیق شده</label>
-            @elseif (!$IsDisabled)
+            @elseif (!$Users->IsDisabled)
                 <label class="form-control">فعال</label>
             @endforelse
         </div>

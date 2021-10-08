@@ -95,7 +95,7 @@
                         <td>
                             {{-- @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'UserDetail') . FirstOrDefault() . Id))
                                     {
-                                        <button class="btn btn-secondary" onclick="ShowModal(1,'@usr.NidUser')">جزییات</button>
+                                        <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
                                     }
                                     @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'EditUser') . FirstOrDefault() . Id))
                                     {
@@ -105,7 +105,7 @@
                                     {
                                         <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
                                     } --}}
-                                    <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
+                                    <a href="{{ route('user.EditUser') }}/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
                         </td>
                         </tr>
                         @endforeach

@@ -160,7 +160,7 @@ class NPMSController extends Controller
     {
         $repo = new UserRepository(new Users());
         $User = DataMapper::MapToUser($User);
-        $repo->UpdateUser($User);
+        return $repo->UpdateUser($User);
     }
     public function GetCustomUsers(int $SourceId)
     {
@@ -182,30 +182,30 @@ class NPMSController extends Controller
     public function GetAllUserPermissionUsers()
     {
         $repo = new UserRepository(new Users());
-        $repo->GetUserPermissionUsers(0);
+        return $repo->GetUserPermissionUsers(0);
     }
     public function GetUserInPermissionById(string $NidUser)
     {
         $repo = new UserRepository(new Users());
-        $repo->GetUserInPermissionById($NidUser);
+        return $repo->GetUserInPermissionById($NidUser);
     }
     public function GetAllResources()
     {
         $repo = new UserRepository(new Users());
-        $repo->GetResources(0);
+        return $repo->GetResources(0);
     }
     public function GetAllUserPermissions(string $NidUser)
     {
         $repo = new UserRepository(new Users());
         $repo2 = new AlarmRepository(new Alarms());
-        try
-        {
-            $repo2->HandleAlarmsJob();
-        }
-        catch (\Exception)
-        {
-        }
-        $repo->GetUserPermissions($NidUser);
+        // try
+        // {
+        //     $repo2->HandleAlarmsJob();
+        // }
+        // catch (\Exception)
+        // {
+        // }
+        return $repo->GetUserPermissions($NidUser);
     }
     public function UpdateUserUserPermissions(string $NidUser,string $Resources)
     {
@@ -219,7 +219,7 @@ class NPMSController extends Controller
             }
         }
         $repo = new UserRepository(new Users());
-        $repo->UpdateUserUserPermission($NidUser, $resourceGuids);
+        return $repo->UpdateUserUserPermission($NidUser, $resourceGuids);
     }
 
     //Project section
