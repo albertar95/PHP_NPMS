@@ -490,19 +490,19 @@ class NPMSController extends Controller
         // $reportraw = DataMapper::MapToReportRawData($reportraw);
         return $repo->StatisticsReport($reportraw);
     }
-    public function AddReport(Request $report)
+    public function AddReport(Reports $report)
     {
         $repo = new ReportRepository(new Reports());
-        $report = DataMapper::MapToReport($report);
+        // $report = DataMapper::MapToReport($report);
         return $repo->AddReport($report);
     }
-    public function AddReportParameters(Request $Params)//ReportParameter
+    public function AddReportParameters(Collection $Params)//ReportParameter
     {
         $repo = new ReportRepository(new Reports());
         $pars = new Collection();
         foreach($Params as $param)
         {
-            $pars->push(DataMapper::MapToReportParameter($Params));
+            $pars->push(DataMapper::MapToReportParameter($param));
         }
         return $repo->AddReportParameterList($pars);
     }
