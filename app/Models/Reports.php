@@ -9,7 +9,7 @@ class Reports extends Model
 {
     use HasFactory;
     protected $table = 'reports';
-    protected $primaryKey = ['NidReport'];
+    protected $primaryKey = 'NidReport';
     public $incrementing = false;
     public    $timestamps = false;
     // protected $fillable = [];

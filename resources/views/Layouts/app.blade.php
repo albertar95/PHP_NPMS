@@ -322,7 +322,124 @@
         </div>
         <!-- End of Content Wrapper -->
     </div>
+    <div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content" style="text-align:right;">
+           <div class="modal-header" style="direction:rtl;">
+               <h5 class="modal-title" id="exampleModalLabel">خروج</h5>
+               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">×</span>
+               </button>
+           </div>
+           <div class="modal-body">آیا برای خروج اطمینان دارید ؟</div>
+           <div class="modal-footer" style="margin:0 auto;">
+               <button class="btn btn-secondary" type="button" data-dismiss="modal">خیر</button>
+               <a class="btn btn-primary" href="@Url.Action("Logout","Home")">بله</a>
+           </div>
+       </div>
+   </div>
+</div>
+<div class="modal" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="UploadModalLabel"
+    aria-hidden="true">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="UploadModalLabel">بارگذاری</h5>
+               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">×</span>
+               </button>
+           </div>
+           <div class="modal-body">
+               <h2 id="uploadModalHeader" style="text-align:right;">فایل در حال بارگذاری می باشد.لطفا منتظر بمانید</h2>
+               <div class="progress">
+                   <div class="progress-bar progress-bar-striped progress-bar-animated" id="UploadProgress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+               </div>
+           </div>
+           <div class="modal-footer">
+           </div>
+       </div>
+   </div>
+</div>
+<div class="modal" id="DetailModal" tabindex="-1" role="dialog" aria-labelledby="DetailModalLabel"
+    aria-hidden="true">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="DetailModalLabel"></h5>
+               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">×</span>
+               </button>
+           </div>
+           <div class="modal-body" id="DetailModalBody">
+           </div>
+           <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;" hidden>آیا برای حذف این محقق اطمینان دارید؟</p>
+           <div class="modal-footer">
+               <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal" style="margin:0 auto;width:10%;" hidden>بستن</button>
+               <div class="col-lg-12">
+                   <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk" hidden>بلی</button>
+                   <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel" hidden>خیر</button>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
     @include('Layouts.Footer')
     @yield('scripts')
+    <script type="text/javascript">
+        function AdvanceInProgressBar(newValue)
+        {
+            $("#UploadProgress").css('width',newValue +'%');
+        }
+        function UploadFile()
+            {
+                AdvanceInProgressBar(0);
+                $("#UploadMessage").attr('hidden','hidden');
+                $("#UploadModal").modal('show');
+                AdvanceInProgressBar(10);
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                var formData = new FormData();
+                formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
+                formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
+                $.ajax(
+                    {
+                        url: '/uploadthisfile',
+                        type: 'post',
+                        datatype: 'json',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (result) {
+                            if (result.HasValue)
+                            {
+                                window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
+                                $("#ProfilePicture").val(result.Message);
+                                window.setTimeout(function () {
+                                    $("#uploadedImage").attr('src', '/storage/images/' + result.Message);
+                                    $("#uploadedframe").removeAttr('hidden');
+                                    $("#uploadedImage").removeAttr('hidden');
+                                }, 3000);
+                            } else
+                            {
+                                window.setTimeout(function () {
+                                    $("#UploadMessage").removeAttr('hidden');
+                                    $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
+                                }, 3000);
+                            }
+                        },
+                        error: function ()
+                        {
+                            window.setTimeout(function () {
+                                $("#UploadMessage").removeAttr('hidden');
+                                $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');},3000);
+                        }
+                    });
+                window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
+            }
+    </script>
 </body>
 </html>

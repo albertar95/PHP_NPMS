@@ -71,8 +71,8 @@
                                 <td>{{ $sch->FirstName ?? "" }}{{  $sch->LastName ?? "" }}</td>
                                 <td>{{ $sch->NationalCode ?? "" }}</td>
                                 <td class="priority-1">{{ $sch->Grade ?? ""}}</td>
-                                <td class="priority-2">{{ $sch->MajorName ?? ""}}</td>
-                                <td class="priority-3">{{ $sch->OreintationName ?? ""}}</td>
+                                <td class="priority-2">{{ $sch->MajorName}}</td>
+                                <td class="priority-3">{{ $sch->OreintationName}}</td>
                                 <td class="priority-4">{{ $sch->collegeName ?? ""}}</td>
                                 <td>
                                     {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ScholarDetail").FirstOrDefault().Id))
@@ -87,6 +87,8 @@
                                     {
                                         <button class="btn btn-danger" onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
                                     } --}}
+                                    <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $sch->NidScholar }}')">جزییات</button>
+                                    <a href="{{ route('scholar.EditScholar',$sch->NidScholar) }}" class="btn btn-warning">ویرایش</a>
                                     <button class="btn btn-danger" onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
                                 </td>
                             </tr>

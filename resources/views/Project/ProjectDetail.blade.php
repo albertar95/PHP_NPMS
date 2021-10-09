@@ -80,13 +80,13 @@
                                         <label>رشته تحصیلی : </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        {{-- <label class="form-control">{{ $Scholar->FirstName }}@Model.Scholar.Major.Title</label> --}}
+                                        <label class="form-control">{{ $Scholar->Major->Title }}</label>
                                     </div>
                                     <div class="col-sm-2" style="padding:.5rem;">
                                         <label>گرایش : </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        {{-- <label class="form-control">{{ $Scholar->FirstName }}@Model.Scholar.Oreintation.Title</label> --}}
+                                        <label class="form-control">{{ $Scholar->Oreintation->Title }}</label>
                                     </div>
                                 </div>
                                 <div class="form-group row" style="text-align:right;">
@@ -108,15 +108,15 @@
                                         <label>تعداد طرح ها : </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        {{-- <label class="form-control">{{ $Scholar->FirstName }}@Model.Scholar.Projects.Count()</label> --}}
+                                        <label class="form-control">{{ $Scholar->Projects->count() }}</label>
                                     </div>
                                     <div class="col-sm-2" style="padding:.5rem;">
                                         <label>طرح ها : </label>
                                     </div>
                                     <div class="col-sm-4" style="display:table-column">
-                                        {{-- @foreach ($Projects as $proj)
+                                        @foreach ($Scholar->Projects as $proj)
                                             <label class="form-control">{{ $proj->Subject }}</label>
-                                        @endforeach --}}
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                                         <label>مشخصات محقق : </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <label class="form-control">{{ $Project->FirstName }}{{ $Project->LastName }}</label>
+                                        <label class="form-control">{{ $Scholar->FirstName }} {{ $Scholar->LastName }}</label>
                                     </div>
                                 </div>
                                 <div class="form-group row" style="text-align:right;">

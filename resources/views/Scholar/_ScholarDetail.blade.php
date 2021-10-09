@@ -2,9 +2,8 @@
     <div class="form-group row" style="text-align:right;">
         <div class="col-sm-6" style="padding:.5rem;">
             <div class="frame">
-                @if (!is_null($Scholar->ProfilePicture))
-                    {{ $imgSrc = sprintf("data:image/jpg;base64,%s", $Scholar->ProfilePicture); }}
-                    <img src="{{ $imgSrc }}" style="width:100%;height:10rem;" />
+                @if (!empty($Scholar->ProfilePicture))
+                    <img src="{{ sprintf("/storage/images/%s", $Scholar->ProfilePicture) }}" style="width:100%;height:10rem;" />
                 @else
                     <img src="" style="width:100%;height:10rem;" alt="بدون نمایه"/>
                 @endforelse
@@ -65,13 +64,13 @@
             <label>رشته تحصیلی : </label>
         </div>
         <div class="col-sm-4">
-            {{-- <label class="form-control">{{ $Scholar->MillitaryStatusTitle }}@Model.Major.Title</label> --}}
+            <label class="form-control">{{ $Scholar->Major->Title }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>گرایش : </label>
         </div>
         <div class="col-sm-4">
-            {{-- <label class="form-control">{{ $Scholar->MillitaryStatusTitle }}@Model.Oreintation.Title</label> --}}
+            <label class="form-control">{{ $Scholar->Oreintation->Title }}</label>
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
@@ -93,15 +92,15 @@
             <label>تعداد طرح ها : </label>
         </div>
         <div class="col-sm-4">
-            {{-- <label class="form-control">{{ $Scholar->Projects->count() }}</label> --}}
+            <label class="form-control">{{ $Scholar->Projects->count() }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>طرح ها : </label>
         </div>
         <div class="col-sm-4" style="display:table-column">
-            {{-- @foreach ($Projects as $proj)
+            @foreach ($Scholar->Projects as $proj)
                 <label class="form-control">{{ $proj->Subject }}</label>
-            @endforeach --}}
+            @endforeach
         </div>
     </div>
     <hr>

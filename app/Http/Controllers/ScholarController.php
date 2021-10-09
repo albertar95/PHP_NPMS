@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\DataMapper;
 use App\Http\Controllers\Api\NPMSController;
+use App\Models\Scholars;
 use Facade\FlareClient\Api;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -10,6 +12,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Http;
 use resources\ViewModels;
 use Resources\ViewModels\ScholarViewModel;
+use Illuminate\Support\Str;
 
 class ScholarController extends Controller
 {
@@ -22,6 +25,35 @@ class ScholarController extends Controller
         $MillitaryStatuses = $api->GetMillitaryStatuses();
         $Colleges = $api->GetColleges();
         return view('Scholar.AddScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges'));
+    }
+    public function MajorSelectChanged(string $NidMajor)
+    {
+        $api = new NPMSController();
+        $Oreintations = $api->GetOreintationsByMajorId($NidMajor);
+        $newValue = "<option value='0' disabled selected>گرایش</option> ";
+        foreach ($Oreintations as $orie) {
+            $newValue = Str::of($newValue)->append("<option value='");
+            $newValue = Str::of($newValue)->append($orie->NidOreintation);
+            $newValue = Str::of($newValue)->append("'>");
+            $newValue = Str::of($newValue)->append($orie->Title);
+            $newValue = Str::of($newValue)->append("</option> ");
+        }
+        $result = new JsonResults();
+        $result->Html = $newValue;
+        return response()->json($result);
+    }
+    public function SubmitAddScholar(Request $scholar)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if($api->AddScholar($scholar))
+        {
+            $tmpname = $scholar->FirstName;
+            $tmpname = Str::of($tmpname)->append(" ");
+            $tmpname = Str::of($tmpname)->append($scholar->FirstName);
+            $result->Message = $tmpname;
+        }
+        return response()->json($result);
     }
     public function Scholars()
     {
@@ -47,7 +79,7 @@ class ScholarController extends Controller
         $MillitaryStatuses = $api->GetMillitaryStatuses();
         $Colleges = $api->GetColleges();
         $Scholar = $api->GetScholarDTO($NidScholar);
-        if(is_null($Scholar))
+        if(!is_null($Scholar))
         {
             $Oreintations = $api->GetOreintationsByMajorId($Scholar->MajorId);
         }else
@@ -74,7 +106,18 @@ class ScholarController extends Controller
         //         TempData["EditScholarErrorMessage"] = $"خطا در انجام عملیات لطفا مجدد امتحان کنید";
         // }
         // return RedirectToAction("Scholars");
-        return redirect('Scholars');
+        return redirect('scholars');
+    }
+    public function UploadThisFile(Request $file)
+    {
+        // $imageName = time().'.'.$file->image->extension();
+        // $file->ProfilePictureUpload->storeAs('Images', $imageName);
+        $filename = "File".'_'.time().'_'.$file->fileName;
+        $file->profile->storeAs('/public/Images/', $filename);
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Message = $filename;
+        return response()->json($result);
     }
     public function DeleteScholar(string $NidScholar)
     {

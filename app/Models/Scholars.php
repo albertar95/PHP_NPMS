@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Scholars extends Model
 {
     use HasFactory;
     protected $table = 'scholars';
-    protected $primaryKey = ['NidScholar'];
-    protected $fillable = ['ProfilePicture','FirstName','LastName','NationalCode','BirthDate','Mobile','MillitaryStatus','GradeId','MajorId','OreintationId','college','CollaborationType'];
+    protected $primaryKey = 'NidScholar';
+    protected $fillable = ['ProfilePicture','FirstName','LastName','NationalCode','BirthDate','Mobile','MillitaryStatus','GradeId','MajorId','OreintationId','college','CollaborationType','IsDeleted'];
     public $incrementing = false;
     public    $timestamps = false;
     // protected $visible = [];

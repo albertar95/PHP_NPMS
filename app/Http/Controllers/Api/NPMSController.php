@@ -251,7 +251,7 @@ class NPMSController extends Controller
         $project = DataMapper::MapToProject($project);
         $project->ProjectStatus = $repo->ProjectStatusCalc($project);
         $res = $repo->UpdateProject($project);
-        $repo2->HandleAlarmsByProjectId($project->NidProject);
+        // $repo2->HandleAlarmsByProjectId($project->NidProject);
         return $res;
     }
     public function GetProjectDTOById(string $NidProject)
@@ -292,8 +292,8 @@ class NPMSController extends Controller
         $Project = DataMapper::MapToProject($Project);
         $repo->AddProject($Project);
         $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
-        $repo->UpdateProject($Project);
-        return $repo2->HandleAlarmsByProjectId($Project->NidProject);
+        return $repo->UpdateProject($Project);
+        // return $repo2->HandleAlarmsByProjectId($Project->NidProject);
     }
     public function GetProjectById(string $NidProject)
     {

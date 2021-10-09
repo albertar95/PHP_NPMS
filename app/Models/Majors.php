@@ -11,7 +11,7 @@ class Majors extends Model
 {
     use HasFactory;
     protected $table = 'majors';
-    protected $primaryKey = ['NidMajor'];
+    protected $primaryKey = 'NidMajor';
     protected $fillable = ['Title'];
     public $incrementing = false;
     // protected $visible = [];

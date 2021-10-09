@@ -9,7 +9,7 @@ class Projects extends Model
 {
     use HasFactory;
     protected $table = 'projects';
-    protected $primaryKey = ['NidProject'];
+    protected $primaryKey = 'NidProject';
     protected $fillable = ['Subject','ScholarId','UnitId','GroupId','Supervisor','SupervisorMobile','Advisor','AdvisorMobile','Refree1','Refree2','Editor','TenPercentLetterDate','PreImploymentLetterDate','ImploymentDate','SecurityLetterDate','ThesisDefenceDate','ThesisDefenceLetterDate','ReducePeriod','Commision','HasBookPublish','TitleApproved','ThirtyPercentLetterDate','SixtyPercentLetterDate','ATFLetterDate','FinalApprove'];
     public $incrementing = false;
     public    $timestamps = false;

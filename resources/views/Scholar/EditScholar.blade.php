@@ -22,9 +22,9 @@
                         <input type="text" id="NidScholar" name="NidScholar" value="{{ $Scholar->NidScholar }}" hidden />
                         <input type="text" id="UserId" name="UserId" value="{{ $Scholar->UserId }}" hidden />
                         @if ($Scholar->IsDeleted)
-                        <input type="checkbox" id="IsDeleted" name="IsDeleted" checked hidden/>
+                        <input type="checkbox" id="IsDeleted" name="IsDeleted" value="true" checked hidden/>
                         @else
-                        <input type="checkbox" id="IsDeleted" name="IsDeleted" hidden/>
+                        <input type="checkbox" id="IsDeleted" name="IsDeleted" value="false" hidden/>
                         @endforelse
                         <input type="text" id="DeleteDate" name="DeleteDate" value="{{ $Scholar->DeleteDate }}" hidden />
                         <input type="text" id="DeleteUser" name="DeleteUser" value="{{ $Scholar->DeleteUser }}" hidden />
@@ -171,13 +171,12 @@
                             </div>
                             <div class="col-sm-6" style="display:flex;">
                                 @if (!empty($Scholar->ProfilePicture))
-                                    {{-- var imgSrc = String.Format("data:image/jpg;base64,{0}", Model.Scholar.ProfilePicture); --}}
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe">
-                                        <img src="@imgSrc" id="userImg" style="width:100%;height:200px;" />
+                                        <img src="{{ sprintf("/storage/images/%s", $Scholar->ProfilePicture) }}" id="userImg" style="width:100%;height:200px;" />
                                     </div>
                                 @else
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe" hidden>
-                                        <img src="" id="userImg" style="width:100%;height:200px;" />
+                                        <img src="" id="uploadedImage" style="width:100%;height:200px;" />
                                     </div>
                                 @endforelse
                             </div>
@@ -194,6 +193,7 @@
 </div>
 
 @section('styles')
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
 @endsection
 @section('scripts')
@@ -218,15 +218,15 @@
                     $("#OrentationSlt").html('')
                     $.ajax(
                         {
-                            url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' + 'scholar/GetOreintationsByMajorId?MajorId=' + this.value,
+                            url: '/majorselectchanged/' + this.value,
                             type: 'get',
                             datatype: 'json',
                             success: function (result) {
-                                var newValue = "<option value='0' disabled selected>گرایش</option> "
-                                $.each(result, function (i, item) {
-                                    newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
-                                });
-                                $("#OrentationSlt").html(newValue)
+                                // var newValue = "<option value='0' disabled selected>گرایش</option> "
+                                // $.each(result, function (i, item) {
+                                //     newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
+                                // });
+                                $("#OrentationSlt").html(result.Html)
                             },
                             error: function () {
                                 $("#OrentationSlt").html('<option value="0" disabled selected>گرایش</option> ')
@@ -234,47 +234,6 @@
                         });
                 });
             });
-        function UploadFile() {
-            AdvanceInProgressBar(0);
-            $("#UploadMessage").attr('hidden', 'hidden');
-            $("#UploadModal").modal('show');
-            AdvanceInProgressBar(10);
-            var formData = new FormData();
-            formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
-            $.ajax(
-                {
-                    url: '@Url.Action("UploadThisFile","Home")',
-                    type: 'post',
-                    datatype: 'json',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (result) {
-                        if (result.HasValue)
-                        {
-                            window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
-                            window.setTimeout(function () {
-                                $("#ProfilePicture").val(result.Html);
-                                $("#userImg").attr('src', 'data:image/jpg;base64,' + result.Html);
-                                $("#uploadedframe").removeAttr('hidden');
-                            }, 3000);
-                        } else {
-                            window.setTimeout(function () {
-                                $("#UploadMessage").removeAttr('hidden');
-                                $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
-                            }, 3000);
-                        }
-                    },
-                    error: function ()
-                    {
-                        window.setTimeout(function () {
-                            $("#UploadMessage").removeAttr('hidden');
-                            $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
-                        }, 3000);
-                    }
-                });
-            window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
-        }
     </script>
 @endsection
 

@@ -11,7 +11,7 @@ class scholarDTO extends Model
     public string $FirstName;
     public string $LastName;
     public string $NationalCode;
-    public string $BirthDate;
+    public ?string $BirthDate;
     public string $FatherName;
     public string $Mobile;
     public int $MillitaryStatus;//tiny int

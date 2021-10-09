@@ -9,7 +9,7 @@ class Messages extends Model
 {
     use HasFactory;
     protected $table = 'messages';
-    protected $primaryKey = ['NidMessage'];
+    protected $primaryKey = 'NidMessage';
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];

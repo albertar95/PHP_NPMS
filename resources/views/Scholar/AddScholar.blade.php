@@ -11,7 +11,8 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">اطلاعات محقق</h1>
                     </div>
-                    <form class="user" enctype="application/x-www-form-urlencoded" id="AddScholarForm">
+                    <form class="user" id="AddScholarForm">
+                        @csrf
                         <input type="text" id="UserId" name="UserId" value="@slvm.NidUser" hidden />
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
@@ -139,6 +140,7 @@
 </div>
 
     @section ('styles')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
     @endsection
     @section ('scripts')
@@ -207,19 +209,19 @@
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
                     var data = $("#AddScholarForm").serializeArray();
-                    for (var item in data) {
-                        if (data[item].name == 'ProfilePicture') {
-                            data[item].value = upload;
-                        }
-                    }
+                    // for (var item in data) {
+                    //     if (data[item].name == 'ProfilePicture') {
+                    //         data[item].value = upload;
+                    //     }
+                    // }
                     $.ajax(
                         {
-                            url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' + 'scholar/AddScholar',
+                            url: '/submitaddscholar',
                             type: 'post',
                             datatype: 'json',
-                            data: data,
+                            data: $("#AddScholarForm").serialize(),
                             success: function (result) {
-                                $("#SuccessMessage").text(' محقق با نام ' + result.FirstName + ' ' + result.LastName + ' با موفقیت ایجاد گردید ')
+                                $("#SuccessMessage").text(' محقق با نام ' + result.Message + ' با موفقیت ایجاد گردید ')
                                 $("#successAlert").removeAttr('hidden')
                                 $('#AddScholarForm').each(function () { this.reset(); });
                                 window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden'); }, 5000);
@@ -238,15 +240,15 @@
                     $("#OrentationSlt").html('')
                     $.ajax(
                         {
-                            url: '/api/' + 'scholar/getoreintationsbymajorid/' + this.value,
+                            url: '/majorselectchanged/' + this.value,
                             type: 'get',
                             datatype: 'json',
                             success: function (result) {
-                                var newValue = "<option value='0' disabled selected>گرایش</option> "
-                                $.each(result, function (i, item) {
-                                    newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
-                                });
-                                $("#OrentationSlt").html(newValue)
+                                // var newValue = "<option value='0' disabled selected>گرایش</option> "
+                                // $.each(result, function (i, item) {
+                                //     newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
+                                // });
+                                $("#OrentationSlt").html(result.Html)
                             },
                             error: function () {
                                 $("#OrentationSlt").html('<option value="0" disabled selected>گرایش</option> ')
@@ -264,48 +266,54 @@
             {
                 return /((\+|00)98|0)9\d{9}/.test(input);
             }
-            function UploadFile() {
-                AdvanceInProgressBar(0);
-                $("#UploadMessage").attr('hidden','hidden');
-                $("#UploadModal").modal('show');
-                AdvanceInProgressBar(10);
-                var formData = new FormData();
-                formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
-                $.ajax(
-                    {
-                        url: '@Url.Action("UploadThisFile","Home")',
-                        type: 'post',
-                        datatype: 'json',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (result) {
-                            if (result.HasValue)
-                            {
-                                window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
-                                upload = result.Html;
-                                window.setTimeout(function () {
-                                    $("#uploadedImage").attr('src', 'data:image/jpg;base64,' + upload);
-                                    $("#uploadedframe").removeAttr('hidden');
-                                    $("#uploadedImage").removeAttr('hidden');
-                                }, 3000);
-                            } else
-                            {
-                                window.setTimeout(function () {
-                                    $("#UploadMessage").removeAttr('hidden');
-                                    $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
-                                }, 3000);
-                            }
-                        },
-                        error: function ()
-                        {
-                            window.setTimeout(function () {
-                                $("#UploadMessage").removeAttr('hidden');
-                                $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');},3000);
-                        }
-                    });
-                window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
-            }
+            // function UploadFile() {
+            //     AdvanceInProgressBar(0);
+            //     $("#UploadMessage").attr('hidden','hidden');
+            //     $("#UploadModal").modal('show');
+            //     AdvanceInProgressBar(10);
+            //     $.ajaxSetup({
+            //     headers: {
+            //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            //     });
+            //     var formData = new FormData();
+            //     formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
+            //     formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
+            //     $.ajax(
+            //         {
+            //             url: '/uploadthisfile',
+            //             type: 'post',
+            //             datatype: 'json',
+            //             data: formData,
+            //             contentType: false,
+            //             processData: false,
+            //             success: function (result) {
+            //                 if (result.HasValue)
+            //                 {
+            //                     window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
+            //                     $("#ProfilePicture").val(result.Message);
+            //                     window.setTimeout(function () {
+            //                         $("#uploadedImage").attr('src', '/storage/images/' + result.Message);
+            //                         $("#uploadedframe").removeAttr('hidden');
+            //                         $("#uploadedImage").removeAttr('hidden');
+            //                     }, 3000);
+            //                 } else
+            //                 {
+            //                     window.setTimeout(function () {
+            //                         $("#UploadMessage").removeAttr('hidden');
+            //                         $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
+            //                     }, 3000);
+            //                 }
+            //             },
+            //             error: function ()
+            //             {
+            //                 window.setTimeout(function () {
+            //                     $("#UploadMessage").removeAttr('hidden');
+            //                     $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');},3000);
+            //             }
+            //         });
+            //     window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
+            // }
         </script>
     @endsection
 

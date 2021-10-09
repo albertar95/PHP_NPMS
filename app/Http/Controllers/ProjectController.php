@@ -35,7 +35,7 @@ class ProjectController extends Controller
             return response()->json($result);
         }else
         {
-            $result->HasValue = true;
+            $result->HasValue = false;
             $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
             return response()->json($result);
         }
@@ -112,11 +112,9 @@ class ProjectController extends Controller
             $unitname = $api->UpdateUnit($unit);
             $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unitname);
         }
-        $units = $api->GetAllUnits();
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 1;
-        $mbivm->Units = $units;
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 1;
+        $Units = $api->GetAllUnits();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Units'))->render();
         $result->HasValue = true;
         $result->AltProp = $unit->NidUnit;
         return response()->json($result);
@@ -134,11 +132,10 @@ class ProjectController extends Controller
             $unitgroupname = $api->UpdateUnitGroup($unitGroup);
             $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitgroupname);
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 2;
-        $mbivm->Units = $api->GetAllUnits();
-        $mbivm->UnitGroups = $api->GetAllUnitGroups();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 2;
+        $Units = $api->GetAllUnits();
+        $UnitGroups = $api->GetAllUnitGroups();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Units','UnitGroups'))->render();
         $result->HasValue = true;
         // $result->AltProp = $unit->NidUnit;
         return response()->json($result);
@@ -171,10 +168,9 @@ class ProjectController extends Controller
                 return response()->json($result);
             }
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 3;
-        $mbivm->Grades = $api->GetGrades();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 3;
+        $Grades = $api->GetGrades();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Grades'))->render();
         $result->HasValue = true;
         return response()->json($result);
     }
@@ -191,10 +187,9 @@ class ProjectController extends Controller
             $api->UpdateMajor($major);
             $result->Message = sprintf("رشته تحصیلی با نام %s با موفقیت ویرایش گردید",$major->Title);
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 4;
-        $mbivm->Majors = $api->GetMajors();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 4;
+        $Majors = $api->GetMajors();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Majors'))->render();
         $result->HasValue = true;
         $result->AltProp = $major->NidMajor;
         return response()->json($result);
@@ -212,11 +207,10 @@ class ProjectController extends Controller
             $api->UpdateOreintation($oreintation);
             $result->Message = sprintf("گرایش با نام %s با موفقیت ویرایش گردید",$oreintation->Title);
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 5;
-        $mbivm->Majors = $api->GetMajors();
-        $mbivm->Oreintations = $api->GetOrientations();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 5;
+        $Majors = $api->GetMajors();
+        $Oreintations = $api->GetOrientations();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Majors','Oreintations'))->render();
         $result->HasValue = true;
         return response()->json($result);
     }
@@ -248,10 +242,9 @@ class ProjectController extends Controller
                 return response()->json($result);
             }
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 6;
-        $mbivm->Grades = $api->GetColleges();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 6;
+        $Colleges = $api->GetColleges();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Colleges'))->render();
         $result->HasValue = true;
         return response()->json($result);
     }
@@ -283,10 +276,9 @@ class ProjectController extends Controller
                 return response()->json($result);
             }
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 7;
-        $mbivm->Grades = $api->GetMillitaryStatuses();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 7;
+        $MillitaryStatuses = $api->GetMillitaryStatuses();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','MillitaryStatuses'))->render();
         $result->HasValue = true;
         return response()->json($result);
     }
@@ -318,10 +310,9 @@ class ProjectController extends Controller
                 return response()->json($result);
             }
         }
-        $mbivm = new ManageBaseInfoViewModel();
-        $mbivm->TblId = 8;
-        $mbivm->Grades = $api->GetCollaborationTypes();
-        $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+        $TblId = 8;
+        $CollaborationTypes = $api->GetCollaborationTypes();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','CollaborationTypes'))->render();
         $result->HasValue = true;
         return response()->json($result);
     }

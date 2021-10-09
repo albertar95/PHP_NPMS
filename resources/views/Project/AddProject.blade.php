@@ -428,7 +428,7 @@
                                     window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                                 } else
                                 {
-                                    window.location.href = '@Url.Action("Projects","Home")'
+                                    window.location.href = '/projects';
                                 }
                             },
                             error: function () {

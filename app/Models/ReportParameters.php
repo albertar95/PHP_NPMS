@@ -9,7 +9,7 @@ class ReportParameters extends Model
 {
     use HasFactory;
     protected $table = 'report_parameters';
-    protected $primaryKey = ['NidParameter'];
+    protected $primaryKey = 'NidParameter';
     public $incrementing = false;
     // protected $fillable = [];
     // protected $visible = [];

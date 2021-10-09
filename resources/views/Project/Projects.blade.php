@@ -87,6 +87,7 @@
                                     {
                                         <a href="{{ link_to_route('project.ProjectProgress','',$NidProject = $prj->NidProject) }}" class="btn btn-info">پیشرفت</a>
                                     } --}}
+                                    <a href="/projectdetail/{{ $prj->NidProject }}" class="btn btn-secondary">جزییات</a>
                                     <a href="/projectprogress/{{ $prj->NidProject }}" class="btn btn-info">پیشرفت</a>
                                 </td>
                             </tr>

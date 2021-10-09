@@ -738,7 +738,9 @@
             </div>
         </div>
     </div>
-
+@section('styles')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(function() {
@@ -748,8 +750,13 @@
                     NidUnit: $("#NidUnit").val(),
                     Title: $("#UnitTitle").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
-                    url: '/submitunitForm',
+                    url: '/submitunitform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -799,6 +806,11 @@
                     Title: $("#GroupTitle").val(),
                     UnitId: $("#UnitGroupsUnitId").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitunitgroupform',
                     type: 'post',
@@ -845,6 +857,11 @@
                     SettingTitle: $("#GradeSettingTitle").val(),
                     IsDeleted: $("#GradeIsDeleted").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitgradeform',
                     type: 'post',
@@ -888,6 +905,11 @@
                     NidMajor: $("#NidMajor").val(),
                     Title: $("#MajorTitle").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitmajorform',
                     type: 'post',
@@ -939,6 +961,11 @@
                     Title: $("#OreintationTitle").val(),
                     MajorId: $("#OreintationMajorId").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitoreintationform',
                     type: 'post',
@@ -986,6 +1013,11 @@
                     SettingTitle: $("#CollegeSettingTitle").val(),
                     IsDeleted: $("#CollegeIsDeleted").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitcollegeform',
                     type: 'post',
@@ -1032,6 +1064,11 @@
                     SettingTitle: $("#MillitSettingTitle").val(),
                     IsDeleted: $("#MillitIsDeleted").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitmillitform',
                     type: 'post',
@@ -1078,6 +1115,11 @@
                     SettingTitle: $("#CollabSettingTitle").val(),
                     IsDeleted: $("#CollabIsDeleted").val()
                 };
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax({
                     url: '/submitcollabform',
                     type: 'post',
@@ -1207,6 +1249,11 @@
         }
         $("#btnDeleteModalSubmit").click(function(e) {
             e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
             switch (CurrentDeleteTypo) {
                 case 1:
                     $.ajax({

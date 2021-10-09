@@ -9,7 +9,7 @@ class Oreintations extends Model
 {
     use HasFactory;
     protected $table = 'oreintations';
-    protected $primaryKey = ['NidOreintation'];
+    protected $primaryKey = 'NidOreintation';
     public $incrementing = false;
     // protected $fillable = [];
     // protected $visible = [];

@@ -16,8 +16,9 @@ use App\Models\Projects;
 use App\Models\Scholars;
 use App\Models\Settings;
 use App\Models\Units;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
-
+use phpDocumentor\Reflection\Types\Boolean;
 
 class ScholarRepository extends BaseRepository implements IScholarRepository{
     public function __construct(Scholars $model)
@@ -143,7 +144,7 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
         {
             $result->push(DataMapper::MapToOreintationDTO($orien));
         }
-        return response()->json($result);
+        return $result;
     }
     public function GetScholarDTOById(string $ScholarId):scholarDTO
     {
@@ -187,6 +188,8 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
                 {
                     $tmpScholarList->Grade = ($this->GetGrades(0, true)->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle)->get();
                     $tmpScholarList->collegeName = $this->GetColleges(0, true)->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
+                    $tmpScholarList->MajorName = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;
+                    $tmpScholarList->OreintationName = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title;
                 }
                 catch (\Exception)
                 {
@@ -204,6 +207,8 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
                 {
                     $tmpScholarList->Grade = $this->GetGrades(0, true)->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;
                     $tmpScholarList->collegeName = $this->GetColleges(0, true)->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
+                    $tmpScholarList->MajorName = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;
+                    $tmpScholarList->OreintationName = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title;
                 }
                 catch (\Exception)
                 {
@@ -223,6 +228,10 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
             $tmpScholarDetail->CollaborationTypeTitle = $this->GetCollaborationTypes(0, true)->Where('SettingValue','=',$scholar->CollaborationType)->firstOrFail()->SettingTitle;
             $tmpScholarDetail->MillitaryStatusTitle = $this->GetMillitaryStatuses(0, true)->Where('SettingValue','=',$scholar->MillitaryStatus)->firstOrFail()->SettingTitle;
             $tmpScholarDetail->CollegeTitle = $this->GetColleges(0, true)->Where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
+
+            $tmpScholarDetail->Major = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail();
+            $tmpScholarDetail->Oreintation = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail();
+            $tmpScholarDetail->Projects = Projects::all()->where('ScholarId','=',$scholar->NidScholar);
             // $tmpScholarDetail->Projects = new projectDTO();
             return $tmpScholarDetail;
         }
@@ -237,11 +246,11 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function DeleteScholar(string $ScholarId):bool
     {
-        $tmpScholar = $this->model->all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',false)->firstOrFail();
+        $tmpScholar = Scholars::all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',false)->firstOrFail();
         if (!is_null($tmpScholar))
         {
             $tmpScholar->IsDeleted = true;
-            // $tmpScholar->DeleteDate = DateTime.Now;
+            // $tmpScholar->DeleteDate = Carbon::now();
             //tmpScholar.DeleteUser = //deleted user;
             $tmpScholar->save();
             return true;
@@ -260,7 +269,27 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function UpdateScholar(Scholars $Scholar):bool
     {
-        $Scholar->save();
+        $current = Scholars::where('NidScholar',$Scholar->NidScholar)->update(
+            [
+                'FirstName' => $Scholar->FirstName,
+                'LastName' => $Scholar->LastName,
+                'NationalCode' => $Scholar->NationalCode,
+                'BirthDate' => $Scholar->BirthDate,
+                'FatherName' => $Scholar->FatherName,
+                'Mobile' => $Scholar->Mobile,
+                'MillitaryStatus' => $Scholar->MillitaryStatus,
+                'GradeId' => $Scholar->GradeId,
+                'MajorId' => $Scholar->MajorId,
+                'OreintationId' => $Scholar->OreintationId,
+                'college' => $Scholar->college,
+                'CollaborationType' => $Scholar->CollaborationType,
+                'ProfilePicture' => $Scholar->ProfilePicture,
+                'UserId' => $Scholar->UserId,
+                'IsDeleted' => $Scholar->IsDeleted ?? boolval(false),
+                'DeleteDate' => $Scholar->DeleteDate,
+                'DeleteUser' => $Scholar->DeleteUser
+            ]
+            );
         return true;
     }
 }

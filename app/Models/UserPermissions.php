@@ -9,7 +9,7 @@ class UserPermissions extends Model
 {
     use HasFactory;
     protected $table = 'user_permissions';
-    protected $primaryKey = ['NidPermission'];
+    protected $primaryKey = 'NidPermission';
     public $incrementing = false;
     public    $timestamps = false;
     // protected $fillable = [];

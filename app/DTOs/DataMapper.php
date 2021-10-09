@@ -154,11 +154,11 @@ class DataMapper
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
-            // $result->ScholarName = $project->Scholar->Title;//check
+            $result->ScholarName = "";//$project->Scholar->Title;//check
             $result->UnitId = $project->UnitId;
-            // $result->UnitName = $project->Unit->Title;//check
+            $result->UnitName = "";//$project->Unit->Title;//check
             $result->GroupId = $project->GroupId;
-            // $result->GroupName = $project->unit_group->Title;//check
+            $result->GroupName = "";//$project->unit_group->Title;//check
             $result->Supervisor = $project->Supervisor ?? "";
             $result->SupervisorMobile = $project->SupervisorMobile ?? "";
             $result->Advisor = $project->Advisor ?? "";
@@ -252,7 +252,7 @@ class DataMapper
             $result->OreintationId = $scholar->OreintationId;
             $result->college = $scholar->college;
             $result->CollaborationType = $scholar->CollaborationType;
-            $result->ProfilePicture = $scholar->ProfilePicture;
+            $result->ProfilePicture = $scholar->ProfilePicture ?? "";
             $result->UserId = $scholar->UserId;
             $result->IsDeleted = boolval($scholar->IsDeleted);
             $result->DeleteDate = $scholar->DeleteDate;
@@ -274,8 +274,8 @@ class DataMapper
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
             $result->Grade = "";//$scholar->GradeId ?? "";
-            // $result->MajorName = $scholar->Major->Title;//check
-            // $result->OreintationName = $scholar->Oreintation->Title;//check
+            $result->MajorName = "";//check
+            $result->OreintationName = "";//check
             $result->collegeName = $scholar->college;
             return $result;
         }
@@ -293,17 +293,17 @@ class DataMapper
             $result->FirstName = $scholar->FirstName;
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
-            $result->BirthDate = $scholar->BirthDate;
+            $result->BirthDate = $scholar->BirthDate ?? "";
             $result->FatherName = $scholar->FatherName;
             $result->Mobile = $scholar->Mobile;
             $result->MillitaryStatusTitle = $scholar->MillitaryStatus;
             $result->GradeTitle = $scholar->GradeId;//check
-            // $result->Major = $this->MapToMajorDTO($scholar->major);//check
-            // $result->Oreintation = $this->MapToOreintationDTO($scholar->orientation);//check
+            $result->Major = new majorDTO();//check
+            $result->Oreintation = new OrientationDTO();//check
             $result->CollegeTitle = $scholar->college;
             $result->CollaborationTypeTitle = $scholar->CollaborationType;
-            $result->ProfilePicture = $scholar->ProfilePicture;
-            // $result->Projects = collect($this->MapToProjectDTO($scholar->project));//check
+            $result->ProfilePicture = $scholar->ProfilePicture ?? "";
+            $result->Projects = new Collection();//check
             return $result;
         }
         catch (\Exception)
@@ -574,13 +574,13 @@ class DataMapper
             $result->ThesisDefenceLetterDate = $project->ThesisDefenceLetterDate;
             $result->ReducePeriod = $project->ReducePeriod;
             $result->Commision = $project->Commision;
-            $result->HasBookPublish = $project->HasBookPublish;
-            $result->UserId = $project->UserId;
-            $result->TitleApproved = $project->TitleApproved;
+            $result->HasBookPublish = boolval($project->HasBookPublish);
+            $result->UserId = '68018f1c-3e7f-4ff2-af9e-9fb197a194b9';//$project->UserId;
+            $result->TitleApproved = boolval($project->TitleApproved);
             $result->ThirtyPercentLetterDate = $project->ThirtyPercentLetterDate;
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate;
             $result->ATFLetterDate = $project->ATFLetterDate;
-            $result->FinalApprove = $project->FinalApprove;
+            $result->FinalApprove = boolval($project->FinalApprove);
             return $result;
         }
         catch (\Exception)
@@ -692,7 +692,7 @@ class DataMapper
             $result->SettingKey = $setting->SettingKey;
             $result->SettingValue = $setting->SettingValue;
             $result->SettingTitle = $setting->SettingTitle;
-            $result->IsDeleted = $setting->IsDeleted;
+            $result->IsDeleted = boolval($setting->IsDeleted);
             return $result;
         }
         catch (\Exception)

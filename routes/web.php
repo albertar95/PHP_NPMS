@@ -80,6 +80,9 @@ Route::get("scholardetail/{NidScholar}",[ScholarController::class,"ScholarDetail
 Route::get("editscholar/{NidScholar}",[ScholarController::class,"EditScholar"])->name('scholar.EditScholar');
 Route::post("submiteditscholar",[ScholarController::class,"SubmitEditScholar"])->name('scholar.SubmitEditScholar');
 Route::get("deletescholar/{NidScholar}",[ScholarController::class,"DeleteScholar"])->name('scholar.DeleteScholar');
+Route::get("majorselectchanged/{NidMajor}",[ScholarController::class,"MajorSelectChanged"])->name('scholar.MajorSelectChanged');
+Route::post("submitaddscholar",[ScholarController::class,"SubmitAddScholar"])->name('scholar.SubmitAddScholar');
+Route::post("uploadthisfile",[ScholarController::class,"UploadThisFile"])->name('scholar.UploadThisFile');
 
 //search routes
 Route::get("advancesearch",[SearchController::class,"AdvanceSearch"])->name('search.AdvanceSearch');

@@ -3,6 +3,7 @@
 namespace App\DTOs;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class scholarDetailDTO extends Model
 {
@@ -16,9 +17,9 @@ class scholarDetailDTO extends Model
     public string $MillitaryStatusTitle;
     public string $GradeTitle;
     public majorDTO $Major;
-    public OreintationDTO $Oreintation;
+    public OrientationDTO $Oreintation;
     public string $CollegeTitle;
     public string $CollaborationTypeTitle;
-    public projectDTO $Projects;
+    public Collection $Projects;
     public string $ProfilePicture;
 }

@@ -10,7 +10,7 @@ class scholarListDTO extends Model
     public string $FirstName;
     public string $LastName;
     public string $NationalCode;
-    public ?string $Grade;
+    public string $Grade;
     public string $MajorName;
     public string $OreintationName;
     public string $CollegeName;

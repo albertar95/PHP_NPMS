@@ -9,7 +9,7 @@ class UnitGroups extends Model
 {
     use HasFactory;
     protected $table = 'unit_groups';
-    protected $primaryKey = ['NidGroup'];
+    protected $primaryKey = 'NidGroup';
     public $incrementing = false;
     public    $timestamps = false;
     // protected $fillable = [];

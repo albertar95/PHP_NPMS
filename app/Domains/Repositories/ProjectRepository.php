@@ -35,18 +35,28 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
             $tmpProject = $this->model->all()->take($pagesize);
             foreach ($tmpProject as $prj)
             {
-                $result->push(DataMapper::MapToProjectInitialDTO($prj));
+                $tmpprojectinitial = DataMapper::MapToProjectInitialDTO($prj);
+                $tmpscholar = Scholars::all()->where('NidScholar','=',$tmpprojectinitial->ScholarId)->firstOrFail();
+                $tmpprojectinitial->ScholarName = $tmpscholar->FirstName.' '.$tmpscholar->LastName;
+                $tmpprojectinitial->UnitName = $this->GetUnitById($tmpprojectinitial->UnitId)->Title;
+                $tmpprojectinitial->GroupName = $this->GetUnitGroupById($tmpprojectinitial->GroupId)->Title;
+                $result->push($tmpprojectinitial);
             }
         }else
         {
             $tmpProject = $this->model->all();
             foreach ($tmpProject as $prj)
             {
-                $result->push(DataMapper::MapToProjectInitialDTO($prj));
+                $tmpprojectinitial = DataMapper::MapToProjectInitialDTO($prj);
+                $tmpscholar = Scholars::all()->where('NidScholar','=',$tmpprojectinitial->ScholarId)->firstOrFail();
+                $tmpprojectinitial->ScholarName = $tmpscholar->FirstName.' '.$tmpscholar->LastName;
+                $tmpprojectinitial->UnitName = $this->GetUnitById($tmpprojectinitial->UnitId)->Title;
+                $tmpprojectinitial->GroupName = $this->GetUnitGroupById($tmpprojectinitial->GroupId)->Title;
+                $result->push($tmpprojectinitial);
             }
         }
         // return $result;
-        return $this->model->all();
+        return $result;
     }
     public function AddProjectInitial(projectInitialDTO $projectInitial):bool
     {
@@ -125,7 +135,7 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
         if($pagesize == 0)
         {
             // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false);
-            $tmpUnitGroups = Scholars::where('IsDeleted','=',null)->orWhere('IsDeleted','=',false);
+            $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',false);
             foreach ($tmpUnitGroups as $sch)
             {
                 $result->push(DataMapper::MapToScholarListDTO($sch));
@@ -134,7 +144,7 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
         else
         {
             // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false)->take($pagesize);
-            $tmpUnitGroups = Scholars::where('IsDeleted','=',null)->orWhere('IsDeleted','=',false)->take($pagesize);
+            $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',false)->take($pagesize);
             foreach ($tmpUnitGroups as $sch)
             {
                 $result->push(DataMapper::MapToScholarListDTO($sch));
@@ -191,20 +201,20 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
         switch ($Type)
         {
             case 1://grade
-                if (Settings::all()->where('SettingKey','=','GradeId')->exists())
-                    $result = Settings::all()->where('SettingKey','=','GradeId')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                if (Settings::all()->where('SettingKey','=','GradeId')->count() > 0)
+                    $result = Settings::all()->where('SettingKey','=','GradeId')->max('SettingValue') + 1;
                 break;
             case 2://college
-                if (Settings::all()->where('SettingKey','=','College')->exists())
-                    $result = Settings::all()->where('SettingKey','=','College')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                if (Settings::all()->where('SettingKey','=','College')->count() > 0)
+                    $result = Settings::all()->where('SettingKey','=','College')->max('SettingValue') + 1;
                 break;
             case 3://millit
-                if (Settings::all()->where('SettingKey','=','MillitaryStatus')->exists())
-                    $result = Settings::all()->where('SettingKey','=','MillitaryStatus')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                if (Settings::all()->where('SettingKey','=','MillitaryStatus')->count() > 0)
+                    $result = Settings::all()->where('SettingKey','=','MillitaryStatus')->max('SettingValue') + 1;
                 break;
             case 4://collab
-                if (Settings::all()->where('SettingKey','=','CollaborationType')->exists())
-                    $result = Settings::all()->where('SettingKey','=','CollaborationType')->orderBy('SettingValue','DESC')->firstOrFail()->SettingValue + 1;
+                if (Settings::all()->where('SettingKey','=','CollaborationType')->count() > 0)
+                    $result = Settings::all()->where('SettingKey','=','CollaborationType')->max('SettingValue') + 1;
                 break;
         }
         return $result;
@@ -301,7 +311,41 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateProject(Projects $project)
     {
-        return $project->save();
+        $current = Projects::where('NidProject',$project->NidProject)->update(
+            [
+                'ProjectNumber' => $project->ProjectNumber,
+                'Subject' => $project->Subject,
+                'ProjectStatus' => $project->ProjectStatus,
+                'ScholarId' => $project->ScholarId,
+                'UnitId' => $project->UnitId,
+                'GroupId' => $project->GroupId,
+                'Supervisor' => $project->Supervisor,
+                'SupervisorMobile' => $project->SupervisorMobile,
+                'Advisor' => $project->Advisor,
+                'AdvisorMobile' => $project->AdvisorMobile,
+                'Referee1' => $project->Referee1,
+                'Referee2' => $project->Referee1,
+                'Editor' => $project->Editor,
+                'CreateDate' => $project->CreateDate,
+                'PersianCreateDate' => $project->PersianCreateDate,
+                'TenPercentLetterDate' => $project->TenPercentLetterDate,
+                'PreImploymentLetterDate' => $project->PreImploymentLetterDate,
+                'ImploymentDate' => $project->ImploymentDate,
+                'SecurityLetterDate' => $project->SecurityLetterDate,
+                'ThesisDefenceDate' => $project->ThesisDefenceDate,
+                'ThesisDefenceLetterDate' => $project->ThesisDefenceLetterDate,
+                'ReducePeriod' => $project->ReducePeriod,
+                'Commision' => $project->Commision,
+                'HasBookPublish' => boolval($project->HasBookPublish),
+                'UserId' => '68018f1c-3e7f-4ff2-af9e-9fb197a194b9',//$project->UserId,
+                'TitleApproved' => boolval($project->TitleApproved),
+                'ThirtyPercentLetterDate' => $project->ThirtyPercentLetterDate,
+                'SixtyPercentLetterDate' => $project->SixtyPercentLetterDate,
+                'ATFLetterDate' => $project->ATFLetterDate,
+                'FinalApprove' => boolval($project->FinalApprove)
+            ]
+            );
+            return true;
     }
     public function AddProject(Projects $project)
     {
