@@ -332,10 +332,9 @@ class ProjectController extends Controller
             case "2":
                 $result->HasValue = true;
                 $result->Message = "یگان با موفقیت حذف گردید";
-                $mbivm = new ManageBaseInfoViewModel();
-                $mbivm->TblId = 1;
-                $mbivm->Units = $api->GetAllUnits();
-                $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+                $TblId = 1;
+                $Units = $api->GetAllUnits();
+                $result->Html = view('Project._BaseInfoTables',compact('TblId','Units'))->render();
                 return response()->json($result);
                 break;
             case "3":
@@ -354,11 +353,10 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "گروه با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 1;
-            $mbivm->Units = $api->GetAllUnits();
-            $mbivm->UnitGroups = $api->GetAllUnitGroups();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 1;
+            $Units = $api->GetAllUnits();
+            $UnitGroups = $api->GetAllUnitGroups();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','Units','UnitGroups'))->render();
             return response()->json($result);
         }else
         {
@@ -376,10 +374,9 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "مقطع تحصیلی با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 3;
-            $mbivm->Grades = $api->GetGrades();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 3;
+            $Grades = $api->GetGrades();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','Grades'))->render();
             return response()->json($result);
         }else
         {
