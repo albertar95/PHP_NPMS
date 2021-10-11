@@ -7,6 +7,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScholarController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Mime\MessageConverter;
 
@@ -24,6 +25,8 @@ use Symfony\Component\Mime\MessageConverter;
 Route::get('/', function () {
     return view('General.Index');
 })->name('index');
+
+
 
 //alarm routes
 Route::get("getalarms",[AlarmController::class,"GetAlarms"])->name('alarm.GetAlarms');
@@ -104,8 +107,8 @@ Route::get("userpermissions",[UserController::class,"UserPermissions"])->name('u
 Route::get("userpermissiondetail/{NidUser}",[UserController::class,"UserPermissionDetail"])->name('user.UserPermissionDetail');
 Route::get("managepermission/{NidUser}",[UserController::class,"ManagePermission"])->name('user.ManagePermission');
 Route::get("edituserpermission",[UserController::class,"EditUserPermission"])->name('user.EditUserPermission');
-Route::get("login",[UserController::class,"Login"])->name('user.Login');
+Route::get("login",[UserController::class,"Login"])->name('login');
 Route::get("loadingpage",[UserController::class,"LoadingPage"])->name('user.LoadingPage');
 Route::post("submitlogin",[UserController::class,"SubmitLogin"])->name('user.SubmitLogin');
-Route::get("setlogindata",[UserController::class,"SetLoginData"])->name('user.SetLoginData');
-Route::get("logout",[UserController::class,"Logout"])->name('user.Logout');
+Route::get("setlogindata/{Niduser}",[UserController::class,"SetLoginData"])->name('user.SetLoginData');
+Route::post("logout",[UserController::class,"Logout"])->name('user.Logout');

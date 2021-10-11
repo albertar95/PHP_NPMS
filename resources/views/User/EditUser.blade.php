@@ -42,13 +42,13 @@
                     </div>
                     <form class="user" action="{{ route('user.SubmitEditUser') }}" id="EditUserForm" method="POST">
                         @csrf
-                        <input id="CreateDate" name="CreateDate" type="text" hidden >
-                        <input id="LastLoginDate" name="LastLoginDate" type="text" hidden >
-                        <input id="IncorrectPasswordCount" name="IncorrectPasswordCount" type="text" hidden >
-                        <input id="IsDisabled" name="IsDisabled" type="text" hidden >
-                        <input id="IsLockedOut" name="IsLockedOut" type="text" hidden >
-                        <input id="LastLoginDate" name="LastLoginDate" type="text" hidden >
-                        <input id="NidUser" name="NidUser" type="text" hidden >
+                        <input id="CreateDate" value="{{ $User->CreateDate }}" name="CreateDate" type="text" hidden >
+                        <input id="LastLoginDate" value="{{ $User->LastLoginDate }}" name="LastLoginDate" type="text" hidden >
+                        <input id="IncorrectPasswordCount" value="{{ $User->IncorrectPasswordCount }}" name="IncorrectPasswordCount" type="text" hidden >
+                        <input id="IsDisabled" name="IsDisabled" value="{{ $User->IsDisabled }}" type="text" hidden >
+                        <input id="IsLockedOut" name="IsLockedOut" value="{{ $User->IsLockedOut }}" type="text" hidden >
+                        <input id="LastLoginDate" name="LastLoginDate" value="{{ $User->LastLoginDate }}" type="text" hidden >
+                        <input id="NidUser" name="NidUser" value="{{ $User->NidUser }}" type="text" hidden >
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="FirstName" name="FirstName"

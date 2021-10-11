@@ -17,10 +17,6 @@ class UserPermissions extends Model
     // protected $hidden = [];
     public function user()
     {
-        return $this->belongsTo(Users::class);
-    }
-    public function resource()
-    {
-        return $this->belongsTo(Resources::class);
+        return $this->belongsTo(User::class);
     }
 }

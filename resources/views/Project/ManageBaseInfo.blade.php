@@ -709,8 +709,7 @@
                             </div>
                         </div>
                         <hr>
-                        <a href="{{ URL('project.Projects') }} id=" btnSubmit"
-                            class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
+                        <a href="{{ route('project.Projects') }}" id="btnSubmit" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
                             بازگشت به لیست طرح ها
                         </a>
                     </div>

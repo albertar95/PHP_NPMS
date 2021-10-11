@@ -48,7 +48,7 @@ class CreateProjectsTable extends Migration
             $table->collation = 'utf8mb4_persian_ci';
             $table->primary('NidProject','PK_Projects');
             $table->foreign('ScholarId','FK_ScholarProject')->references('NidScholar')->on('Scholars');
-            $table->foreign('UserId','FK_UserProject')->references('NidUser')->on('Users');
+            $table->foreign('UserId','FK_UserProject')->references('NidUser')->on('User');
             $table->foreign('UnitId','FK_UnitProject')->references('NidUnit')->on('Units');
             $table->foreign('GroupId','FK_UnitGroupProject')->references('NidGroup')->on('Unit_Groups');
         });

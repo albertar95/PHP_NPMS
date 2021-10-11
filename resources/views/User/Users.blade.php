@@ -105,7 +105,7 @@
                                     {
                                         <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
                                     } --}}
-                                    <a href="{{ route('user.EditUser') }}/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
+                                    <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
                         </td>
                         </tr>
                         @endforeach
@@ -229,7 +229,7 @@
 
             function ChangeTableSource(sourceId) {
                 $.ajax({
-                    url: '/UserSourceChange/' + sourceId,
+                    url: '/usersourcechange/' + sourceId,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

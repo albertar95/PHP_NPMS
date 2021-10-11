@@ -24,6 +24,7 @@ use App\Models\Projects;
 use App\Models\Reports;
 use App\Models\Scholars;
 use App\Models\Units;
+use App\Models\User;
 use App\Models\Users;
 use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
@@ -136,67 +137,75 @@ class NPMSController extends Controller
     {
         $User->CreateDate = Carbon::now();
         $User->NidUser = Str::uuid();
-        $repo = new UserRepository(new Users());
+        $User->IsLockedOut = boolval(false);
+        $User->IsDisabled = boolval(false);
+        $User->IsAdmin = boolval($User->IsAdmin);
+        $repo = new UserRepository(new User());
         $User = DataMapper::MapToUser($User);
         $repo->AddUser($User);
         return $User;
     }
     public function GetUserDTOById(string $UserId)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return $repo->GetUserDTOById($UserId);
     }
     public function GetAllUsers()
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return $repo->GetUserDTOs(0);
     }
     public function DisableUserById(string $UserId)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return response()->json(['HasValue'=>$repo->DisableUser($UserId)]);
     }
     public function UpdateUser(Request $User)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         $User = DataMapper::MapToUser($User);
         return $repo->UpdateUser($User);
     }
     public function GetCustomUsers(int $SourceId)
     {
-        $repo = new UserRepository(new Users());
-        $repo->GetFilteredUserDTOs($SourceId);
+        $repo = new UserRepository(new User());
+        return $repo->GetFilteredUserDTOs($SourceId);
     }
     public function ResetPassword(string $NidUser,string $NewPassword)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         $NewPass = $repo->ChangeUserPassword($NidUser, $NewPassword);
         if (!isEmptyOrNullString($NewPass))
         return response()->json(['Message'=>$NewPass,'HasValue'=>true]);
     }
     public function LoginThisUser(string $Username, string $Password)
     {
-        $repo = new UserRepository(new Users());
-        $repo->LoginUser($Username,$Password);
+        $repo = new UserRepository(new User());
+        return $repo->LoginUser($Username,$Password);
+    }
+    public function GetThisUserByUsername(string $Username)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetUserByUsername($Username);
     }
     public function GetAllUserPermissionUsers()
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return $repo->GetUserPermissionUsers(0);
     }
     public function GetUserInPermissionById(string $NidUser)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return $repo->GetUserInPermissionById($NidUser);
     }
     public function GetAllResources()
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         return $repo->GetResources(0);
     }
     public function GetAllUserPermissions(string $NidUser)
     {
-        $repo = new UserRepository(new Users());
+        $repo = new UserRepository(new User());
         $repo2 = new AlarmRepository(new Alarms());
         // try
         // {
@@ -207,19 +216,18 @@ class NPMSController extends Controller
         // }
         return $repo->GetUserPermissions($NidUser);
     }
-    public function UpdateUserUserPermissions(string $NidUser,string $Resources)
+    public function UpdateUserUserPermissions(string $NidUser,array $Resources)
     {
         $resourceGuids = new Collection();
         if(!is_null($Resources))
         {
-            $ResourceArray = explode(',',$Resources);
-            foreach ($ResourceArray as $ids)
+            foreach ($Resources as $ids)
             {
-                $resourceGuids->push(str_replace("'","",$ids));
+                $resourceGuids->push($ids);
             }
         }
-        $repo = new UserRepository(new Users());
-        return $repo->UpdateUserUserPermission($NidUser, $resourceGuids);
+        $repo = new UserRepository(new User());
+        return $repo->UpdateUserUserPermission($NidUser, $Resources);
     }
 
     //Project section
@@ -331,6 +339,7 @@ class NPMSController extends Controller
     public function AddMajor(Request $major)
     {
         $repo = new ProjectRepository(new Projects());
+        $major->NidMajor = Str::uuid();
         $major = DataMapper::MapToMajor($major);
         return $repo->AddMajor($major);
     }
@@ -343,6 +352,7 @@ class NPMSController extends Controller
     public function AddOreintation(Request $oreintation)
     {
         $repo = new ProjectRepository(new Projects());
+        $oreintation->NidOreintation = Str::uuid();
         $oreintation = DataMapper::MapToOreintation($oreintation);
         return $repo->AddOreintation($oreintation);
     }
@@ -356,6 +366,7 @@ class NPMSController extends Controller
     {
         $repo = new ProjectRepository(new Projects());
         $setting->NidSetting = Str::uuid();
+        $setting->IsDeleted = boolval(false);
         $setting = DataMapper::MapToSetting($setting);
         return $repo->AddSetting($setting);
     }
@@ -403,7 +414,7 @@ class NPMSController extends Controller
     {
         $repo = new ProjectRepository(new Projects());
         $tmpSetting = $repo->GetSettingById($NidSetting);
-        $tmpSetting->IsDeleted = true;
+        $tmpSetting->IsDeleted = boolval(true);
         return response()->json(['HasValue'=>$repo->UpdateSetting($tmpSetting)]);
     }
     public function GenerateSettingValue(int $index)

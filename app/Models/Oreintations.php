@@ -11,6 +11,7 @@ class Oreintations extends Model
     protected $table = 'oreintations';
     protected $primaryKey = 'NidOreintation';
     public $incrementing = false;
+    public    $timestamps = false;
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];

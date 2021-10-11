@@ -400,10 +400,9 @@ class ProjectController extends Controller
             case "2":
                 $result->HasValue = true;
                 $result->Message = "رشته تحصیلی با موفقیت حذف گردید";
-                $mbivm = new ManageBaseInfoViewModel();
-                $mbivm->TblId = 4;
-                $mbivm->Majors = $api->GetMajors();
-                $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+                $TblId = 4;
+                $Majors = $api->GetMajors();
+                $result->Html = view('Project._BaseInfoTables',compact('TblId','Majors'))->render();
                 return response()->json($result);
                 break;
             case "3":
@@ -422,11 +421,10 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "گرایش با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 5;
-            $mbivm->Majors = $api->GetMajors();
-            $mbivm->Oreintations = $api->GetOrientations();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 5;
+            $Majors = $api->GetMajors();
+            $Oreintations = $api->GetOrientations();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','Majors','Oreintations'))->render();
             return response()->json($result);
         }else
         {
@@ -444,10 +442,9 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "دانشکده با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 3;
-            $mbivm->Colleges = $api->GetColleges();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 6;
+            $Colleges = $api->GetColleges();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','Colleges'))->render();
             return response()->json($result);
         }else
         {
@@ -465,10 +462,9 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "وضعیت خدمت با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 7;
-            $mbivm->MillitaryStatuses = $api->GetMillitaryStatuses();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 7;
+            $MillitaryStatuses = $api->GetMillitaryStatuses();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','MillitaryStatuses'))->render();
             return response()->json($result);
         }else
         {
@@ -486,10 +482,9 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "نوع همکاری با موفقیت حذف گردید";
-            $mbivm = new ManageBaseInfoViewModel();
-            $mbivm->TblId = 8;
-            $mbivm->CollaborationTypes = $api->GetCollaborationTypes();
-            $result->Html = view('Project._BaseInfoTables',$mbivm)->render();
+            $TblId = 8;
+            $CollaborationTypes = $api->GetCollaborationTypes();
+            $result->Html = view('Project._BaseInfoTables',compact('TblId','CollaborationTypes'))->render();
             return response()->json($result);
         }else
         {

@@ -169,11 +169,22 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function CheckForUnitGroupExist(string $NidUnit) :bool
     {
-        return UnitGroups::all()->where('UnitId','=',$NidUnit)->exists();
+        if(UnitGroups::all()->where('UnitId','=',$NidUnit)->count() > 0)
+        {
+            return true;
+        }else{
+            return false;
+        }
     }
     public function CheckForOreintationExist(string $NidMajor):bool
     {
-        return Oreintations::all()->where('MajorId','=',$NidMajor)->exists();
+        if(Oreintations::all()->where('MajorId','=',$NidMajor)->count() > 0)
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
     }
     public function GetUnitById(string $NidUnit):Units
     {
@@ -303,7 +314,14 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateSetting(Settings $setting)
     {
-        return $setting->save();
+        Settings::where('NidSetting',$setting->NidSetting)->update(
+            [
+                'SettingKey'=>$setting->SettingKey,
+                'SettingValue'=>$setting->SettingValue,
+                'SettingTitle'=>$setting->SettingTitle,
+                'IsDeleted'=>$setting->IsDeleted
+            ]);
+        return true;
     }
     public function DeleteSetting(Settings $setting)
     {

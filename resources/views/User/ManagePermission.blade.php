@@ -54,12 +54,9 @@
                             <label>دسترسی ها : </label>
                         </div>
                     </div>
-                    {{ $counter = $Resources->count() / 3; }}
-                    @for ($i = 0; $i < $counter; $i++)
-                    {
+                    @for ($i = 0; $i < $Resources->count(); $i++)
                         <div class="form-group row" style="text-align:right;">
-                            {{ $tmp1 = $Resources->where('ClassLevel','=',1)->sortBy('SortNumber')->skip($i * 3)->take(3); }}
-                            @foreach ($tmp1 as $res)
+                            @foreach ($Resources->where('ClassLevel','=',1)->sortBy('SortNumber')->skip($i * 3)->take(3) as $res)
                                 <div class="col-sm-4">
                                         @if ($UserPermissions->Where('ResourceId','=',$res->NidResource)->count() > 0)
                                             <div class="row" style="display:flex;">
@@ -67,8 +64,7 @@
                                                 <label for="{{ $res->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res->SortNumber}}.{{ $res->ResourceName  }}</label>
                                             </div>
                                             @if ($Resources->where('ClassLevel','=',2)->where('ParentId','=','NidResource')->count() > 0)
-                                            {{ $tmp2 =$resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber'); }}
-                                                @foreach ($tmp2 as $res1)
+                                                @foreach ($resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber') as $res1)
                                                     <div class="row" style="display:flex;padding-right:1.5rem;">
                                                         @if ($UserPermissions->Where('ResourceId','=',$res1->NidResource)->count() > 0)
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="@res1.ParentId" checked />
@@ -86,8 +82,7 @@
                                                 <label for="{{ $res->NidResource }}" style="margin:.45rem .45rem 0 0">{{ $res->SortNumber}}.{{ $res->ResourceName  }}</label>
                                             </div>
                                             @if ($Resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->count() > 0)
-                                            {{ $tmp3 = $Resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber'); }}
-                                                @foreach ($tmp3 as $res1)
+                                                @foreach ($Resources->where('ClassLevel','=',2)->where('ParentId','=',$res->NidResource)->sortBy('SortNumber') as $res1)
                                                     <div class="row" style="display:flex;padding-right:1.5rem;">
                                                         @if ($UserPermissions->where('ResourceId','=',$res1->NidResource)->count() > 0)
                                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $res1->NidResource }}" class="form-control checkboxChild" alt="{{ $res1->ParentId }}" checked disabled />
@@ -175,7 +170,7 @@
                                 window.setTimeout(function(){$("#errorAlert").attr('hidden','hidden')},5000);
                             } else
                             {
-                                window.location = '@Url.Action("UserPermissions", "Home")';
+                                window.location = '/userpermissions';
                             }
                         },
                         error: function ()

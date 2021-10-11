@@ -11,6 +11,7 @@ class Alarms extends Model
     protected $table = 'alarms';
     protected $primaryKey = ['NidMaster','AlarmSubject'];
     public $incrementing = false;
+    public    $timestamps = false;
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];

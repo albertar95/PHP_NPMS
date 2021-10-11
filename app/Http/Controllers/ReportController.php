@@ -11,6 +11,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 class ReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function StatisticReports()
     {
         $api = new NPMSController();

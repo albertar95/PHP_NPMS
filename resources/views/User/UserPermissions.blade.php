@@ -73,6 +73,7 @@
                                     {
                                         <button class="btn btn-secondary" onclick="ShowModal('@sch.NidUser')">جزییات</button>
                                     } --}}
+                                    <a href="managepermission/{{ $user->NidUser }}" class="btn btn-info">اعمال دسترسی</a>
                                     <button class="btn btn-secondary" onclick="ShowModal('{{ $user->NidUser }}')">جزییات</button>
                                 </td>
                             </tr>

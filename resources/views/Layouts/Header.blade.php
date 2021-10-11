@@ -7,3 +7,4 @@
 <link href="{{ URL('Content/css/fonts.css') }}" rel="stylesheet">
 <link href="{{ URL('Content/css/sb-admin-2.min.css') }}" rel="stylesheet">
 <link rel="icon" href="{{ URL('Content/img/Icon/icon48.png') }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}">

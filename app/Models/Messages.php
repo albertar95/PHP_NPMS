@@ -10,6 +10,7 @@ class Messages extends Model
     use HasFactory;
     protected $table = 'messages';
     protected $primaryKey = 'NidMessage';
+    public    $timestamps = false;
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];
@@ -27,6 +28,6 @@ class Messages extends Model
     }
     public function user()
     {
-        return $this->belongsTo(Users::class);
+        return $this->belongsTo(User::class);
     }
 }

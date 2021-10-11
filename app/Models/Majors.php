@@ -14,6 +14,7 @@ class Majors extends Model
     protected $primaryKey = 'NidMajor';
     protected $fillable = ['Title'];
     public $incrementing = false;
+    public    $timestamps = false;
     // protected $visible = [];
     // protected $hidden = [];
     public function oreintations()

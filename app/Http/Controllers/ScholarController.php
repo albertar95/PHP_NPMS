@@ -16,6 +16,10 @@ use Illuminate\Support\Str;
 
 class ScholarController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function AddScholar()
     {
         $api = new NPMSController();

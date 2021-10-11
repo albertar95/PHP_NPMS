@@ -8,6 +8,7 @@ use App\DTOs\DataMapper;
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
 use App\Models\Resources;
+use App\Models\User;
 use App\Models\UserPermissions;
 use App\Models\Users;
 use Illuminate\Support\Collection;
@@ -16,7 +17,7 @@ use Illuminate\Support\Str;
 
 
 class UserRepository extends BaseRepository implements IUserRepository{
-    public function __construct(Users $model)
+    public function __construct(User $model)
     {
         parent::__construct($model);
     }
@@ -25,7 +26,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
         $tmpuser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
         return DataMapper::MapToUserDTO($tmpuser);
     }
-    public function AddUser(Users $User)
+    public function AddUser(User $User)
     {
         $User->Password = Hash::make($User->Password);
         return $User->save();
@@ -63,10 +64,24 @@ class UserRepository extends BaseRepository implements IUserRepository{
         else
             return false;
     }
-    public function UpdateUser(Users $User):bool
+    public function UpdateUser(User $User):bool
     {
-        $User->save();
-        return true;
+        User::where('NidUser',$User->NidUser)->update(
+            [
+                'Username' => $User->Username,
+                'Password' => $User->Password,
+                'FirstName' => $User->FirstName,
+                'LastName' => $User->LastName,
+                'CreateDate' => $User->CreateDate,
+                'LastLoginDate' => $User->LastLoginDate,
+                'IncorrectPasswordCount' => $User->IncorrectPasswordCount,
+                'IsLockedOut' => boolval($User->IsLockedOut),
+                'IsDisabled' => boolval($User->IsDisabled),
+                'IsAdmin' =>  boolval($User->IsAdmin),
+                'ProfilePicture' => $User->ProfilePicture
+            ]
+            );
+            return true;
     }
     public function GetFilteredUserDTOs(int $FilterType):Collection
     {
@@ -74,21 +89,21 @@ class UserRepository extends BaseRepository implements IUserRepository{
         switch ($FilterType)
         {
             case 1:
-                $tmpUser = $this->model->all()->where('IsDisabled','=',true);
+                $tmpUser = $this->model->all()->where('IsDisabled','=',1);
                 foreach ($tmpUser as $usr)
                 {
                     $result->push(DataMapper::MapToUserDTO($usr));
                 }
                 break;
             case 2:
-                $tmpUser = $this->model->all()->where('IsLockedOut','=',true);
+                $tmpUser = $this->model->all()->where('IsLockedOut','=',1);
                 foreach ($tmpUser as $usr)
                 {
                     $result->push(DataMapper::MapToUserDTO($usr));
                 }
                 break;
             case 3:
-                $tmpUser = $this->model->all()->where('IsAdmin','=',true);
+                $tmpUser = $this->model->all()->where('IsAdmin','=',1);
                 foreach ($tmpUser as $usr)
                 {
                     $result->push(DataMapper::MapToUserDTO($usr));
@@ -123,18 +138,23 @@ class UserRepository extends BaseRepository implements IUserRepository{
         $resultFlag = 0;
         if (!is_null($tmpUser))
         {
-            if ($tmpUser->Password == Hash::make($Password))
+            if (Hash::check($Password, $tmpUser->Password))
                 $resultFlag = 1;
             else
                 $resultFlag = 2;
         }
         else
-            $esultFlag = 3;
+            $resultFlag = 3;
         // return new Tuple<byte, string>(resultFlag, tmpUser.NidUser);
+        return response()->json(['result'=>$resultFlag,'nidUser'=>$tmpUser->NidUser]);
     }
-    public function GetUserByUsername(string $Username):userDTO
+    public function GetUserDTOByUsername(string $Username):userDTO
     {
-        return DataMapper::MapToUserDTO($this->model->all()->where('Username','=',trim($Username))->firstOrFail());
+        return DataMapper::MapToUserDTO($this->model->all()->where('UserName','=',trim($Username))->firstOrFail());
+    }
+    public function GetUserByUsername(string $Username):User
+    {
+        return $this->model->all()->where('UserName','=',trim($Username))->firstOrFail();
     }
     public function GetUserPermissionUsers(int $Pagesize = 10):Collection
     {
@@ -192,41 +212,63 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         return $result;
     }
-    public function UpdateUserUserPermission(string $NidUser,Collection $Resources):bool
+    public function UpdateUserUserPermission(string $NidUser,array $Resources)
     {
-        try
+        // try
+        // {
+        //     var CurrentPermissions = db.UserPermissions.Where(p => p.UserId == NidUser).ToList();
+        //     List<Guid> ProcessedResources = new List<Guid>();
+        //     foreach (var cur in CurrentPermissions)
+        //     {
+        //         if (!Resources.Contains(cur.ResourceId))
+        //         {
+        //             db.Entry(cur).State = System.Data.Entity.EntityState.Deleted;
+        //             db.SaveChanges();
+        //         }
+        //     }
+        //     foreach (var rsc1 in Resources)
+        //     {
+        //         if (!CurrentPermissions.GroupBy(p => p.ResourceId).Select(q => q.Key).Contains(rsc1))
+        //         {
+        //             ProcessedResources.Add(rsc1);
+        //         }
+        //     }
+        //     foreach (var rsc in ProcessedResources)
+        //     {
+        //         db.UserPermissions.Add(new UserPermission() { NidPermission = Guid.NewGuid(), ResourceId = rsc, UserId = NidUser });
+        //         db.SaveChanges();
+        //     }
+        //     return true;
+        // }
+        // catch (Exception ex)
+        // {
+        //     return false;
+        // }
+
+
+        $CurrentPermissions = UserPermissions::all()->where('UserId','=',$NidUser);
+        $ProcessedResources = new Collection();
+        $toadds = array_diff($Resources,$CurrentPermissions->toArray());
+        if($Resources != null)
         {
-            $CurrentPermissions = UserPermissions::all()->where('UserId','=',$NidUser);
-            $ProcessedResources = new Collection();
-            foreach ($CurrentPermissions as $permission)
-            {
-                if (!$Resources->Contains($permission->ResourceId))
-                {
-                    $permission->delete();
-                }
+            $todeletes = array_diff($CurrentPermissions->toArray(),$Resources);
+            foreach ($todeletes as $del) {
+                UserPermissions::all()->where('UserId','=',$NidUser)->where('ResourceId','=',$del)->firstOrFail()->delete();
             }
-            $tmpResources = Resources::all();
-            foreach ($tmpResources as $Resource)
-            {
-                if (!$CurrentPermissions->GroupBy('ResourceId')->Select('ResourceId')->Contains($Resource))
-                {
-                    $ProcessedResources->push($Resource);
-                }
-            }
-            foreach ($ProcessedResources as $processed)
-            {
-                $tmpPermission = new UserPermissions();
-                $tmpPermission->NidPermission = Str::uuid();
-                $tmpPermission->ResourceId = $processed;
-                $tmpPermission->UserId = $NidUser;
-                $tmpPermission->save();
-            }
-            return true;
-        }
-        catch (\Exception)
+        }else
         {
-            return false;
+            foreach (UserPermissions::all()->where('UserId','=',$NidUser) as $perm) {
+                $perm->delete();
+            }
         }
+        foreach ($toadds as $add) {
+            $tmpPermission = new UserPermissions();
+            $tmpPermission->NidPermission = Str::uuid();
+            $tmpPermission->ResourceId = $add;
+            $tmpPermission->UserId = $NidUser;
+            $tmpPermission->save();
+        }
+        return true;
     }
 }
 
@@ -234,7 +276,7 @@ class UserRepositoryFactory
 {
     public static function GetUserRepositoryObj():IUserRepository
     {
-        return new UserRepository(new Users());
+        return new UserRepository(new User());
     }
 
 }

@@ -11,6 +11,7 @@ class ReportParameters extends Model
     protected $table = 'report_parameters';
     protected $primaryKey = 'NidParameter';
     public $incrementing = false;
+    public    $timestamps = false;
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];

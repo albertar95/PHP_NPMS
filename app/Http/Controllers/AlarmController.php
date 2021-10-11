@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class AlarmController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function GetAlarms()
     {
         // using (var client = new HttpClient())

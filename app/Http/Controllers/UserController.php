@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Api\NPMSController;
 use App\Models\Users;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use resources\ViewModels\ManagePermissionViewModel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData']]);
+    }
     public function AddUser()
     {
         return view('User.AddUser');
@@ -84,10 +92,8 @@ class UserController extends Controller
     public function SubmitEditUser(Request $User)
     {
         $api = new NPMSController();
-        if($api->UpdateUser($User))
-        {
-            redirect('Users');
-        }
+        $api->UpdateUser($User);
+        return redirect('users');
         // using (var client = new HttpClient())
         // {
         //     client.BaseAddress = new Uri(ApiBaseAddress);
@@ -108,7 +114,7 @@ class UserController extends Controller
         $Users = $api->GetCustomUsers($SourceId);
         $result = new JsonResults();
         $result->HasValue = true;
-        $result->Html = view('User._UserTable',$Users)->render();
+        $result->Html = view('User._UserTable',compact('Users'))->render();
         return response()->json($result);
     }
     public function UserPermissions()
@@ -139,7 +145,7 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $result = new JsonResults();
-        if($api->UpdateUserUserPermissions($permissions->UserId,join(',',$permissions->ResourceIds)))
+        if($api->UpdateUserUserPermissions($permissions->UserId,$permissions->ResourceIds ?? []))
         {
             $result->HasValue = true;
         }else
@@ -162,122 +168,39 @@ class UserController extends Controller
     // [AllowAnonymous]
     public function SubmitLogin(Request $logindata)//string $Username,string $Password
     {
-        // bool IsLogin = false;
-        // string LoginMessage = "";
-        // if(!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
-        // {
-        //     using (var client = new HttpClient())
-        //     {
-        //         client.BaseAddress = new Uri(ApiBaseAddress);
-        //         client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //         HttpResponseMessage response = client.GetAsync($"User/LoginThisUser?Username={Username}&Password={Password}").Result;
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             Tuple<byte, Guid> result = response.Content.ReadAsAsync<Tuple<byte, Guid>>().Result;
-        //             switch (result.Item1)
-        //             {
-        //                 case 1:
-        //                     IsLogin = true;
-        //                     LoginMessage = result.Item2.ToString();
-        //                     break;
-        //                 case 2:
-        //                     LoginMessage = "کلمه عبور وارد شده صحیح نمی باشد";
-        //                     break;
-        //                 case 3:
-        //                     LoginMessage = "کاربر مورد نظر یافت نشد";
-        //                     break;
-        //             }
-        //         }else
-        //             LoginMessage = "خطا در سرور.لطفا مجدد امتحان کنید";
-        //     }
-        // }else
-        //     LoginMessage = "لطفا نام کاربری و کلمه عبور را وارد نمایید";
-        // return Json(new JsonResults() { HasValue = IsLogin, Message = LoginMessage });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $loginresult = json_decode($api->LoginThisUser($logindata->Username,$logindata->Password)->getContent(),true);
+        if($loginresult['result'] == 1)
+        {
+            $user = $api->GetThisUserByUsername($logindata->Username);
+            Auth::login($user);
+            $logindata->session()->regenerate();
+            $result->HasValue = true;
+            $result->Message = $loginresult['nidUser'];
+        }else
+        {
+            $result->HasValue = false;
+        }
+        return response()->json($result);
     }
     // [AllowAnonymous]
     public function SetLoginData(string $Niduser)
     {
-        // string UserData = "";
-        // string UserPermissions = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UserDTOResponse = client.GetAsync($"User/GetUserDTOById?UserId={Niduser}").Result;
-        //     if (UserDTOResponse.IsSuccessStatusCode)
-        //     {
-        //         var tmpuser = UserDTOResponse.Content.ReadAsAsync<UserDTO>().Result;
-        //         HttpResponseMessage UserPermissionDTOResponse = client.GetAsync($"UserPermission/GetAllUserPermissions?NidUser={Niduser}").Result;
-        //         if (UserPermissionDTOResponse.IsSuccessStatusCode)
-        //         {
-        //             UserData = GenerateUserData(tmpuser, null, false);
-        //             UserPermissions = GenerateUserData(null, UserPermissionDTOResponse.Content.ReadAsAsync<List<UserPermissionDTO>>().Result, true);
-        //         }
-        //         FormsAuthentication.SetAuthCookie(UserData, true);
-        //         FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, tmpuser.Username, DateTime.Now, DateTime.Now.AddHours(8), false, UserPermissions);
-        //         var encdata = FormsAuthentication.Encrypt(ticket);
-        //         var tmpCookie = new HttpCookie("NPMS_Permissions", encdata);
-        //         tmpCookie.Expires = DateTime.Now.AddHours(8);
-        //         Response.Cookies.Add(tmpCookie);
-        //         if (!string.IsNullOrWhiteSpace(tmpuser.ProfilePicture))
-        //         {
-        //             Image image;
-        //             byte[] bytes = Convert.FromBase64String(tmpuser.ProfilePicture);
-        //             using (MemoryStream ms = new MemoryStream(bytes))
-        //             {
-        //                 image = Image.FromStream(ms);
-        //             }
-        //             Bitmap resized = JsonResults.ResizeImage(image, 80, 80);
-        //             string tmpFileName = Server.MapPath("~/ImageTiles/") + tmpuser.NidUser + ".jpg";
-        //             using (resized)
-        //             {
-        //                 ImageCodecInfo jpgEncoder = JsonResults.GetEncoder(ImageFormat.Jpeg);
-        //                 System.Drawing.Imaging.Encoder myEncoder =
-        //                     System.Drawing.Imaging.Encoder.Quality;
-        //                 EncoderParameters myEncoderParameters = new EncoderParameters(1);
-
-        //                 EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 80L);
-        //                 myEncoderParameters.Param[0] = myEncoderParameter;
-        //                 resized.Save(tmpFileName, jpgEncoder, myEncoderParameters);
-        //             }
-        //         }
-        //         return Json(new JsonResults() { HasValue = true });
-        //     }else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false });
-        //     }
-        // }
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $permissions = $api->GetAllUserPermissions($Niduser)->pluck('NidPermission')->toArray();
+        $output = "";
+        if($permissions != null)
+        {
+            $output = join('#',$permissions);
+        }
+        return redirect('')->withCookie(cookie('NPMS_Permissions', $output, 480));
     }
-    private function GenerateUserData(Request $user,Collection $permissions,bool $isPermission)
+    public function Logout(Request $request)
     {
-        // string output = "";
-        // if (isPermission)
-        // {
-        //     //#permissions#
-        //     output += string.Join("#", permissions.Select(p => p.ResourceId).ToList());
-        //     return output;
-        // }
-        // else
-        // {
-        //     //firstname lastname,userLevel,userguid,userImage
-        //     output += user.FirstName + " " + user.LastName + ",";
-        //     if (user.IsAdmin)
-        //         output += "Admin" + ",";
-        //     else
-        //         output += "Simple" + ",";
-        //     output += user.NidUser + ",";
-        //     if (!string.IsNullOrWhiteSpace(user.ProfilePicture))
-        //         output += "true";
-        //     else
-        //         output += "false";
-        //     return DataAccessLibrary.Helpers.Encryption.Encrypt(output);
-        // }
-    }
-    public function Logout()
-    {
-        // FormsAuthentication.SignOut();
-        // Response.Cookies["NPMS_Permissions"].Expires = DateTime.Now.AddHours(-1);
-        // Response.Cookies["NPMS_ProfilePicture"].Expires = DateTime.Now.AddHours(-1);
-        // return RedirectToAction("Login");
+        Auth::logout();
+        Cookie::queue(Cookie::forget('NPMS_Permissions'));
+        return redirect('login');
     }
 }

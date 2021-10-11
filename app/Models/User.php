@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Users extends Model
+class User extends Authenticatable
 {
     use HasFactory;
-    protected $table = 'users';
+    protected $table = 'user';
     protected $primaryKey = 'NidUser';
     protected $fillable = ['UserName','Password','FirstName','LastName','ProfilePicture'];
     public $incrementing = false;
@@ -21,7 +22,7 @@ class Users extends Model
     }
     public function users()
     {
-        return $this->hasMany(Users::class);
+        return $this->hasMany(User::class);
     }
     public function userPermissions()
     {

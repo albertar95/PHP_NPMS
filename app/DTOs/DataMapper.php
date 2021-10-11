@@ -15,6 +15,7 @@ use App\Models\Scholars;
 use App\Models\Settings;
 use App\Models\UnitGroups;
 use App\Models\Units;
+use App\Models\User;
 use App\Models\UserPermissions;
 use App\Models\Users;
 use Brick\Math\BigInteger;
@@ -340,7 +341,7 @@ class DataMapper
             return null;
         }
     }
-    public static function MapToUserDTO(Users $user)
+    public static function MapToUserDTO(User $user)
     {
         try
         {
@@ -364,7 +365,7 @@ class DataMapper
             return null;
         }
     }
-    public static function MapToUserInPermissionDTO(Users $user)
+    public static function MapToUserInPermissionDTO(User $user)
     {
         $result = new userInPermissionDTO();
         $result->NidUser = $user->NidUser;
@@ -748,7 +749,7 @@ class DataMapper
     {
         try
         {
-            $result = new Users();
+            $result = new User();
             $result->NidUser = $user->NidUser;
             $result->Username = $user->Username;
             $result->Password = $user->Password;

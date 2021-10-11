@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ URL('Content/img/Icon/icon48.png') }}" />
     <title>ورود</title>
     <!-- Custom fonts for this template-->
@@ -100,9 +101,14 @@
                 window.setTimeout(function () { $("#warningAlert").attr('hidden', 'hidden') }, 5000);
             } else
             {
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax(
                     {
-                        url: '/SubmitLogin',
+                        url: '/submitlogin',
                         type: 'post',
                         datatype: 'json',
                         data: { Username: $("#txtUsername").val(), Password: $("#txtPassword").val() },
@@ -114,22 +120,28 @@
                                 $("#spinnerDiv").removeAttr('hidden');
                                 $("#waitText").removeAttr('hidden');
                                 $("#FormWrapper").attr('hidden', 'hidden');
-                                $.ajax({
-                                    url: '@Url.Action("SetLoginData", "Home")',
-                                    type: 'post',
-                                    datatype: 'json',
-                                    data: { Niduser: result.Message },
-                                    success: function (result) {
-                                        if (result.HasValue) {
-                                            window.location.href = '@Url.Action("Index","Home")';
-                                        }
-                                    },
-                                    error: function () { }
-                                });
+                                window.location.href = '/setlogindata/' + result.Message;
+                                // $.ajaxSetup({
+                                // headers: {
+                                // 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                // }
+                                // });
+                                // $.ajax({
+                                //     url: 'setlogindata',
+                                //     type: 'post',
+                                //     datatype: 'json',
+                                //     data: { Niduser: result.Message },
+                                //     success: function (result) {
+                                //         if (result.HasValue) {
+                                //             window.location.href = '/';
+                                //         }
+                                //     },
+                                //     error: function () { }
+                                // });
                             }
                             else
                             {
-                                $("#ErrorMessage").text(result.Message);
+                                $("#ErrorMessage").text('ورود ناموفق');
                                 $("#errorAlert").removeAttr('hidden');
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
                             }

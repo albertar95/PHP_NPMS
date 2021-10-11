@@ -332,11 +332,14 @@
                    <span aria-hidden="true">×</span>
                </button>
            </div>
+           <form action="{{ route('user.Logout') }}" method="POST">
+            @csrf
            <div class="modal-body">آیا برای خروج اطمینان دارید ؟</div>
            <div class="modal-footer" style="margin:0 auto;">
                <button class="btn btn-secondary" type="button" data-dismiss="modal">خیر</button>
-               <a class="btn btn-primary" href="@Url.Action("Logout","Home")">بله</a>
+               <button class="btn btn-primary" type="submit">بله</button>
            </div>
+        </form>
        </div>
    </div>
 </div>

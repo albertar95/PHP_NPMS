@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Console\Migrations\RefreshCommand;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -29,8 +28,8 @@ class CreateMessagesTable extends Migration
             $table->dateTime('DeleteDate')->nullable(true);
             $table->collation = 'utf8mb4_persian_ci';
             $table->primary('NidMessage','PK_Messages');
-            $table->foreign('SenderId','FK_UserMessage')->references('NidUser')->on('Users');
-            $table->foreign('RecieverId','FK_UserMessage2')->references('NidUser')->on('Users');
+            $table->foreign('SenderId','FK_UserMessage')->references('NidUser')->on('User');
+            $table->foreign('RecieverId','FK_UserMessage2')->references('NidUser')->on('User');
             $table->foreign('RelateId','FK_MessageMessage')->references('NidMessage')->on('Messages');
         });
     }

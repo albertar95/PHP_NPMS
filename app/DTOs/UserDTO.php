@@ -19,5 +19,5 @@ class userDTO extends Model
     public bool $IsLockedOut;
     public bool $IsDisabled;
     public bool $IsAdmin;
-    public string $ProfilePicture;
+    public ?string $ProfilePicture;
 }
