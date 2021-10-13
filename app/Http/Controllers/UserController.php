@@ -18,6 +18,10 @@ class UserController extends Controller
     {
         $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData']]);
     }
+    public function Index()
+    {
+        return view('General.Index');
+    }
     public function AddUser()
     {
         return view('User.AddUser');
@@ -202,5 +206,19 @@ class UserController extends Controller
         Auth::logout();
         Cookie::queue(Cookie::forget('NPMS_Permissions'));
         return redirect('login');
+    }
+    public function PasswordPolicy()
+    {
+        $api = new NPMSController();
+        $Policies = $api->GetPolicies();
+        return view('User.PasswordPolicy',compact('Policies'));
+    }
+    public function SubmitPasswordPolicy(Request $Policy)
+    {
+        $api = new NPMSController();
+        if($api->UpdatePolicy($Policy))
+        {
+            return redirect('/passwordpolicy');
+        }
     }
 }

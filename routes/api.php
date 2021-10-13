@@ -46,6 +46,8 @@ Route::post("user/updateuser",[NPMSController::class,"UpdateUser"]);
 Route::get("user/getcustomusers",[NPMSController::class,"GetCustomUsers"]);
 Route::get("user/resetpassword",[NPMSController::class,"ResetPassword"]);
 Route::get("user/loginthisuser",[NPMSController::class,"LoginThisUser"]);
+Route::get("user/updatepolicy",[NPMSController::class,"UpdatePolicy"]);
+Route::get("user/getpolicies",[NPMSController::class,"GetPolicies"]);
 
 //user permission routes
 Route::get("userpermision/getalluserpermissionusers",[NPMSController::class,"GetAllUserPermissionUsers"]);

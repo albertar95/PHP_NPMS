@@ -2,21 +2,6 @@
 
 @section('Content')
 
-{{-- @{
-    ViewBag.Title = "ایجاد کاربر";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-    if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-    {
-        var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-        slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-    }
-    else
-    {
-        slvm1.UserPermissions = new List<Guid>();
-    }
-} --}}
-
 <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
@@ -130,48 +115,6 @@
                         });
                 });
             });
-        function UploadFile() {
-            AdvanceInProgressBar(0);
-            $("#UploadModal").modal('show');
-            $("#UploadMessage").attr('hidden', 'hidden');
-            AdvanceInProgressBar(10);
-            var formData = new FormData();
-            formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
-            $.ajax(
-                {
-                    url: '@Url.Action("UploadThisFile","Home")',
-                    type: 'post',
-                    datatype: 'json',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (result) {
-                        if (result.HasValue)
-                        {
-                            window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
-                            upload = result.Html;
-                            window.setTimeout(function () {
-                                $("#uploadedImage").attr('src', 'data:image/jpg;base64,' + upload);
-                                $("#uploadedframe").removeAttr('hidden');
-                                $("#uploadedImage").removeAttr('hidden');
-                            }, 3000);
-                        } else {
-                            window.setTimeout(function () {
-                                $("#UploadMessage").removeAttr('hidden');
-                                $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
-                            }, 3000);
-                        }
-                    },
-                    error: function ()
-                    {
-                        window.setTimeout(function () {
-                            $("#UploadMessage").removeAttr('hidden');
-                            $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
-                        }, 3000);
-                    }
-                });
-            window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
-        }
     </script>
 @endsection
 @endsection

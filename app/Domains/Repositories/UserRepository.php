@@ -8,6 +8,7 @@ use App\DTOs\DataMapper;
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
 use App\Models\Resources;
+use App\Models\Settings;
 use App\Models\User;
 use App\Models\UserPermissions;
 use App\Models\Users;
@@ -269,6 +270,147 @@ class UserRepository extends BaseRepository implements IUserRepository{
             $tmpPermission->save();
         }
         return true;
+    }
+    public function UpdateUserPasswordPolicy(array $policy)
+    {
+        if(!is_null($policy['PasswordDificulty']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordDificulty')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordDificulty')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['PasswordDificulty']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'PasswordDificulty';
+                $newSet->SettingValue = $policy['PasswordDificulty'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['FullLockoutUser']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','FullLockoutUser')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','FullLockoutUser')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['FullLockoutUser']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'FullLockoutUser';
+                $newSet->SettingValue = $policy['FullLockoutUser'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['PasswordLength']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordLength')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordLength')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['PasswordLength']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'PasswordLength';
+                $newSet->SettingValue = $policy['PasswordLength'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['ChangePasswordDuration']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','ChangePasswordDuration')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','ChangePasswordDuration')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['ChangePasswordDuration']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'ChangePasswordDuration';
+                $newSet->SettingValue = $policy['ChangePasswordDuration'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['LastPasswordCount']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LastPasswordCount')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LastPasswordCount')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['LastPasswordCount']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'LastPasswordCount';
+                $newSet->SettingValue = $policy['LastPasswordCount'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['IncorrectAttemptCount']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','IncorrectAttemptCount')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','IncorrectAttemptCount')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['IncorrectAttemptCount']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'IncorrectAttemptCount';
+                $newSet->SettingValue = $policy['IncorrectAttemptCount'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        if(!is_null($policy['LockoutDuration']))
+        {
+            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LockoutDuration')->count() > 0)
+            {
+                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LockoutDuration')->firstOrFail()->update(
+                    [
+                        'SettingValue' => $policy['LockoutDuration']
+                    ]);
+            }else
+            {
+                $newSet = new Settings();
+                $newSet->NidSetting = Str::uuid();
+                $newSet->SettingKey = 'LockoutDuration';
+                $newSet->SettingValue = $policy['LockoutDuration'];
+                $newSet->SettingTitle = 'PasswordPolicies';
+                $newSet->IsDeleted = boolval(0);
+                $newSet->save();
+            }
+        }
+        return true;
+    }
+    public function GetUserPasswordPolicy()
+    {
+        return Settings::all()->where('SettingTitle','=','PasswordPolicies');
     }
 }
 

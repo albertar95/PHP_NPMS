@@ -22,10 +22,10 @@ use Symfony\Component\Mime\MessageConverter;
 |
 */
 
-Route::get('/', function () {
-    return view('General.Index');
-})->name('index');
-
+// Route::post('/', function () {
+//     return view('General.Index');
+// })->middleware('auth')->name('index');
+Route::get("/",[UserController::class,"Index"])->name('index');
 
 
 //alarm routes
@@ -112,3 +112,5 @@ Route::get("loadingpage",[UserController::class,"LoadingPage"])->name('user.Load
 Route::post("submitlogin",[UserController::class,"SubmitLogin"])->name('user.SubmitLogin');
 Route::get("setlogindata/{Niduser}",[UserController::class,"SetLoginData"])->name('user.SetLoginData');
 Route::post("logout",[UserController::class,"Logout"])->name('user.Logout');
+Route::get("passwordpolicy",[UserController::class,"PasswordPolicy"])->name('user.PasswordPolicy');
+Route::post("submitpasswordpolicy",[UserController::class,"SubmitPasswordPolicy"])->name('user.SubmitPasswordPolicy');

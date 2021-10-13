@@ -5,19 +5,6 @@
 </head>
 <body id="page-top">
     <div id="wrapper" style="direction:rtl;">
-        {{-- @{
-            NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(DataAccessLibrary.Helpers.Encryption.Decrypt(User.Identity.Name).Split(','),0);
-            if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-            {
-                var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-                slvm.UserPermissions = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1).UserPermissions;
-            }
-            else
-            {
-                slvm.UserPermissions = new List<Guid>();
-            }
-        } --}}
-        <!-- Sidebar -->
         <div class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" style="height:10rem;" href="{{ route('index') }}">
@@ -150,9 +137,51 @@
                         </div>
                     </div>
                 </div>
-            <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
             {{-- @endif --}}
+        <!-- Nav Item - Pages Collapse Menu -->
+            <div class="nav-item collapsed">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MessagePart" aria-expanded="true"
+                   aria-controls="MessagePart">
+                    <i class="fas fa-fw fa-envelope"></i>
+                    <span>پیام ها</span>
+                </a>
+                <div id="MessagePart" class="collapse" aria-labelledby="MessageHeading"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
+                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
+                            <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">ارسال پیام</a>
+                        {{-- @endif --}}
+                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id)) --}}
+                            <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">صندوق پیام</a>
+                        {{-- @endif --}}
+                    </div>
+                </div>
+            </div>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider d-none d-md-block">
+                                        <!-- Heading -->
+            <div class="sidebar-heading">
+                بخش تنظیمات
+            </div>
+        <!-- Nav Item - Pages Collapse Menu -->
+            <div class="nav-item collapsed">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#SettingPart" aria-expanded="true"
+                    aria-controls="SettingPart">
+                    <i class="fas fa-fw fa-user-circle"></i>
+                    <span>تنظیمات امنیتی</span>
+                </a>
+                <div id="SettingPart" class="collapse" aria-labelledby="SettingHeading"
+                        data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
+                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
+                            <a class="collapse-item" href="{{ route('user.PasswordPolicy') }}" style="text-align:right;">خط مشی کلمه عبور</a>
+                        {{-- @endif --}}
+                    </div>
+                </div>
+            </div>
+            <hr class="sidebar-divider d-none d-md-block">
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -278,14 +307,15 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="ml-2 d-none d-lg-inline text-gray-600 small">@slvm.UserInfo</span>
-                                <span id="txtUserId" hidden >@slvm.NidUser</span>
-                                {{-- @if (slvm.HasProfile) --}}
-                                    {{-- <img src="@Url.Content("~/ImageTiles/" + slvm.NidUser + ".jpg")" class="img-profile rounded-circle" /> --}}
-                                {{-- @endif --}}
-                                {{-- @else --}}
-                                    <img class="img-profile rounded-circle" src="{{ URL('Content/img/User/user3.png') }}">
-                                {{-- @endelse --}}
+                               @auth
+                               <span class="ml-2 d-none d-lg-inline text-gray-600 small">{{ auth()->user()->FirstName }} {{ auth()->user()->LastName }}</span>
+                               <span id="txtUserId" hidden >{{ auth()->user()->NidUser }}</span>
+                                @if (!empty(auth()->user()->ProfilePicture))
+                                    <img src="{{ sprintf('/storage/images/%s',auth()->user()->ProfilePicture) }}" class="img-profile rounded-circle" /> --}}
+                                @else
+                                <img class="img-profile rounded-circle" src="{{ URL('Content/img/User/user3.png') }}">
+                                @endforelse
+                               @endauth
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-left shadow animated--grow-in"
@@ -322,8 +352,7 @@
         </div>
         <!-- End of Content Wrapper -->
     </div>
-    <div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+    <div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
        <div class="modal-content" style="text-align:right;">
            <div class="modal-header" style="direction:rtl;">
@@ -340,6 +369,25 @@
                <button class="btn btn-primary" type="submit">بله</button>
            </div>
         </form>
+       </div>
+   </div>
+</div>
+<div class="modal" id="EnteranceModal" tabindex="-1" role="dialog" aria-labelledby="EnteranceModalLabel"
+    aria-hidden="true">
+   <div class="modal-dialog" role="document">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="EnteranceModalLabel">اخطار</h5>
+               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">×</span>
+               </button>
+           </div>
+           <div class="modal-body">
+               <p id="uploadModalHeader" style="text-align:right;">کاربر گرامی شما به سامانه مدیریت تحقیقات نظری نپاجا وارد شده اید.به اطلاع می رساند تمامی فعالیت های کاربران قابل ردیابی و بازبینی می باشدو مسئولیت اطلاعات حساس سامانه بر عهده کاربر می باشد</p>
+           </div>
+           <div class="modal-footer">
+            <button class="btn btn-secondary" style="margin: 0 auto;" type="button" data-dismiss="modal">بستن</button>
+           </div>
        </div>
    </div>
 </div>

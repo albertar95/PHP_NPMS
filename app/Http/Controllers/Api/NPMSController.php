@@ -229,6 +229,26 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->UpdateUserUserPermission($NidUser, $Resources);
     }
+    public function UpdatePolicy(Request $policy)
+    {
+        $policies = [
+            "PasswordDificulty" => $policy->PasswordDificulty,
+            "FullLockoutUser" => $policy->FullLockoutUser,
+            "PasswordLength" => $policy->PasswordLength,
+            "ChangePasswordDuration" => $policy->ChangePasswordDuration,
+            "LastPasswordCount" => $policy->LastPasswordCount,
+            "IncorrectAttemptCount" => $policy->IncorrectAttemptCount,
+            "LockoutDuration" => $policy->LockoutDuration
+                    ];
+                    $repo = new UserRepository(new User());
+                    return $repo->UpdateUserPasswordPolicy($policies);
+                    // return $policies;
+    }
+    public function GetPolicies()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetUserPasswordPolicy();
+    }
 
     //Project section
     public function GetAllProjectInitials()

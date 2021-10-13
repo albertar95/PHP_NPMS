@@ -24,4 +24,6 @@ interface IUserRepository
     public function GetResources(int $pagesize = 100):Collection;
     public function GetUserPermissions(string $NidUser) :Collection;
     public function UpdateUserUserPermission(string $NidUser,array $Resources);
+    public function UpdateUserPasswordPolicy(array $policy);
+    public function GetUserPasswordPolicy();
 }
