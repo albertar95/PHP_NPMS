@@ -22,6 +22,8 @@ use App\Models\Alarms;
 use App\Models\Messages;
 use App\Models\Projects;
 use App\Models\Reports;
+use App\Models\RolePermissions;
+use App\Models\Roles;
 use App\Models\Scholars;
 use App\Models\Units;
 use App\Models\User;
@@ -249,7 +251,91 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->GetUserPasswordPolicy();
     }
-
+    public function AddRole(Request $role)
+    {
+        $repo = new UserRepository(new User());
+        $newrole = new Roles();
+        $newrole->NidRole = Str::uuid();
+        $newrole->Title = $role->Title;
+        $newrole->IsAdmin = boolval($role->IsAdmin);
+        $newrole->CreateDate = Carbon::now();
+        return $repo->AddRole($newrole);
+    }
+    public function UpdateRole(Request $role)
+    {
+        $repo = new UserRepository(new User());
+        $newrole = new Roles();
+        $newrole->NidRole = $role->NidRole;
+        $newrole->Title = $role->Title;
+        $newrole->IsAdmin = boolval($role->IsAdmin);
+        $newrole->CreateDate = $role->CreateDate;
+        return $repo->UpdateRole($newrole);
+    }
+    public function GetAllRoles()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRoles();
+    }
+    public function AddRolePermission(Request $rolepermission)
+    {
+        $repo = new UserRepository(new User());
+        $newroleperm = new RolePermissions();
+        $newroleperm->NidPermission = Str::uuid();
+        $newroleperm->RoleId = $rolepermission->RoleId;
+        $newroleperm->EntityId = $rolepermission->EntityId;
+        $newroleperm->Create = boolval($rolepermission->CreateVal);
+        $newroleperm->Edit = boolval($rolepermission->EditVal);
+        $newroleperm->Delete = boolval($rolepermission->DeleteVal);
+        $newroleperm->Detail = boolval($rolepermission->DetailVal);
+        $newroleperm->List = boolval($rolepermission->ListVal);
+        $newroleperm->Print = boolval($rolepermission->PrintVal);
+        return $repo->AddRolePermission($newroleperm);
+    }
+    public function UpdateRolePermission(Request $rolepermission)
+    {
+        $repo = new UserRepository(new User());
+        $newroleperm = new RolePermissions();
+        $newroleperm->NidPermission = $rolepermission->NidPermission;
+        $newroleperm->RoleId = $rolepermission->RoleId;
+        $newroleperm->EntityId = $rolepermission->EntityId;
+        $newroleperm->Create = boolval($rolepermission->CreateVal);
+        $newroleperm->Edit = boolval($rolepermission->EditVal);
+        $newroleperm->Delete = boolval($rolepermission->DeleteVal);
+        $newroleperm->Detail = boolval($rolepermission->DetailVal);
+        $newroleperm->List = boolval($rolepermission->ListVal);
+        $newroleperm->Print = boolval($rolepermission->PrintVal);
+        return $repo->UpdateRolePermission($newroleperm);
+    }
+    public function DeleteRolePermission(string $NidPermission)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->DeleteRolePermission($NidPermission);
+    }
+    public function GetAllRolePermissions()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRolesPermission();
+    }
+    public function GetAllRolePermissionDTOs()
+    {
+        $repo = new UserRepository(new User());
+        $perms = $repo->GetRolesPermission();
+        $res = new Collection();
+        foreach ($perms as $pr) {
+            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        }
+        return $res;
+    }
+    public function GetRolePermissionsByUser(string $UserId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRolesPermissionByUserId($UserId);
+    }
+    public function GetRolePermissionsById(string $PermissionId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRolesPermissionById($PermissionId);
+    }
     //Project section
     public function GetAllProjectInitials()
     {

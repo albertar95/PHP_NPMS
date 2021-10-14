@@ -113,4 +113,14 @@ Route::post("submitlogin",[UserController::class,"SubmitLogin"])->name('user.Sub
 Route::get("setlogindata/{Niduser}",[UserController::class,"SetLoginData"])->name('user.SetLoginData');
 Route::post("logout",[UserController::class,"Logout"])->name('user.Logout');
 Route::get("passwordpolicy",[UserController::class,"PasswordPolicy"])->name('user.PasswordPolicy');
+Route::get("manageroles",[UserController::class,"ManageRoles"])->name('user.ManageRoles');
 Route::post("submitpasswordpolicy",[UserController::class,"SubmitPasswordPolicy"])->name('user.SubmitPasswordPolicy');
+Route::post("submitroleform",[UserController::class,"SubmitRoleForm"])->name('user.SubmitRoleForm');
+Route::post("submitdeleterole/{NidRole}",[UserController::class,"SubmitDeleteRole"])->name('user.SubmitDeleteRole');
+
+Route::get("managerolepermissions",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
+Route::get("addrolepermission",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
+Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermission"])->name('user.SubmitAddRolePermission');
+Route::get("editrolepermission/{NidPermission}",[UserController::class,"EditRolePermission"])->name('user.EditRolePermission');
+Route::post("submiteditrolepermission",[UserController::class,"SubmitEditRolePermission"])->name('user.SubmitEditRolePermission');
+Route::post("deleterolepermission/{NidPermission}",[UserController::class,"DeleteRolePermission"])->name('user.DeleteRolePermission');

@@ -221,4 +221,110 @@ class UserController extends Controller
             return redirect('/passwordpolicy');
         }
     }
+    public function ManageRoles()
+    {
+        $api = new NPMSController();
+        $Roles = $api->GetAllRoles();
+        return view('User.ManageRoles',compact('Roles'));
+    }
+    public function SubmitRoleForm(Request $role)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if(empty($role->NidRole))
+        {
+            $api->AddRole($role);
+            $result->Message = sprintf("نقش با نام %s با موفقیت ایجاد گردید",$role->Title);
+        }else
+        {
+            $api->UpdateRole($role);
+            $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$role->Title);
+        }
+        $TblId = 9;
+        $Roles = $api->GetAllRoles();
+        $result->Html = view('Project._BaseInfoTables',compact('TblId','Roles'))->render();
+        $result->HasValue = true;
+        return response()->json($result);
+        // return $role;
+    }
+    public function SubmitDeleteRole(string $NidRole)
+    {
+        // $api = new NPMSController();
+        // $result = new JsonResults();
+        // $tmpResult = $api->deleterole($NidUnit);
+        // $tmpstatus = json_decode($tmpResult->getContent(),true)['Message'];
+        // $result->HasValue = false;
+        // switch($tmpstatus)
+        // {
+        //     case "1":
+        //         $result->Message = "یگان مورد نظر دارای گروه می باشد.امکان حذف وجود ندارد";
+        //         return response()->json($result);
+        //         break;
+        //     case "2":
+        //         $result->HasValue = true;
+        //         $result->Message = "یگان با موفقیت حذف گردید";
+        //         $TblId = 1;
+        //         $Units = $api->GetAllUnits();
+        //         $result->Html = view('Project._BaseInfoTables',compact('TblId','Units'))->render();
+        //         return response()->json($result);
+        //         break;
+        //     case "3":
+        //         $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+        //         return response()->json($result);
+        //         break;
+        // }
+    }
+    public function ManageRolePermissions()
+    {
+        $api = new NPMSController();
+        $Permissions = $api->GetAllRolePermissionDTOs();
+        return view('User.ManageRolePermissions',compact('Permissions'));
+    }
+    public function AddRolePermission()
+    {
+        $api = new NPMSController();
+        $Roles = $api->GetAllRoles();
+        $Entities = new Collection();
+        $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
+        $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
+        $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
+        $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
+        $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+        return view('User.AddRolePermission',compact('Roles','Entities'));
+    }
+    public function SubmitAddRolePermission(Request $Permission)
+    {
+        $api = new NPMSController();
+        $api->AddRolePermission($Permission);
+        return redirect('/managerolepermissions');
+    }
+    public function EditRolePermission(string $NidPermission)
+    {
+        $api = new NPMSController();
+        $Roles = $api->GetAllRoles();
+        $Entities = new Collection();
+        $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
+        $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
+        $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
+        $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
+        $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+        $Role = $api->GetRolePermissionsById($NidPermission);
+        return view('User.EditRolePermission',compact('Roles','Entities','Role'));
+        // return $Role;
+    }
+    public function SubmitEditRolePermission(Request $Permission)
+    {
+        $api = new NPMSController();
+        $api->UpdateRolePermission($Permission);
+        return redirect('/managerolepermissions');
+        // return $Permission;
+    }
+    public function DeleteRolePermission(string $NidPermission)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $api->DeleteRolePermission($NidPermission);
+        $result->HasValue = true;
+        return response()->json($result);
+    }
 }

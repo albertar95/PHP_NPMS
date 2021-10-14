@@ -277,4 +277,40 @@
         </tbody>
     </table>
     @break
+    @case(9)
+    <table class="table table-bordered" id="RoledataTable"
+    style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ردیف</th>
+            <th>عنوان نقش</th>
+            <th>سطح نقش</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ردیف</th>
+            <th>عنوان نقش</th>
+            <th>سطح نقش</th>
+            <th>عملیات</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        @foreach ($Roles as $role)
+            <tr>
+                <td>{{ $tmpCounter }}</td>
+                <td>{{ $role->Title }}</td>
+                <td>
+                    <button class="btn btn-danger"
+                        onclick="DeleteModal(1,'{{ $role->NidRole }}')">حذف</button>
+                    <button class="btn btn-warning"
+                        onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">ویرایش</button>
+                </td>
+            </tr>
+            {{ $tmpCounter++ }}
+        @endforeach
+    </tbody>
+</table>
+    @break
     @endswitch

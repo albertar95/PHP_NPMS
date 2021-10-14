@@ -168,7 +168,7 @@
             <div class="nav-item collapsed">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#SettingPart" aria-expanded="true"
                     aria-controls="SettingPart">
-                    <i class="fas fa-fw fa-user-circle"></i>
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>تنظیمات امنیتی</span>
                 </a>
                 <div id="SettingPart" class="collapse" aria-labelledby="SettingHeading"
@@ -177,6 +177,8 @@
                         {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
                         {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
                             <a class="collapse-item" href="{{ route('user.PasswordPolicy') }}" style="text-align:right;">خط مشی کلمه عبور</a>
+                            <a class="collapse-item" href="{{ route('user.ManageRoles') }}" style="text-align:right;">مدیریت نقش ها</a>
+                            <a class="collapse-item" href="{{ route('user.ManageRolePermissions') }}" style="text-align:right;">مدیریت دسترسی ها</a>
                         {{-- @endif --}}
                     </div>
                 </div>

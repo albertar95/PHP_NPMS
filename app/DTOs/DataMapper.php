@@ -11,6 +11,8 @@ use App\Models\Projects;
 use App\Models\ReportParameters;
 use App\Models\Reports;
 use App\Models\Resources;
+use App\Models\RolePermissions;
+use App\Models\Roles;
 use App\Models\Scholars;
 use App\Models\Settings;
 use App\Models\UnitGroups;
@@ -407,6 +409,28 @@ class DataMapper
             $result->NidPermission = $userpermission->NidPermission;
             $result->UserId = $userpermission->UserId;
             $result->ResourceId = $userpermission->ResourceId;
+            return $result;
+        }
+        catch (\Exception)
+        {
+            return null;
+        }
+    }
+    public static function MapToRolePermissionDTO(RolePermissions $rolepermission)
+    {
+        try
+        {
+            $result = new RolePermissionDTO();
+            $result->NidPermission = $rolepermission->NidPermission;
+            $result->RoleId = $rolepermission->RoleId;
+            $result->EntityId = $rolepermission->EntityId;
+            $result->Create = boolval($rolepermission->CreateVal);
+            $result->Edit = boolval($rolepermission->EditVal);
+            $result->Delete = boolval($rolepermission->DeleteVal);
+            $result->Detail = boolval($rolepermission->DetailVal);
+            $result->List = boolval($rolepermission->ListVal);
+            $result->Print = boolval($rolepermission->PrintVal);
+            $result->RoleTitle = Roles::all()->where('NidRole','=',$rolepermission->RoleId)->firstOrFail()->Title;
             return $result;
         }
         catch (\Exception)

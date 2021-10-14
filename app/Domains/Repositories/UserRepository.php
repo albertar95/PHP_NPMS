@@ -8,6 +8,8 @@ use App\DTOs\DataMapper;
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
 use App\Models\Resources;
+use App\Models\RolePermissions;
+use App\Models\Roles;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\UserPermissions;
@@ -411,6 +413,66 @@ class UserRepository extends BaseRepository implements IUserRepository{
     public function GetUserPasswordPolicy()
     {
         return Settings::all()->where('SettingTitle','=','PasswordPolicies');
+    }
+    public function AddRole(Roles $role)
+    {
+        return $role->save();
+    }
+    public function UpdateRole(Roles $role)
+    {
+        if(Roles::all()->where('NidRole','=',$role->NidRole)->count() > 0)
+        {
+            Roles::all()->where('NidRole','=',$role->NidRole)->firstOrFail()->update(
+                [
+                    'Title' => $role->Title,
+                    'IsAdmin' => $role->IsAdmin
+                ]);
+        }
+    }
+    public function DeleteRole(string $NidRole)
+    {
+        //first need to check for user assigns
+        Roles::all()->where('NidRole','=',$NidRole)->firstOrFail()->delete();
+        return true;
+    }
+    public function GetRoles()
+    {
+        return Roles::all();
+    }
+    public function AddRolePermission(RolePermissions $role)
+    {
+        $role->save();
+    }
+    public function UpdateRolePermission(RolePermissions $role)
+    {
+        RolePermissions::all()->where('','',$role->NidRole)->firstOrFail()->update(
+            [
+                'RoleId' => $role->RoleId,
+                'EntityId' => $role->EntityId,
+                'Create' => $role->Create,
+                'Edit' => $role->Edit,
+                'Delete' => $role->Delete,
+                'Detail' => $role->Detail,
+                'List' => $role->List,
+                'Print' => $role->Print
+            ]);
+            return true;
+    }
+    public function DeleteRolePermission(string $NidPermission)
+    {
+        RolePermissions::all()->where('NidPermission','=',$NidPermission)->firstOrFail()->delete();
+    }
+    public function GetRolesPermission()
+    {
+        return RolePermissions::all();
+    }
+    public function GetRolesPermissionByUserId(string $NidUser)
+    {
+        return RolePermissions::all()->where('NidUser','=',$NidUser);
+    }
+    public function GetRolesPermissionById(string $NidPermission)
+    {
+        return RolePermissions::all()->where('NidPermission','=',$NidPermission)->firstOrFail();
     }
 }
 

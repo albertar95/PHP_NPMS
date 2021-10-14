@@ -3,6 +3,8 @@ namespace App\Domains\Interfaces;
 
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
+use App\Models\RolePermissions;
+use App\Models\Roles;
 use App\Models\User;
 use App\Models\Users;
 use Illuminate\Support\Collection;
@@ -26,4 +28,16 @@ interface IUserRepository
     public function UpdateUserUserPermission(string $NidUser,array $Resources);
     public function UpdateUserPasswordPolicy(array $policy);
     public function GetUserPasswordPolicy();
+    //roles
+    public function AddRole(Roles $role);
+    public function UpdateRole(Roles $role);
+    public function DeleteRole(string $NidRole);
+    public function GetRoles();
+    //role permissions
+    public function AddRolePermission(RolePermissions $role);
+    public function UpdateRolePermission(RolePermissions $role);
+    public function DeleteRolePermission(string $NidRole);
+    public function GetRolesPermission();
+    public function GetRolesPermissionByUserId(string $NidUser);
+    public function GetRolesPermissionById(string $NidPermission);
 }
