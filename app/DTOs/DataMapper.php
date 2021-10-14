@@ -358,8 +358,9 @@ class DataMapper
             $result->IncorrectPasswordCount = $user->IncorrectPasswordCount;
             $result->IsLockedOut = boolval($user->IsLockedOut);
             $result->IsDisabled = boolval($user->IsDisabled);
-            $result->IsAdmin = boolval($user->IsAdmin);
             $result->ProfilePicture = $user->ProfilePicture;
+            $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
+            $result->RoleId = $user->RoleId;
             return $result;
         }
         catch (\Exception)
@@ -374,7 +375,7 @@ class DataMapper
         $result->Username = $user->UserName;
         $result->FirstName = $user->FirstName;
         $result->LastName = $user->LastName;
-        $result->IsAdmin = boolval($user->IsAdmin);
+        $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
         return $result;
         try
         {
@@ -784,8 +785,8 @@ class DataMapper
             $result->IncorrectPasswordCount = $user->IncorrectPasswordCount;
             $result->IsLockedOut = $user->IsLockedOut;
             $result->IsDisabled = $user->IsDisabled;
-            $result->IsAdmin = $user->IsAdmin;
             $result->ProfilePicture = $user->ProfilePicture;
+            $result->RoleId = $user->RoleId;
             return $result;
         }
         catch (\Exception)

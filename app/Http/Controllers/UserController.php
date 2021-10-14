@@ -24,7 +24,9 @@ class UserController extends Controller
     }
     public function AddUser()
     {
-        return view('User.AddUser');
+        $api = new NPMSController();
+        $Roles = $api->GetAllRoles();
+        return view('User.AddUser',compact('Roles'));
     }
     public function SubmitAddUser(Request $user)
     {
@@ -74,7 +76,7 @@ class UserController extends Controller
         $api = new NPMSController();
         $tmpresult = $api->DisableUserById($NidUser);
         $result = new JsonResults();
-        if(json_decode($tmpresult->getContent(),true)['HasValue'])
+        if(!is_null($tmpresult))
         {
             $result->HasValue = true;
             $tmpUser = $api->DisableUserById($NidUser);
@@ -91,7 +93,19 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $User = $api->GetUserDTOById($NidUser);
-        return view('User.EditUser',compact('User'));
+        $Roles = $api->GetAllRoles();
+        return view('User.EditUser',compact('User','Roles'));
+    }
+    public function SubmitChangePassword(string $NidUser,string $NewPassword)
+    {
+        $api = new NPMSController();
+        $res = $api->ResetPassword($NidUser,$NewPassword);
+        $state = json_decode($res->getContent(),true)['HasValue'];
+        $newPass = json_decode($res->getContent(),true)['Message'];
+        $jsonresult = new JsonResults();
+        $jsonresult->HasValue = $state;
+        $jsonresult->Message = $newPass;
+        return response()->json($jsonresult);
     }
     public function SubmitEditUser(Request $User)
     {

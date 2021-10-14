@@ -2,9 +2,8 @@
     <div class="form-group row" style="text-align:right;">
               <div class="col-sm-6" style="padding:.5rem;">
                   <div class="frame">
-                      @if (!is_null($Users->ProfilePicture))
-                          {{ $imgSrc = sprintf("data:image/jpg;base64,%s", $Users->ProfilePicture); }}
-                          <img src="{{ $imgSrc }}" style="width:100%;height:10rem;" />
+                      @if (!empty($Users->ProfilePicture))
+                          <img src="/storage/images/{{ $Users->ProfilePicture }}" style="width:100%;height:10rem;" />
                       @else
                         <img src="" style="width:100%;height:10rem;" alt="بدون نمایه" />
                       @endforelse
@@ -57,11 +56,7 @@
             <label>نوع کاربر : </label>
         </div>
         <div class="col-sm-4">
-            @if ($Users->IsAdmin)
-                <label class="form-control">کاربر ادمین</label>
-            @else
-                <label class="form-control">کاربر عادی</label>
-            @endforelse
+            <label class="form-control">{{ $Users->RoleTitle }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>تعداد کلمه عبور اشتباه وارد شده : </label>

@@ -24,11 +24,11 @@
             <label>دسترسی کاربر : </label>
         </div>
         <div class="col-sm-4">
-            @if ($User->IsAdmin)
+            {{-- @if ($User->IsAdmin)
                 <label class="form-control">کاربر ادمین</label>
             @else
                 <label class="form-control">کاربر عادی</label>
-            @endforelse
+            @endforelse --}}
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">

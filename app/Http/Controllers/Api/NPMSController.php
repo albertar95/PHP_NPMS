@@ -141,7 +141,6 @@ class NPMSController extends Controller
         $User->NidUser = Str::uuid();
         $User->IsLockedOut = boolval(false);
         $User->IsDisabled = boolval(false);
-        $User->IsAdmin = boolval($User->IsAdmin);
         $repo = new UserRepository(new User());
         $User = DataMapper::MapToUser($User);
         $repo->AddUser($User);
@@ -160,7 +159,7 @@ class NPMSController extends Controller
     public function DisableUserById(string $UserId)
     {
         $repo = new UserRepository(new User());
-        return response()->json(['HasValue'=>$repo->DisableUser($UserId)]);
+        return $repo->DisableUser($UserId);
     }
     public function UpdateUser(Request $User)
     {
@@ -177,7 +176,7 @@ class NPMSController extends Controller
     {
         $repo = new UserRepository(new User());
         $NewPass = $repo->ChangeUserPassword($NidUser, $NewPassword);
-        if (!isEmptyOrNullString($NewPass))
+        if (!is_null($NewPass))
         return response()->json(['Message'=>$NewPass,'HasValue'=>true]);
     }
     public function LoginThisUser(string $Username, string $Password)

@@ -55,17 +55,20 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         return $result;
     }
-    public function DisableUser(string $NidUser):bool
+    public function DisableUser(string $NidUser)
     {
         $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
         if (!is_null($tmpUser))
         {
-            $tmpUser->IsDisabled = true;
-            $tmpUser->save();
-            return true;
+            User::where('NidUser',$NidUser)->update(
+                [
+                    'IsDisabled' => boolval(true)
+                ]
+                );
+                return $tmpUser;
         }
         else
-            return false;
+            return null;
     }
     public function UpdateUser(User $User):bool
     {
@@ -80,7 +83,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 'IncorrectPasswordCount' => $User->IncorrectPasswordCount,
                 'IsLockedOut' => boolval($User->IsLockedOut),
                 'IsDisabled' => boolval($User->IsDisabled),
-                'IsAdmin' =>  boolval($User->IsAdmin),
+                'RoleId' => $User->RoleId,
                 'ProfilePicture' => $User->ProfilePicture
             ]
             );
@@ -106,11 +109,11 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 }
                 break;
             case 3:
-                $tmpUser = $this->model->all()->where('IsAdmin','=',1);
-                foreach ($tmpUser as $usr)
-                {
-                    $result->push(DataMapper::MapToUserDTO($usr));
-                }
+                // $tmpUser = $this->model->all()->where('IsAdmin','=',1);
+                // foreach ($tmpUser as $usr)
+                // {
+                //     $result->push(DataMapper::MapToUserDTO($usr));
+                // }
                 break;
             case 4:
                 // foreach (var usr in db.Users.Where(p => p.LastLoginDate >= DateTime.Parse(DateTime.Now.ToShortDateString())))
@@ -129,9 +132,12 @@ class UserRepository extends BaseRepository implements IUserRepository{
         $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
         if (!is_null($tmpUser))
         {
-            $tmpUser->Password = Hash::make($NewPass);
-            $tmpUser->save();
-            return $tmpUser->Password;
+            User::where('NidUser',$NidUser)->update(
+                [
+                    'Password' => Hash::make($NewPass)
+                ]
+                );
+                return $tmpUser->Password;
         }else
             return "";
     }

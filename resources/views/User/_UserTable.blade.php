@@ -35,19 +35,14 @@
         <tr>
             <td>
             @if (!empty($usr->ProfilePicture))
-                {{ $imgSrc = sprintf("data:image/jpg;base64,%s", $usr->ProfilePicture); }}
-                <img src="{{ $imgSrc }}" height="100" width="100" />
+                <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50" width="50" />
             @else
-                <img height="100" width="100" src="{{ URL('Content/img/User/user3.png') }}">
+                <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
             @endforelse
             </td>
             <td>{{ $usr->FirstName}} {{ $usr->LastName }}</td>
             <td>{{ $usr->Username }}</td>
-            @if (!$usr->IsAdmin)
-                <td>کاربر عادی</td>
-            @else
-                <td>کاربر ادمین</td>
-            @endforelse
+            <td>{{ $usr->RoleTitle }}</td>
             <td>
                 {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "UserDetail").FirstOrDefault().Id))
                 {
@@ -61,6 +56,9 @@
                 {
                     <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
                 } --}}
+                <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
+                <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
+                <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
             </td>
         </tr>
     @endforeach

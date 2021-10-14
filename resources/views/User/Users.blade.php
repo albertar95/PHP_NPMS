@@ -1,21 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-    {{-- @model List<DataAccessLibrary.DTOs.UserDTO>
-    @{
-        ViewBag.Title = "مدیریت کاربران";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-        if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-        {
-            var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-            slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-        }
-        else
-        {
-            slvm1.UserPermissions = new List<Guid>();
-        }
-    } --}}
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -46,8 +31,8 @@
                     style="margin:.25rem;width:15%;" href="#">نمایش کاربران غیرفعال</a>
                 <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-dark btn-block"
                     style="margin:.25rem;width:15%;" href="#">نمایش کاربران تعلیق شده</a>
-                <a id="btnAdmin" onclick="ChangeTableSource(3)" class="btn btn-outline-info btn-block"
-                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران ادمین</a>
+                {{-- <a id="btnAdmin" onclick="ChangeTableSource(3)" class="btn btn-outline-info btn-block"
+                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران ادمین</a> --}}
                 <a id="btnOnline" onclick="ChangeTableSource(4)" class="btn btn-outline-primary btn-block"
                     style="margin:.25rem;width:15%;" href="#">نمایش کاربران برخط</a>
                 <a id="btnDefault" onclick="ChangeTableSource(5)" class="btn btn-outline-warning btn-block"
@@ -61,7 +46,7 @@
                             <th>تصویر</th>
                             <th>مشخصات کاربر</th>
                             <th>نام کاربری</th>
-                            <th>سطح کاربری</th>
+                            <th>نقش</th>
                             <th>عملیات</th>
                         </tr>
                     </thead>
@@ -70,7 +55,7 @@
                             <th>تصویر</th>
                             <th>مشخصات کاربر</th>
                             <th>نام کاربری</th>
-                            <th>سطح کاربری</th>
+                            <th>نقش</th>
                             <th>عملیات</th>
                         </tr>
                     </tfoot>
@@ -79,19 +64,14 @@
                             <tr>
                                 <td>
                                     @if (!empty($usr->ProfilePicture))
-                                        {{ $imgSrc = string . sprintf('data:image/jpg;base64,%s', $usr->ProfilePicture) }}
-                                        <img src="{{ $imgSrc }}" height="100" width="100" />
+                                        <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50" width="50" />
                                     @else
-                                    {{-- <img height="100" width="100" src="@Url.Content(" ~/Content/img/User/user3.png")"> --}}
-                        @endforelse
+                                    <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
+                                    @endforelse
                         </td>
                         <td>{{ $usr->FirstName}} {{ $usr->LastName }}</td>
                         <td>{{ $usr->Username }}</td>
-                        @if ($usr->IsAdmin)
-                            <td>کاربر عادی</td>
-                        @else
-                        <td>کاربر ادمین</td>
-                        @endforelse
+                        <td>{{ $usr->RoleTitle }}</td>
                         <td>
                             {{-- @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'UserDetail') . FirstOrDefault() . Id))
                                     {
@@ -105,7 +85,9 @@
                                     {
                                         <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
                                     } --}}
+                                    <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
                                     <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
+                                    <button class="btn btn-danger" onclick="ShowModal(2,'{{ $usr->NidUser }}')">غیرفعال</button>
                         </td>
                         </tr>
                         @endforeach

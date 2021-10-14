@@ -1,22 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-{{-- @model DataAccessLibrary.DTOs.UserDTO
-@{
-    ViewBag.Title = "ویرایش کاربر";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-    if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-    {
-        var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-        slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-    }
-    else
-    {
-        slvm1.UserPermissions = new List<Guid>();
-    }
-} --}}
-
 <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
@@ -80,9 +64,8 @@
                             </div>
                             <div class="col-sm-6" style="display:flex;">
                                 @if (!empty($User->ProfilePicture))
-                                    {{ $imgSrc = string.spintf("data:image/jpg;base64,%s", $User->ProfilePicture); }}
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe">
-                                        <img src="{{ $imgSrc }}" id="userImg" style="width:100%;height:200px;" />
+                                        <img src="/storage/images/{{ $User->ProfilePicture }}" id="userImg" style="width:100%;height:200px;" />
                                     </div>
                                 @else
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe" hidden>
@@ -93,14 +76,17 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                @if ($User->IsAdmin)
-                                    <input class="form-check-input" type="checkbox" style="margin-right:1.2rem;" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" id="IsAdmin" name="IsAdmin" value="true" checked>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                name="RoleId" style="padding:0 .75rem;">
+                                <option value="0" disabled>نقش</option>
+                                @foreach ($Roles as $rls)
+                                @if($rls->NidRole == $User->RoleId)
+                                    <option value="{{ $rls->NidRole }}" selected>{{ $rls->Title }}</option>
                                 @else
-                                    <input class="form-check-input" type="checkbox" style="margin-right:1.2rem;" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" id="IsAdmin" name="IsAdmin" value="false">
+                                <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
                                 @endforelse
-                                <label class="form-check-label" for="IsAdmin" style="margin-right:2.4rem;">
-                                    کاربر ادمین باشد؟
-                                </label>
+                                @endforeach
+                            </select>
                             </div>
                             <div class="col-sm-6" style="display:flex;">
                                 <a data-toggle="modal" data-target="#UserPasswordModal" class="btn btn-outline-primary btn-block" style="margin:1rem;width:25%;" href="#"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
@@ -164,9 +150,14 @@
             {
                 if ($("#NewPassword").val() == $("#RepeatNewPassword").val())
                 {
+                    $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                     $.ajax(
                         {
-                            url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' + 'user/ResetPassword?NidUser=' + '@Model.NidUser' + '&NewPassword=' + $("#NewPassword").val(),
+                            url: '/submitchangepassword/' + $("#NidUser").val() + '/' + $("#NewPassword").val(),
                             type: 'post',
                             datatype: 'json',
                             success: function (result) {

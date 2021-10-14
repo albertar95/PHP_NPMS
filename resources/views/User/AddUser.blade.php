@@ -46,10 +46,14 @@
                                 </div>
                             </div>
                             <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                <input class="form-check-input" type="checkbox" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" id="IsAdmin" name="IsAdmin">
-                                <label class="form-check-label" for="IsAdmin">
-                                    کاربر ادمین باشد؟
-                                </label>
+                                <label>نقش کاربر : </label>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                name="RoleId" style="padding:0 0 0 .75rem;">
+                                <option value="0" disabled selected>نقش کاربر</option>
+                                @foreach ($Roles as $rls)
+                                    <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
+                                @endforeach
+                            </select>
                             </div>
                         </div>
                         <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block" style="width:25%;margin:auto;">
@@ -86,18 +90,12 @@
             $(function () {
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
-                    var data = $("#AddUserForm").serializeArray();
-                    for (var item in data) {
-                        if (data[item].name == 'ProfilePicture') {
-                            data[item].value =  upload;
-                        }
-                    }
                     $.ajax(
                         {
                             url: '/submitadduser',
                             type: 'post',
                             datatype: 'json',
-                            data: data,
+                            data: $("#AddUserForm").serialize(),
                             success: function (result) {
                                 $("#SuccessMessage").text(' کاربر با نام ' + result.FirstName + ' ' + result.LastName + ' با موفقیت ایجاد گردید ');
                                 $("#successAlert").removeAttr('hidden');

@@ -14,7 +14,7 @@ interface IUserRepository
     public function GetUserDTOById(string $NidUser):userDTO;
     public function AddUser(User $User);
     public function GetUserDTOs(int $pagesize = 10) :Collection;
-    public function DisableUser(string $NidUser):bool;
+    public function DisableUser(string $NidUser);
     public function UpdateUser(User $User):bool;
     public function GetFilteredUserDTOs(int $FilterType):Collection;
     public function ChangeUserPassword(string $NidUser, string $NewPass) :string;

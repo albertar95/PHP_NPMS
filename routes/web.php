@@ -124,3 +124,4 @@ Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermi
 Route::get("editrolepermission/{NidPermission}",[UserController::class,"EditRolePermission"])->name('user.EditRolePermission');
 Route::post("submiteditrolepermission",[UserController::class,"SubmitEditRolePermission"])->name('user.SubmitEditRolePermission');
 Route::post("deleterolepermission/{NidPermission}",[UserController::class,"DeleteRolePermission"])->name('user.DeleteRolePermission');
+Route::post("submitchangepassword/{NidUser}/{NewPassword}",[UserController::class,"SubmitChangePassword"])->name('user.SubmitChangePassword');

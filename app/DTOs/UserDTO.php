@@ -18,6 +18,7 @@ class userDTO extends Model
     public ?int $IncorrectPasswordCount;
     public bool $IsLockedOut;
     public bool $IsDisabled;
-    public bool $IsAdmin;
+    public string $RoleId;
+    public string $RoleTitle;
     public ?string $ProfilePicture;
 }
