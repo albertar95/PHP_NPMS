@@ -6,25 +6,19 @@
 <body id="page-top">
     <div id="wrapper" style="direction:rtl;">
         <div class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" style="height:10rem;" href="{{ route('index') }}">
                 <div class="sidebar-brand-icon">
                     <img src="{{ URL('Content/img/Logo/logo192.png') }}" style="width:100%;height:10rem;" />
                 </div>
             </a>
             <hr class="sidebar-divider my-0">
-            <!-- Nav Item - Dashboard -->
-            {{-- @if(slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Dashboard").FirstOrDefault().Id)) --}}
             <div class="nav-item">
                 <a class="nav-link" href="{{ route('index') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>داشبورد</span>
                 </a>
             </div>
-            <!-- Divider -->
             <hr class="sidebar-divider">
-            {{-- @endif --}}
-            <!-- Heading -->
             <div class="sidebar-heading">
                 بخش تحقیقات
             </div>
@@ -37,12 +31,16 @@
                 </a>
                 <div id="ScholarPart" class="collapse" aria-labelledby="ScholarHeading" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddScholar").FirstOrDefault().Id)) --}}
+                        @if(in_array('1',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[0] == 1)
                             <a class="collapse-item" href="{{ route('scholar.AddScholar') }}" style="text-align:right;">محقق جدید</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Scholars").FirstOrDefault().Id)) --}}
+                            @endif
+                        @endif
+                        @if(in_array('1',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[4] == 1)
                             <a class="collapse-item" href="{{ route('scholar.Scholars') }}" style="text-align:right;">مدیریت محققان</a>
-                        {{-- @endif --}}
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>
@@ -56,16 +54,19 @@
                 <div id="ProjectPart" class="collapse" aria-labelledby="ProjectHeading"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {{-- @*<h6 class="collapse-header"></h6>*@ --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddProject").FirstOrDefault().Id)) --}}
+                        @if(in_array('2',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[0] == 1)
                             <a class="collapse-item" href="{{ route('project.AddProject') }}" style="text-align:right;">طرح جدید</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Projects").FirstOrDefault().Id)) --}}
+                            @endif
+                        @endif
+                        @if(in_array('2',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[4] == 1)
                             <a class="collapse-item" href="{{ route('project.Projects') }}" style="text-align:right;">مدیریت طرح ها</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ManageProjectsBaseInfo").FirstOrDefault().Id)) --}}
-                            <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}" style="text-align:right;">مدیریت اطلاعات پایه</a>
-                        {{-- @endif --}}
+                            @endif
+                        @endif
+                        @if(in_array('6',$sharedData['UserAccessedEntities']))
+                        <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}" style="text-align:right;">مدیریت اطلاعات پایه</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -85,36 +86,34 @@
                 <div id="ReportPart" class="collapse" aria-labelledby="ReportHeading"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "StatisticalReports").FirstOrDefault().Id)) --}}
+                        @if(in_array('4',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',4)->pluck('rowValue')[0])[4] == 1)
                             <a class="collapse-item" href="{{ route('report.StatisticReports') }}" style="text-align:right;">گزارشات آماری</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ChartReports").FirstOrDefault().Id)) --}}
+                            @endif
+                        @endif
+                        @if(in_array('4',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',4)->pluck('rowValue')[0])[4] == 1)
                             <a class="collapse-item" href="{{ route('report.ChartReports') }}" style="text-align:right;">گزارشات نموداری</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddCustomReport").FirstOrDefault().Id)) --}}
+                            @endif
+                        @endif
+                        @if(in_array('4',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',4)->pluck('rowValue')[0])[0] == 1)
                             <a class="collapse-item" href="{{ route('report.CustomReports') }}" style="text-align:right;">ایجاد گزارش سفارشی</a>
-                        {{-- @endif --}}
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>
-            {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AdvanceSearch").FirstOrDefault().Id)) --}}
-                            <!-- Nav Item - Charts -->
                 <div class="nav-item">
                     <a class="nav-link" href="{{ route('search.AdvanceSearch') }}">
                         <i class="fas fa-fw fa-search"></i>
                         <span>جستجو پیشرفته</span>
                     </a>
                 </div>
-            <!-- Divider -->
                 <hr class="sidebar-divider">
-            {{-- @endif --}}
-            {{-- @if (slvm.UserLevel == "Admin") --}}
-                            <!-- Heading -->
                 <div class="sidebar-heading">
                     بخش کاربران
                 </div>
-            <!-- Nav Item - Pages Collapse Menu -->
                 <div class="nav-item collapsed">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#UserPart" aria-expanded="true"
                        aria-controls="UserPart">
@@ -124,21 +123,20 @@
                     <div id="UserPart" class="collapse" aria-labelledby="UserHeading"
                          data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
-                            {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
+                            @if(in_array('3',$sharedData['UserAccessedEntities']))
+                                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[0] == 1)
                                 <a class="collapse-item" href="{{ route('user.AddUser') }}" style="text-align:right;">ایجاد کاربر</a>
-                            {{-- @endif --}}
-                            {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id)) --}}
+                                @endif
+                            @endif
+                            @if(in_array('3',$sharedData['UserAccessedEntities']))
+                                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('user.Users') }}" style="text-align:right;">مدیریت کاربران</a>
-                            {{-- @endif --}}
-                            {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "UserPermissions").FirstOrDefault().Id)) --}}
+                                @endif
+                            @endif
                                 <a class="collapse-item" href="{{ route('user.UserPermissions') }}" style="text-align:right;">مدیریت دسترسی ها</a>
-                            {{-- @endif --}}
                         </div>
                     </div>
                 </div>
-            {{-- @endif --}}
-        <!-- Nav Item - Pages Collapse Menu -->
             <div class="nav-item collapsed">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MessagePart" aria-expanded="true"
                    aria-controls="MessagePart">
@@ -148,23 +146,24 @@
                 <div id="MessagePart" class="collapse" aria-labelledby="MessageHeading"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
+                        @if(in_array('5',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',5)->pluck('rowValue')[0])[0] == 1)
                             <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">ارسال پیام</a>
-                        {{-- @endif --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id)) --}}
+                            @endif
+                        @endif
+                        @if(in_array('5',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',5)->pluck('rowValue')[0])[4] == 1)
                             <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">صندوق پیام</a>
-                        {{-- @endif --}}
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>
-                        <!-- Divider -->
-                        <hr class="sidebar-divider d-none d-md-block">
-                                        <!-- Heading -->
+            <hr class="sidebar-divider d-none d-md-block">
+            @if(in_array('0',$sharedData['UserAccessedEntities']))
             <div class="sidebar-heading">
                 بخش تنظیمات
             </div>
-        <!-- Nav Item - Pages Collapse Menu -->
             <div class="nav-item collapsed">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#SettingPart" aria-expanded="true"
                     aria-controls="SettingPart">
@@ -174,23 +173,18 @@
                 <div id="SettingPart" class="collapse" aria-labelledby="SettingHeading"
                         data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {{-- @*<h6 class="collapse-header">Login Screens:</h6>*@ --}}
-                        {{-- @if (slvm.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddUser").FirstOrDefault().Id)) --}}
                             <a class="collapse-item" href="{{ route('user.PasswordPolicy') }}" style="text-align:right;">خط مشی کلمه عبور</a>
                             <a class="collapse-item" href="{{ route('user.ManageRoles') }}" style="text-align:right;">مدیریت نقش ها</a>
                             <a class="collapse-item" href="{{ route('user.ManageRolePermissions') }}" style="text-align:right;">مدیریت دسترسی ها</a>
-                        {{-- @endif --}}
                     </div>
                 </div>
             </div>
             <hr class="sidebar-divider d-none d-md-block">
-            <!-- Sidebar Toggler (Sidebar) -->
+            @endif
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
         </div>
-        <!-- End of Sidebar -->
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">

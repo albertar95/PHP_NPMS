@@ -425,12 +425,12 @@ class DataMapper
             $result->NidPermission = $rolepermission->NidPermission;
             $result->RoleId = $rolepermission->RoleId;
             $result->EntityId = $rolepermission->EntityId;
-            $result->Create = boolval($rolepermission->CreateVal);
-            $result->Edit = boolval($rolepermission->EditVal);
-            $result->Delete = boolval($rolepermission->DeleteVal);
-            $result->Detail = boolval($rolepermission->DetailVal);
-            $result->List = boolval($rolepermission->ListVal);
-            $result->Print = boolval($rolepermission->PrintVal);
+            $result->Create = boolval($rolepermission->Create);
+            $result->Edit = boolval($rolepermission->Edit);
+            $result->Delete = boolval($rolepermission->Delete);
+            $result->Detail = boolval($rolepermission->Detail);
+            $result->List = boolval($rolepermission->List);
+            $result->Print = boolval($rolepermission->Print);
             $result->RoleTitle = Roles::all()->where('NidRole','=',$rolepermission->RoleId)->firstOrFail()->Title;
             return $result;
         }

@@ -314,9 +314,13 @@
                                 </div>
                             </div>
                             <hr>
-                        <a href="{{ route('project.Projects') }}" id="btnSubmit" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
+                        @if(in_array('2',$sharedData['UserAccessedEntities']))
+                            @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[3] == 1)
+                            <a href="{{ route('project.Projects') }}" id="btnSubmit" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
                             بازگشت به لیست طرح ها
-                        </a>
+                            </a>
+                            @endif
+                        @endif
                         </form>
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -137,7 +137,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
                     'Password' => Hash::make($NewPass)
                 ]
                 );
-                return $tmpUser->Password;
+                return User::all()->where('NidUser','=',$NidUser)->firstOrFail()->Password;
         }else
             return "";
     }
@@ -154,7 +154,6 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         else
             $resultFlag = 3;
-        // return new Tuple<byte, string>(resultFlag, tmpUser.NidUser);
         return response()->json(['result'=>$resultFlag,'nidUser'=>$tmpUser->NidUser]);
     }
     public function GetUserDTOByUsername(string $Username):userDTO
@@ -164,6 +163,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     public function GetUserByUsername(string $Username):User
     {
         return $this->model->all()->where('UserName','=',trim($Username))->firstOrFail();
+        // return User::with('role')->where('UserName','=',trim($Username))->firstOrFail();
     }
     public function GetUserPermissionUsers(int $Pagesize = 10):Collection
     {
@@ -474,7 +474,8 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function GetRolesPermissionByUserId(string $NidUser)
     {
-        return RolePermissions::all()->where('NidUser','=',$NidUser);
+        $tmpRoleId = User::all()->where('NidUser','=',$NidUser)->firstOrFail()->RoleId;
+        return RolePermissions::all()->where('RoleId','=',$tmpRoleId);
     }
     public function GetRolesPermissionById(string $NidPermission)
     {

@@ -6,12 +6,13 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
-                {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
-                {
+                @if(in_array('3',$sharedData['UserAccessedEntities']))
+                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[4] == 1)
                     <div dir="ltr">
-                        <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="@Url.Action("Users","Home")">&larr; بازگشت</a>
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="{{ route('user.Users') }}">&larr; بازگشت</a>
                     </div>
-                } --}}
+                    @endif
+                @endif
                 <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <p style="text-align:right;" id="SuccessMessage"></p>

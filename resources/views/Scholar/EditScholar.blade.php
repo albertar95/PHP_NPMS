@@ -7,12 +7,11 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
-                {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Scholars").FirstOrDefault().Id))
-                {
-                    <div dir="ltr">
-                        <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="@Url.Action("Scholars","Home")">&larr; بازگشت</a>
-                    </div>
-                } --}}
+                @if(in_array('1',$sharedData['UserAccessedEntities']))
+                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[4] == 1)
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="{{ route('scholar.Scholars') }}">&larr; بازگشت</a>
+                    @endif
+                @endif
                 <div class="p-5">
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">ویرایش اطلاعات محقق</h1>

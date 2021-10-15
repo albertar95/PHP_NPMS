@@ -1,23 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-{{-- @model List<DataAccessLibrary.DTOs.ProjectInitialDTO>
-    @{
-        ViewBag.Title = "مدیریت طرح ها";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-        if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-        {
-            var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-            slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-        }
-        else
-        {
-            slvm1.UserPermissions = new List<Guid>();
-        }
-    } --}}
-
-
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:right;">مدیریت طرح ها</h6>
@@ -35,12 +18,11 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
-            {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddProject").FirstOrDefault().Id))
-            {
-                <div class="row" style="margin-bottom:1rem;">
-                    <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="{{ URL('project.AddProject') }}">ایجاد طرح</a>
-                </div>
-            } --}}
+            @if(in_array('2',$sharedData['UserAccessedEntities']))
+                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[0] == 1)
+                <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="{{ URL('project.AddProject') }}">ایجاد طرح</a>
+                @endif
+            @endif
             <div class="table-responsive" dir="ltr">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                     <thead>
@@ -79,16 +61,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ProjectDetail").FirstOrDefault().Id))
-                                    {
-                                        <a href="/projectdetail/{{ $prj->NidProject }}" class="btn btn-secondary">جزییات</a>
-                                    }
-                                    @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ProgressProject").FirstOrDefault().Id))
-                                    {
-                                        <a href="{{ link_to_route('project.ProjectProgress','',$NidProject = $prj->NidProject) }}" class="btn btn-info">پیشرفت</a>
-                                    } --}}
+                                @if(in_array('2',$sharedData['UserAccessedEntities']))
+                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[3] == 1)
                                     <a href="/projectdetail/{{ $prj->NidProject }}" class="btn btn-secondary">جزییات</a>
+                                    @endif
+                                @endif
+                                @if(in_array('2',$sharedData['UserAccessedEntities']))
+                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[1] == 1)
                                     <a href="/projectprogress/{{ $prj->NidProject }}" class="btn btn-info">پیشرفت</a>
+                                    @endif
+                                @endif
                                 </td>
                             </tr>
                         @endforeach

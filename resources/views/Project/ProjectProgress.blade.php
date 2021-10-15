@@ -7,12 +7,11 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
-                {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Projects").FirstOrDefault().Id))
-                {
-                    <div dir="ltr">
-                        <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="@Url.Action("Projects","Home")">&larr; بازگشت</a>
-                    </div>
-                } --}}
+                @if(in_array('2',$sharedData['UserAccessedEntities']))
+                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[4] == 1)
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="{{ route('project.Projects') }}">&larr; بازگشت</a>
+                    @endif
+                @endif
                 <div class="p-5">
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اطلاعات طرح</h1>

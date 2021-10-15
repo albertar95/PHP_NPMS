@@ -10,13 +10,34 @@ use Illuminate\Support\Collection;
 use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData']]);
+    }
+    private static function GetEntityPermissionsFromCache()
+    {
+        $raw = Cookie::get('NPMS_Permissions');
+        $row = explode('#',$raw);
+        $AccessedEntities = new Collection();
+        foreach ($row as $r)
+        {
+            $AccessedEntities->push(explode(',',$r)[0]);
+        }
+        return $AccessedEntities->toArray();
+    }
+    private static function GetSubPermissionsFromCache()
+    {
+        $raw = Cookie::get('NPMS_Permissions');
+        $row = explode('#',$raw);
+        $AccessedSub = new Collection();
+        foreach ($row as $r)
+        {
+            $AccessedSub->push(["entity" => explode(',',$r)[0],"rowValue" => substr($r,2,strlen($r)-2)]);
+        }
+        return $AccessedSub;
     }
     public function Index()
     {
@@ -207,11 +228,21 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $result = new JsonResults();
-        $permissions = $api->GetAllUserPermissions($Niduser)->pluck('NidPermission')->toArray();
-        $output = "";
-        if($permissions != null)
+        $perms = $api->GetRolePermissionsByUser($Niduser);
+        $userRole = $api->GetAllRoles()->where('NidRole','=',auth()->user()->RoleId)->firstOrFail()->IsAdmin;
+        $tmpPerms = new Collection();
+        if($userRole)
         {
-            $output = join('#',$permissions);
+            $tmpPerms->push('0,0,0,0,0,0,0');
+        }
+        foreach ($perms as $perm)
+        {
+            $tmpPerms->push($perm->EntityId.','.$perm->Create.','.$perm->Edit.','.$perm->Delete.','.$perm->Detail.','.$perm->List.','.$perm->Print);
+        }
+        $output = "";
+        if($tmpPerms->count() > 0)
+        {
+            $output = join('#',$tmpPerms->toArray());
         }
         return redirect('')->withCookie(cookie('NPMS_Permissions', $output, 480));
     }
@@ -304,6 +335,7 @@ class UserController extends Controller
         $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
         $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
         $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+        $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
         return view('User.AddRolePermission',compact('Roles','Entities'));
     }
     public function SubmitAddRolePermission(Request $Permission)
@@ -322,6 +354,7 @@ class UserController extends Controller
         $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
         $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
         $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+        $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
         $Role = $api->GetRolePermissionsById($NidPermission);
         return view('User.EditRolePermission',compact('Roles','Entities','Role'));
         // return $Role;

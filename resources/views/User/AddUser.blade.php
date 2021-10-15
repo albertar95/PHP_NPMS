@@ -61,12 +61,13 @@
                         </button>
                         <hr />
                     </form>
-                    {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "Users").FirstOrDefault().Id))
-                    {
-                        <a href="@Url.Action("Users","Home")" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
-                            لیست کاربران
+                    @if(in_array('3',$sharedData['UserAccessedEntities']))
+                        @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[4] == 1)
+                        <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
+                        لیست کاربران
                         </a>
-                    } --}}
+                        @endif
+                    @endif
                     <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <p style="text-align:right;" id="SuccessMessage"></p>

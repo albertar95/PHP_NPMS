@@ -35,6 +35,8 @@
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
             <div class="table-responsive" dir="ltr">
+            @if (in_array('4', $sharedData['UserAccessedEntities']))
+                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                     <thead>
                         <tr>
@@ -70,12 +72,18 @@
                                 @endswitch
                                 <td>
                                     <a href="executereport/{{ $rpt->NidReport }}" class="btn btn-outline-success">اجرای گزارش</a>
-                                    <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')">حذف</button>
+                                    @if (in_array('4', $sharedData['UserAccessedEntities']))
+                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[2] == 1)
+                                        <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')">حذف</button>
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                @endif
+                @endif
             </div>
         </div>
     </div>

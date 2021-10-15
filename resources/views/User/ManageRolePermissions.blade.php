@@ -69,6 +69,8 @@
                                 <td>گزارش</td>
                                 @elseif($perm->EntityId == 5)
                                 <td>پیام</td>
+                                @elseif($perm->EntityId == 6)
+                                <td>اطلاعات پایه</td>
                                 @endforelse
                                 @if ($perm->Create)
                                     <td>دارد</td>

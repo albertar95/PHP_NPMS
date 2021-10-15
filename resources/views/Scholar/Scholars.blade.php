@@ -35,14 +35,17 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
-            {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "AddScholar").FirstOrDefault().Id))
-            {
+            @if(in_array('1',$sharedData['UserAccessedEntities']))
+                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[0] == 1)
                 <div class="row" style="margin-bottom:1rem;">
-                    <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="@Url.Action("AddScholar","Home")">ایجاد محقق</a>
+                <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="{{ route('scholar.AddScholar') }}">ایجاد محقق</a>
                 </div>
-            } --}}
+                @endif
+            @endif
             <div class="table-responsive" dir="ltr">
-                <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                @if(in_array('1',$sharedData['UserAccessedEntities']))
+                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[4] == 1)
+                    <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                     <thead>
                         <tr>
                             <th>نام محقق</th>
@@ -75,26 +78,23 @@
                                 <td class="priority-3">{{ $sch->OreintationName}}</td>
                                 <td class="priority-4">{{ $sch->collegeName ?? ""}}</td>
                                 <td>
-                                    {{-- @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "ScholarDetail").FirstOrDefault().Id))
-                                    {
-                                        <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $sch->NidScholar }}')">جزییات</button>
-                                    }
-                                    @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "EditScholar").FirstOrDefault().Id))
-                                    {
+                                    @if(in_array('1',$sharedData['UserAccessedEntities']))
+                                        @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[1] == 1)
                                         <a href="{{ route('scholar.EditScholar',$sch->NidScholar) }}" class="btn btn-warning">ویرایش</a>
-                                    }
-                                    @if (slvm1.UserPermissions.Contains(NPMS_WebUI.ViewModels.SharedLayoutViewModel.ResourceIds.Where(p => p.Title == "DeleteScholar").FirstOrDefault().Id))
-                                    {
+                                        @endif
+                                    @endif
+                                    @if(in_array('1',$sharedData['UserAccessedEntities']))
+                                        @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[2] == 1)
                                         <button class="btn btn-danger" onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
-                                    } --}}
-                                    <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $sch->NidScholar }}')">جزییات</button>
-                                    <a href="{{ route('scholar.EditScholar',$sch->NidScholar) }}" class="btn btn-warning">ویرایش</a>
-                                    <button class="btn btn-danger" onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                @endif
+                @endif
             </div>
         </div>
     </div>

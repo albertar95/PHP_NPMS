@@ -12,7 +12,9 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">ایجاد گزارش</h1>
                     </div>
-                    <form class="user" enctype="application/x-www-form-urlencoded" id="AddReportForm">
+                    @if (in_array('4', $sharedData['UserAccessedEntities']))
+                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[0] == 1)
+                        <form class="user" enctype="application/x-www-form-urlencoded" id="AddReportForm">
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="ReportName" name="ReportName"
@@ -56,9 +58,15 @@
                         </button>
                         <hr>
                     </form>
-                    <a href="{{ URL('report.StatisticReports') }}" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
+                    @endif
+                    @endif
+                    @if (in_array('4', $sharedData['UserAccessedEntities']))
+                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
+                        <a href="{{ URL('report.StatisticReports') }}" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
                        گزارشات
-                    </a>
+                        </a>
+                        @endif
+                    @endif
                     <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <p style="text-align:right;" id="SuccessMessage"></p>

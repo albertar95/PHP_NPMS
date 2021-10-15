@@ -2,21 +2,6 @@
 
 @section('Content')
 
-{{-- @{
-    ViewBag.Title = "ایجاد پروژه";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(DataAccessLibrary.Helpers.Encryption.Decrypt(User.Identity.Name).Split(','), 0);
-    if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-    {
-        var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-        slvm.UserPermissions = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1).UserPermissions;
-    }
-    else
-    {
-        slvm.UserPermissions = new List<Guid>();
-    }
-} --}}
-
 <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
         <!-- Nested Row within Card Body -->

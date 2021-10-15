@@ -23,10 +23,11 @@
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
             <div class="row" style="margin-bottom:1rem;">
-                {{-- @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'AddUser') . FirstOrDefault() . Id))
-                {
-                    <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;" href="@Url.Action("AddUser","Home")">ایجاد کاربر</a>
-                } --}}
+                @if(in_array('3',$sharedData['UserAccessedEntities']))
+                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[0] == 1)
+                    <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;" href="{{ route('user.AddUser') }}">ایجاد کاربر</a>
+                    @endif
+                @endif
                 <a id="btnDisabled" onclick="ChangeTableSource(1)" class="btn btn-outline-secondary btn-block"
                     style="margin:.25rem;width:15%;" href="#">نمایش کاربران غیرفعال</a>
                 <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-dark btn-block"
@@ -39,6 +40,8 @@
                     style="margin:.25rem;width:15%;" href="#">حالت پیش فرض</a>
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
+            @if(in_array('3',$sharedData['UserAccessedEntities']))
+                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[4] == 1)
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                     cellspacing="0">
                     <thead>
@@ -66,33 +69,37 @@
                                     @if (!empty($usr->ProfilePicture))
                                         <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50" width="50" />
                                     @else
-                                    <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
+                                        <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
                                     @endforelse
-                        </td>
-                        <td>{{ $usr->FirstName}} {{ $usr->LastName }}</td>
-                        <td>{{ $usr->Username }}</td>
-                        <td>{{ $usr->RoleTitle }}</td>
-                        <td>
-                            {{-- @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'UserDetail') . FirstOrDefault() . Id))
-                                    {
-                                        <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
-                                    }
-                                    @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'EditUser') . FirstOrDefault() . Id))
-                                    {
-                                        <a href="@Url.Action("EditUser","Home",new { NidUser = usr.NidUser})" class="btn btn-warning">ویرایش</a>
-                                    }
-                                    @if (slvm1 . UserPermissions . Contains(NPMS_WebUI . ViewModels . SharedLayoutViewModel . ResourceIds . Where(p->p . Title == 'DisableUser') . FirstOrDefault() . Id))
-                                    {
-                                        <button class="btn btn-danger" onclick="ShowModal(2,'@usr.NidUser')">غیرفعال</button>
-                                    } --}}
-                                    <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
+                                </td>
+                                <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
+                                <td>{{ $usr->Username }}</td>
+                                <td>{{ $usr->RoleTitle }}</td>
+                                <td>
+                                @if(in_array('3',$sharedData['UserAccessedEntities']))
+                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[3] == 1)
+                                    <button class="btn btn-secondary"
+                                    onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
+                                    @endif
+                                @endif
+                                @if(in_array('3',$sharedData['UserAccessedEntities']))
+                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[1] == 1)
                                     <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
-                                    <button class="btn btn-danger" onclick="ShowModal(2,'{{ $usr->NidUser }}')">غیرفعال</button>
-                        </td>
-                        </tr>
+                                    @endif
+                                @endif
+                                @if(in_array('3',$sharedData['UserAccessedEntities']))
+                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[2] == 1)
+                                    <button class="btn btn-danger"
+                                    onclick="ShowModal(2,'{{ $usr->NidUser }}')">غیرفعال</button>
+                                    @endif
+                                @endif
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
+                @endif
+                @endif
             </div>
         </div>
     </div>
@@ -123,105 +130,105 @@
             </div>
         </div>
     </div>
-    @section('styles')
-        <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    @endsection
-    @section('scripts')
-        <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
-        <script type="text/javascript">
-            $(function() {
-                var successedit = '@TempData["EditUserSuccessMessage"]';
-                var erroredit = '@TempData["EditUserErrorMessage"]';
-                var successdelete = '@TempData["DisableUserSuccessMessage"]';
-                if (successedit != '') {
-                    $("#SuccessMessage").text(successedit);
-                    $("#successAlert").removeAttr('hidden')
-                    window.setTimeout(function() {
-                        $("#successAlert").attr('hidden', 'hidden');
-                    }, 10000);
-                }
-                if (erroredit != '') {
-                    $("#ErrorMessage").text(erroredit);
-                    $("#errorAlert").removeAttr('hidden')
-                    window.setTimeout(function() {
-                        $("#errorAlert").attr('hidden', 'hidden');
-                    }, 10000);
-                }
-                if (successdelete != '') {
-                    $("#SuccessMessage").text(successdelete);
-                    $("#successAlert").removeAttr('hidden')
-                    window.setTimeout(function() {
-                        $("#successAlert").attr('hidden', 'hidden');
-                    }, 10000);
-                }
+@section('styles')
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
+@section('scripts')
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+    <script type="text/javascript">
+        $(function() {
+            var successedit = '@TempData["EditUserSuccessMessage"]';
+            var erroredit = '@TempData["EditUserErrorMessage"]';
+            var successdelete = '@TempData["DisableUserSuccessMessage"]';
+            if (successedit != '') {
+                $("#SuccessMessage").text(successedit);
+                $("#successAlert").removeAttr('hidden')
+                window.setTimeout(function() {
+                    $("#successAlert").attr('hidden', 'hidden');
+                }, 10000);
+            }
+            if (erroredit != '') {
+                $("#ErrorMessage").text(erroredit);
+                $("#errorAlert").removeAttr('hidden')
+                window.setTimeout(function() {
+                    $("#errorAlert").attr('hidden', 'hidden');
+                }, 10000);
+            }
+            if (successdelete != '') {
+                $("#SuccessMessage").text(successdelete);
+                $("#successAlert").removeAttr('hidden')
+                window.setTimeout(function() {
+                    $("#successAlert").attr('hidden', 'hidden');
+                }, 10000);
+            }
+        });
+
+        function ShowModal(typo, NidUser) {
+            if (typo == 1) {
+                $("#UserModalLabel").text('جزییات اطلاعات کاربر');
+                $("#btnClose").removeAttr('hidden');
+                $("#btnCancel").attr('hidden', 'hidden');
+                $("#btnOk").attr('hidden', 'hidden');
+                $("#DeleteQuestion").attr('hidden', 'hidden');
+            } else if (typo == 2) {
+                $("#UserModalLabel").text('غیرفعال کردن کاربر');
+                $("#DeleteQuestion").removeAttr('hidden');
+                $("#btnOk").removeAttr('hidden');
+                $("#btnCancel").removeAttr('hidden');
+                $("#btnClose").attr('hidden', 'hidden');
+                $("#btnOk").attr('onclick', 'DisableUser(' + "'" + NidUser + "'" + ')');
+            }
+            $.ajax({
+                url: '/userdetail/' + NidUser,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue) {
+                        $("#UserModalBody").html(result.Html)
+                        $("#UserModal").modal('show')
+                    }
+                },
+                error: function() {}
+            })
+        }
+
+        function DisableUser(NidUser) {
+            $.ajax({
+                url: '/disableuser/' + NidUser,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue)
+                        window.location.reload()
+                    else {
+                        $("#UserModal").modal('hide');
+                        $("#ErrorMessage").text(result.Message);
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+
+                    }
+                },
+                error: function() {}
             });
+        }
 
-            function ShowModal(typo, NidUser) {
-                if (typo == 1) {
-                    $("#UserModalLabel").text('جزییات اطلاعات کاربر');
-                    $("#btnClose").removeAttr('hidden');
-                    $("#btnCancel").attr('hidden', 'hidden');
-                    $("#btnOk").attr('hidden', 'hidden');
-                    $("#DeleteQuestion").attr('hidden', 'hidden');
-                } else if (typo == 2) {
-                    $("#UserModalLabel").text('غیرفعال کردن کاربر');
-                    $("#DeleteQuestion").removeAttr('hidden');
-                    $("#btnOk").removeAttr('hidden');
-                    $("#btnCancel").removeAttr('hidden');
-                    $("#btnClose").attr('hidden', 'hidden');
-                    $("#btnOk").attr('onclick', 'DisableUser(' + "'" + NidUser + "'" + ')');
-                }
-                $.ajax({
-                    url: '/userdetail/' + NidUser,
-                    type: 'get',
-                    datatype: 'json',
-                    success: function(result) {
-                        if (result.HasValue) {
-                            $("#UserModalBody").html(result.Html)
-                            $("#UserModal").modal('show')
-                        }
-                    },
-                    error: function() {}
-                })
-            }
-
-            function DisableUser(NidUser) {
-                $.ajax({
-                    url: '/disableuser/' + NidUser,
-                    type: 'get',
-                    datatype: 'json',
-                    success: function(result) {
-                        if (result.HasValue)
-                            window.location.reload()
-                        else {
-                            $("#UserModal").modal('hide');
-                            $("#ErrorMessage").text(result.Message);
-                            $("#errorAlert").removeAttr('hidden');
-                            window.setTimeout(function() {
-                                $("#errorAlert").attr('hidden', 'hidden');
-                            }, 10000);
-
-                        }
-                    },
-                    error: function() {}
-                });
-            }
-
-            function ChangeTableSource(sourceId) {
-                $.ajax({
-                    url: '/usersourcechange/' + sourceId,
-                    type: 'get',
-                    datatype: 'json',
-                    success: function(result) {
-                        $("#dataTable").html(result.Html)
-                    },
-                    error: function() {}
-                });
-            }
-        </script>
-    @endsection
+        function ChangeTableSource(sourceId) {
+            $.ajax({
+                url: '/usersourcechange/' + sourceId,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    $("#dataTable").html(result.Html)
+                },
+                error: function() {}
+            });
+        }
+    </script>
+@endsection
 
 
 @endsection
