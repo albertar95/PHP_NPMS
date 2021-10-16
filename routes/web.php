@@ -72,9 +72,9 @@ Route::get("executereport/{NidReport}",[ReportController::class,"ExecuteReport"]
 Route::post("submitstatisticsreport",[ReportController::class,"SubmitStatisticsReport"])->name('report.SubmitStatisticsReport');
 Route::get("chartreports",[ReportController::class,"ChartReports"])->name('report.ChartReports');
 Route::get("customreports",[ReportController::class,"CustomReports"])->name('report.CustomReports');
-Route::get("customreportcontextchanged",[ReportController::class,"CustomReportContextChanged"])->name('report.CustomReportContextChanged');
+Route::post("customreportcontextchanged/{ContextId}",[ReportController::class,"CustomReportContextChanged"])->name('report.CustomReportContextChanged');
 Route::post("submitaddcustomreport",[ReportController::class,"SubmitAddCustomReport"])->name('report.SubmitAddCustomReport');
-Route::get("deletereport",[ReportController::class,"DeleteReport"])->name('report.DeleteReport');
+Route::post("deletereport/{NidReport}",[ReportController::class,"DeleteReport"])->name('report.DeleteReport');
 
 //scholar routes
 Route::get("addscholar",[ScholarController::class,"AddScholar"])->name('scholar.AddScholar');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domains\Repositories\AlarmRepository;
+use App\Domains\Repositories\LogRepository;
 use App\Domains\Repositories\MessageRepository;
 use App\Domains\Repositories\ProjectRepository;
 use App\Domains\Repositories\ReportRawData;
@@ -19,6 +20,7 @@ use App\Helpers\Casts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScholarRequest;
 use App\Models\Alarms;
+use App\Models\Logs;
 use App\Models\Messages;
 use App\Models\Projects;
 use App\Models\Reports;
@@ -33,6 +35,7 @@ use Dflydev\DotAccessData\Data;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 class NPMSController extends Controller
@@ -216,6 +219,24 @@ class NPMSController extends Controller
         // {
         // }
         return $repo->GetUserPermissions($NidUser);
+    }
+    public static function AddLog(User $user,string $ip,int $action,int $status,int $importance,int $confident,string $description = "")
+    {
+        $newlog = new Logs();
+        $repo = new LogRepository();
+        $newlog->NidLog = Str::uuid();
+        $newlog->UserId = $user->NidUser;
+        $newlog->Username = $user->UserName;
+        $newlog->LogDate = Carbon::now()->toDateString();
+        $newlog->IP = $ip;
+        $newlog->LogTime = Carbon::now()->toTimeString();
+        $newlog->ActionId = $action;
+        $newlog->Description = $description;
+        $newlog->LogStatus = $status;
+        $newlog->ImportanceLevel = $importance;
+        $newlog->ConfidentialLevel = $confident;
+        return $repo->AddLog($newlog);
+        // return $newlog;
     }
     public function UpdateUserUserPermissions(string $NidUser,array $Resources)
     {
@@ -612,7 +633,7 @@ class NPMSController extends Controller
         // $report = DataMapper::MapToReport($report);
         return $repo->AddReport($report);
     }
-    public function AddReportParameters(Collection $Params)//ReportParameter
+    public function AddReportParameters(SupportCollection $Params)//ReportParameter
     {
         $repo = new ReportRepository(new Reports());
         $pars = new Collection();

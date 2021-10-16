@@ -7,6 +7,7 @@ use App\DTOs\DataMapper;
 use App\Models\Projects;
 use App\Models\Scholars;
 use App\Models\Settings;
+use App\Models\User;
 use App\Models\Users;
 use App\Repository\Eloquent\BaseRepository;
 use Illuminate\Support\Collection;
@@ -753,7 +754,7 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpUser = Users::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -771,7 +772,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 1:
-                    $tmpUser = Users::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -799,7 +800,7 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpUser = Users::all()->where('IsDisabled','=',false)->where('Username','=',$searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->where('Username','=',$searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -817,7 +818,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 1:
-                    $tmpUser = Users::all()->where('IsDisabled','=',false)->where('Username','=',$searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->where('Username','=',$searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));

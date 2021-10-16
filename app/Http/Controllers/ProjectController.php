@@ -11,18 +11,20 @@ use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
 {
-    public function Projects()
+    public function Projects(Request $request)
     {
         $api = new NPMSController();
         $Projects = $api->GetAllProjectInitials();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
         return view('Project.Projects',compact('Projects'));
     }
-    public function AddProject()
+    public function AddProject(Request $request)
     {
         $api = new NPMSController();
         $Scholars = $api->GetAllProjectScholars();
         $UnitGroups = $api->GetAllUnitGroups();
         $Units = $api->GetAllUnits();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد طرح");
         return view('Project.AddProject',compact('Scholars','UnitGroups','Units'));
     }
     public function SubmitAddProject(Request $Project)
@@ -32,28 +34,32 @@ class ProjectController extends Controller
         if($api->AddProject($Project))
         {
             $result->HasValue = true;
+            $api->AddLog(auth()->user(),$Project->ip(),2,0,3,1,"ایجاد طرح موفق");
             return response()->json($result);
         }else
         {
             $result->HasValue = false;
             $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+            $api->AddLog(auth()->user(),$Project->ip(),2,1,3,1,"ایجاد طرح ناموفق");
             return response()->json($result);
         }
     }
-    public function ProjectDetail(string $NidProject)
+    public function ProjectDetail(string $NidProject,Request $request)
     {
         $api = new NPMSController();
         $Project = $api->GetProjectDetailDTOById($NidProject);
         $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات طرح");
         return view('Project.ProjectDetail',compact('Project','Scholar'));
     }
-    public function ProjectProgress(string $NidProject)
+    public function ProjectProgress(string $NidProject,Request $request)
     {
         $api = new NPMSController();
         $Scholars = $api->GetAllProjectScholars();
         $UnitGroups = $api->GetAllUnitGroups();
         $Units = $api->GetAllUnits();
         $Project = $api->GetProjectDTOById($NidProject);
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"پیشرفت طرح");
         return view('Project.ProjectProgress',compact('Scholars','UnitGroups','Units','Project'));
     }
     public function UpdateProject(Request $Project)
@@ -63,30 +69,18 @@ class ProjectController extends Controller
         if($api->ProjectProgress($Project))
         {
             $result->HasValue = true;
+            $result->Message = "طرح با موفقیت ویرایش گردید";
+            $api->AddLog(auth()->user(),$Project->ip(),3,0,3,1,"پیشرفت طرح موفق");
             return response()->json($result);
         }else
         {
             $result->HasValue = false;
             $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+            $api->AddLog(auth()->user(),$Project->ip(),3,1,3,1,"پیشرفت طرح ناموفق");
             return response()->json($result);
         }
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage UpdateProjectResponse = client.PostAsJsonAsync($"Project/ProjectProgress", Project).Result;
-        //     if (UpdateProjectResponse.IsSuccessStatusCode)
-        //     {
-        //         TempData["ProjectSuccessMessage"] = $"طرح با شماره پرونده {Project.ProjectNumber} با موفقیت ویرایش گردید";
-        //         return Json(new JsonResults() { HasValue = true });
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false, Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید" });
-        //     }
-        // }
     }
-    public function ManageBaseInfo()
+    public function ManageBaseInfo(Request $request)
     {
         $api = new NPMSController();
         $UnitGroups = $api->GetAllUnitGroups();
@@ -97,6 +91,7 @@ class ProjectController extends Controller
         $Oreintations = $api->GetOrientations();
         $Colleges = $api->GetColleges();
         $Grades = $api->GetGrades();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت اطلاعات پایه");
         return view('Project.ManageBaseInfo',compact('UnitGroups','Units','Majors','CollaborationTypes','MillitaryStatuses','Oreintations','Colleges','Grades'));
     }
     public function SubmitUnitForm(Request $unit)
@@ -106,10 +101,12 @@ class ProjectController extends Controller
         if(empty($unit->NidUnit))
         {
             $unitname = $api->AddUnit($unit);
+            $api->AddLog(auth()->user(),$unit->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             $result->Message = sprintf("یگان با نام %s با موفقیت ایجاد گردید",$unitname);
         }else
         {
             $unitname = $api->UpdateUnit($unit);
+            $api->AddLog(auth()->user(),$unit->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unitname);
         }
         $TblId = 1;
@@ -126,10 +123,12 @@ class ProjectController extends Controller
         if(empty($unitGroup->NidGroup))
         {
             $unitgroupname = $api->AddUnitGroup($unitGroup);
+            $api->AddLog(auth()->user(),$unitGroup->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             $result->Message = sprintf("گروه با نام %s با موفقیت ایجاد گردید",$unitgroupname);
         }else
         {
             $unitgroupname = $api->UpdateUnitGroup($unitGroup);
+            $api->AddLog(auth()->user(),$unitGroup->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitgroupname);
         }
         $TblId = 2;
@@ -150,10 +149,12 @@ class ProjectController extends Controller
             if($api->AddSetting($grade))
             {
                 $result->Message = sprintf("مقطع تحصیلی با نام %s با موفقیت ایجاد گردید",$grade->SettingTitle);
+                $api->AddLog(auth()->user(),$grade->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$grade->ip(),4,1,3,1,"ایجاد اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }else
@@ -161,10 +162,12 @@ class ProjectController extends Controller
             if($api->UpdateSetting($grade))
             {
                 $result->Message = sprintf("مقطع تحصیلی با نام %s با موفقیت ویرایش گردید",$grade->SettingTitle);
+                $api->AddLog(auth()->user(),$grade->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$grade->ip(),5,1,3,1,"ویرایش اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }
@@ -182,10 +185,12 @@ class ProjectController extends Controller
         {
             $api->AddMajor($major);
             $result->Message = sprintf("رشته تحصیلی با نام %s با موفقیت ایجاد گردید",$major->Title);
+            $api->AddLog(auth()->user(),$major->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
         }else
         {
             $api->UpdateMajor($major);
             $result->Message = sprintf("رشته تحصیلی با نام %s با موفقیت ویرایش گردید",$major->Title);
+            $api->AddLog(auth()->user(),$major->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
         }
         $TblId = 4;
         $Majors = $api->GetMajors();
@@ -202,10 +207,13 @@ class ProjectController extends Controller
         {
             $api->AddOreintation($oreintation);
             $result->Message = sprintf("گرایش با نام %s با موفقیت ایجاد گردید",$oreintation->Title);
+            $api->AddLog(auth()->user(),$oreintation->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
+
         }else
         {
             $api->UpdateOreintation($oreintation);
             $result->Message = sprintf("گرایش با نام %s با موفقیت ویرایش گردید",$oreintation->Title);
+            $api->AddLog(auth()->user(),$oreintation->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
         }
         $TblId = 5;
         $Majors = $api->GetMajors();
@@ -224,10 +232,12 @@ class ProjectController extends Controller
             if($api->AddSetting($college))
             {
                 $result->Message = sprintf("دانشکده با نام %s با موفقیت ایجاد گردید",$college->SettingTitle);
+                $api->AddLog(auth()->user(),$college->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$college->ip(),4,1,3,1,"ایجاد اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }else
@@ -235,10 +245,12 @@ class ProjectController extends Controller
             if($api->UpdateSetting($college))
             {
                 $result->Message = sprintf("دانشکده با نام %s با موفقیت ویرایش گردید",$college->SettingTitle);
+                $api->AddLog(auth()->user(),$college->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$college->ip(),5,1,3,1,"ویرایش اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }
@@ -258,10 +270,12 @@ class ProjectController extends Controller
             if($api->AddSetting($millit))
             {
                 $result->Message = sprintf("وضعیت خدمت با نام %s با موفقیت ایجاد گردید",$millit->SettingTitle);
+                $api->AddLog(auth()->user(),$millit->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$millit->ip(),4,1,3,1,"ایجاد اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }else
@@ -269,10 +283,12 @@ class ProjectController extends Controller
             if($api->UpdateSetting($millit))
             {
                 $result->Message = sprintf("وضعیت خدمت با نام %s با موفقیت ویرایش گردید",$millit->SettingTitle);
+                $api->AddLog(auth()->user(),$millit->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$millit->ip(),5,1,3,1,"ویرایش اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }
@@ -292,10 +308,12 @@ class ProjectController extends Controller
             if($api->AddSetting($collab))
             {
                 $result->Message = sprintf("نوع همکاری با نام %s با موفقیت ایجاد گردید",$collab->SettingTitle);
+                $api->AddLog(auth()->user(),$collab->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$collab->ip(),4,1,3,1,"ایجاد اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }else
@@ -303,10 +321,12 @@ class ProjectController extends Controller
             if($api->UpdateSetting($collab))
             {
                 $result->Message = sprintf("نوع همکاری با نام %s با موفقیت ویرایش گردید",$collab->SettingTitle);
+                $api->AddLog(auth()->user(),$collab->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
             }else
             {
                 $result->HasValue = false;
                 $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(),$collab->ip(),5,1,3,1,"ویرایش اطلاعات پایه ناموفق");
                 return response()->json($result);
             }
         }
@@ -316,7 +336,7 @@ class ProjectController extends Controller
         $result->HasValue = true;
         return response()->json($result);
     }
-    public function SubmitDeleteUnit(string $NidUnit)
+    public function SubmitDeleteUnit(string $NidUnit,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -327,11 +347,13 @@ class ProjectController extends Controller
         {
             case "1":
                 $result->Message = "یگان مورد نظر دارای گروه می باشد.امکان حذف وجود ندارد";
+                $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
                 return response()->json($result);
                 break;
             case "2":
                 $result->HasValue = true;
                 $result->Message = "یگان با موفقیت حذف گردید";
+                $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
                 $TblId = 1;
                 $Units = $api->GetAllUnits();
                 $result->Html = view('Project._BaseInfoTables',compact('TblId','Units'))->render();
@@ -339,11 +361,12 @@ class ProjectController extends Controller
                 break;
             case "3":
                 $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
                 return response()->json($result);
                 break;
         }
     }
-    public function SubmitDeleteUnitGroup(string $NidUnitGroup)
+    public function SubmitDeleteUnitGroup(string $NidUnitGroup,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -353,6 +376,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "گروه با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 1;
             $Units = $api->GetAllUnits();
             $UnitGroups = $api->GetAllUnitGroups();
@@ -361,10 +385,11 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }
-    public function SubmitDeleteGrade(string $NidGrade)
+    public function SubmitDeleteGrade(string $NidGrade,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -374,6 +399,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "مقطع تحصیلی با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 3;
             $Grades = $api->GetGrades();
             $result->Html = view('Project._BaseInfoTables',compact('TblId','Grades'))->render();
@@ -381,10 +407,11 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }
-    public function SubmitDeleteMajor(string $NidMajor)
+    public function SubmitDeleteMajor(string $NidMajor,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -411,7 +438,7 @@ class ProjectController extends Controller
                 break;
         }
     }
-    public function SubmitDeleteOreintation(string $NidOreintation)
+    public function SubmitDeleteOreintation(string $NidOreintation,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -421,6 +448,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "گرایش با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 5;
             $Majors = $api->GetMajors();
             $Oreintations = $api->GetOrientations();
@@ -429,10 +457,11 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }
-    public function SubmitDeleteCollege(string $NidCollege)
+    public function SubmitDeleteCollege(string $NidCollege,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -442,6 +471,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "دانشکده با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 6;
             $Colleges = $api->GetColleges();
             $result->Html = view('Project._BaseInfoTables',compact('TblId','Colleges'))->render();
@@ -449,10 +479,11 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }
-    public function SubmitDeleteMillit(string $NidMillit)
+    public function SubmitDeleteMillit(string $NidMillit,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -462,6 +493,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "وضعیت خدمت با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 7;
             $MillitaryStatuses = $api->GetMillitaryStatuses();
             $result->Html = view('Project._BaseInfoTables',compact('TblId','MillitaryStatuses'))->render();
@@ -469,10 +501,11 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }
-    public function SubmitDeleteCollab(string $NidCollab)
+    public function SubmitDeleteCollab(string $NidCollab,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -482,6 +515,7 @@ class ProjectController extends Controller
         {
             $result->HasValue = true;
             $result->Message = "نوع همکاری با موفقیت حذف گردید";
+            $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
             $TblId = 8;
             $CollaborationTypes = $api->GetCollaborationTypes();
             $result->Html = view('Project._BaseInfoTables',compact('TblId','CollaborationTypes'))->render();
@@ -489,6 +523,7 @@ class ProjectController extends Controller
         }else
         {
             $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            $api->AddLog(auth()->user(),$request->ip(),6,1,3,1,"حذف اطلاعات پایه ناموفق");
             return response()->json($result);
         }
     }

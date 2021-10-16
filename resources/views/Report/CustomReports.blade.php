@@ -91,12 +91,16 @@
         {
             $("#sltContext").on('change', function ()
             {
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax(
                     {
-                        url: '@Url.Action("CustomReportContextChanged", "Home")',
+                        url: '/customreportcontextchanged/' + $("#sltContext").val(),
                         type: 'post',
                         datatype: 'json',
-                        data: { ContextId: $("#sltContext").val() },
                         success: function (result) {
                             if (result.HasValue)
                                 $("#Partials").html(result.Html);
@@ -138,7 +142,7 @@
                 });
                 $.ajax(
                     {
-                        url: '@Url.Action("SubmitAddCustomReport", "Home")',
+                        url: '/submitaddcustomreport',
                         type: 'post',
                         datatype: 'json',
                         data: { Name: $("#ReportName").val(), ContextId: $("#sltContext").val(), FieldId: $("#sltField").val(), Inputs: selectedInputs, Outputs: selectedOutputs },

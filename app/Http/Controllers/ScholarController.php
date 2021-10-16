@@ -20,7 +20,7 @@ class ScholarController extends Controller
     {
         $this->middleware('auth');
     }
-    public function AddScholar()
+    public function AddScholar(Request $request)
     {
         $api = new NPMSController();
         $Majors = $api->GetMajors();
@@ -28,6 +28,7 @@ class ScholarController extends Controller
         $Grades = $api->GetGrades();
         $MillitaryStatuses = $api->GetMillitaryStatuses();
         $Colleges = $api->GetColleges();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return view('Scholar.AddScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges'));
     }
     public function MajorSelectChanged(string $NidMajor)
@@ -56,25 +57,28 @@ class ScholarController extends Controller
             $tmpname = Str::of($tmpname)->append(" ");
             $tmpname = Str::of($tmpname)->append($scholar->FirstName);
             $result->Message = $tmpname;
+            $api->AddLog(auth()->user(),$scholar->ip(),7,0,3,1,"ایجاد محقق موفق");
         }
         return response()->json($result);
     }
-    public function Scholars()
+    public function Scholars(Request $request)
     {
         $api = new NPMSController();
         $Scholar = $api->GetAllScholarLists(0);
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت محققان");
         return view('Scholar.Scholars',compact('Scholar'));
     }
-    public function ScholarDetail(string $NidScholar)
+    public function ScholarDetail(string $NidScholar,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
         $result->HasValue = true;
         $Scholar = $api->GetAllScholarDetails($NidScholar);
         $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
     }
-    public function EditScholar(string $NidScholar)
+    public function EditScholar(string $NidScholar,Request $request)
     {
         $api = new NPMSController();
         $Majors = $api->GetMajors();
@@ -90,26 +94,14 @@ class ScholarController extends Controller
         {
             $Oreintations = new Collection();
         }
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
     }
     public function SubmitEditScholar(Request $scholar) //ScholarDTO
     {
         $api = new NPMSController();
-        $Scholar = $api->UpdateScholar($scholar);
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     var UpdateScholarResult = client.PostAsJsonAsync("scholar/UpdateScholarDTO", scholar).Result;
-        //     if(UpdateScholarResult.IsSuccessStatusCode)
-        //     {
-        //         //var Response = UpdateScholarResult.Content.ReadAsAsync<ScholarDTO>().Result;
-        //         TempData["EditScholarSuccessMessage"] = $"محقق با نام {scholar.FirstName} {scholar.LastName} با موفقیت ویرایش گردید";
-        //     }
-        //     else
-        //         TempData["EditScholarErrorMessage"] = $"خطا در انجام عملیات لطفا مجدد امتحان کنید";
-        // }
-        // return RedirectToAction("Scholars");
+        $api->UpdateScholar($scholar);
+        $api->AddLog(auth()->user(),$scholar->ip(),8,0,3,1,"ویرایش محقق موفق");
         return redirect('scholars');
     }
     public function UploadThisFile(Request $file)
@@ -123,7 +115,7 @@ class ScholarController extends Controller
         $result->Message = $filename;
         return response()->json($result);
     }
-    public function DeleteScholar(string $NidScholar)
+    public function DeleteScholar(string $NidScholar,Request $request)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -133,14 +125,17 @@ class ScholarController extends Controller
         {
             $result->Message = "1";
             $result->Html = sprintf('محقق با نام %s با موفقیت حذف گردید',json_decode($Scholar->getContent(),true)['Html']);
+            $api->AddLog(auth()->user(),$request->ip(),9,0,3,1,"حذف محقق موفق");
         }elseif(json_decode($Scholar->getContent(),true)['Message'] == "0")
         {
             $result->Message = "2";
             $result->Html = sprintf('خطا در انجام عملیات.لطفا مجددا امتحان کنید');
+            $api->AddLog(auth()->user(),$request->ip(),9,1,3,1,"حذف محقق ناموفق");
         }else
         {
             $result->Message = "3";
             $result->Html = sprintf('محقق دارای %s طرح ثبت شده در سیستم می باشد.امکان حذف وجود ندارد',json_decode($Scholar->getContent(),true)['Message']);
+            $api->AddLog(auth()->user(),$request->ip(),9,1,3,1,"حذف محقق ناموفق");
         }
         return response()->json($result);
     }

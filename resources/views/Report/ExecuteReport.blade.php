@@ -1,21 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-{{-- @model NPMS_WebUI.ViewModels.ReportViewModel
-@{
-    ViewBag.Title = "گزارش آماری";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-    if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-    {
-        var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-        slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-    }
-    else
-    {
-        slvm1.UserPermissions = new List<Guid>();
-    }
-} --}}
 <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
@@ -25,38 +10,16 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">{{ $report->ReportName }}</h1>
                     </div>
-                    @if (!empty($inputs))
-                        {{ $round = $inputs->count() / 3; }}
-                    @endif
                     <form class="user" id="ExecuteReportForm">
                         <input type="text" class="form-control form-control-user" value="{{ $report->NidReport }}" id="NidReport" hidden>
-                        @for ($i = 0; $i <= $round; $i++)
-                            @if (!empty($inputs))
-                                <div class="form-group row" style="display:flex;">
-                                    @foreach ($inputs->sortBy('NidParameter')->skip($i*3)->take(3) as $inp)
-                                    <div class="col-sm-4" style="text-align:right;">
-                                        <div style="display:flex;">
-                                            {{-- @Html.Partial("_ExecuteReportPartial",new Tuple<int,string>(Model.report.ContextId,inp.ParameterKey)) --}}
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        @endfor
+                        {!! $inputHtml !!}
                         <div class="form-group row" style="text-align:right;">
                             <div class="col-sm-3" style="padding:.5rem;">
                                 <label>خروجی ها : </label>
                             </div>
                         </div>
                         <div class="form-group row" style="text-align:right;" id="OutputDiv">
-                            @foreach ($outputs as $outy)
-                                <div class="col-sm-4">
-                                    <div class="row" style="display:flex;">
-                                        <input type="checkbox" style="width:1rem;margin:unset !important;" id="{{ $outy->ParameterKey }}" class="form-control checkbox" alt="out" checked />
-                                        {{-- <label for="{{ outy->ParameterKey }}" style="margin:.45rem .45rem 0 0">@NPMS_WebUI.ViewModels.SharedLayoutViewModel.ReportParametersInfos.Where(p => p.ParameterType == 1 && p.FieldName == outy.ParameterKey).FirstOrDefault().PersianName</label> --}}
-                                    </div>
-                                </div>
-                            @endforeach
+                            {!! $outputHtml !!}
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-5">
@@ -128,6 +91,11 @@
                             selectedOutputs.push($(this).attr('id'));
                         }
                     }
+                });
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
                 });
                 $.ajax(
                     {

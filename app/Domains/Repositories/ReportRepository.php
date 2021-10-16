@@ -69,7 +69,7 @@ class ReportRepository extends BaseRepository implements IReportRepository{
         $report = $this->model->all()->where('NidReport','=',$NidReport)->firstOrFail();
         if (!is_null($report))
         {
-            $report->save();
+            $report->delete();
             return true;
         }
         else
@@ -80,7 +80,7 @@ class ReportRepository extends BaseRepository implements IReportRepository{
         $reportParameters = ReportParameters::all()->where('ReportId','=',$NidReport);
         foreach ($reportParameters as $rp)
         {
-            ReportParameters::all()->where('NidParameter','=',$rp->NidParameter)->delete();
+            ReportParameters::all()->where('NidParameter','=',$rp->NidParameter)->firstOrFail()->delete();
         }
         return true;
     }

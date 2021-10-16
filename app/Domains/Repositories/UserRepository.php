@@ -451,7 +451,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function UpdateRolePermission(RolePermissions $role)
     {
-        RolePermissions::all()->where('','',$role->NidRole)->firstOrFail()->update(
+        RolePermissions::all()->where('NidPermission','=',$role->NidPermission)->firstOrFail()->update(
             [
                 'RoleId' => $role->RoleId,
                 'EntityId' => $role->EntityId,

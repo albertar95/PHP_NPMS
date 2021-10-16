@@ -1,22 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-{{-- @model List<DataAccessLibrary.DTOs.ReportDTO> --}}
-    {{-- @{
-        ViewBag.Title = "گزارشات آماری";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-        if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-        {
-            var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-            slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-        }
-        else
-        {
-            slvm1.UserPermissions = new List<Guid>();
-        }
-    } --}}
-
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:right;">گزارشات آماری</h6>
@@ -55,7 +39,7 @@
                     <tbody>
                         @foreach ($Report as $rpt)
                             <tr>
-                                <td>{{ $rpt->ReportName }}{{ $rpt->NidReport }}</td>
+                                <td>{{ $rpt->ReportName }}</td>
                                 @switch ($rpt->ContextId)
                                     @case(1)
                                         <td>محقق</td>
@@ -133,12 +117,16 @@
             }
             function DeleteReport(NidReport)
             {
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
                 $.ajax(
                     {
-                        url: '@Url.Action("DeleteReport", "Home")',
+                        url: '/deletereport/' + NidReport,
                         type: 'post',
                         datatype: 'json',
-                        data: { NidReport: NidReport },
                         success: function (result)
                         {
                             if(result.HasValue)

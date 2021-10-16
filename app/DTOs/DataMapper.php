@@ -614,7 +614,7 @@ class DataMapper
             return null;
         }
     }
-    public static function MapToReportParameter(Request $reportparameter)
+    public static function MapToReportParameter(ReportParameters $reportparameter)
     {
         try
         {

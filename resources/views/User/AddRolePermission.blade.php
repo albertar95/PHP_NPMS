@@ -131,6 +131,13 @@
                     $("#DetailVal").val(0);
                 }
             });
+            $("#Delete").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#DeleteVal").val(1);
+                } else {
+                    $("#DeleteVal").val(0);
+                }
+            });
             $("#List").change(function() {
                 if ($(this).is(':checked')) {
                     $("#ListVal").val(1);
