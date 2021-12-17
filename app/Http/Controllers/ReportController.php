@@ -107,17 +107,16 @@ class ReportController extends Controller
     public function SubmitStatisticsReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
         $api = new NPMSController();
-        $reportrawdata = new ReportRawData();
-        $reportrawdata->NidReport = $report->NidReport;
-        $reportrawdata->paramsKey = $report->PrameterKeys;
-        $reportrawdata->paramsValue = $report->ParameterValues;
-        $reportresult = $api->GetStatisticsReport($reportrawdata);
-        $reportresult->OutputKey = $report->OutPutValues;
+        $reportresult = $api->GetStatisticsReport($report->NidReport,$report->PrameterKeys,$report->ParameterValues);
+        $OutputKey = collect($report->OutPutValues);
+        $Scholars = $reportresult->Scholars;
+        $ReportName = $reportresult->ReportName;
         $result = new JsonResults();
         $result->HasValue = true;
-        $result->Html = view('User._ReportResult',compact('reportresult'))->render();
-        $api->AddLog(auth()->user(),$report->ip(),24,0,2,2,$report->ReportName);
+        $result->Html = view('Report._ReportResult',compact('Scholars','OutputKey','ReportName'))->render();
+        // $api->AddLog(auth()->user(),$report->ip(),24,0,2,2,$report->ReportName);
         return response()->json($result);
+
         // return view('Report.ExecuteReport',compact('report','inputs','outputs'));
     }
     public function ChartReports(Request $request)

@@ -57,64 +57,61 @@
             </thead>
             <tbody>
                 @foreach ($Scholars as $sch)
-
                     <tr>
                         @if ($OutputKey->contains("FirstName") || $OutputKey->contains("LastName"))
 
                             @if ($OutputKey->contains("FirstName") && $OutputKey->contains("LastName"))
 
-                                <td>{{ $sch->FirstName &nbsp; $sch->LastName }}</td>
-                            @endif
+                                <td>{{ $sch->FirstName ?? ""}} {{ $sch->LastName ?? "" }}</td>
                             @elseif ($OutputKey->contains("FirstName"))
 
-                                <td>{{ $sch->FirstName }}</td>
-                            @endif
+                                <td>{{ $sch->FirstName ?? "" }}</td>
                             @else
 
-                                <td>{{ $sch->LastName }}</td>
+                                <td>{{ $sch->LastName ?? "" }}</td>
                             @endforelse
                         @endif
                         @if ($OutputKey->contains("NationalCode"))
 
-                            <td>{{ $sch->NationalCode }}</td>
+                            <td>{{ $sch->NationalCode ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("GradeId"))
 
-                            <td>{{ $sch->GradeTitle }}</td>
+                            <td>{{ $sch->GradeTitle ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("MajorId"))
 
-                            <td>{{ 'Major->Title' }}</td>
+                            <td>{{ $sch->Major->Title }}</td>
                         @endif
                         @if ($OutputKey->contains("OreintationId"))
 
-                            <td>{{ 'sch->Oreintation->Title' }}</td>
+                            <td>{{ $sch->Oreintation->Title }}</td>
                         @endif
                         @if ($OutputKey->contains("college"))
 
-                            <td>{{ $sch->CollegeTitle }}</td>
+                            <td>{{ $sch->CollegeTitle ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("BirthDate"))
 
-                            <td>{{ $sch->BirthDate }}</td>
+                            <td>{{ $sch->BirthDate ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("CollaborationType"))
 
-                            <td>{{ $sch->CollaborationTypeTitle }}</td>
+                            <td>{{ $sch->CollaborationTypeTitle ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("FatherName"))
 
-                            <td>{{ $sch->FatherName }}</td>
+                            <td>{{ $sch->FatherName ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("MillitaryStatus"))
 
-                            <td>{{ $sch->MillitaryStatusTitle }}</td>
+                            <td>{{ $sch->MillitaryStatusTitle ?? "" }}</td>
                         @endif
                         @if ($OutputKey->contains("Mobile"))
 
-                            <td>{{ $sch->Mobile }}</td>
+                            <td>{{ $sch->Mobile ?? "" }}</td>
                         @endif
-                        @if ($OutputKey->contains("ProjectCount"))
+                        {{-- @if ($OutputKey->contains("ProjectCount"))
 
                             <td>
                                 @foreach ($Projects as $prj)
@@ -122,7 +119,7 @@
                                     <p>{{ $sch->Subject }}</p>
                                 @endforeach
                             </td>
-                        @endif
+                        @endif --}}
                     </tr>
                 @endforeach
             </tbody>

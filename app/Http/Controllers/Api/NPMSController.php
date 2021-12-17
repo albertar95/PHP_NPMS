@@ -621,11 +621,11 @@ class NPMSController extends Controller
         return $repo->SendMessage($Message);
     }
     //report section
-    public function GetStatisticsReport(ReportRawData $reportraw)
+    public function GetStatisticsReport(string $NidReport,array $paramsKey,array $paramsValue)
     {
         $repo = new ReportRepository(new Reports());
         // $reportraw = DataMapper::MapToReportRawData($reportraw);
-        return $repo->StatisticsReport($reportraw);
+        return $repo->StatisticsReport($NidReport,$paramsKey,$paramsValue);
     }
     public function AddReport(Reports $report)
     {

@@ -220,7 +220,8 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function GetScholarDetail(string $ScholarId):scholarDetailDTO
     {
-        $scholar = Scholars::all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',false)->firstOrFail();
+        $scholar = Scholars::all()->where('NidScholar','=',$ScholarId)->firstOrFail();//->where('IsDeleted','=','0')
+        // $scholar = Scholars::all()->firstOrFail();
         if(!is_null($scholar))
         {
             $tmpScholarDetail = DataMapper::MapToScholarDetailDTO($scholar);
@@ -232,7 +233,6 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
             $tmpScholarDetail->Major = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail();
             $tmpScholarDetail->Oreintation = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail();
             $tmpScholarDetail->Projects = Projects::all()->where('ScholarId','=',$scholar->NidScholar);
-            // $tmpScholarDetail->Projects = new projectDTO();
             return $tmpScholarDetail;
         }
         else

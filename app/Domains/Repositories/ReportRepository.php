@@ -7,10 +7,15 @@ use App\Domains\Interfaces\IReportRepository;
 use App\Domains\Interfaces\ISearchRepository;
 use App\DTOs\DataMapper;
 use App\DTOs\reportDTO;
+use App\DTOs\reportParameterDTO;
+use App\Helpers\Casts;
 use App\Models\ReportParameters;
 use App\Models\Reports;
+use App\Models\Scholars;
+use Guzzle\Service\Resource\Model;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ReportRepository extends BaseRepository implements IReportRepository{
     public function __construct(Reports $model)
@@ -84,11 +89,75 @@ class ReportRepository extends BaseRepository implements IReportRepository{
         }
         return true;
     }
-    public function StatisticsReport(ReportRawData $Report):ReportResultData
+    public function StatisticsReport(string $NidReport,array $paramsKey,array $paramsValue):ReportResultData
     {
-        // CurrentReport = db.Reports.Where(p => p.NidReport == Report.NidReport).FirstOrDefault();
-        // return ExecuteReport(1, QueryBuilder(Report));
-        return new ReportResultData();
+        $CurrentReport = Reports::all()->where('NidReport','=',$NidReport)->firstOrFail();
+        return $this->ExecuteReport(1, $this->QueryBuilder($NidReport,$paramsKey,$paramsValue,$CurrentReport),$CurrentReport);
+        // return $CurrentReport;
+    }
+    private function QueryBuilder(string $NidReport,array $paramsKey,array $paramsValue,Reports $CurrentReport)
+    {
+        $query = "select ";
+        // $Outputs = ReportParameters::all()->where('ReportId','=',$NidReport)->where('Type','=',1);//  p.IsDeleted == false).ToList();
+        //query += string.Join(",", Outputs.Select(p => p.ParameterKey).ToList());
+        $query = Str::of($query)->append('* ');
+        switch ($CurrentReport->ContextId)
+        {
+            case 1://scholar
+                $query = Str::of($query)->append('from scholars ');
+                break;
+        }
+        $query = Str::of($query)->append('where ');
+        // $Inputs = ReportParameters::all()->where('ReportId','=',$CurrentReport->NidReport)->where('Type','=',0);//p.IsDeleted == false);
+        for ($i=0; $i < count($paramsKey); $i++) {
+            if ($i > 0)
+            $query = Str::of($query)->append(' and ');
+        if (!($paramsKey[$i] == "BirthDate"))
+        {
+            $query = Str::of($query)->append($paramsKey[$i]);
+            $query = Str::of($query)->append(' = ');
+            $query = Str::of($query)->append("'");
+            $query = Str::of($query)->append($paramsValue[$i]);
+            $query = Str::of($query)->append("'");
+        }
+        else
+        {
+            $query = Str::of($query)->append($paramsKey[$i]);
+            $query = Str::of($query)->append(' = ');
+            $query = Str::of($query)->append("N'");
+            $query = Str::of($query)->append(Casts::EnglishToPersianDigits($paramsValue[$i]));
+            $query = Str::of($query)->append("'");
+        }
+        }
+        return $query;
+
+        // return "select * from scholars";
+    }
+    private function ExecuteReport(int $type,string $query,Reports $CurrentReport)
+    {
+        $result = new ReportResultData();
+        $result->ReportName = $CurrentReport->ReportName;
+        switch ($type)
+        {
+            case 1://statistics
+                switch ($CurrentReport->ContextId)
+                {
+                    case 1:
+                        $schs = new Collection();//ScholarDetailDTO
+                        $sr = new ScholarRepository(new Scholars());
+                        $Nidschs = DB::select($query);// .SqlQuery(query).Select(q => q.NidScholar).ToList();
+                        foreach ($Nidschs as $sch )
+                        {
+                            $detail = $sr->GetScholarDetail($sch->NidScholar);
+                            if(!is_null($detail))
+                            $schs->push($detail);
+                        }
+                        $result->Scholars = $schs;
+                        break;
+                }
+                break;
+        }
+        return $result;
     }
 }
 class ReportRawData

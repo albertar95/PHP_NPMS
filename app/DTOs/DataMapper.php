@@ -293,7 +293,7 @@ class DataMapper
         {
             $result = new scholarDetailDTO();
             $result->NidScholar = $scholar->NidScholar;
-            $result->FirstName = $scholar->FirstName;
+            $result->FirstName = $scholar->FirstName ?? "";
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
             $result->BirthDate = $scholar->BirthDate ?? "";
@@ -702,6 +702,36 @@ class DataMapper
             $result->IsDeleted = $scholar->IsDeleted;
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
+            return $result;
+        }
+        catch (\Exception)
+        {
+            return null;
+        }
+    }
+    public static function MapToScholarFromArray(array $scholar)
+    {
+        try
+        {
+            $result = new Scholars();
+            $result->NidScholar = $scholar[0];
+            $result->FirstName = $scholar[1];
+            $result->LastName = $scholar[2];
+            $result->NationalCode = $scholar[3];
+            $result->BirthDate = $scholar[4];
+            $result->FatherName = $scholar[5];
+            $result->Mobile = $scholar[6];
+            $result->MillitaryStatus = $scholar[7];
+            $result->GradeId = $scholar[8];
+            $result->MajorId = $scholar[9];
+            $result->OreintationId = $scholar[10];
+            $result->college = $scholar[11];
+            $result->CollaborationType = $scholar[12];
+            $result->ProfilePicture = $scholar[13];
+            $result->UserId = $scholar[14];
+            $result->IsDeleted = $scholar[15];
+            $result->DeleteDate = $scholar[16];
+            $result->DeleteUser = $scholar[17];
             return $result;
         }
         catch (\Exception)
