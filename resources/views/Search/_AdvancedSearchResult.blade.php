@@ -1,7 +1,5 @@
-@model DataAccessLibrary.Repositories.SearchRepository
-
 <h3>طرح ها</h3>
-@if (!is_null($Projects))
+@if ($Projects->count() > 0)
     <div class="table-responsive" dir="ltr">
         <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
             cellspacing="0">
@@ -35,7 +33,7 @@
                         <td>{{ $prj->Subject }}</td>
                         <td class="priority-1">{{ $prj->UnitName }}</td>
                         <td class="priority-2">{{ $prj->GroupName }}</td>
-                        <td class="priority-3">%&nbsp;{{ $prj->ProjectStatus }}</td>
+                        <td class="priority-3">% {{ $prj->ProjectStatus }}</td>
                         <td>
                             <a href="{{ link_to_route('project.ProjectDetail', '', $NidProject = $prj->NidProject) }}"
                                 class="btn btn-secondary">جزییات</a>
@@ -45,12 +43,11 @@
             </tbody>
         </table>
     </div>
-@endif
 @else
-<p>موردی یافت نشد</p>
+    <p>موردی یافت نشد</p>
 @endforelse
 <h3>محققان</h3>
-@if (!is_null($Projects))
+@if ($Scholars->count() > 0)
     <div class="table-responsive" dir="ltr">
         <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
             cellspacing="0">
@@ -75,8 +72,7 @@
             <tbody>
                 @foreach ($Scholars as $sch)
                     <tr>
-                        <td>{{ $sch->FirstName & nbsp;
-$sch->LastName }}</td>
+                        <td>{{ $sch->FirstName }} {{ $sch->LastName }}</td>
                         <td>{{ $sch->NationalCode }}</td>
                         <td class="priority-2">{{ $sch->MajorName }}</td>
                         <td class="priority-3">{{ $sch->OreintationName }}</td>
@@ -89,12 +85,11 @@ $sch->LastName }}</td>
             </tbody>
         </table>
     </div>
-@endif
 @else
-<p>موردی یافت نشد</p>
+    <p>موردی یافت نشد</p>
 @endforelse
 <h3>کاربران</h3>
-@if (!is_null($Projects))
+@if ($Users->count() > 0)
     <div class="table-responsive" dir="ltr" id="tableWrapper">
         <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
             cellspacing="0">
@@ -125,15 +120,13 @@ $sch->LastName }}</td>
                                 <img src="{{ $imgSrc }}" height="100" width="100" />
                             @endif
                         </td>
-                        <td>{{ $usr->FirstName & nbsp;
-$usr->LastName }}</td>
+                        <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
                         <td>{{ $usr->Username }}</td>
                         @if (!$usr->IsAdmin)
                             <td>کاربر عادی</td>
-                        @endif
-                    @else
+                        @else
                         <td>کاربر ادمین</td>
-                @endforelse
+                        @endforelse
                 <td>
                     <button class="btn btn-secondary"
                         onclick="ShowDetailModal(2,'{{ $usr->NidUser }}')">جزییات</button>
@@ -143,13 +136,12 @@ $usr->LastName }}</td>
 </tbody>
 </table>
 </div>
-@endif
 @else
 <p>موردی یافت نشد</p>
 @endforelse
 <h3>اطلاعات پایه</h3>
 
-@if (!is_null($BaseInfo))
+@if ($BaseInfo->count() > 0)
     <div class="table-responsive" dir="ltr" id="BaseInfoTableWrapper">
         <table class="table table-bordered" id="BaseInfodataTable" style="width:100%;direction:rtl;text-align:center;"
             cellspacing="0">
@@ -168,32 +160,29 @@ $usr->LastName }}</td>
                 </tr>
             </tfoot>
             <tbody>
-                {{ $tmpCounter = 1 }}
-                @foreach ($BaseInfo->orderBy('SettingKey') as $bi)
+                @foreach ($BaseInfo->sortBy('SettingKey') as $bi)
                     <tr>
                         <td>{{ $tmpCounter }}</td>
                         @switch ($bi->SettingKey)
                             @case ('CollaborationType')
-                            <td>نوع همکاری</td>
+                                <td>نوع همکاری</td>
                             @break
                             @case ('College')
-                            <td>دانشکده</td>
+                                <td>دانشکده</td>
                             @break
                             @case ('GradeId')
-                            <td>مقطع تحصیلی</td>
+                                <td>مقطع تحصیلی</td>
                             @break
                             @case ('MillitaryStatus')
-                            <td>وضعیت خدمتی</td>
+                                <td>وضعیت خدمتی</td>
                             @break
                         @endswitch
-                            <td>{{ $bi->SettingTitle }}</td>
-                        </tr>
-                        {{ $tmpCounter++; }}
+                        <td>{{ $bi->SettingTitle }}</td>
+                    </tr>
                 @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
+            </tbody>
+        </table>
+    </div>
 @else
-    <p>موردی یافت نشد</p>
-    @endforelse
+<p>موردی یافت نشد</p>
+@endforelse

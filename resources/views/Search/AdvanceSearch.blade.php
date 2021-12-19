@@ -175,9 +175,15 @@
                     }
                 } else {
                     $("#CascadeSection").attr('hidden', 'hidden');
+
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    });
                     $.ajax({
-                        url: '@Url.Action("SearchSectionChange","Home")',
-                        type: 'post',
+                        url: '/searchsectionchange',
+                        type: 'get',
                         datatype: 'json',
                         data: {
                             SectionId: this.value
@@ -201,9 +207,15 @@
                 $("#SearchBy").html('');
                 $("#DateSubject").attr('hidden', 'hidden');
                 $("#Subject").removeAttr('hidden');
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
                 $.ajax({
-                    url: '@Url.Action("SearchSectionChange","Home")',
-                    type: 'post',
+                    url: '/searchsectionchange',
+                    type: 'get',
                     datatype: 'json',
                     data: {
                         SectionId: $("#SearchSection").val(),
@@ -237,8 +249,14 @@
                 stext = $("#DateSubject").val();
             else
                 stext = $("#Subject").val();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
             $.ajax({
-                url: '@Url.Action("SubmitAdvanceSearch","Home")',
+                url: '/submitadvancesearch',
                 type: 'post',
                 datatype: 'json',
                 data: {

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SearchController extends Controller
 {
@@ -16,128 +18,119 @@ class SearchController extends Controller
     }
     public function SearchSectionChange(int $SectionId,int $cascadeId = 0)
     {
-        // string result = "<option value='0' selected>تمامی موارد</option>";
-        // switch (SectionId)
-        // {
-        //     case 1:
-        //         switch (cascadeId)
-        //         {
-        //             case 0:
-        //                 result += "<option value='1'>نام محقق</option>";
-        //                 result += "<option value='2'>کد ملی</option>";
-        //                 result += "<option value='3'>شماره همراه</option>";
-        //                 result += "<option value='4'>وضعیت خدمتی</option>";
-        //                 result += "<option value='5'>نوع همکاری</option>";
-        //                 result += "<option value='6'>رشته تحصیلی</option>";
-        //                 result += "<option value='7'>گرایش تحصیلی</option>";
-        //                 result += "<option value='8'>مقطع تحصیلی</option>";
-        //                 result += "<option value='9'>دانشکده</option>";
-        //                 break;
-        //             case 1:
-        //                 result += "<option value='1'>نام محقق</option>";
-        //                 result += "<option value='2'>کد ملی</option>";
-        //                 result += "<option value='3'>شماره همراه</option>";
-        //                 result += "<option value='4'>وضعیت خدمتی</option>";
-        //                 result += "<option value='5'>نوع همکاری</option>";
-        //                 break;
-        //             case 2:
-        //                 result += "<option value='6'>رشته تحصیلی</option>";
-        //                 result += "<option value='7'>گرایش تحصیلی</option>";
-        //                 result += "<option value='8'>مقطع تحصیلی</option>";
-        //                 result += "<option value='9'>دانشکده</option>";
-        //                 break;
-        //         }
-        //         break;
-        //     case 2:
-        //         switch (cascadeId)
-        //         {
-        //             case 0:
-        //                 result += "<option value='1'>موضوع طرح</option>";
-        //                 result += "<option value='2'>یگان تخصصی</option>";
-        //                 result += "<option value='3'>گروه تخصصی</option>";
-        //                 result += "<option value='4'>شماره پرونده</option>";
-        //                 result += "<option value='5'>نام محقق</option>";
-        //                 result += "<option value='6'>تاریخ بکارگیری</option>";
-        //                 result += "<option value='7'>تاریخ نامه 10 درصد</option>";
-        //                 result += "<option value='8'>تاریخ روگرفت</option>";
-        //                 result += "<option value='9'>تاریخ فرم 30 درصد</option>";
-        //                 result += "<option value='10'>تاریخ فرم 60 درصد</option>";
-        //                 result += "<option value='11'>تاریخ نامه حفاظت</option>";
-        //                 result += "<option value='12'>استاد راهنما</option>";
-        //                 result += "<option value='13'>استاد مشاور</option>";
-        //                 result += "<option value='14'>داور 1</option>";
-        //                 result += "<option value='15'>داور 2</option>";
-        //                 result += "<option value='16'>تاریخ دفاعیه</option>";
-        //                 break;
-        //             case 1:
-        //                 result += "<option value='1'>موضوع طرح</option>";
-        //                 result += "<option value='2'>یگان تخصصی</option>";
-        //                 result += "<option value='3'>گروه تخصصی</option>";
-        //                 result += "<option value='4'>شماره پرونده</option>";
-        //                 result += "<option value='5'>نام محقق</option>";
-        //                 break;
-        //             case 2:
-        //                 result += "<option value='6'>تاریخ بکارگیری</option>";
-        //                 result += "<option value='7'>تاریخ نامه 10 درصد</option>";
-        //                 result += "<option value='8'>تاریخ روگرفت</option>";
-        //                 result += "<option value='9'>تاریخ فرم 30 درصد</option>";
-        //                 result += "<option value='10'>تاریخ فرم 60 درصد</option>";
-        //                 result += "<option value='11'>تاریخ نامه حفاظت</option>";
-        //                 break;
-        //             case 3:
-        //                 result += "<option value='12'>استاد راهنما</option>";
-        //                 result += "<option value='13'>استاد مشاور</option>";
-        //                 result += "<option value='14'>داور 1</option>";
-        //                 result += "<option value='15'>داور 2</option>";
-        //                 result += "<option value='16'>تاریخ دفاعیه</option>";
-        //                 break;
-        //         }
-        //         break;
-        //     case 3:
-        //         result += "<option value='1'>نام کاربری</option>";
-        //         result += "<option value='2'>مشخصات کاربر</option>";
-        //         result += "<option value='3'>دسترسی های کاربر</option>";
-        //         break;
-        //     case 4:
-        //         result += "<option value='1'>عنوان</option>";
-        //         break;
-        // }
-        // return Json(new JsonResults() { HasValue = true, Html = result });
+        $result = "<option value='0' selected>تمامی موارد</option>";
+        switch ($SectionId)
+        {
+            case 1:
+                switch ($cascadeId)
+                {
+                    case 0:
+                        $result = Str::of($result)->append("<option value='1'>نام محقق</option>");
+                        $result = Str::of($result)->append("<option value='2'>کد ملی</option>");
+                        $result = Str::of($result)->append("<option value='3'>شماره همراه</option>");
+                        $result = Str::of($result)->append("<option value='4'>وضعیت خدمتی</option>");
+                        $result = Str::of($result)->append("<option value='5'>نوع همکاری</option>");
+                        $result = Str::of($result)->append("<option value='6'>رشته تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='7'>گرایش تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='8'>مقطع تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='9'>دانشکده</option>");
+                        break;
+                    case 1:
+                        $result = Str::of($result)->append("<option value='1'>نام محقق</option>");
+                        $result = Str::of($result)->append("<option value='2'>کد ملی</option>");
+                        $result = Str::of($result)->append("<option value='3'>شماره همراه</option>");
+                        $result = Str::of($result)->append("<option value='4'>وضعیت خدمتی</option>");
+                        $result = Str::of($result)->append("<option value='5'>نوع همکاری</option>");
+                        break;
+                    case 2:
+                        $result = Str::of($result)->append("<option value='6'>رشته تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='7'>گرایش تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='8'>مقطع تحصیلی</option>");
+                        $result = Str::of($result)->append("<option value='9'>دانشکده</option>");
+                        break;
+                }
+                break;
+            case 2:
+                switch ($cascadeId)
+                {
+                    case 0:
+                        $result = Str::of($result)->append("<option value='1'>موضوع طرح</option>");
+                        $result = Str::of($result)->append("<option value='2'>یگان تخصصی</option>");
+                        $result = Str::of($result)->append("<option value='3'>گروه تخصصی</option>");
+                        $result = Str::of($result)->append("<option value='4'>شماره پرونده</option>");
+                        $result = Str::of($result)->append("<option value='5'>نام محقق</option>");
+                        $result = Str::of($result)->append("<option value='6'>تاریخ بکارگیری</option>");
+                        $result = Str::of($result)->append("<option value='7'>تاریخ نامه 10 درصد</option>");
+                        $result = Str::of($result)->append("<option value='8'>تاریخ روگرفت</option>");
+                        $result = Str::of($result)->append("<option value='9'>تاریخ فرم 30 درصد</option>");
+                        $result = Str::of($result)->append("<option value='10'>تاریخ فرم 60 درصد</option>");
+                        $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
+                        $result = Str::of($result)->append("<option value='12'>استاد راهنما</option>");
+                        $result = Str::of($result)->append("<option value='13'>استاد مشاور</option>");
+                        $result = Str::of($result)->append("<option value='14'>داور 1</option>");
+                        $result = Str::of($result)->append("<option value='15'>داور 2</option>");
+                        $result = Str::of($result)->append("<option value='16'>تاریخ دفاعیه</option>");
+                        break;
+                    case 1:
+                        $result = Str::of($result)->append("<option value='1'>موضوع طرح</option>");
+                        $result = Str::of($result)->append("<option value='2'>یگان تخصصی</option>");
+                        $result = Str::of($result)->append("<option value='3'>گروه تخصصی</option>");
+                        $result = Str::of($result)->append("<option value='4'>شماره پرونده</option>");
+                        $result = Str::of($result)->append("<option value='5'>نام محقق</option>");
+                        break;
+                    case 2:
+                        $result = Str::of($result)->append("<option value='6'>تاریخ بکارگیری</option>");
+                        $result = Str::of($result)->append("<option value='7'>تاریخ نامه 10 درصد</option>");
+                        $result = Str::of($result)->append("<option value='8'>تاریخ روگرفت</option>");
+                        $result = Str::of($result)->append("<option value='9'>تاریخ فرم 30 درصد</option>");
+                        $result = Str::of($result)->append("<option value='10'>تاریخ فرم 60 درصد</option>");
+                        $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
+                        break;
+                    case 3:
+                        $result = Str::of($result)->append("<option value='12'>استاد راهنما</option>");
+                        $result = Str::of($result)->append("<option value='13'>استاد مشاور</option>");
+                        $result = Str::of($result)->append("<option value='14'>داور 1</option>");
+                        $result = Str::of($result)->append("<option value='15'>داور 2</option>");
+                        $result = Str::of($result)->append("<option value='16'>تاریخ دفاعیه</option>");
+                        break;
+                }
+                break;
+            case 3:
+                $result = Str::of($result)->append("<option value='1'>نام کاربری</option>");
+                $result = Str::of($result)->append("<option value='2'>مشخصات کاربر</option>");
+                $result = Str::of($result)->append("<option value='3'>دسترسی های کاربر</option>");
+                break;
+            case 4:
+                $result = Str::of($result)->append("<option value='1'>عنوان</option>");
+                break;
+        }
+        $results = new JsonResults();
+        $results->HasValue = true;
+        $results->Html = $result;
+        return response()->json($results);
     }
     public function SubmitAdvanceSearch(string $searchText,int $SectionId = 0,int $ById = 0,bool $Similar = true)
     {
-        // bool state = false;
-        // string html = "";
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = client.GetAsync($"Search/AdvancedSearch?searchText={searchText}&SectionId={SectionId}&ById={ById}&Similar={Similar}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         DataAccessLibrary.Repositories.SearchRepository res = response.Content.ReadAsAsync<DataAccessLibrary.Repositories.SearchRepository>().Result;
-        //         state = true;
-        //         html = JsonResults.RenderViewToString(this.ControllerContext, "_AdvancedSearchResult", res);
-        //     }
-        // }
-        // return Json(new JsonResults() { HasValue = state, Html = html });
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $response = $api->AdvancedSearch($searchText,$SectionId,$ById,$Similar);
+        $Projects = $response->Projects;
+        $Scholars = $response->Scholars;
+        $Users = $response->Users;
+        $BaseInfo = $response->BaseInfo;
+        $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users'))->render();
+        // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+        return response()->json($result);
     }
     public function ComplexSearch(string $Text)
     {
-        // using (var client = new HttpClient())
-        // {
-        //     client.BaseAddress = new Uri(ApiBaseAddress);
-        //     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        //     HttpResponseMessage response = client.GetAsync($"Search/ComplexSearch?searchText={Text}").Result;
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         DataAccessLibrary.Repositories.SearchRepository res = response.Content.ReadAsAsync<DataAccessLibrary.Repositories.SearchRepository>().Result;
-        //         return Json(new JsonResults() { HasValue = true, Html = JsonResults.RenderViewToString(this.ControllerContext, "_ComplexSearchResult", res)});
-        //     }
-        //     else
-        //     {
-        //         return Json(new JsonResults() { HasValue = false, Html = "" });
-        //     }
-        // }
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $response = $api->ComplexSearch($Text);
+        $result->Html = view('Search._ComplexSearchResult',compact('response'))->render();
+        // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+        return response()->json($result);
     }
 }

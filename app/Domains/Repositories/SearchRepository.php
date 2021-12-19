@@ -25,31 +25,31 @@ class SearchRepository implements ISearchRepository{
         switch ($SectionId)
         {
             case 0:
-                $Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
-                $Projects = $this->SearchInProjects($searchText,$Similar,$ById);
-                $Users = $this->SearchInUsers($searchText,$Similar,$ById);
-                $BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
+                $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
+                $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
+                $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
+                $this->BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
                 break;
             case 1:
-                $Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
+                $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
                 break;
             case 2:
-                $Projects = $this->SearchInProjects($searchText,$Similar,$ById);
+                $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
                 break;
             case 3:
-                $Users = $this->SearchInUsers($searchText,$Similar,$ById);
+                $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
                 break;
             case 4:
-                $BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
+                $this->BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
                 break;
         }
         return $this;
     }
     public function ComplexSearch(string $searchText,bool $Similar,int $ById):SearchRepository
     {
-        $Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
-        $Projects = $this->SearchInProjects($searchText,$Similar,$ById);
-        $Users = $this->SearchInUsers($searchText,$Similar,$ById);
+        $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
+        $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
+        $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
         return $this;
     }
     private function SearchInScholars(string $searchText,bool $Similar,int $ById):Collection//scholarlistdto
@@ -64,17 +64,17 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToScholarListDTO(sch));
                     // }
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->select('NationalCode')->contains($searchText);
+                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('NationalCode','like','%'.$searchText.'%');//->get('NationalCode')->contains($searchText);
                     foreach ($tmpScholar as $scholar)
                     {
                         $result->push(DataMapper::MapToScholarListDTO($scholar));
                     }
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->select('Mobile')->contains($searchText);
+                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('Mobile','like','%'.$searchText.'%');//->get('Mobile')->contains($searchText);
                     foreach ($tmpScholar as $scholar)
                     {
                         $result->push(DataMapper::MapToScholarListDTO($scholar));
                     }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
@@ -83,7 +83,7 @@ class SearchRepository implements ISearchRepository{
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
                         }
                     }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
@@ -100,7 +100,7 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToScholarListDTO(sch));
                     // }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
@@ -109,7 +109,7 @@ class SearchRepository implements ISearchRepository{
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
                         }
                     }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
@@ -126,21 +126,21 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 2:
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->select('NationalCode')->contains($searchText);
+                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('NationalCode','like','%'.$searchText.'%');//->get('NationalCode')->contains($searchText);
                     foreach ($tmpScholar as $scholar)
                     {
                         $result->push(DataMapper::MapToScholarListDTO($scholar));
                     }
                     break;
                 case 3:
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->select('Mobile')->contains($searchText);
+                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('Mobile','like','%'.$searchText.'%');//->get('Mobile')->contains($searchText);
                     foreach ($tmpScholar as $scholar)
                     {
                         $result->push(DataMapper::MapToScholarListDTO($scholar));
                     }
                     break;
                 case 4:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
@@ -151,7 +151,7 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 5:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
@@ -174,7 +174,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 8:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
@@ -185,7 +185,7 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 9:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
@@ -340,7 +340,7 @@ class SearchRepository implements ISearchRepository{
             }
         }
         $uniques = new Collection();//ScholarListDTO
-        $grouped = $result->groupBy('NidScholar')->select('NidScholar');
+        $grouped = $result->groupBy('NidScholar');
         foreach ($grouped as $itm)
         {
             $uniques->push($result->where('NidScholar','=',$itm)->firstOrFail());
@@ -355,7 +355,7 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpProject = Projects::all()->select('Subject')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Subject','like','%'.$searchText.'%');//->get('Subject')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -368,7 +368,7 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToProjectInitialDTO(prj));
                     // }
-                    $tmpProject = Projects::all()->select('ProjectNumber')->contains($searchText);
+                    $tmpProject = Projects::all()->where('ProjectNumber','like','%'.$searchText.'%');//->get('ProjectNumber')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -407,22 +407,22 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToProjectInitialDTO(prj));
                     // }
-                    $tmpProject = Projects::all()->select('Supervisor')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Supervisor','like','%'.$searchText.'%');//->get('Supervisor')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    $tmpProject = Projects::all()->select('Advisor')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Advisor','like','%'.$searchText.'%');//->get('Advisor')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    $tmpProject = Projects::all()->select('Referee1')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Referee1','like','%'.$searchText.'%');//->get('Referee1')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    $tmpProject = Projects::all()->select('Referee2')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Referee2','like','%'.$searchText.'%');//->get('Referee2')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -434,7 +434,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 1:
-                    $tmpProject = Projects::all()->select('Subject')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Subject','like','%'.$searchText.'%');//->get('Subject')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -453,7 +453,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 4:
-                    $tmpProject = Projects::all()->select('ProjectNumber')->contains($searchText);
+                    $tmpProject = Projects::all()->where('ProjectNumber','like','%'.$searchText.'%');//->get('ProjectNumber')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -508,28 +508,28 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 12:
-                    $tmpProject = Projects::all()->select('Supervisor')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Supervisor','like','%'.$searchText.'%');//->get('Supervisor')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
                     break;
                 case 13:
-                    $tmpProject = Projects::all()->select('Advisor')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Advisor','like','%'.$searchText.'%');//->get('Advisor')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
                     break;
                 case 14:
-                    $tmpProject = Projects::all()->select('Referee1')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Referee1','like','%'.$searchText.'%');//->get('Referee1')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
                     break;
                 case 15:
-                    $tmpProject = Projects::all()->select('Referee2')->contains($searchText);
+                    $tmpProject = Projects::all()->where('Referee2','like','%'.$searchText.'%');//->get('Referee2')->contains($searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
@@ -739,7 +739,7 @@ class SearchRepository implements ISearchRepository{
             }
         }
         $uniques = new Collection();//ProjectInitialDTO
-        $grouped = $result->groupBy('NidProject')->select('NidProject');
+        $grouped = $result->groupBy('NidProject');
         foreach ($grouped as $itm)
         {
             $uniques->push($result->where('NidProject','=',$itm)->firstOrFail());
@@ -754,7 +754,7 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpUser = User::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->where('Username','like','%'.$searchText.'%');//->get('Username')->contains($searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -763,7 +763,7 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToUserDTO(usr));
                     // }
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).Select(q => q.UserId))
+                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
                     //     {
@@ -772,7 +772,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 1:
-                    $tmpUser = User::all()->where('IsDisabled','=',false)->select('Username')->contains($searchText);
+                    $tmpUser = User::all()->where('IsDisabled','=',false)->where('UserName','like','%'.$searchText.'%');//->get('Username')->contains($searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -785,7 +785,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 3:
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).Select(q => q.UserId))
+                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
                     //     {
@@ -809,7 +809,7 @@ class SearchRepository implements ISearchRepository{
                     // {
                     //     result.Add(mapper.MapToUserDTO(usr));
                     // }
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).Select(q => q.UserId))
+                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
                     //     {
@@ -831,7 +831,7 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 3:
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).Select(q => q.UserId))
+                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
                     //     {
@@ -842,7 +842,7 @@ class SearchRepository implements ISearchRepository{
             }
         }
         $uniques = new Collection();//UserDTO
-        $grouped = $result->groupBy('NidUser')->select('NidUser');
+        $grouped = $result->groupBy('NidUser');
         foreach ($grouped as $itm)
         {
             $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
@@ -857,14 +857,14 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $result->push($setting);
                     }
                     break;
                 case 1:
-                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->select('SettingTitle')->contains($searchText);
+                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
                     foreach ($tmpSetting as $setting)
                     {
                         $result->push($setting);
@@ -893,7 +893,7 @@ class SearchRepository implements ISearchRepository{
             }
         }
         $uniques = new Collection();//Setting
-        $grouped = $result->groupBy('NidSetting')->select('NidSetting');
+        $grouped = $result->groupBy('NidSetting');
         foreach ($grouped as $itm)
         {
             $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
