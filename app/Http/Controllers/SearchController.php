@@ -119,7 +119,7 @@ class SearchController extends Controller
         $Scholars = $response->Scholars;
         $Users = $response->Users;
         $BaseInfo = $response->BaseInfo;
-        $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users'))->render();
+        $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
     }
@@ -129,7 +129,10 @@ class SearchController extends Controller
         $result = new JsonResults();
         $result->HasValue = true;
         $response = $api->ComplexSearch($Text);
-        $result->Html = view('Search._ComplexSearchResult',compact('response'))->render();
+        $Projects = $response->Projects;
+        $Scholars = $response->Scholars;
+        $Users = $response->Users;
+        $result->Html = view('Search._ComplexSearchResult',compact('Projects','Scholars','Users'))->render();
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
     }

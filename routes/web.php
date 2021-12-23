@@ -91,7 +91,7 @@ Route::post("uploadthisfile",[ScholarController::class,"UploadThisFile"])->name(
 Route::get("advancesearch",[SearchController::class,"AdvanceSearch"])->name('search.AdvanceSearch');
 Route::get("searchsectionchange",[SearchController::class,"SearchSectionChange"])->name('search.SearchSectionChange');
 Route::post("submitadvancesearch",[SearchController::class,"SubmitAdvanceSearch"])->name('search.SubmitAdvanceSearch');
-Route::get("complexsearch",[SearchController::class,"ComplexSearch"])->name('search.ComplexSearch');
+Route::get("complexsearch/{Text}",[SearchController::class,"ComplexSearch"])->name('search.ComplexSearch');
 
 //user routes
 Route::get("adduser",[UserController::class,"AddUser"])->name('user.AddUser');

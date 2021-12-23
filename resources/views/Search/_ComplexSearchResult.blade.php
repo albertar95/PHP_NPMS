@@ -1,6 +1,3 @@
-@model DataAccessLibrary.Repositories.SearchRepository
-
-
 @if (!is_null($Projects))
 @foreach ($Projects as $prj)
     <div class="SearchWrap1">
@@ -20,7 +17,7 @@
             <p class="SearchContent1">محقق</p>
         </div>
         <div class="col-lg-10">
-            <a href="#" onclick="ShowDetailModal(1,'{{ $sch->NidScholar }}')">{{ $sch->FirstName&nbsp;$sch->LastName }}</a>
+            <a href="#" onclick="ShowDetailModal(1,'{{ $sch->NidScholar }}')">{{ $sch->FirstName}}{{ $sch->LastName }}</a>
         </div>
     </div>
 @endforeach
@@ -32,7 +29,7 @@
             <p class="SearchContent1">کاربر</p>
         </div>
         <div class="col-lg-10">
-            <a href="#" onclick="ShowDetailModal(2,'{{ $usr->NidUser }}')">{{ $usr->FirstName&nbsp;$usr->LastName }}</a>
+            <a href="#" onclick="ShowDetailModal(2,'{{ $usr->NidUser }}')">{{ $usr->FirstName}}{{ $usr->LastName }}</a>
         </div>
     </div>
 @endforeach

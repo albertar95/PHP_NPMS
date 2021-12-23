@@ -487,6 +487,82 @@
                     });
                 window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
             }
+
+            function SearchAll()
+        {
+            if ($("#txtSearch").val().length > 0)
+                $("#ClearSearch").removeAttr('hidden');
+            else
+                $("#ClearSearch").attr('hidden','hidden');
+            $("#txtSearchSm").val($("#txtSearch").val());
+            if($("#txtSearch").val().length > 2)
+                ComplexSearch($("#txtSearchSm").val(), 1);
+            else
+            {
+                $("#SearchResult").html('');
+                $("#SearchResultSm").html('');
+            }
+        }
+        function SearchAllSm() {
+            if ($("#txtSearchSm").val().length > 0)
+                $("#ClearSearchSm").removeAttr('hidden');
+            else
+                $("#ClearSearchSm").attr('hidden', 'hidden');
+            $("#txtSearch").val($("#txtSearchSm").val());
+            if ($("#txtSearchSm").val().length > 2)
+                ComplexSearch($("#txtSearchSm").val(), 2);
+            else
+            {
+                $("#SearchResult").html('');
+                $("#SearchResultSm").html('');
+            }
+        }
+        function ClearSearchTxt()
+        {
+            $("#txtSearch").val('');
+            $("#txtSearchSm").val('');
+            $("#SearchResult").html('');
+            $("#SearchResultSm").html('');
+            $("#ClearSearch").attr('hidden', 'hidden');
+            $("#ClearSearchSm").attr('hidden', 'hidden');
+        }
+        function ComplexSearch(textVal,output)
+        {
+            $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+            $.ajax(
+                {
+                    url: '/complexsearch/' + textVal,
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (result)
+                    {
+                        if(result.HasValue)
+                        {
+                            switch (output) {
+                                case 1:
+                                    $("#SearchResult").html(result.Html);
+                                    break;
+                                case 2:
+                                    $("#SearchResultSm").html(result.Html);
+                                    break;
+                            }
+                        } else
+                        {
+                            $("#SearchResult").html('');
+                            $("#SearchResultSm").html('');
+                        }
+                    },
+                    error: function ()
+                    {
+                        $("#SearchResult").html('');
+                        $("#SearchResultSm").html('');
+                    }
+                });
+        }
     </script>
 </body>
 </html>
