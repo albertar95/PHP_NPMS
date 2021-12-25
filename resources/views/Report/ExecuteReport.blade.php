@@ -57,6 +57,8 @@
 <script src="{{ URL('Content/vendor/ExportTable/tableHTMLExport.js') }}"></script>
 <script src="{{ URL('Content/vendor/ExportTable/pdfmake.min.js') }}"></script>
 <script src="{{ URL('Content/vendor/ExportTable/html2canvas.min.js') }}"></script>
+<script src="{{ URL('Content/vendor/ExportTable/jspdf.min.js') }}"></script>
+<script src="{{ URL('Content/vendor/ExportTable/jspdf.plugin.autotable.min.js') }}"></script>
 <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
 <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
@@ -120,18 +122,24 @@
                 case 1:
                     switch (typo) {
                         case 1:
-                            html2canvas($('#ScholarDataTable')[0], {
-                                onrendered: function (canvas) {
-                                    var data = canvas.toDataURL();
-                                    var docDefinition = {
-                                        content: [{
-                                            image: data,
-                                            width: 500
-                                        }]
-                                    };
-                                    pdfMake.createPdf(docDefinition).download(reportname + ".pdf");
-                                }
-                            });
+                            // html2canvas($('#ScholarDataTable')[0], {
+                            //     onrendered: function (canvas) {
+                            //         var data = canvas.toDataURL();
+                            //         var docDefinition = {
+                            //             content: [{
+                            //                 image: data,
+                            //                 width: 500
+                            //             }]
+                            //         };
+                            //         pdfMake.createPdf(docDefinition).download(reportname + ".pdf");
+                            //     }
+                            // });
+                        $("#ScholarDataTable").tableHTMLExport(
+                                {
+                                    type: 'pdf',
+                                    filename: reportname + '.pdf',
+                                    orientation:'p'
+                                });
                             break;
                         case 2:
                             $("#ScholarDataTable").tableHTMLExport(

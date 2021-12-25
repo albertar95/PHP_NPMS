@@ -90,7 +90,7 @@ Route::post("uploadthisfile",[ScholarController::class,"UploadThisFile"])->name(
 //search routes
 Route::get("advancesearch",[SearchController::class,"AdvanceSearch"])->name('search.AdvanceSearch');
 Route::get("searchsectionchange",[SearchController::class,"SearchSectionChange"])->name('search.SearchSectionChange');
-Route::post("submitadvancesearch",[SearchController::class,"SubmitAdvanceSearch"])->name('search.SubmitAdvanceSearch');
+Route::get("submitadvancesearch/{SearchInputs}",[SearchController::class,"SubmitAdvanceSearch"])->name('search.SubmitAdvanceSearch');
 Route::get("complexsearch/{Text}",[SearchController::class,"ComplexSearch"])->name('search.ComplexSearch');
 
 //user routes
@@ -117,7 +117,8 @@ Route::get("manageroles",[UserController::class,"ManageRoles"])->name('user.Mana
 Route::post("submitpasswordpolicy",[UserController::class,"SubmitPasswordPolicy"])->name('user.SubmitPasswordPolicy');
 Route::post("submitroleform",[UserController::class,"SubmitRoleForm"])->name('user.SubmitRoleForm');
 Route::post("submitdeleterole/{NidRole}",[UserController::class,"SubmitDeleteRole"])->name('user.SubmitDeleteRole');
-
+Route::get("changepassword/{Niduser}",[UserController::class,"ChangePassword"])->name('user.ChangePassword');
+Route::get("getuserspasscode/{Niduser}/{CurrentPassword}",[UserController::class,"getUsersPassCode"])->name('user.getUsersPassCode');
 Route::get("managerolepermissions",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
 Route::get("addrolepermission",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
 Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermission"])->name('user.SubmitAddRolePermission');

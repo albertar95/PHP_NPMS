@@ -250,21 +250,18 @@
             else
                 stext = $("#Subject").val();
 
+                var searchModel = [stext,document.getElementById("SearchSection").value,document.getElementById("SearchBy").value,
+                    $("#cbSimilar").val()];
+                var SearchInp = searchModel.join();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
             $.ajax({
-                url: '/submitadvancesearch',
-                type: 'post',
+                url: '/submitadvancesearch/' + SearchInp,
+                type: 'get',
                 datatype: 'json',
-                data: {
-                    searchText: stext,
-                    SectionId: document.getElementById("SearchSection").value,
-                    ById: document.getElementById("SearchBy").value,
-                    Similar: $("#cbSimilar").val()
-                },
                 success: function(result) {
                     if (result.HasValue)
                         $("#Resultwrapper").html(result.Html);

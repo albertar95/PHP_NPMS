@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class SearchController extends Controller
@@ -109,12 +110,13 @@ class SearchController extends Controller
         $results->Html = $result;
         return response()->json($results);
     }
-    public function SubmitAdvanceSearch(string $searchText,int $SectionId = 0,int $ById = 0,bool $Similar = true)
+    public function SubmitAdvanceSearch(string $SearchInputs)
     {
         $api = new NPMSController();
         $result = new JsonResults();
         $result->HasValue = true;
-        $response = $api->AdvancedSearch($searchText,$SectionId,$ById,$Similar);
+        $inps = explode(',',$SearchInputs);
+        $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
         $Projects = $response->Projects;
         $Scholars = $response->Scholars;
         $Users = $response->Users;
@@ -122,6 +124,7 @@ class SearchController extends Controller
         $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
+        // return $response;
     }
     public function ComplexSearch(string $Text)
     {

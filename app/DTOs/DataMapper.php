@@ -345,23 +345,23 @@ class DataMapper
     }
     public static function MapToUserDTO(User $user)
     {
+        $result = new userDTO();
+        $result->NidUser = $user->NidUser;
+        $result->Username = $user->UserName;
+        $result->Password = $user->Password;
+        $result->FirstName = $user->FirstName;
+        $result->LastName = $user->LastName;
+        $result->CreateDate = $user->CreateDate;
+        $result->LastLoginDate = $user->LastLoginDate;
+        $result->IncorrectPasswordCount = $user->IncorrectPasswordCount;
+        $result->IsLockedOut = boolval($user->IsLockedOut);
+        $result->IsDisabled = boolval($user->IsDisabled);
+        $result->ProfilePicture = $user->ProfilePicture;
+        $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
+        $result->RoleId = $user->RoleId;
+        return $result;
         try
         {
-            $result = new userDTO();
-            $result->NidUser = $user->NidUser;
-            $result->Username = $user->UserName;
-            $result->Password = $user->Password;
-            $result->FirstName = $user->FirstName;
-            $result->LastName = $user->LastName;
-            $result->CreateDate = $user->CreateDate;
-            $result->LastLoginDate = $user->LastLoginDate;
-            $result->IncorrectPasswordCount = $user->IncorrectPasswordCount;
-            $result->IsLockedOut = boolval($user->IsLockedOut);
-            $result->IsDisabled = boolval($user->IsDisabled);
-            $result->ProfilePicture = $user->ProfilePicture;
-            $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
-            $result->RoleId = $user->RoleId;
-            return $result;
         }
         catch (\Exception)
         {

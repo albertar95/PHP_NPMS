@@ -182,6 +182,11 @@ class NPMSController extends Controller
         if (!is_null($NewPass))
         return response()->json(['Message'=>$NewPass,'HasValue'=>true]);
     }
+    public function CheckPrePassword(string $NidUser,string $NewPassword)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->CheckPreviousPassword($NidUser,$NewPassword);
+    }
     public function LoginThisUser(string $Username, string $Password)
     {
         $repo = new UserRepository(new User());
@@ -550,10 +555,10 @@ class NPMSController extends Controller
     }
 
     //search section
-    public function AdvancedSearch(string $searchText, int $SectionId = 0, int $ById = 0, bool $Similar = true)
+    public function AdvancedSearch(string $FsearchText, int $FSectionId = 0, int $FById = 0, bool $FSimilar = true)
     {
         $repo = new SearchRepository();
-        return $repo->AdvancedSearch($searchText,$SectionId,$Similar,$ById);
+        return $repo->AdvancedSearch($FsearchText,$FSectionId,$FSimilar,$FById);
     }
     public function ComplexSearch(string $searchText, int $ById = 0, bool $Similar = true)
     {

@@ -11,12 +11,13 @@ use Illuminate\Support\Collection;
 use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData']]);
+        $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData','ChangePassword','SubmitChangePassword','getUsersPassCode']]);
     }
     private static function GetEntityPermissionsFromCache()
     {
@@ -130,14 +131,25 @@ class UserController extends Controller
     public function SubmitChangePassword(string $NidUser,string $NewPassword,Request $request)
     {
         $api = new NPMSController();
-        $res = $api->ResetPassword($NidUser,$NewPassword);
-        $state = json_decode($res->getContent(),true)['HasValue'];
-        $newPass = json_decode($res->getContent(),true)['Message'];
-        $jsonresult = new JsonResults();
-        $jsonresult->HasValue = $state;
-        $jsonresult->Message = $newPass;
-        $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,"تغییر رمز کاربر موفق");
-        return response()->json($jsonresult);
+        if(!$api->CheckPrePassword($NidUser,$NewPassword))
+        {
+            $jsonresult = new JsonResults();
+            $jsonresult->HasValue = false;
+            $jsonresult->AltProp = "1";
+            // $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,"تغییر رمز کاربر موفق");
+            return response()->json($jsonresult);
+        }else
+        {
+            $res = $api->ResetPassword($NidUser,$NewPassword);
+            $state = json_decode($res->getContent(),true)['HasValue'];
+            $newPass = json_decode($res->getContent(),true)['Message'];
+            $jsonresult = new JsonResults();
+            $jsonresult->HasValue = $state;
+            $jsonresult->Message = $newPass;
+            $jsonresult->AltProp = "2";
+            // $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,"تغییر رمز کاربر موفق");
+            return response()->json($jsonresult);
+        }
     }
     public function SubmitEditUser(Request $User)
     {
@@ -222,11 +234,47 @@ class UserController extends Controller
             $result->HasValue = true;
             $result->Message = $loginresult['nidUser'];
             $api->AddLog($user,$logindata->ip(),15,0,3,1,"ورود موفق");
-        }else
+        }else if($loginresult['result'] == 2)//incorrect password
         {
-            $api->AddLog(new User(),$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            // $api->AddLog(new User(),$logindata->ip(),16,1,3,1,"ورود ناموفق");
             $result->HasValue = false;
+            $result->AltProp = "2";
+            $result->Message = "نام کاربری یا کلمه عبور صحیح نمی باشد";
+        }else if($loginresult['result'] == 3)//user not found
+        {
+            // $api->AddLog(new User(),$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            $result->HasValue = false;
+            $result->AltProp = "3";
+            $result->Message = "نام کاربری یافت نشد";
         }
+        else if($loginresult['result'] == 4) //lockout
+        {
+            $result->HasValue = false;
+            $result->AltProp = "4";
+            $result->Message = "کاربر در حالت تعلیق می باشد";
+        }
+        else if($loginresult['result'] == 5)//change password time
+        {
+            $user = $api->GetThisUserByUsername($logindata->Username);
+            $result->Message = $loginresult['nidUser'];
+            $result->HasValue = false;
+            $result->AltProp = "5";
+        }
+        return response()->json($result);
+        // return $loginresult;
+    }
+    public function ChangePassword(string $Niduser)
+    {
+        return view('User.ChangePassword',compact('Niduser'));
+    }
+    public function getUsersPassCode(string $Niduser,string $CurrentPassword)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        if (Hash::check($CurrentPassword, $api->GetUserDTOById($Niduser)->Password))
+        $result->HasValue = true;
+        else
+        $result->HasValue = false;
         return response()->json($result);
     }
     // [AllowAnonymous]

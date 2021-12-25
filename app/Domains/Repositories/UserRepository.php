@@ -7,6 +7,7 @@ use App\Domains\Interfaces\IUserRepository;
 use App\DTOs\DataMapper;
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
+use App\Models\PasswordHistory;
 use App\Models\Resources;
 use App\Models\RolePermissions;
 use App\Models\Roles;
@@ -14,6 +15,8 @@ use App\Models\Settings;
 use App\Models\User;
 use App\Models\UserPermissions;
 use App\Models\Users;
+use Carbon\Carbon;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -74,7 +77,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     {
         User::where('NidUser',$User->NidUser)->update(
             [
-                'Username' => $User->Username,
+                'UserName' => $User->UserName,
                 'Password' => $User->Password,
                 'FirstName' => $User->FirstName,
                 'LastName' => $User->LastName,
@@ -84,6 +87,8 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 'IsLockedOut' => boolval($User->IsLockedOut),
                 'IsDisabled' => boolval($User->IsDisabled),
                 'RoleId' => $User->RoleId,
+                'LockoutDeadLine' => $User->LockoutDeadLine,
+                'LastPasswordChangeDate' => $User->LastPasswordChangeDate,
                 'ProfilePicture' => $User->ProfilePicture
             ]
             );
@@ -127,14 +132,35 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         return $result;
     }
+    public function CheckPreviousPassword(string $NidUser, string $NewPass) :bool
+    {
+        $result = true;
+        $tmpPasswords = PasswordHistory::all()->where('NidUser','=',$NidUser)->sortByDesc('CreateDate')->take(3);
+        if (!is_null($tmpPasswords))
+        {
+            foreach ($tmpPasswords as $Pass) {
+                if (Hash::check($NewPass, $Pass->Password))
+                {
+                    $result = false;
+                }
+            }
+        }
+        return $result;
+    }
     public function ChangeUserPassword(string $NidUser, string $NewPass) :string
     {
         $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
         if (!is_null($tmpUser))
         {
+            $passhistory = new PasswordHistory();
+            $passhistory->NidUser = $NidUser;
+            $passhistory->Password = $tmpUser->Password;
+            $passhistory->CreateDate = Carbon::now();
+            $passhistory->save();
             User::where('NidUser',$NidUser)->update(
                 [
-                    'Password' => Hash::make($NewPass)
+                    'Password' => Hash::make($NewPass),
+                    'LastPasswordChangeDate' => Carbon::now()
                 ]
                 );
                 return User::all()->where('NidUser','=',$NidUser)->firstOrFail()->Password;
@@ -145,12 +171,40 @@ class UserRepository extends BaseRepository implements IUserRepository{
     {
         $tmpUser = $this->GetUserByUsername($Username);
         $resultFlag = 0;
+        $dateNow = Carbon::now();
         if (!is_null($tmpUser))
         {
-            if (Hash::check($Password, $tmpUser->Password))
-                $resultFlag = 1;
-            else
-                $resultFlag = 2;
+            if($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine))
+            {
+                $resultFlag = 4;
+            }else
+            {
+                if(is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > 45)
+                $resultFlag = 5;
+                else
+                {
+                    if (Hash::check($Password, $tmpUser->Password))
+                    {
+                        $tmpUser->IsLockedOut = 0;
+                        $tmpUser->LastLoginDate = Carbon::now();
+                        $tmpUser->IncorrectPasswordCount = 0;
+                        $this->UpdateUser($tmpUser);
+                        $resultFlag = 1;
+                    }
+                    else
+                    {
+                        $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
+                        if($tmpUser->IncorrectPasswordCount >= 5)
+                        {
+                            $tmpUser->IsLockedOut = 1;
+                            $tmpUser->LockoutDeadLine = $dateNow->addMinutes(1);
+                            $tmpUser->IncorrectPasswordCount = 0;
+                        }
+                        $this->UpdateUser($tmpUser);
+                        $resultFlag = 2;
+                    }
+                }
+            }
         }
         else
             $resultFlag = 3;
