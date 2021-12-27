@@ -121,6 +121,9 @@ Route::get("changepassword/{Niduser}",[UserController::class,"ChangePassword"])-
 Route::get("getuserspasscode/{Niduser}/{CurrentPassword}",[UserController::class,"getUsersPassCode"])->name('user.getUsersPassCode');
 Route::get("managerolepermissions",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
 Route::get("addrolepermission",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
+Route::get("profile",[UserController::class,"Profile"])->name('user.Profile');
+Route::get("managesessions",[UserController::class,"ManageSessions"])->name('user.ManageSessions');
+Route::post("submitsessionsetting",[UserController::class,"SubmitSessionSetting"])->name('user.SubmitSessionSetting');
 Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermission"])->name('user.SubmitAddRolePermission');
 Route::get("editrolepermission/{NidPermission}",[UserController::class,"EditRolePermission"])->name('user.EditRolePermission');
 Route::post("submiteditrolepermission",[UserController::class,"SubmitEditRolePermission"])->name('user.SubmitEditRolePermission');

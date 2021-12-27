@@ -535,6 +535,29 @@ class UserRepository extends BaseRepository implements IUserRepository{
     {
         return RolePermissions::all()->where('NidPermission','=',$NidPermission)->firstOrFail();
     }
+    public function UpdateSessionSetting(string $newValue)
+    {
+        if(Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->count() > 0)
+        {
+            Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->firstOrFail()->update(
+                [
+                    'SettingValue' => $newValue
+                ]);
+        }else
+        {
+            $newSet = new Settings();
+            $newSet->NidSetting = Str::uuid();
+            $newSet->SettingKey = 'SessionTimeout';
+            $newSet->SettingValue = $newValue;
+            $newSet->SettingTitle = 'SessionSetting';
+            $newSet->IsDeleted = boolval(0);
+            $newSet->save();
+        }
+    }
+    public function GetSessionSettings()
+    {
+        return Settings::all()->where('SettingTitle','=','SessionSetting');
+    }
 }
 
 class UserRepositoryFactory

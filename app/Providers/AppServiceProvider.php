@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Roles;
+use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -49,5 +50,11 @@ class AppServiceProvider extends ServiceProvider
             $sharedData = array('UserAccessedEntities' => $AccessedEntities->toArray(),'UserAccessedSub' => $AccessedSub);
             view()->share('sharedData',$sharedData);
         }
+        if ($this->app->environment() !== 'test') {
+            if(Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->count() > 0)
+            config([
+                'session.lifetime' => Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->firstOrFail()->SettingValue
+            ]);
+          }
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 
@@ -151,6 +152,10 @@ class UserController extends Controller
             return response()->json($jsonresult);
         }
     }
+    public function Profile()
+    {
+        return view('User.Profile');
+    }
     public function SubmitEditUser(Request $User)
     {
         $api = new NPMSController();
@@ -231,6 +236,7 @@ class UserController extends Controller
             $user = $api->GetThisUserByUsername($logindata->Username);
             Auth::login($user);
             $logindata->session()->regenerate();
+            Auth::logoutOtherDevices($logindata->Password,'Password');
             $result->HasValue = true;
             $result->Message = $loginresult['nidUser'];
             $api->AddLog($user,$logindata->ip(),15,0,3,1,"ورود موفق");
@@ -440,5 +446,20 @@ class UserController extends Controller
         $result->HasValue = true;
         $api->AddLog(auth()->user(),$request->ip(),23,0,3,3,"حذف دسترسی نقش موفق");
         return response()->json($result);
+    }
+    public function ManageSessions(Request $request)
+    {
+        $api = new NPMSController();
+        $sets = $api->GetSessionsSettings();
+        return view('User.ManageSessions',compact('sets'));
+    }
+    public function SubmitSessionSetting(Request $request)
+    {
+
+        // config('session.lifetime',$request->SessionTimeout);
+        $api = new NPMSController();
+        $api->UpdateSessionsSettings($request->SessionTimeout);
+        return redirect('/managesessions');
+        // return $request->SessionTimeout;
     }
 }

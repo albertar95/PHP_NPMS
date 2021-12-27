@@ -276,6 +276,17 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->GetUserPasswordPolicy();
     }
+    public function UpdateSessionsSettings(string $value)
+    {
+                    $repo = new UserRepository(new User());
+                    return $repo->UpdateSessionSetting($value);
+                    // return $policies;
+    }
+    public function GetSessionsSettings()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetSessionSettings();
+    }
     public function AddRole(Request $role)
     {
         $repo = new UserRepository(new User());

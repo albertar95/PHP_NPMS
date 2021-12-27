@@ -176,6 +176,7 @@
                             <a class="collapse-item" href="{{ route('user.PasswordPolicy') }}" style="text-align:right;">خط مشی کلمه عبور</a>
                             <a class="collapse-item" href="{{ route('user.ManageRoles') }}" style="text-align:right;">مدیریت نقش ها</a>
                             <a class="collapse-item" href="{{ route('user.ManageRolePermissions') }}" style="text-align:right;">مدیریت دسترسی ها</a>
+                            <a class="collapse-item" href="{{ route('user.ManageSessions') }}" style="text-align:right;">مدیریت نشست ها</a>
                     </div>
                 </div>
             </div>
@@ -316,7 +317,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-left shadow animated--grow-in"
                                  aria-labelledby="userDropdown" style="max-width:10.375rem !important;">
-                                <a class="dropdown-item" href="#" style="text-align:right;">
+                                <a class="dropdown-item" href="{{ route('user.Profile') }}" style="text-align:right;">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     پروفایل
                                 </a>
