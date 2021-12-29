@@ -121,6 +121,25 @@ class UserController extends Controller
             return response()->json($result);
         }
     }
+    public function LogoutUser(string $NidUser,Request $request)
+    {
+        $api = new NPMSController();
+        $tmpresult = $api->LogoutUserById($NidUser);
+        $result = new JsonResults();
+        if(!is_null($tmpresult))
+        {
+            $result->HasValue = true;
+            $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید",$tmpresult->Username);
+            // $api->AddLog(auth()->user(),$request->ip(),12,0,3,1,"ایجاد کاربر موفق");
+            return response()->json($result);
+        }else
+        {
+            $result->HasValue = false;
+            $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+            // $api->AddLog(auth()->user(),$request->ip(),12,1,3,1,"ایجاد کاربر ناموفق");
+            return response()->json($result);
+        }
+    }
     public function EditUser(string $NidUser,Request $request)
     {
         $api = new NPMSController();
@@ -451,7 +470,8 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $sets = $api->GetSessionsSettings();
-        return view('User.ManageSessions',compact('sets'));
+        $users = $api->GetAllOnlineUsers();
+        return view('User.ManageSessions',compact('sets','users'));
     }
     public function SubmitSessionSetting(Request $request)
     {

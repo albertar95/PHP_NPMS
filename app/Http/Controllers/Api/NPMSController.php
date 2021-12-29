@@ -159,10 +159,20 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->GetUserDTOs(0);
     }
+    public function GetAllOnlineUsers()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetUserDTOs(0);
+    }
     public function DisableUserById(string $UserId)
     {
         $repo = new UserRepository(new User());
         return $repo->DisableUser($UserId);
+    }
+    public function LogoutUserById(string $UserId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->LogoutUser($UserId);
     }
     public function UpdateUser(Request $User)
     {

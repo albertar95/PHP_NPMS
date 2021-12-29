@@ -58,6 +58,27 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         return $result;
     }
+    public function GetOnlineUserDTOs(int $pagesize = 10) :Collection
+    {
+        $result = new Collection();
+        if ($pagesize != 0)
+        {
+            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->whereNotNull('last_seen')->sortByDesc('last_seen')->take($pagesize);
+            foreach ($tmpUsers as $User)
+            {
+                $result->push(DataMapper::MapToUserDTO($User));
+            }
+        }
+        else
+        {
+            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->whereNotNull('last_seen')->sortByDesc('last_seen');
+            foreach ($tmpUsers as $User)
+            {
+                $result->push(DataMapper::MapToUserDTO($User));
+            }
+        }
+        return $result;
+    }
     public function DisableUser(string $NidUser)
     {
         $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
@@ -66,6 +87,21 @@ class UserRepository extends BaseRepository implements IUserRepository{
             User::where('NidUser',$NidUser)->update(
                 [
                     'IsDisabled' => boolval(true)
+                ]
+                );
+                return $tmpUser;
+        }
+        else
+            return null;
+    }
+    public function LogoutUser(string $NidUser)
+    {
+        $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
+        if (!is_null($tmpUser))
+        {
+            User::where('NidUser',$NidUser)->update(
+                [
+                    'Force_logout' => boolval(true)
                 ]
                 );
                 return $tmpUser;

@@ -11,6 +11,10 @@ use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function Projects(Request $request)
     {
         $api = new NPMSController();

@@ -100,6 +100,7 @@ Route::get("users",[UserController::class,"Users"])->name('user.Users');
 Route::get("userdetail/{NidUser}",[UserController::class,"UserDetail"])->name('user.UserDetail');
 Route::get("uploadthisfile",[UserController::class,"UploadThisFile"])->name('user.UploadThisFile');
 Route::get("disableuser/{NidUser}",[UserController::class,"DisableUser"])->name('user.DisableUser');
+Route::get("logoutuser/{NidUser}",[UserController::class,"LogoutUser"])->name('user.LogoutUser');
 Route::get("edituser/{NidUser}",[UserController::class,"EditUser"])->name('user.EditUser');
 Route::post("submitedituser",[UserController::class,"SubmitEditUser"])->name('user.SubmitEditUser');
 Route::get("usersourcechange/{SourceId}",[UserController::class,"UserSourceChange"])->name('user.UserSourceChange');
