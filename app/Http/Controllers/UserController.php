@@ -327,6 +327,7 @@ class UserController extends Controller
         {
             $output = join('#',$tmpPerms->toArray());
         }
+        $api->HandleAlarms();
         return redirect('')->withCookie(cookie('NPMS_Permissions', $output, 480));
     }
     public function Logout(Request $request)

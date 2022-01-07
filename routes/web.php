@@ -30,7 +30,7 @@ Route::get("/",[UserController::class,"Index"])->name('index');
 
 //alarm routes
 Route::get("getalarms",[AlarmController::class,"GetAlarms"])->name('alarm.GetAlarms');
-Route::get("alarms",[AlarmController::class,"Alarms"])->name('alarm.Alarms');
+Route::get("alarms/{type}",[AlarmController::class,"Alarms"])->name('alarm.Alarms');
 
 //message routes
 Route::get("getmessages",[MessageController::class,"GetMessages"])->name('message.GetMessages');

@@ -30,7 +30,7 @@
                                        placeholder="عنوان طرح" />
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
                                     <option value="0" disabled>انتخاب محقق</option>
                                     @foreach ($Scholars->sortBy('LastName') as $sch)
                                     {
@@ -45,7 +45,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId" id="UnitId" style="padding:0 .75rem;">
                                     <option value="0" disabled>انتخاب یگان</option>
                                     @foreach ($Units->sortBy('Title') as $uni)
                                         @if ($uni->NidUnit == $Project->UnitId)
@@ -57,7 +57,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId" id="GroupId" style="padding:0 .75rem;">
                                     <option value="0" disabled>انتخاب گروه</option>
                                     @foreach ($UnitGroups->sortBy('Title') as $ung)
                                     @if ($ung->NidGroup == $Project->GroupId)
@@ -517,27 +517,6 @@
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "عنوان طرح وارد نشده است";
-                ValiditiyMessage += '</li>';
-                isValid = false;
-            }
-            if(!$("#ScholarId").is(':selected'))
-            {
-                ValiditiyMessage += '<li>';
-                ValiditiyMessage += "محقق انتخاب نشده است";
-                ValiditiyMessage += '</li>';
-                isValid = false;
-            }
-            if(!$("#UnitId").is(':selected'))
-            {
-                ValiditiyMessage += '<li>';
-                ValiditiyMessage += "یگان انتخاب نشده است";
-                ValiditiyMessage += '</li>';
-                isValid = false;
-            }
-            if(!$("#GroupId").is(':selected'))
-            {
-                ValiditiyMessage += '<li>';
-                ValiditiyMessage += "گروه تخصصی انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }

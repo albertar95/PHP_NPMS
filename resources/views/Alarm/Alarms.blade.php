@@ -11,9 +11,7 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اعلان ها</h1>
                     </div>
-                    {{ $tmpCounter = 1; }}
                     @switch ($Typo)
-                    {
                         @case (0)
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
@@ -40,22 +38,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','PreImployment') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','PreImployment') as $key => $prm)
                                                     <tr>
-                                                        <td>{{ $tmpCounter }}</td>
+                                                        <td>{{ $key + 1 }}</td>
                                                         <td>{{ $prm->Description }}</td>
                                                         <td>
-                                                            <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                            <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                         </td>
                                                     </tr>
-                                                    {{ $tmpCounter++; }}
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSecurityItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -81,22 +77,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                            @foreach ($Alarms->where('AlarmSubject','=','SecurityLetter') as $prm)
+                                            @foreach ($Alarms->where('AlarmSubject','=','SecurityLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseThirtyItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -122,22 +116,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                            @foreach ($Alarms->where('AlarmSubject','=','ThirtyLetter') as $prm)
+                                            @foreach ($Alarms->where('AlarmSubject','=','ThirtyLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSixtyItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -163,22 +155,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','SixtyLetter') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','SixtyLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseThesisItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -204,22 +194,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                            @foreach ($Alarms->where('AlarmSubject','=','ThesisLetter') as $prm)
+                                            @foreach ($Alarms->where('AlarmSubject','=','ThesisLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseRefItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -245,22 +233,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','RefInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','RefInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseEditorItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -286,22 +272,20 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','EditorInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','EditorInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseAdvSupItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -327,15 +311,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','AdvSupInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','AdvSupInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -344,7 +327,6 @@
                             </div>
                             @break
                         @case (1)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapsePreImploymentItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -370,15 +352,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','PreImployment') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','PreImployment') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -387,7 +368,6 @@
                             </div>
                             @break
                         @case (2)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSecurityItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -413,15 +393,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','SecurityLetter') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','SecurityLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -430,7 +409,6 @@
                             </div>
                             @break
                         @case (3)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseThirtyItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -456,15 +434,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','ThirtyLetter') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','ThirtyLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -473,7 +450,6 @@
                             </div>
                             @break
                         @case (4)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSixtyItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -499,15 +475,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','SixtyLetter') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','SixtyLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -516,7 +491,6 @@
                             </div>
                             @break
                         @case (5)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseThesisItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -542,15 +516,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','ThesisLetter') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','ThesisLetter') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -559,7 +532,6 @@
                             </div>
                             @break
                         @case (6)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseRefItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -585,15 +557,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','RefInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','RefInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -602,7 +573,6 @@
                             </div>
                             @break
                         @case (7)
-                        {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseEditorItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -628,15 +598,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','EditorInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','EditorInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -645,7 +614,6 @@
                             </div>
                             @break
                         @case (8)
-                            {{ $tmpCounter = 1; }}
                             <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseAdvSupItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -671,15 +639,14 @@
                                                 </tr>
                                             </tfoot>
                                             <tbody>
-                                                @foreach ($Alarms->where('AlarmSubject','=','AdvSupInfo') as $prm)
+                                                @foreach ($Alarms->where('AlarmSubject','=','AdvSupInfo') as $key => $prm)
                                                 <tr>
-                                                    <td>{{ $tmpCounter }}</td>
+                                                    <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="{{ link_to_route('project.ProjectDetail','',$NidProject = $prm->NidMaster) }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
-                                                {{ $tmpCounter++; }}
                                             @endforeach
                                             </tbody>
                                         </table>

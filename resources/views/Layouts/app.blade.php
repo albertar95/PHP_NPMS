@@ -266,7 +266,7 @@
                                         <span class="font-weight-bold">A new monthly report is ready to download!</span>
                                     </div>
                                 </a>*@
-                                <a class="dropdown-item text-center small text-gray-500" href="{{ route('alarm.Alarms') }}">نمایش تمامی اعلان ها</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="/alarms/0">نمایش تمامی اعلان ها</a>
                             </div>
                         </li>
                         <!-- Nav Item - Messages -->
@@ -436,6 +436,10 @@
     @include('Layouts.Footer')
     @yield('scripts')
     <script type="text/javascript">
+    $(function()
+    {
+        GetUsersAlarms();
+    });
         function AdvanceInProgressBar(newValue)
         {
             $("#UploadProgress").css('width',newValue +'%');
@@ -563,6 +567,28 @@
                         $("#SearchResult").html('');
                         $("#SearchResultSm").html('');
                     }
+                });
+        }
+        function GetUsersAlarms()
+        {
+            $.ajaxSetup({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+            $.ajax(
+                {
+                    url: '/getalarms/',
+                    type: 'get',
+                    datatype: 'json',
+                    data: {},
+                    success: function (result) {
+                        if (result.HasValue) {
+                            $("#AlarmsDropDown").html(result.Html);
+                            $("#alarmCount").text(result.Message);
+                        }
+                    },
+                    error: function () { }
                 });
         }
     </script>

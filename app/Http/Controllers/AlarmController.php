@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
 
 class AlarmController extends Controller
@@ -12,6 +13,13 @@ class AlarmController extends Controller
     }
     public function GetAlarms()
     {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $alarms = $api->GetFirstPageAlarms();
+        $result->Html = view('Alarm._AlarmSection',compact('alarms'))->render();
+        $result->HasValue = true;
+        $result->Message = $alarms->count();
+        return response()->json($result);
         // using (var client = new HttpClient())
         // {
         //     client.BaseAddress = new Uri(ApiBaseAddress);
@@ -30,6 +38,10 @@ class AlarmController extends Controller
     }
     public function Alarms(int $type = 0)
     {
+        $api = new NPMSController();
+        $Alarms = $api->GetAllAlarms();
+        $Typo = $type;
+        return view('Alarm.Alarms',compact('Alarms','Typo'));
         // AlarmsViewModel avm = new AlarmsViewModel();
         // List<Alarm> res = new List<Alarm>();
         // using (var client = new HttpClient())
@@ -43,6 +55,5 @@ class AlarmController extends Controller
         // avm.Alarms = res;
         // avm.Typo = type;
         // return View(avm);
-        return view('Alarm.Alarms');
     }
 }

@@ -5,7 +5,7 @@
     @foreach ($alarms as $alm)
         @switch ($alm->AlarmSubject)
             @case ('PreImployment')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 1) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/1">
                     <div class="mr-3">
                         <div class="icon-circle bg-warning">
                             <i class="fas fa-file-alt text-white"></i>
@@ -18,7 +18,7 @@
                 </a>
                 @break
             @case ('SecurityLetter')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 2) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/2">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -31,7 +31,7 @@
                 </a>
                 @break
             @case ('ThirtyLetter')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 3) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/3">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -44,7 +44,7 @@
                 </a>
                 @break
             @case ('SixtyLetter')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 4) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/4">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -57,7 +57,7 @@
                 </a>
                 @break
             @case ('ThesisLetter')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 5) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/5">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -70,7 +70,7 @@
                 </a>
                 @break
             @case ('RefInfo')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 6) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/6">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -83,7 +83,7 @@
                 </a>
                 @break
             @case ('EditorInfo')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 7) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/7">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -96,7 +96,7 @@
                 </a>
                 @break
             @case ('AdvSupInfo')
-                <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('alarm.Alarms','',$type = 8) }}">
+                <a class="dropdown-item d-flex align-items-center" href="/alarms/8">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -110,4 +110,4 @@
                 @break
         @endswitch
     @endforeach
-    <a class="dropdown-item text-center small text-gray-500" href="{{ route('alarm.Alarms') }}">نمایش تمامی اعلان ها</a>
+    <a class="dropdown-item text-center small text-gray-500" href="/alarms/0">نمایش تمامی اعلان ها</a>

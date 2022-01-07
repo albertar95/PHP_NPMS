@@ -23,7 +23,7 @@ class ProjectController extends Controller
         try
         {
             $api = new NPMSController();
-            $Projects = $api->GetAllProjectInitial();
+            $Projects = $api->GetAllProjectInitials();
             $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
             return view('Project.Projects',compact('Projects'));
         }catch(\Exception $e)

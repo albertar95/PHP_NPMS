@@ -4,8 +4,11 @@ namespace App\Domains\Repositories;
 
 use App\Domains\Eloquent\BaseRepository;
 use App\Domains\Interfaces\IAlarmRepository;
+use App\Helpers\Casts;
 use App\Models\Alarms;
 use App\Models\Projects;
+use Carbon\Carbon;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Guid\Guid;
 use Illuminate\Support\Str;
@@ -17,64 +20,78 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
     {
         parent::__construct($model);
     }
-
+    public function PersianDateToGeorgian(string $Datee)
+    {
+        return Verta::getGregorian(intval(Casts::PersianToEnglishDigits(substr($Datee,0,8))),intval(Casts::PersianToEnglishDigits(substr(substr($Datee,0,13),-4))),intval(Casts::PersianToEnglishDigits(substr($Datee,-4))));
+    }
     private function ProjectProcess(Projects $CurrentProj):bool
     {
         $res = new Collection();
         $result = true;
-        if (!isEmptyOrNullString($CurrentProj->ATFLetterDate))
+        $nowDate = Carbon::now();
+        if (!empty($CurrentProj->ATFLetterDate))
         {
-            if (isEmptyOrNullString($CurrentProj->PreImploymentLetterDate))
+            if (empty($CurrentProj->PreImploymentLetterDate))
             {
-                // $diff = (DateTime->Now - Helpers.Casts.ConvertToGeorgianDate(CurrentProj.ATFLetterDate)).Days;
-                // res.Add(AlarmProcess(CurrentProj.NidProject, 1, diff, CurrentProj.Subject));
+                $cdate = $this->PersianDateToGeorgian($CurrentProj->ATFLetterDate);
+                $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+                $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+                $res->push($this->AlarmProcess($CurrentProj->NidProject, 1, $diff, $CurrentProj->Subject));
             }
             else
             {
                 $res->push($this->AlarmCancelation($CurrentProj->NidProject, 1));
             }
         }
-        if (isEmptyOrNullString($CurrentProj->SecurityLetterDate))
+        if (empty($CurrentProj->SecurityLetterDate))
         {
-            // int diff = (DateTime.Now - CurrentProj.CreateDate).Days;
-            // res.Add(AlarmProcess(CurrentProj.NidProject, 2, diff, CurrentProj.Subject));
+            $cdate = $this->PersianDateToGeorgian($CurrentProj->CreateDate);
+            $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+            $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+            $res->push($this->AlarmProcess($CurrentProj->NidProject, 2, $diff, $CurrentProj->Subject));
         }
         else
         {
             $res->push($this->AlarmCancelation($CurrentProj->NidProject, 2));
         }
-        if (!isEmptyOrNullString($CurrentProj->ImploymentDate))
+        if (!empty($CurrentProj->ImploymentDate))
         {
-            if (isEmptyOrNullString($CurrentProj->ThirtyPercentLetterDate))
+            if (empty($CurrentProj->ThirtyPercentLetterDate))
             {
-                // int diff = (DateTime.Now - Helpers.Casts.ConvertToGeorgianDate(CurrentProj.ImploymentDate)).Days;
-                // res.Add(AlarmProcess(CurrentProj.NidProject, 3, diff, CurrentProj.Subject));
+                $cdate = $this->PersianDateToGeorgian($CurrentProj->ImploymentDate);
+                $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+                $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+                $res->push($this->AlarmProcess($CurrentProj->NidProject, 3, $diff, $CurrentProj->Subject));
             }
             else
             {
                 $res->push($this->AlarmCancelation($CurrentProj->NidProject, 3));
             }
-            if (isEmptyOrNullString($CurrentProj->SixtyPercentLetterDate))
+            if (empty($CurrentProj->SixtyPercentLetterDate))
             {
-                // int diff = (DateTime.Now - Helpers.Casts.ConvertToGeorgianDate(CurrentProj.ImploymentDate)).Days;
-                // res.Add(AlarmProcess(CurrentProj.NidProject, 4, diff, CurrentProj.Subject));
+                $cdate = $this->PersianDateToGeorgian($CurrentProj->ImploymentDate);
+                $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+                $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+                $res->push($this->AlarmProcess($CurrentProj->NidProject, 4, $diff, $CurrentProj->Subject));
             }
             else
             {
                 $res->push($this->AlarmCancelation($CurrentProj->NidProject, 4));
             }
-            if (!isEmptyOrNullString($CurrentProj->SixtyPercentLetterDate))
+            if (!empty($CurrentProj->SixtyPercentLetterDate))
             {
-                if (isEmptyOrNullString($CurrentProj->ThesisDefenceDate))
+                if (empty($CurrentProj->ThesisDefenceDate))
                 {
-                    // int diff = (DateTime.Now - Helpers.Casts.ConvertToGeorgianDate(CurrentProj.SixtyPercentLetterDate)).Days;
-                    // res.Add(AlarmProcess(CurrentProj.NidProject, 5, diff, CurrentProj.Subject));
+                    $cdate = $this->PersianDateToGeorgian($CurrentProj->SixtyPercentLetterDate);
+                    $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+                    $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+                    $res->push($this->AlarmProcess($CurrentProj->NidProject, 5, $diff, $CurrentProj->Subject));
                 }
                 else
                 {
                     $res->push($this->AlarmCancelation($CurrentProj->NidProject, 5));
                 }
-                if (isEmptyOrNullString($CurrentProj->Referee1) || isEmptyOrNullString($CurrentProj->Referee2))
+                if (empty($CurrentProj->Referee1) || empty($CurrentProj->Referee2))
                 {
                     $res->push($this->AlarmProcess($CurrentProj->NidProject, 6, 0, $CurrentProj->Subject));
                 }
@@ -82,9 +99,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                 {
                     $res->push($this->AlarmCancelation($CurrentProj->NidProject, 6));
                 }
-                if (!isEmptyOrNullString($CurrentProj->ThesisDefenceDate))
+                if (!empty($CurrentProj->ThesisDefenceDate))
                 {
-                    if (isEmptyOrNullString($CurrentProj->Editor))
+                    if (empty($CurrentProj->Editor))
                         $res->push($this->AlarmProcess($CurrentProj->NidProject, 7, 0, $CurrentProj->Subject));
                     else
                     {
@@ -92,7 +109,7 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                 }
             }
-            if (isEmptyOrNullString($CurrentProj->Supervisor) || isEmptyOrNullString($CurrentProj->Advisor))
+            if (empty($CurrentProj->Supervisor) || empty($CurrentProj->Advisor))
             {
                 $res->push($this->AlarmProcess($CurrentProj->NidProject, 8, 0, $CurrentProj->Subject));
             }
@@ -115,9 +132,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
             switch ($ProccessId)
             {
                 case 1:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->firstOrFail();
                         if ($diff > 14)
                         {
                             if (($diff / 14) < 2)
@@ -164,9 +181,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 2:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->firstOrFail();
                         if ($diff > 30)
                         {
                             if (($diff / 30) < 2)
@@ -215,9 +232,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 3:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->firstOrFail();
                         if ($diff > 90)
                         {
                             if (($diff / 90) < 2)
@@ -266,9 +283,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 4:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->firstOrFail();
                         if ($diff > 180)
                         {
                             if (($diff / 180) < 2)
@@ -317,9 +334,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 5:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->firstOrFail();
                         if ($diff > 90)
                         {
                             if (($diff / 90) < 2)
@@ -368,9 +385,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 6:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->firstOrFail();
                         $alarm->AlarmStatus = 1;
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد داور 1 یا 2 می باشد",$MasterName);
                         try
@@ -403,9 +420,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 7:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->firstOrFail();
                         $alarm->AlarmStatus = 1;
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد ویراستار می باشد",$MasterName);
                         try
@@ -438,9 +455,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                     }
                     break;
                 case 8:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if ($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->count() > 0)
                     {
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->firstOrFail();
                         $alarm->AlarmStatus = 1;
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد استاد راهنما یا استاد مشاور می باشد",$MasterName);
                         try
@@ -478,9 +495,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
 
     public function HandleAlarmsByProjectId(string $NidProject):bool
     {
-        $tmpProject = $this->model->all()->where('NidProject','=',$NidProject)->firstOrFail();
-        if (!is_null($tmpProject))
-            return $this->ProjectProcess($tmpProject);
+        // $tmpProject = $this->model->all()->where('NidProject','=',$NidProject)->firstOrFail();
+        if ($this->model->all()->where('NidProject','=',$NidProject)->count() > 0)
+            return $this->ProjectProcess($this->model->all()->where('NidProject','=',$NidProject)->firstOrFail());
         else
             return false;
     }
@@ -490,76 +507,100 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
             switch ($ProcessId)
             {
                 case 1:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 2:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 3:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 4:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 5:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 6:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 7:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
                 case 8:
-                    $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->firstOrFail();
-                    if (!is_null($alarm))
+                    if($this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->count() > 0)
                     {
-                        $alarm->AlarmStatus = 0;
-                        $alarm->save();
+                        $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->firstOrFail();
+                        if (!is_null($alarm))
+                        {
+                            $alarm->AlarmStatus = 0;
+                            $alarm->save();
+                        }
+                        $result = true;
                     }
-                    $result = true;
                     break;
             }
             return $result;
@@ -568,7 +609,7 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
     public function HandleAlarmsJob(int $RunInterval = 12):bool
     {
         $results = new Collection();
-        $projects = DB::select('select * from projects');
+        $projects = Projects::all();
         $res = true;
         foreach ($projects as $prj)
         {
@@ -584,7 +625,7 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
     public function GetFirstLevelAlarms() :Collection
     {
         $result = new Collection();
-        $tmpGrouped = DB::select('select AlarmSubject as Subject,count as cnt from Alarms where AlarmStatus <> ?', [0]);// db.Alarms.Where(p => p.AlarmStatus != 0).GroupBy(q => q.AlarmSubject).Select(w => new { Subject = w.Key,cnt = w.Count()});
+        $tmpGrouped = DB::select('select AlarmSubject as Subject,count(*) as cnt from Alarms where AlarmStatus <> ? group by AlarmSubject', [0]);// db.Alarms.Where(p => p.AlarmStatus != 0).GroupBy(q => q.AlarmSubject).Select(w => new { Subject = w.Key,cnt = w.Count()});
         foreach ($tmpGrouped as $tmp)
         {
             $tmpAlarm = new Alarms();

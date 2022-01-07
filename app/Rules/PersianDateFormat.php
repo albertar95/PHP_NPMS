@@ -28,14 +28,14 @@ class PersianDateFormat implements Rule
     {
         if(strlen($value) >= 10)
         {
-            if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,8))) && is_numeric(Casts::PersianToEnglishDigits(substr(substr($value,0,13),-4))) && is_numeric(Casts::PersianToEnglishDigits(substr($value,-4))))//  && substr($value,4,1) == '/' && substr($value,7,1) == '/')
-            return true;
-            else
-            return false;
-            // if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,4))))
+            // if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,8))) && is_numeric(Casts::PersianToEnglishDigits(substr(substr($value,0,13),-4))) && is_numeric(Casts::PersianToEnglishDigits(substr($value,-4))))//  && substr($value,4,1) == '/' && substr($value,7,1) == '/')
             // return true;
             // else
             // return false;
+            if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,4))))
+            return true;
+            else
+            return false;
         }else
         return false;
     }

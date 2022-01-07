@@ -226,14 +226,25 @@ class NPMSController extends Controller
     {
         $repo = new UserRepository(new User());
         $repo2 = new AlarmRepository(new Alarms());
-        // try
-        // {
-        //     $repo2->HandleAlarmsJob();
-        // }
-        // catch (\Exception)
-        // {
-        // }
+        try
+        {
+            $repo2->HandleAlarmsJob();
+        }
+        catch (\Exception)
+        {
+        }
         return $repo->GetUserPermissions($NidUser);
+    }
+    public function HandleAlarms()
+    {
+        $repo2 = new AlarmRepository(new Alarms());
+        $repo2->HandleAlarmsJob();
+        try
+        {
+        }
+        catch (\Exception)
+        {
+        }
     }
     public static function AddLog(User $user,string $ip,int $action,int $status,int $importance,int $confident,string $description = "")
     {
@@ -425,7 +436,7 @@ class NPMSController extends Controller
         $project = DataMapper::MapToProject($project);
         $project->ProjectStatus = $repo->ProjectStatusCalc($project);
         $res = $repo->UpdateProject($project);
-        // $repo2->HandleAlarmsByProjectId($project->NidProject);
+        $repo2->HandleAlarmsByProjectId($project->NidProject);
         return $res;
     }
     public function GetProjectDTOById(string $NidProject)
@@ -467,7 +478,7 @@ class NPMSController extends Controller
         $repo->AddProject($Project);
         $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
         return $repo->UpdateProject($Project);
-        // return $repo2->HandleAlarmsByProjectId($Project->NidProject);
+        return $repo2->HandleAlarmsByProjectId($Project->NidProject);
     }
     public function GetProjectById(string $NidProject)
     {
