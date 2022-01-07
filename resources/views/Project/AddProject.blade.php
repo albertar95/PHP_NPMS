@@ -20,7 +20,7 @@
                                        placeholder="عنوان طرح">
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
                                     <option value="0" disabled selected>انتخاب محقق</option>
                                     @foreach ($Scholars->sortBy('LastName') as $sch)
                                         <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }} {{ $sch->LastName }}</option>
@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId" id="UnitId" style="padding:0 .75rem;">
                                     <option value="0" disabled selected>انتخاب یگان</option>
                                     @foreach ($Units->sortBy('Title') as $uni)
                                     <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
@@ -38,7 +38,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId" id="GroupId" style="padding:0 .75rem;">
                                     <option value="0" disabled selected>انتخاب گروه</option>
                                     @foreach ($UnitGroups->sortBy('Title') as $ung)
                                     <option value="{{ $ung->NidGroup }}">{{ $ung->Title }}</option>
@@ -162,7 +162,9 @@
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="FinalApprove" name="FinalApprove" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                             <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید نهایی طرح</label>
                                         </div>
-                                        <div class="col-sm-6" style="display:flex;">
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
                                         </div>
                                     </div>
                                 </div>
@@ -190,7 +192,8 @@
                     </div>
                     <div class="alert alert-danger alert-dismissible" role="alert" id="errorAlert" hidden>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <p style="text-align:right;" id="ErrorMessage"></p>
+                        <p style="text-align:right;" id="ErrorMessage">
+                        </p>
                     </div>
                 </div>
             </div>
@@ -205,6 +208,7 @@
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+        var ValiditiyMessage = "";
         $(function () {
             var isvalidSupervisorTel = true;
             $("#Subject").focus();
@@ -400,7 +404,9 @@
                 });
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
-                    $.ajax(
+                    if(CheckInputValidity())
+                    {
+                        $.ajax(
                         {
                             url: '/submitaddproject',
                             type: 'post',
@@ -416,12 +422,23 @@
                                     window.location.href = '/projects';
                                 }
                             },
-                            error: function () {
-                                $("#ErrorMessage").text('')
+                            error: function (response) {
+                                var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#ErrorMessage").text(message)
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }
                         });
+                    }else
+                    {
+                        $("#ErrorMessage").html(ValiditiyMessage)
+                        $("#errorAlert").removeAttr('hidden')
+                        window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
+                        ValiditiyMessage = "";
+                    }
                 });
                 $("#MajorSlt").on('change', function () {
                     $("#OrentationSlt").html('')
@@ -445,6 +462,40 @@
         });
         function isValidMobile(input) {
             return /((\+|00)98|0)9\d{9}/.test(input);
+        }
+        function CheckInputValidity()
+        {
+            var isValid = true;
+            if(!$("#Subject").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "عنوان طرح وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#ScholarId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "محقق انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#UnitId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "یگان انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#GroupId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "گروه تخصصی انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
         }
     </script>
 @endsection

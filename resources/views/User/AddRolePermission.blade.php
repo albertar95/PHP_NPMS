@@ -19,6 +19,7 @@
                             <input type="text" id="DeleteVal" value="0" name="DeleteVal" hidden>
                             <input type="text" id="DetailVal" value="0" name="DetailVal" hidden>
                             <input type="text" id="ListVal" value="0" name="ListVal" hidden>
+                            <input type="text" id="ConfidentVal" value="0" name="ConfidentVal" hidden>
                             <input type="text" id="PrintVal" value="0" name="PrintVal" hidden>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -67,6 +68,12 @@
                                         name="Detail" class="form-control" value="false" alt=""
                                         onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                     <label for="Detail" style="margin:.45rem .45rem 0 0">جزییات</label>
+                                </div>
+                                <div class="col-sm-1" style="display: flex;">
+                                    <input type="checkbox" style="width:1rem;margin:unset !important;" id="Confident"
+                                        name="Confident" class="form-control" value="false" alt=""
+                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                    <label for="Confident" style="margin:.45rem .45rem 0 0">محرمانه</label>
                                 </div>
                                 <div class="col-sm-1" style="display: flex;">
                                     <input type="checkbox" style="width:1rem;margin:unset !important;" id="List" name="List"
@@ -143,6 +150,13 @@
                     $("#ListVal").val(1);
                 } else {
                     $("#ListVal").val(0);
+                }
+            });
+            $("#Confident").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#ConfidentVal").val(1);
+                } else {
+                    $("#ConfidentVal").val(0);
                 }
             });
             $("#Print").change(function() {

@@ -549,6 +549,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 'Edit' => $role->Edit,
                 'Delete' => $role->Delete,
                 'Detail' => $role->Detail,
+                'Confident' => $role->Confident,
                 'List' => $role->List,
                 'Print' => $role->Print
             ]);

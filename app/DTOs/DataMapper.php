@@ -93,6 +93,7 @@ class DataMapper
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate ?? "";
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
             $result->FinalApprove = boolval($project->FinalApprove) ?? false;
+            $result->IsConfident = boolval($project->IsConfident) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -140,6 +141,7 @@ class DataMapper
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate ?? "";
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
             $result->FinalApprove = boolval($project->FinalApprove)?? false;
+            $result->IsConfident = boolval($project->IsConfident) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -260,6 +262,7 @@ class DataMapper
             $result->IsDeleted = boolval($scholar->IsDeleted);
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
+            $result->IsConfident = boolval($scholar->IsConfident);
             return $result;
         }
         catch (\Exception)
@@ -306,6 +309,7 @@ class DataMapper
             $result->CollegeTitle = $scholar->college;
             $result->CollaborationTypeTitle = $scholar->CollaborationType;
             $result->ProfilePicture = $scholar->ProfilePicture ?? "";
+            $result->IsConfident = boolval($scholar->IsConfident) ?? false;
             $result->Projects = new Collection();//check
             return $result;
         }
@@ -429,6 +433,7 @@ class DataMapper
             $result->Edit = boolval($rolepermission->Edit);
             $result->Delete = boolval($rolepermission->Delete);
             $result->Detail = boolval($rolepermission->Detail);
+            $result->Confident = boolval($rolepermission->Confident);
             $result->List = boolval($rolepermission->List);
             $result->Print = boolval($rolepermission->Print);
             $result->RoleTitle = Roles::all()->where('NidRole','=',$rolepermission->RoleId)->firstOrFail()->Title;
@@ -607,6 +612,7 @@ class DataMapper
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate;
             $result->ATFLetterDate = $project->ATFLetterDate;
             $result->FinalApprove = boolval($project->FinalApprove);
+            $result->IsConfident = boolval($project->IsConfident);
             return $result;
         }
         catch (\Exception)
@@ -702,6 +708,7 @@ class DataMapper
             $result->IsDeleted = $scholar->IsDeleted;
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
+            $result->IsConfident = $scholar->IsConfident;
             return $result;
         }
         catch (\Exception)
@@ -732,6 +739,7 @@ class DataMapper
             $result->IsDeleted = $scholar[15];
             $result->DeleteDate = $scholar[16];
             $result->DeleteUser = $scholar[17];
+            $result->IsConfident = $scholar[18];
             return $result;
         }
         catch (\Exception)

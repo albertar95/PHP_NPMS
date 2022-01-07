@@ -12,6 +12,7 @@ class SearchController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('XSS');
     }
     public function AdvanceSearch()
     {
@@ -117,14 +118,14 @@ class SearchController extends Controller
         $result->HasValue = true;
         $inps = explode(',',$SearchInputs);
         $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
-        $Projects = $response->Projects;
-        $Scholars = $response->Scholars;
-        $Users = $response->Users;
-        $BaseInfo = $response->BaseInfo;
+        $Projects = $response[1];
+        $Scholars = $response[0];
+        $Users = $response[2];
+        $BaseInfo = $response[3];
         $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
-        // return $response;
+        // return $response[2];
     }
     public function ComplexSearch(string $Text)
     {

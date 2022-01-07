@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\DataMapper;
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\ScholarRequest;
 use App\Models\Scholars;
 use Facade\FlareClient\Api;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,6 +20,7 @@ class ScholarController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('XSS');
     }
     public function AddScholar(Request $request)
     {
@@ -47,8 +49,9 @@ class ScholarController extends Controller
         $result->Html = $newValue;
         return response()->json($result);
     }
-    public function SubmitAddScholar(Request $scholar)
+    public function SubmitAddScholar(ScholarRequest $scholar)
     {
+        $scholar->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if($api->AddScholar($scholar))
@@ -97,8 +100,9 @@ class ScholarController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
     }
-    public function SubmitEditScholar(Request $scholar) //ScholarDTO
+    public function SubmitEditScholar(ScholarRequest $scholar) //ScholarDTO
     {
+        $scholar->validated();
         $api = new NPMSController();
         $api->UpdateScholar($scholar);
         $api->AddLog(auth()->user(),$scholar->ip(),8,0,3,1,"ویرایش محقق موفق");

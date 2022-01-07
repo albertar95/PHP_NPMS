@@ -253,6 +253,18 @@ class NPMSController extends Controller
         return $repo->AddLog($newlog);
         // return $newlog;
     }
+    public static function GetLogActionTypes(int $pagesize = 10)
+    {
+        $repo = new LogRepository();
+        return $repo->GetAllLogActionType($pagesize);
+        // return $newlog;
+    }
+    public static function GetUserLogReport(string $FromDate,string $ToDate,int $LogActionId = 0,string $UserName = "")
+    {
+        $repo = new LogRepository();
+        return $repo->UserLogReport($FromDate,$ToDate,$LogActionId,$UserName);
+        // return $newlog;
+    }
     public function UpdateUserUserPermissions(string $NidUser,array $Resources)
     {
         $resourceGuids = new Collection();
@@ -333,6 +345,7 @@ class NPMSController extends Controller
         $newroleperm->Edit = boolval($rolepermission->EditVal);
         $newroleperm->Delete = boolval($rolepermission->DeleteVal);
         $newroleperm->Detail = boolval($rolepermission->DetailVal);
+        $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
         $newroleperm->List = boolval($rolepermission->ListVal);
         $newroleperm->Print = boolval($rolepermission->PrintVal);
         return $repo->AddRolePermission($newroleperm);
@@ -348,6 +361,7 @@ class NPMSController extends Controller
         $newroleperm->Edit = boolval($rolepermission->EditVal);
         $newroleperm->Delete = boolval($rolepermission->DeleteVal);
         $newroleperm->Detail = boolval($rolepermission->DetailVal);
+        $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
         $newroleperm->List = boolval($rolepermission->ListVal);
         $newroleperm->Print = boolval($rolepermission->PrintVal);
         return $repo->UpdateRolePermission($newroleperm);

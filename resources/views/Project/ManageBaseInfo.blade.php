@@ -891,7 +891,12 @@
                         }
                     },
                     error: function() {
-                        $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
+                        var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#UnitErrorMessage").text(message)
+                        // $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
                             $("#UnitErrorAlert").attr('hidden', 'hidden');
@@ -940,7 +945,12 @@
                         }
                     },
                     error: function() {
-                        $("#UnitGroupErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
+                        var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#UnitGroupErrorMessage").text(message)
+                        // $("#UnitGroupErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitGroupErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
                             $("#UnitGroupErrorAlert").attr('hidden', 'hidden');
@@ -1046,7 +1056,12 @@
                         }
                     },
                     error: function() {
-                        $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
+                        var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#UnitErrorMessage").text(message)
+                        // $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
                             $("#UnitErrorAlert").attr('hidden', 'hidden');
@@ -1095,8 +1110,13 @@
                         }
                     },
                     error: function() {
-                        $("#OreintationErrorMessage").text(
-                            'خطا در سرور.لطفا مجددا امتحان کنید');
+                        var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#OreintationErrorMessage").text(message)
+                        // $("#OreintationErrorMessage").text(
+                        //     'خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#OreintationErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
                             $("#OreintationErrorAlert").attr('hidden', 'hidden');

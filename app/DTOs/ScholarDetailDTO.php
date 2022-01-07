@@ -22,4 +22,5 @@ class scholarDetailDTO extends Model
     public string $CollaborationTypeTitle;
     public Collection $Projects;
     public string $ProfilePicture;
+    public bool $IsConfident;
 }

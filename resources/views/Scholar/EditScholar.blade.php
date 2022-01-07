@@ -180,11 +180,32 @@
                                 @endforelse
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
+                                @if (!is_null($Scholar->IsConfident) && $Scholar->IsConfident == true)
+                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" value="true" checked onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                @elseif(!is_null($Scholar->IsConfident) && $Scholar->IsConfident == false)
+                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" value="false" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                @else
+                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                @endforelse
+                            </div>
+                        </div>
                         <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block" style="width:25%;margin:auto;">
                             ویرایش اطلاعات
                         </button>
                         <hr>
                     </form>
+                    @if($errors->any())
+                    <div class="m-auto text-center">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>

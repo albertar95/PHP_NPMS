@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Repositories\ReportRawData;
+use App\Helpers\Casts;
 use App\Http\Controllers\Api\NPMSController;
 use App\Models\ReportParameters;
 use App\Models\Reports;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -14,6 +16,7 @@ class ReportController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('XSS');
     }
     public function GetReportParameterInfos()
     {
@@ -64,6 +67,25 @@ class ReportController extends Controller
         $Report = $api->GetStatisticsReports();
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارشات آماری");
         return view('Report.StatisticReports',compact('Report'));
+    }
+    public function UserLogReport()
+    {
+        $api = new NPMSController();
+        $LogActionTypes = $api->GetLogActionTypes();
+        return view('Report.UserLogReport',compact('LogActionTypes'));
+    }
+    public function PersianDateToGeorgian(string $Datee)
+    {
+        return Verta::getGregorian(intval(Casts::PersianToEnglishDigits(substr($Datee,0,8))),intval(Casts::PersianToEnglishDigits(substr(substr($Datee,0,13),-4))),intval(Casts::PersianToEnglishDigits(substr($Datee,-4))));
+    }
+    public function SubmitUserLogReport(Request $report)//string $FromDate,string $ToDate,int $LogActionId,string $UserName = "")
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.$this->PersianDateToGeorgian($report->FromDate)[1].'-'.$this->PersianDateToGeorgian($report->FromDate)[2],$this->PersianDateToGeorgian($report->ToDate)[0].'-'.$this->PersianDateToGeorgian($report->ToDate)[1].'-'.$this->PersianDateToGeorgian($report->ToDate)[2],$report->LogActionId,$report->UserName);
+        $result->HasValue = true;
+        $result->Html = view('Report._UserActivityReportResult',compact('logs'))->render();
+        return response()->json($result);
     }
     public function ExecuteReport(string $NidReport,Request $request)
     {

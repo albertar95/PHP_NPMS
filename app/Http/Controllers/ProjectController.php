@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DTOs\DataMapper;
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\ProjectRequest;
+use App\Http\Requests\TitleRequest;
 use App\Models\Projects;
 use App\Models\Scholars;
 use Illuminate\Http\Request;
@@ -14,13 +16,20 @@ class ProjectController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('XSS');
     }
     public function Projects(Request $request)
     {
-        $api = new NPMSController();
-        $Projects = $api->GetAllProjectInitials();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
-        return view('Project.Projects',compact('Projects'));
+        try
+        {
+            $api = new NPMSController();
+            $Projects = $api->GetAllProjectInitial();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
+            return view('Project.Projects',compact('Projects'));
+        }catch(\Exception $e)
+        {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
     }
     public function AddProject(Request $request)
     {
@@ -31,8 +40,9 @@ class ProjectController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد طرح");
         return view('Project.AddProject',compact('Scholars','UnitGroups','Units'));
     }
-    public function SubmitAddProject(Request $Project)
+    public function SubmitAddProject(ProjectRequest $Project)
     {
+        $Project->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if($api->AddProject($Project))
@@ -66,8 +76,9 @@ class ProjectController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"پیشرفت طرح");
         return view('Project.ProjectProgress',compact('Scholars','UnitGroups','Units','Project'));
     }
-    public function UpdateProject(Request $Project)
+    public function UpdateProject(ProjectRequest $Project)
     {
+        $Project->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if($api->ProjectProgress($Project))
@@ -83,6 +94,7 @@ class ProjectController extends Controller
             $api->AddLog(auth()->user(),$Project->ip(),3,1,3,1,"پیشرفت طرح ناموفق");
             return response()->json($result);
         }
+        // return $Project;
     }
     public function ManageBaseInfo(Request $request)
     {
@@ -98,8 +110,9 @@ class ProjectController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت اطلاعات پایه");
         return view('Project.ManageBaseInfo',compact('UnitGroups','Units','Majors','CollaborationTypes','MillitaryStatuses','Oreintations','Colleges','Grades'));
     }
-    public function SubmitUnitForm(Request $unit)
+    public function SubmitUnitForm(TitleRequest $unit)
     {
+        $unit->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if(empty($unit->NidUnit))
@@ -120,8 +133,9 @@ class ProjectController extends Controller
         $result->AltProp = $unit->NidUnit;
         return response()->json($result);
     }
-    public function SubmitUnitGroupForm(Request $unitGroup)
+    public function SubmitUnitGroupForm(TitleRequest $unitGroup)
     {
+        $unitGroup->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if(empty($unitGroup->NidGroup))
@@ -181,8 +195,9 @@ class ProjectController extends Controller
         $result->HasValue = true;
         return response()->json($result);
     }
-    public function SubmitMajorForm(Request $major)
+    public function SubmitMajorForm(TitleRequest $major)
     {
+        $major->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if(empty($major->NidMajor))
@@ -203,8 +218,9 @@ class ProjectController extends Controller
         $result->AltProp = $major->NidMajor;
         return response()->json($result);
     }
-    public function SubmitOreintationForm(Request $oreintation)
+    public function SubmitOreintationForm(TitleRequest $oreintation)
     {
+        $oreintation->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         if(empty($oreintation->NidOreintation))

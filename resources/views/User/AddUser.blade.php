@@ -87,11 +87,14 @@
 </div>
 @section('scripts')
     <script type="text/javascript">
+    var ValiditiyMessage = "";
         var upload = null;
             $(function () {
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
-                    $.ajax(
+                    if(CheckInputValidity())
+                    {
+                        $.ajax(
                         {
                             url: '/submitadduser',
                             type: 'post',
@@ -107,13 +110,66 @@
                                 $("#uploadedImage").attr('src', '');
                             },
                             error: function () {
-                                $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
+                                var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#ErrorMessage").text(message)
+                                // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }
                         });
+                    }else
+                    {
+                        $("#ErrorMessage").html(ValiditiyMessage)
+                        $("#errorAlert").removeAttr('hidden')
+                        window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
+                        ValiditiyMessage = "";
+                    }
                 });
             });
+            function CheckInputValidity()
+        {
+            var isValid = true;
+            if(!$("#FirstName").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام محقق وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#LastName").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام خانوادگی محقق وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#Username").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام کاربری وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#Password").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "کلمه عبور وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#RoleId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نقش کاربر انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
+        }
     </script>
 @endsection
 @endsection

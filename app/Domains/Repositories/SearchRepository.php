@@ -20,30 +20,34 @@ class SearchRepository implements ISearchRepository{
     public Collection $Projects;//ProjectInitialDTO
     public Collection $Users;//UserDTO
     public Collection $BaseInfo;//Setting
-    public function AdvancedSearch(string $searchText,int $SectionId,bool $Similar,int $ById):SearchRepository
+    public function AdvancedSearch(string $searchText,int $SectionId,bool $Similar,int $ById)
     {
+        $ProjectResult = new Collection();
+        $ScholarResult = new Collection();
+        $UserResult = new Collection();
+        $BaseInfoResult = new Collection();
         switch ($SectionId)
         {
             case 0:
-                $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
-                $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
-                $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
-                $this->BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
+                $ScholarResult = $this->SearchInScholars($searchText,$Similar,$ById);
+                $ProjectResult = $this->SearchInProjects($searchText,$Similar,$ById);
+                $UserResult = $this->SearchInUsers($searchText,$Similar,$ById);
+                $BaseInfoResult = $this->SearchInBaseInfo($searchText,$Similar,$ById);
                 break;
             case 1:
-                $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
+                $ScholarResult = $this->SearchInScholars($searchText,$Similar,$ById);
                 break;
             case 2:
-                $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
+                $ProjectResult = $this->SearchInProjects($searchText,$Similar,$ById);
                 break;
             case 3:
-                $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
+                $UserResult = $this->SearchInUsers($searchText,$Similar,$ById);
                 break;
             case 4:
-                $this->BaseInfo = $this->SearchInBaseInfo($searchText,$Similar,$ById);
+                $BaseInfoResult = $this->SearchInBaseInfo($searchText,$Similar,$ById);
                 break;
         }
-        return $this;
+        return [$ScholarResult,$ProjectResult,$UserResult,$BaseInfoResult];
     }
     public function ComplexSearch(string $searchText,bool $Similar,int $ById):SearchRepository
     {
@@ -748,13 +752,15 @@ class SearchRepository implements ISearchRepository{
     }
     private function SearchInUsers(string $searchText,bool $Similar,int $ById):Collection//UserDTO
     {
-        $result = new Collection();//UserDTO
+        // $result = new Collection();//UserDTO
         if($Similar)
         {
             switch ($ById)
             {
                 case 0:
-                    $tmpUser = User::all()->where('Username','like','%'.$searchText.'%');//->get('Username')->contains($searchText);
+                    $result = new Collection();//UserDTO
+                    // $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');//->get('UserName')->contains($searchText);
+                    $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -770,21 +776,27 @@ class SearchRepository implements ISearchRepository{
                     //         result.Add(mapper.MapToUserDTO(usr));
                     //     }
                     // }
+                    return $result;
                     break;
                 case 1:
-                    $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');//->get('Username')->contains($searchText);
+                    $result = new Collection();//UserDTO
+                    $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');//->get('UserName')->contains($searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
                     }
+                    return $result;
                     break;
                 case 2:
+                    $result = new Collection();//UserDTO
                     // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName).Contains(searchtext) && p.IsDisabled == false))
                     // {
                     //     result.Add(mapper.MapToUserDTO(usr));
                     // }
+                    return $result;
                     break;
                 case 3:
+                    $result = new Collection();//UserDTO
                     // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
@@ -792,6 +804,7 @@ class SearchRepository implements ISearchRepository{
                     //         result.Add(mapper.MapToUserDTO(usr));
                     //     }
                     // }
+                    return $result;
                     break;
             }
         }
@@ -800,7 +813,8 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpUser = User::all()->where('Username','=',$searchText);
+                    $result = new Collection();//UserDTO
+                    $tmpUser = User::all();
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
@@ -816,21 +830,27 @@ class SearchRepository implements ISearchRepository{
                     //         result.Add(mapper.MapToUserDTO(usr));
                     //     }
                     // }
+                    return $result;
                     break;
                 case 1:
-                    $tmpUser = User::all()->where('Username','=',$searchText);
+                    $result = new Collection();//UserDTO
+                    $tmpUser = User::all()->where('UserName','=',$searchText);
                     foreach ($tmpUser as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
                     }
+                    return $result;
                     break;
                 case 2:
+                    $result = new Collection();//UserDTO
                     // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName) == searchtext && p.IsDisabled == false))
                     // {
                     //     result.Add(mapper.MapToUserDTO(usr));
                     // }
+                    return $result;
                     break;
                 case 3:
+                    $result = new Collection();//UserDTO
                     // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).get(q => q.UserId))
                     // {
                     //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
@@ -838,16 +858,22 @@ class SearchRepository implements ISearchRepository{
                     //         result.Add(mapper.MapToUserDTO(usr));
                     //     }
                     // }
+                    return $result;
                     break;
             }
         }
-        $uniques = new Collection();//UserDTO
-        $grouped = $result->groupBy('NidUser');
-        foreach ($grouped as $itm)
-        {
-            $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
-        }
-        return $uniques;
+        // $uniques = new Collection();//UserDTO
+        // $grouped = $result->groupBy('NidUser');
+        // foreach ($grouped as $itm)
+        // {
+        //     $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
+        // }
+        // $tmpUser = User::all()->where('UserName','=',$searchText);
+        // foreach ($tmpUser as $user)
+        // {
+        //     $result->push(DataMapper::MapToUserDTO($user));
+        // }
+        // return $result;
     }
     private function SearchInBaseInfo(string $searchText,bool $Similar,int $ById):Collection//Setting
     {

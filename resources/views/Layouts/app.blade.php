@@ -96,6 +96,7 @@
                             <a class="collapse-item" href="{{ route('report.ChartReports') }}" style="text-align:right;">گزارشات نموداری</a>
                             @endif
                         @endif
+                        <a class="collapse-item" href="{{ route('report.UserLogReport') }}" style="text-align:right;">گزارشات عملکرد کاربران</a>
                         @if(in_array('4',$sharedData['UserAccessedEntities']))
                             @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',4)->pluck('rowValue')[0])[0] == 1)
                             <a class="collapse-item" href="{{ route('report.CustomReports') }}" style="text-align:right;">ایجاد گزارش سفارشی</a>

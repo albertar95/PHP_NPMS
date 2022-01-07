@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1f0ac4800c245ddda12d5aa8505c099",
+    "content-hash": "925d9bb09ce224e608548e5f3093b948",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2376,6 +2376,55 @@
                 "source": "https://github.com/opis/closure/tree/3.6.2"
             },
             "time": "2021-04-09T13:42:10+00:00"
+        },
+        {
+            "name": "persian-validator/national-code",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ali-kh333/persianValidator-nationalCode.git",
+                "reference": "6499f1aa96c45d94843159b019dbf4861379715c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ali-kh333/persianValidator-nationalCode/zipball/6499f1aa96c45d94843159b019dbf4861379715c",
+                "reference": "6499f1aa96c45d94843159b019dbf4861379715c",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "PersianValidator\\NationalCode\\NationalCodeValidatorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PersianValidator\\NationalCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ali Khalili",
+                    "email": "ali.kh333@gmail.com"
+                }
+            ],
+            "description": "Validates national codes in Iran",
+            "keywords": [
+                "laravel",
+                "nationalcode",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/Ali-kh333/persianValidator-nationalCode/issues",
+                "source": "https://github.com/Ali-kh333/persianValidator-nationalCode/tree/master"
+            },
+            "time": "2018-07-01T13:45:23+00:00"
         },
         {
             "name": "phpoption/phpoption",

@@ -98,6 +98,13 @@
                             ذخیره اطلاعات
                         </button>
                     </form>
+                    @if($errors->any())
+                    <div class="m-auto text-center">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                    @endif
                     <hr />
                 </div>
             </div>

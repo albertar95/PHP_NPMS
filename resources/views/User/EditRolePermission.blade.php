@@ -18,6 +18,7 @@
                             <input type="text" id="EditVal"  name="EditVal" value="{{ $Role->Edit }}" hidden>
                             <input type="text" id="DeleteVal" name="DeleteVal" value="{{ $Role->Delete }}" hidden>
                             <input type="text" id="DetailVal" name="DetailVal" value="{{ $Role->Detail }}" hidden>
+                            <input type="text" id="ConfidentVal" name="ConfidentVal" value="{{ $Role->Confident }}" hidden>
                             <input type="text" id="ListVal" name="ListVal" value="{{ $Role->List }}" hidden>
                             <input type="text" id="PrintVal" name="PrintVal" value="{{ $Role->Print }}" hidden>
                             <div class="form-group row">
@@ -103,6 +104,18 @@
                                     <label for="Detail" style="margin:.45rem .45rem 0 0">جزییات</label>
                                 </div>
                                 <div class="col-sm-1" style="display: flex;">
+                                    @if ($Role->Confident)
+                                    <input type="checkbox" style="width:1rem;margin:unset !important;" id="Confident"
+                                        name="Confident" class="form-control" value="false" alt=""
+                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" checked />
+                                    @else
+                                    <input type="checkbox" style="width:1rem;margin:unset !important;" id="Confident"
+                                    name="Confident" class="form-control" value="false" alt=""
+                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                    @endforelse
+                                    <label for="Confident" style="margin:.45rem .45rem 0 0">محرمانه</label>
+                                </div>
+                                <div class="col-sm-1" style="display: flex;">
                                     @if ($Role->List)
                                     <input type="checkbox" style="width:1rem;margin:unset !important;" id="List" name="List"
                                         class="form-control" value="false" alt=""
@@ -182,6 +195,13 @@
                     $("#DetailVal").val(1);
                 } else {
                     $("#DetailVal").val(0);
+                }
+            });
+            $("#Confident").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#ConfidentVal").val(1);
+                } else {
+                    $("#ConfidentVal").val(0);
                 }
             });
             $("#List").change(function() {

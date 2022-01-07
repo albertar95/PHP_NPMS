@@ -42,4 +42,5 @@ class projectDetailDTO extends Model
     public string $SixtyPercentLetterDate;
     public string $ATFLetterDate;
     public bool $FinalApprove;
+    public bool $IsConfident;
 }

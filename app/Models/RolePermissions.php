@@ -12,7 +12,7 @@ class RolePermissions extends Model
     protected $primaryKey = 'NidPermission';
     public $incrementing = false;
     public    $timestamps = false;
-    protected $fillable = ['RoleId','EntityId','Create','Edit','Delete','Detail','List','Print'];
+    protected $fillable = ['RoleId','EntityId','Create','Edit','Delete','Detail','Confident','List','Print'];
     // protected $visible = [];
     // protected $hidden = [];
     public function role()

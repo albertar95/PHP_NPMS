@@ -115,9 +115,8 @@
                 @foreach ($Users as $usr)
                     <tr>
                         <td>
-                            @if (!isEmptyOrNull($usr->ProfilePicture))
-                                {{ $imgSrc = string->sprintf('data:image/jpg;base64,%s', $usr->ProfilePicture) }}
-                                <img src="{{ $imgSrc }}" height="100" width="100" />
+                            @if (!Empty($usr->ProfilePicture))
+                                <img src="{{ sprintf("/storage/images/%s", $usr->ProfilePicture) }}" height="100" width="100" />
                             @endif
                         </td>
                         <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>

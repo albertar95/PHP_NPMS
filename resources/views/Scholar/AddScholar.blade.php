@@ -89,7 +89,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="CollaborationType" style="padding:0 .75rem;">
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="CollaborationType" id="CollaborationType" style="padding:0 .75rem;">
                                     <option value="0" disabled selected>نوع همکاری</option>
                                     @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
                                     <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}</option>
@@ -108,6 +108,10 @@
                                 <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe" hidden>
                                     <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
                                 </div>
+                            </div>
+                            <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
                             </div>
                         </div>
                         <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block" style="width:25%;margin:auto;">
@@ -147,6 +151,7 @@
         <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
         <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
         <script type="text/javascript">
+        var ValiditiyMessage = "";
             var upload = "";
             $(function () {
                 var isValidNational = false;
@@ -208,7 +213,9 @@
                 });
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
-                    var data = $("#AddScholarForm").serializeArray();
+                    if(CheckInputValidity())
+                    {
+                        var data = $("#AddScholarForm").serializeArray();
                     // for (var item in data) {
                     //     if (data[item].name == 'ProfilePicture') {
                     //         data[item].value = upload;
@@ -229,12 +236,24 @@
                                 $("#uploadedImage").attr('hidden', 'hidden');
                                 $("#uploadedImage").attr('src', '');
                             },
-                            error: function () {
-                                $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
+                            error: function (response) {
+                                var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#ErrorMessage").text(message)
+                                // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }
                         });
+                    }else
+                    {
+                        $("#ErrorMessage").html(ValiditiyMessage)
+                        $("#errorAlert").removeAttr('hidden')
+                        window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
+                        ValiditiyMessage = "";
+                    }
                 });
                 $("#MajorSlt").on('change', function () {
                     $("#OrentationSlt").html('')
@@ -265,6 +284,61 @@
             function isValidMobile(input)
             {
                 return /((\+|00)98|0)9\d{9}/.test(input);
+            }
+            function CheckInputValidity()
+            {
+            var isValid = true;
+            if(!$("#FirstName").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام محقق وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#LastName").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام خانوادگی محقق وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#observer").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "کد ملی وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#MajorSlt").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "رشته تحصیلی انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#GradeId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "مقطع تحصیلی انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#OreintationId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "گرایش انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#CollaborationType").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نوع همکاری انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
             }
             // function UploadFile() {
             //     AdvanceInProgressBar(0);

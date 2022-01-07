@@ -209,7 +209,17 @@
                                             <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید نهایی طرح</label>
                                             @endforelse
                                             </div>
-                                            <div class="col-sm-6" style="display:flex;">
+                                            <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                @if (!is_null($Project->IsConfident) && $Project->IsConfident == true)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" value="true" checked onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                                @elseif(!is_null($Project->IsConfident) && $Project->IsConfident == false)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" value="false" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                                @else
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
+                                                @endforelse
                                             </div>
                                         </div>
                                 </div>
@@ -247,6 +257,7 @@
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+    var ValiditiyMessage = "";
             $(function () {
                 $("#TenPercentLetterDate").persianDatepicker({
                     altField: '#TenPercentLetterDate',
@@ -440,7 +451,9 @@
                 });
                 $("#btnSubmit").click(function (e) {
                     e.preventDefault();
-                    $.ajax(
+                    if(CheckInputValidity())
+                    {
+                        $.ajax(
                         {
                             url: '/updateproject',
                             type: 'post',
@@ -457,11 +470,22 @@
                                 }
                             },
                             error: function () {
-                                $("#ErrorMessage").text('')
+                                var message = "";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += val;
+                                });
+                                $("#ErrorMessage").text(message)
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }
                         });
+                    }else
+                    {
+                        $("#ErrorMessage").html(ValiditiyMessage)
+                        $("#errorAlert").removeAttr('hidden')
+                        window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
+                        ValiditiyMessage = "";
+                    }
                 });
                 $("#MajorSlt").on('change', function () {
                     $("#OrentationSlt").html('')
@@ -485,6 +509,40 @@
             });
         function isValidMobile(input) {
             return /((\+|00)98|0)9\d{9}/.test(input);
+        }
+        function CheckInputValidity()
+        {
+            var isValid = true;
+            if(!$("#Subject").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "عنوان طرح وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#ScholarId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "محقق انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#UnitId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "یگان انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if(!$("#GroupId").is(':selected'))
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "گروه تخصصی انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
         }
     </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData','ChangePassword','SubmitChangePassword','getUsersPassCode']]);
+        $this->middleware('XSS');
     }
     private static function GetEntityPermissionsFromCache()
     {
@@ -55,8 +57,9 @@ class UserController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد کاربر");
         return view('User.AddUser',compact('Roles'));
     }
-    public function SubmitAddUser(Request $user)
+    public function SubmitAddUser(UserRequest $user)
     {
+        $user->validated();
         $api = new NPMSController();
         $api->AddLog(auth()->user(),$user->ip(),10,0,3,1,"ایجاد کاربر موفق");
         return $api->AddUser($user);
@@ -64,7 +67,7 @@ class UserController extends Controller
     public function Users(Request $request)
     {
         $api = new NPMSController();
-        $Users = $api->GetAllUsers(0);
+        // $Users = $api->GetAllUsers(0);
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت کاربران");
         return view('User.Users',compact('Users'));
     }
@@ -175,8 +178,9 @@ class UserController extends Controller
     {
         return view('User.Profile');
     }
-    public function SubmitEditUser(Request $User)
+    public function SubmitEditUser(UserRequest $User)
     {
+        $User->validated();
         $api = new NPMSController();
         $api->UpdateUser($User);
         $api->AddLog(auth()->user(),$User->ip(),11,0,3,1,"ویرایش کاربر موفق");

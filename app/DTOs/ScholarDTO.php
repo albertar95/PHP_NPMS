@@ -25,4 +25,5 @@ class scholarDTO extends Model
     public bool $IsDeleted;
     public ?DateTime $DeleteDate;
     public ?string $DeleteUser;
+    public bool $IsConfident;
 }
