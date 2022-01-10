@@ -6,6 +6,7 @@ use App\Domains\Interfaces\ILogRepository;
 use App\Models\LogActionTypes;
 use App\Models\Logs;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class LogRepository implements ILogRepository{
@@ -39,5 +40,20 @@ class LogRepository implements ILogRepository{
                 return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId)->where('Username','=',$UserName);
             }
         }
+    }
+    public function CurrentUserLogReport(string $NidUser)
+    {
+        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogDate')->take(200);
+    }
+    public function CurrentUserLoginReport(string $NidUser)
+    {
+        $res = new Collection();
+        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',15)->sortByDesc('LogDate')->take(5) as $key => $value) {
+            $res->push($value);
+        }
+        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',16)->sortByDesc('LogDate')->take(5) as $key => $value) {
+            $res->push($value);
+        }
+        return $res;
     }
 }

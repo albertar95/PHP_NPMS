@@ -276,6 +276,18 @@ class NPMSController extends Controller
         return $repo->UserLogReport($FromDate,$ToDate,$LogActionId,$UserName);
         // return $newlog;
     }
+    public static function GetCurrentUserLogReport(string $NidUser)
+    {
+        $repo = new LogRepository();
+        return $repo->CurrentUserLogReport($NidUser);
+        // return $newlog;
+    }
+    public static function GetCurrentUserLoginReport(string $NidUser)
+    {
+        $repo = new LogRepository();
+        return $repo->CurrentUserLoginReport($NidUser);
+        // return $newlog;
+    }
     public function UpdateUserUserPermissions(string $NidUser,array $Resources)
     {
         $resourceGuids = new Collection();

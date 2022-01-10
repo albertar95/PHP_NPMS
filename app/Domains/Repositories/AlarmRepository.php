@@ -146,7 +146,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                             $alarm->AlarmStatus = 0;
                         $alarm->Description = sprintf("پروژه با موضوع %s از تاریخ ارسال مدارک به عتف %d روز می گذرد اما هنوز نامه روگرفت آن در سامانه ثبت نگردیده است",$MasterName,$diff);
                         try{
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }catch(\Exception)
                         {
@@ -196,7 +201,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s از تاریخ ایجاد پروژه %d روز می گذرد اما هنوز نامه حفاظت آن در سامانه ثبت نگردیده است",$MasterName,$diff);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -247,7 +257,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s از تاریخ بکارگیری %d روز می گذرد اما هنوز فرم 30 درصد در سامانه ثبت نگردیده است",$MasterName,$diff);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -298,7 +313,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s از تاریخ بکارگیری %d روز می گذرد اما هنوز فرم 60 درصد در سامانه ثبت نگردیده است",$MasterName,$diff);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -349,7 +369,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s از تاریخ ارائه فرم 60 درصد %d روز می گذرد اما هنوز تاریخ دفاعیه در سامانه ثبت نگردیده است",$MasterName,$diff);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -392,7 +417,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد داور 1 یا 2 می باشد",$MasterName);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -427,7 +457,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد ویراستار می باشد",$MasterName);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -462,7 +497,12 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm->Description = sprintf("پروژه با موضوع %s فاقد استاد راهنما یا استاد مشاور می باشد",$MasterName);
                         try
                         {
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => $alarm->AlarmStatus,
+                                    "Description" => $alarm->Description
+                                ]);
+                            // $alarm->save();
                             $result = true;
                         }
                         catch (\Exception)
@@ -512,8 +552,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','PreImployment')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -524,8 +566,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SecurityLetter')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -536,8 +580,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThirtyLetter')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -548,8 +594,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','SixtyLetter')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -560,8 +608,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','ThesisLetter')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -572,8 +622,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','RefInfo')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -584,8 +636,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','EditorInfo')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }
@@ -596,8 +650,10 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                         $alarm = $this->model->all()->where('NidMaster','=',$NidMaster)->where('AlarmSubject','=','AdvSupInfo')->firstOrFail();
                         if (!is_null($alarm))
                         {
-                            $alarm->AlarmStatus = 0;
-                            $alarm->save();
+                            Alarms::where('NidAlarm',$alarm->NidAlarm)->update(
+                                [
+                                    "AlarmStatus" => 0
+                                ]);
                         }
                         $result = true;
                     }

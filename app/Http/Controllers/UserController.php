@@ -176,7 +176,12 @@ class UserController extends Controller
     }
     public function Profile()
     {
-        return view('User.Profile');
+        $api = new NPMSController();
+        $Users = $api->GetUserDTOById(auth()->user()->NidUser);
+        $logs = $api->GetCurrentUserLogReport(auth()->user()->NidUser);
+        $logins = $api->GetCurrentUserLoginReport(auth()->user()->NidUser);
+        $Permissions = $api->GetAllRolePermissionDTOs();
+        return view('User.Profile',compact('Users','logs','Permissions','logins'));
     }
     public function SubmitEditUser(UserRequest $User)
     {
