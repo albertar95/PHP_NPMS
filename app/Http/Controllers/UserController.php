@@ -47,8 +47,16 @@ class UserController extends Controller
     public function Index(Request $request)
     {
         $api = new NPMSController();
+        $briefs = $api->IndexBriefReport();
+        $charts = $api->IndexChartReport();
+        $chartarrays = [0,0,0,0,0,0,0,0,0,0,0,0];
+        foreach ($charts as $key => $value) {
+            $chartarrays[$key-1] = $value;
+        }
+        $chartvals = join(',',$chartarrays);
+        $alarms = $api->GetFirstPageAlarms();
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"داشبورد");
-        return view('General.Index');
+        return view('General.Index',compact('briefs','chartvals','alarms'));
     }
     public function AddUser(Request $request)
     {

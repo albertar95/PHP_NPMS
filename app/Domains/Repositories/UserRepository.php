@@ -8,9 +8,11 @@ use App\DTOs\DataMapper;
 use App\DTOs\userDTO;
 use App\DTOs\userInPermissionDTO;
 use App\Models\PasswordHistory;
+use App\Models\Projects;
 use App\Models\Resources;
 use App\Models\RolePermissions;
 use App\Models\Roles;
+use App\Models\Scholars;
 use App\Models\Settings;
 use App\Models\User;
 use App\Models\UserPermissions;
@@ -594,6 +596,31 @@ class UserRepository extends BaseRepository implements IUserRepository{
     public function GetSessionSettings()
     {
         return Settings::all()->where('SettingTitle','=','SessionSetting');
+    }
+    public function GetIndexBriefReport():array
+    {
+        $res = [];
+        $scholarCount = Scholars::all()->where('IsDeleted','=',false)->count();
+        $ProjectCount = Projects::all()->count();
+        $DoneProjectCount = Projects::all()->where('FinalApprove','=',true)->count();
+        $res = [$scholarCount,$ProjectCount,$DoneProjectCount,$ProjectCount - $DoneProjectCount];
+        return $res;
+    }
+    public function GetIndexChartReport()
+    {
+        $grouped = Projects::all()->groupBy(function ($item, $key) {
+            return substr($item['PersianCreateDate'],stripos($item['PersianCreateDate'],'/')+1,strrpos($item['PersianCreateDate'],'/')-stripos($item['PersianCreateDate'],'/')-1);
+        });
+        // $projs = Projects::all()->get('PersianCreateDate');
+        // $grouped = $projs->groupBy(function ($item, $key) {
+        //     return substr($item,0,7);
+        // });
+
+
+        $groupCount = $grouped->map(function ($item, $key) {
+            return collect($item)->count();
+        });
+        return $groupCount;
     }
 }
 

@@ -301,6 +301,16 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->UpdateUserUserPermission($NidUser, $Resources);
     }
+    public function IndexBriefReport()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetIndexBriefReport();
+    }
+    public function IndexChartReport()
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetIndexChartReport();
+    }
     public function UpdatePolicy(Request $policy)
     {
         $policies = [

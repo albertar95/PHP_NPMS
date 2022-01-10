@@ -28,6 +28,9 @@ interface IUserRepository
     public function UpdateUserUserPermission(string $NidUser,array $Resources);
     public function UpdateUserPasswordPolicy(array $policy);
     public function GetUserPasswordPolicy();
+    //index reports
+    public function GetIndexBriefReport():array;
+    public function GetIndexChartReport();
     //roles
     public function AddRole(Roles $role);
     public function UpdateRole(Roles $role);
