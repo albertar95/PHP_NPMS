@@ -18,13 +18,13 @@ class SearchController extends Controller
     {
         return view('Search.AdvanceSearch');
     }
-    public function SearchSectionChange(int $SectionId,int $cascadeId = 0)
+    public function SearchSectionChange(Request $request)
     {
         $result = "<option value='0' selected>تمامی موارد</option>";
-        switch ($SectionId)
+        switch ($request->SectionId)
         {
             case 1:
-                switch ($cascadeId)
+                switch ($request->cascadeId)
                 {
                     case 0:
                         $result = Str::of($result)->append("<option value='1'>نام محقق</option>");
@@ -53,7 +53,7 @@ class SearchController extends Controller
                 }
                 break;
             case 2:
-                switch ($cascadeId)
+                switch ($request->cascadeId)
                 {
                     case 0:
                         $result = Str::of($result)->append("<option value='1'>موضوع طرح</option>");
@@ -133,9 +133,9 @@ class SearchController extends Controller
         $result = new JsonResults();
         $result->HasValue = true;
         $response = $api->ComplexSearch($Text);
-        $Projects = $response->Projects;
-        $Scholars = $response->Scholars;
-        $Users = $response->Users;
+        $Projects = $response[0];
+        $Scholars = $response[1];
+        $Users = $response[2];
         $result->Html = view('Search._ComplexSearchResult',compact('Projects','Scholars','Users'))->render();
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);

@@ -35,7 +35,7 @@
                         <td class="priority-2">{{ $prj->GroupName }}</td>
                         <td class="priority-3">% {{ $prj->ProjectStatus }}</td>
                         <td>
-                            <a href="{{ link_to_route('project.ProjectDetail', '', $NidProject = $prj->NidProject) }}"
+                            <a href="/projectdetail/{{ $prj->NidProject }}"
                                 class="btn btn-secondary">جزییات</a>
                         </td>
                     </tr>

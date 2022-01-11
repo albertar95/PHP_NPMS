@@ -4,13 +4,20 @@ namespace App\Domains\Repositories;
 
 use App\Domains\Interfaces\ISearchRepository;
 use App\DTOs\DataMapper;
+use App\Helpers\Casts;
+use App\Models\Majors;
+use App\Models\Oreintations;
 use App\Models\Projects;
 use App\Models\Scholars;
 use App\Models\Settings;
+use App\Models\UnitGroups;
+use App\Models\Units;
 use App\Models\User;
 use App\Models\Users;
 use App\Repository\Eloquent\BaseRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SearchRepository implements ISearchRepository{
     public int $SectionId;
@@ -20,7 +27,7 @@ class SearchRepository implements ISearchRepository{
     public Collection $Projects;//ProjectInitialDTO
     public Collection $Users;//UserDTO
     public Collection $BaseInfo;//Setting
-    public function AdvancedSearch(string $searchText,int $SectionId,bool $Similar,int $ById)
+    public function AdvancedSearchProcess(string $searchText,int $SectionId,int $Similar,int $ById)
     {
         $ProjectResult = new Collection();
         $ScholarResult = new Collection();
@@ -48,13 +55,14 @@ class SearchRepository implements ISearchRepository{
                 break;
         }
         return [$ScholarResult,$ProjectResult,$UserResult,$BaseInfoResult];
+        // return $this->SearchInUsers($searchText,$Similar,$ById);
     }
-    public function ComplexSearch(string $searchText,bool $Similar,int $ById):SearchRepository
+    public function ComplexSearch(string $searchText,bool $Similar,int $ById)
     {
-        $this->Scholars = $this->SearchInScholars($searchText,$Similar,$ById);
-        $this->Projects = $this->SearchInProjects($searchText,$Similar,$ById);
-        $this->Users = $this->SearchInUsers($searchText,$Similar,$ById);
-        return $this;
+        $ScholarResult = $this->SearchInScholars($searchText,$Similar,$ById);
+        $ProjectResult = $this->SearchInProjects($searchText,$Similar,$ById);
+        $UserResult = $this->SearchInUsers($searchText,$Similar,$ById);
+        return [$ScholarResult,$ProjectResult,$UserResult];
     }
     private function SearchInScholars(string $searchText,bool $Similar,int $ById):Collection//scholarlistdto
     {
@@ -64,138 +72,154 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    // foreach (var sch in db.Scholars.Where(p => (p.FirstName + " " + p.LastName).Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('NationalCode','like','%'.$searchText.'%');//->get('NationalCode')->contains($searchText);
-                    foreach ($tmpScholar as $scholar)
-                    {
-                        $result->push(DataMapper::MapToScholarListDTO($scholar));
-                    }
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('Mobile','like','%'.$searchText.'%');//->get('Mobile')->contains($searchText);
-                    foreach ($tmpScholar as $scholar)
-                    {
-                        $result->push(DataMapper::MapToScholarListDTO($scholar));
-                    }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains($scholar->FirstName,$searchText) || Str::contains($scholar->LastName,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                        if(Str::contains($scholar->NationalCode,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                        if(Str::contains($scholar->Mobile,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                        if(Str::contains(Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                        if(Str::contains(Oreintations::all()->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title,$searchText))
                         {
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
                         }
                     }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Settings::all()->where('SettingKey','=','MillitaryStatus') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
                         {
-                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
-                    // foreach (var sch in db.Scholars.Where(p => p.Major.Title.Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    // foreach (var sch in db.Scholars.Where(p => p.Oreintation.Title.Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Settings::all()->where('SettingKey','=','CollaborationType') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
                         {
-                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
-                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Settings::all()->where('SettingKey','=','GradeId') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
                         {
-                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
+                        }
+                    }
+                    foreach (Settings::all()->where('SettingKey','=','College') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
+                        {
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
                     break;
                 case 1:
-                    // foreach (var sch in db.Scholars.Where(p => (p.FirstName + " " + p.LastName).Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains($scholar->FirstName,$searchText) || Str::contains($scholar->LastName,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     break;
                 case 2:
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('NationalCode','like','%'.$searchText.'%');//->get('NationalCode')->contains($searchText);
-                    foreach ($tmpScholar as $scholar)
-                    {
-                        $result->push(DataMapper::MapToScholarListDTO($scholar));
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains($scholar->NationalCode,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
                     }
                     break;
                 case 3:
-                    $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('Mobile','like','%'.$searchText.'%');//->get('Mobile')->contains($searchText);
-                    foreach ($tmpScholar as $scholar)
-                    {
-                        $result->push(DataMapper::MapToScholarListDTO($scholar));
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains($scholar->Mobile,$searchText))
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
                     }
                     break;
                 case 4:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','MillitaryStatus')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Settings::all()->where('SettingKey','=','MillitaryStatus') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
                         {
-                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('MillitaryStatus','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
                     break;
                 case 5:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','CollaborationType')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Settings::all()->where('SettingKey','=','CollaborationType') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
                         {
-                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('CollaborationType','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
                     break;
                 case 6:
-                    // foreach (var sch in db.Scholars.Where(p => p.Major.Title.Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    break;
-                case 7:
-                    // foreach (var sch in db.Scholars.Where(p => p.Oreintation.Title.Contains(searchtext) && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    break;
-                case 8:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','GradeId')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains(Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title,$searchText))
                         {
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
                         }
                     }
                     break;
-                case 9:
-                    $tmpSetting = Settings::all()->where('SettingKey','=','College')->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
-                    {
-                        $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
-                        foreach ($tmpScholar as $scholar)
+                case 7:
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Str::contains(Oreintations::all()->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title,$searchText))
                         {
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
+                    break;
+                case 8:
+                    foreach (Settings::all()->where('SettingKey','=','GradeId') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
+                        {
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('GradeId','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
+                        }
+                    }
+                    break;
+                case 9:
+                    foreach (Settings::all()->where('SettingKey','=','College') as $key => $setting) {
+                        if(Str::contains($setting->SettingTitle,$searchText))
+                        {
+                            $tmpScholar = Scholars::all()->where('IsDeleted','=',false)->where('college','=',$setting->SettingValue);
+                            foreach ($tmpScholar as $scholar)
+                            {
+                                $result->push(DataMapper::MapToScholarListDTO($scholar));
+                            }
                         }
                     }
                     break;
@@ -206,10 +230,13 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    // foreach (var sch in db.Scholars.Where(p => (p.FirstName + " " + p.LastName) == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all() as $scholar)
+                    {
+                        if($scholar->FirstName.' '.$scholar->LastName == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     $tmpScholar = Scholars::all()->where('NationalCode','=',$searchText)->where('IsDeleted','=',false);
                     foreach ($tmpScholar as $scholar)
                     {
@@ -238,14 +265,18 @@ class SearchRepository implements ISearchRepository{
                             $result->push(DataMapper::MapToScholarListDTO($scholar));
                         }
                     }
-                    // foreach (var sch in db.Scholars.Where(p => p.Major.Title == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
-                    // foreach (var sch in db.Scholars.Where(p => p.Oreintation.Title == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Oreintations::all()->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     $tmpSetting = Settings::all()->where('SettingTitle','=',$searchText)->where('SettingKey','=','GradeId');
                     foreach($tmpSetting as $setting)
                     {
@@ -266,10 +297,13 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 1:
-                    // foreach (var sch in db.Scholars.Where(p => (p.FirstName + " " + p.LastName) == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all() as $scholar)
+                    {
+                        if($scholar->FirstName.' '.$scholar->LastName == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     break;
                 case 2:
                     $tmpScholar = Scholars::all()->where('NationalCode','=',$searchText)->where('IsDeleted','=',false);
@@ -308,16 +342,20 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 6:
-                    // foreach (var sch in db.Scholars.Where(p => p.Major.Title == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     break;
                 case 7:
-                    // foreach (var sch in db.Scholars.Where(p => p.Oreintation.Title == searchtext && p.IsDeleted == false))
-                    // {
-                    //     result.Add(mapper.MapToScholarListDTO(sch));
-                    // }
+                    foreach (Scholars::all()->where('IsDeleted','=',false) as $key => $scholar) {
+                        if(Oreintations::all()->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToScholarListDTO($scholar));
+                        }
+                    }
                     break;
                 case 8:
                     $tmpSetting = Settings::all()->where('SettingTitle','=',$searchText)->where('SettingKey','=','GradeId');
@@ -343,13 +381,7 @@ class SearchRepository implements ISearchRepository{
                     break;
             }
         }
-        $uniques = new Collection();//ScholarListDTO
-        $grouped = $result->groupBy('NidScholar');
-        foreach ($grouped as $itm)
-        {
-            $uniques->push($result->where('NidScholar','=',$itm)->firstOrFail());
-        }
-        return $uniques;
+        return $result->unique();
     }
     private function SearchInProjects(string $searchText,bool $Similar,int $ById):Collection//ProjectInitialDTO
     {
@@ -359,192 +391,210 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpProject = Projects::all()->where('Subject','like','%'.$searchText.'%');//->get('Subject')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Subject,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains(Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->ProjectNumber,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->FirstName,$searchText) || Str::contains($project->LastName,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->Supervisor,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->Advisor,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->Referee1,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->Referee2,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
-                    // foreach (var prj in db.Projects.Where(p => p.Unit.Title.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // foreach (var prj in db.Projects.Where(p => p.UnitGroup.Title.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    $tmpProject = Projects::all()->where('ProjectNumber','like','%'.$searchText.'%');//->get('ProjectNumber')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->ImploymentDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->TenPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->PreImploymentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->ThirtyPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->SixtyPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->SecurityLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(Str::contains($project->ThesisDefenceDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
-                    // foreach (var prj in db.Projects.Where(p => (p.Scholar.FirstName + " " + p.Scholar.LastName).Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ImploymentDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.TenPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.PreImploymentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThirtyPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SixtyPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SecurityLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    $tmpProject = Projects::all()->where('Supervisor','like','%'.$searchText.'%');//->get('Supervisor')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
-                    }
-                    $tmpProject = Projects::all()->where('Advisor','like','%'.$searchText.'%');//->get('Advisor')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
-                    }
-                    $tmpProject = Projects::all()->where('Referee1','like','%'.$searchText.'%');//->get('Referee1')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
-                    }
-                    $tmpProject = Projects::all()->where('Referee2','like','%'.$searchText.'%');//->get('Referee2')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
-                    }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThesisDefenceDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
                     break;
                 case 1:
-                    $tmpProject = Projects::all()->where('Subject','like','%'.$searchText.'%');//->get('Subject')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Subject,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 2:
-                    // foreach (var prj in db.Projects.Where(p => p.Unit.Title.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains(Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 3:
-                    // foreach (var prj in db.Projects.Where(p => p.UnitGroup.Title.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 4:
-                    $tmpProject = Projects::all()->where('ProjectNumber','like','%'.$searchText.'%');//->get('ProjectNumber')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->ProjectNumber,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 5:
-                    // foreach (var prj in db.Projects.Where(p => (p.Scholar.FirstName + " " + p.Scholar.LastName).Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->FirstName,$searchText) || Str::contains($project->LastName,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 6:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ImploymentDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->ImploymentDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 7:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.TenPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->TenPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 8:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.PreImploymentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->PreImploymentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 9:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThirtyPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->ThirtyPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 10:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SixtyPercentLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->SixtyPercentLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 11:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SecurityLetterDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->SecurityLetterDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 12:
-                    $tmpProject = Projects::all()->where('Supervisor','like','%'.$searchText.'%');//->get('Supervisor')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Supervisor,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 13:
-                    $tmpProject = Projects::all()->where('Advisor','like','%'.$searchText.'%');//->get('Advisor')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Advisor,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 14:
-                    $tmpProject = Projects::all()->where('Referee1','like','%'.$searchText.'%');//->get('Referee1')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Referee1,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 15:
-                    $tmpProject = Projects::all()->where('Referee2','like','%'.$searchText.'%');//->get('Referee2')->contains($searchText);
-                    foreach ($tmpProject as $project)
-                    {
-                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->Referee2,$searchText))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
                     }
                     break;
                 case 16:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThesisDefenceDate.Contains(searchtext)))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    foreach (Projects::all() as $key => $project) {
+                        if(Str::contains($project->ThesisDefenceDate,$searchtext))
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
             }
         }
@@ -558,53 +608,58 @@ class SearchRepository implements ISearchRepository{
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    // foreach (var prj in db.Projects.Where(p => p.Unit.Title == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // foreach (var prj in db.Projects.Where(p => p.UnitGroup.Title == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $project)
+                    {
+                        if(Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                        if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     $tmpProject = Projects::all()->where('ProjectNumber','=',$searchText);
                     foreach ($tmpProject as $project)
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    // foreach (var prj in db.Projects.Where(p => (p.Scholar.FirstName + " " + p.Scholar.LastName) == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ImploymentDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.TenPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.PreImploymentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThirtyPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SixtyPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SecurityLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('ImploymentDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('TenPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('PreImploymentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('ThirtyPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('SixtyPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('SecurityLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
+                    $tmpProject = Projects::all()->where('ThesisDefenceDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     $tmpProject = Projects::all()->where('Supervisor','=',$searchText);
                     foreach ($tmpProject as $project)
                     {
@@ -625,11 +680,6 @@ class SearchRepository implements ISearchRepository{
                     {
                         $result->push(DataMapper::MapToProjectInitialDTO($project));
                     }
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThesisDefenceDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
                     break;
                 case 1:
                     $tmpProject = Projects::all()->where('Subject','=',$searchText);
@@ -639,16 +689,22 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 2:
-                    // foreach (var prj in db.Projects.Where(p => p.Unit.Title == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $project)
+                    {
+                        if(Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 3:
-                    // foreach (var prj in db.Projects.Where(p => p.UnitGroup.Title == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    foreach (Projects::all() as $project)
+                    {
+                        if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title == $searchText)
+                        {
+                            $result->push(DataMapper::MapToProjectInitialDTO($project));
+                        }
+                    }
                     break;
                 case 4:
                     $tmpProject = Projects::all()->where('ProjectNumber','=',$searchText);
@@ -664,46 +720,52 @@ class SearchRepository implements ISearchRepository{
                     // }
                     break;
                 case 6:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ImploymentDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('ImploymentDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 7:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.TenPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('TenPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 8:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.PreImploymentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('PreImploymentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 9:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThirtyPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('ThirtyPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 10:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SixtyPercentLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('SixtyPercentLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 11:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.SecurityLetterDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('SecurityLetterDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
                 case 12:
                     $tmpProject = Projects::all()->where('Supervisor','=',$searchText);
@@ -734,77 +796,54 @@ class SearchRepository implements ISearchRepository{
                     }
                     break;
                 case 16:
-                    // searchtext = Helpers.Casts.EnglishToPersianDigits(searchtext);
-                    // foreach (var prj in db.Projects.Where(p => p.ThesisDefenceDate == searchtext))
-                    // {
-                    //     result.Add(mapper.MapToProjectInitialDTO(prj));
-                    // }
+                    $searchtext = Casts::EnglishToPersianDigits($searchText);
+                    $tmpProject = Projects::all()->where('ThesisDefenceDate','=',$searchtext);
+                    foreach ($tmpProject as $project)
+                    {
+                        $result->push(DataMapper::MapToProjectInitialDTO($project));
+                    }
                     break;
             }
         }
-        $uniques = new Collection();//ProjectInitialDTO
-        $grouped = $result->groupBy('NidProject');
-        foreach ($grouped as $itm)
-        {
-            $uniques->push($result->where('NidProject','=',$itm)->firstOrFail());
-        }
-        return $uniques;
+        return $result->unique();
     }
-    private function SearchInUsers(string $searchText,bool $Similar,int $ById):Collection//UserDTO
+    private function SearchInUsers(string $searchText,bool $Similar,int $ById)//UserDTO
     {
-        // $result = new Collection();//UserDTO
+        $result = new Collection();//UserDTO
         if($Similar)
         {
             switch ($ById)
             {
                 case 0:
-                    $result = new Collection();//UserDTO
-                    // $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');//->get('UserName')->contains($searchText);
-                    $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');
-                    foreach ($tmpUser as $user)
+                    foreach (User::all() as $user)
                     {
-                        $result->push(DataMapper::MapToUserDTO($user));
+                        if(Str::contains($user->UserName, $searchText))
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
+                        if(Str::contains($user->FirstName, $searchText) || Str::contains($user->LastName, $searchText))
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
                     }
-                    // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName).Contains(searchtext) && p.IsDisabled == false))
-                    // {
-                    //     result.Add(mapper.MapToUserDTO(usr));
-                    // }
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).get(q => q.UserId))
-                    // {
-                    //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
-                    //     {
-                    //         result.Add(mapper.MapToUserDTO(usr));
-                    //     }
-                    // }
-                    return $result;
                     break;
                 case 1:
-                    $result = new Collection();//UserDTO
-                    $tmpUser = User::all()->where('UserName','like','%'.$searchText.'%');//->get('UserName')->contains($searchText);
-                    foreach ($tmpUser as $user)
+                    foreach (User::all() as $user)
                     {
-                        $result->push(DataMapper::MapToUserDTO($user));
+                        if(Str::contains($user->UserName, $searchText))
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
                     }
-                    return $result;
                     break;
                 case 2:
-                    $result = new Collection();//UserDTO
-                    // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName).Contains(searchtext) && p.IsDisabled == false))
-                    // {
-                    //     result.Add(mapper.MapToUserDTO(usr));
-                    // }
-                    return $result;
-                    break;
-                case 3:
-                    $result = new Collection();//UserDTO
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName.Contains(searchtext)).get(q => q.UserId))
-                    // {
-                    //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
-                    //     {
-                    //         result.Add(mapper.MapToUserDTO(usr));
-                    //     }
-                    // }
-                    return $result;
+                    foreach (User::all() as $user)
+                    {
+                        if(Str::contains($user->FirstName, $searchText) || Str::contains($user->LastName, $searchText))
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
+                    }
                     break;
             }
         }
@@ -813,67 +852,32 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $result = new Collection();//UserDTO
-                    $tmpUser = User::all();
-                    foreach ($tmpUser as $user)
+                    foreach (User::all() as $user)
                     {
-                        $result->push(DataMapper::MapToUserDTO($user));
+                        if($user->FirstName.' '.$user->LastName == $searchText || $user->UserName == $searchText)
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
                     }
-                    // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName) == searchtext && p.IsDisabled == false))
-                    // {
-                    //     result.Add(mapper.MapToUserDTO(usr));
-                    // }
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).get(q => q.UserId))
-                    // {
-                    //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
-                    //     {
-                    //         result.Add(mapper.MapToUserDTO(usr));
-                    //     }
-                    // }
-                    return $result;
                     break;
                 case 1:
-                    $result = new Collection();//UserDTO
-                    $tmpUser = User::all()->where('UserName','=',$searchText);
-                    foreach ($tmpUser as $user)
+                    foreach (User::all()->where('UserName','=',$searchText) as $user)
                     {
                         $result->push(DataMapper::MapToUserDTO($user));
                     }
-                    return $result;
                     break;
                 case 2:
-                    $result = new Collection();//UserDTO
-                    // foreach (var usr in db.Users.Where(p => (p.FirstName + " " + p.LastName) == searchtext && p.IsDisabled == false))
-                    // {
-                    //     result.Add(mapper.MapToUserDTO(usr));
-                    // }
-                    return $result;
-                    break;
-                case 3:
-                    $result = new Collection();//UserDTO
-                    // foreach (var res in db.UserPermissions.Where(p => p.Resource.ResourceName == searchtext).get(q => q.UserId))
-                    // {
-                    //     foreach (var usr in db.Users.Where(p => p.NidUser == res && p.IsDisabled == false))
-                    //     {
-                    //         result.Add(mapper.MapToUserDTO(usr));
-                    //     }
-                    // }
-                    return $result;
+                    foreach (User::all() as $user)
+                    {
+                        if($user->FirstName.' '.$user->LastName == $searchText)
+                        {
+                            $result->push(DataMapper::MapToUserDTO($user));
+                        }
+                    }
                     break;
             }
         }
-        // $uniques = new Collection();//UserDTO
-        // $grouped = $result->groupBy('NidUser');
-        // foreach ($grouped as $itm)
-        // {
-        //     $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
-        // }
-        // $tmpUser = User::all()->where('UserName','=',$searchText);
-        // foreach ($tmpUser as $user)
-        // {
-        //     $result->push(DataMapper::MapToUserDTO($user));
-        // }
-        // return $result;
+        return $result->unique();
     }
     private function SearchInBaseInfo(string $searchText,bool $Similar,int $ById):Collection//Setting
     {
@@ -883,17 +887,21 @@ class SearchRepository implements ISearchRepository{
             switch ($ById)
             {
                 case 0:
-                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
+                    foreach (Settings::all()->where('IsDeleted','=',false) as $setting)
                     {
-                        $result->push($setting);
+                        if(Str::contains($setting->SettingTitle,$searchText))
+                        {
+                            $result->push($setting);
+                        }
                     }
                     break;
                 case 1:
-                    $tmpSetting = Settings::all()->where('IsDeleted','=',false)->where('SettingTitle','like','%'.$searchText.'%');//->get('SettingTitle')->contains($searchText);
-                    foreach ($tmpSetting as $setting)
+                    foreach (Settings::all()->where('IsDeleted','=',false) as $setting)
                     {
-                        $result->push($setting);
+                        if(Str::contains($setting->SettingTitle,$searchText))
+                        {
+                            $result->push($setting);
+                        }
                     }
                     break;
             }
@@ -918,13 +926,7 @@ class SearchRepository implements ISearchRepository{
                     break;
             }
         }
-        $uniques = new Collection();//Setting
-        $grouped = $result->groupBy('NidSetting');
-        foreach ($grouped as $itm)
-        {
-            $uniques->push($result->where('NidUser','=',$itm)->firstOrFail());
-        }
-        return $uniques;
+        return $result->unique();
     }
 }
 

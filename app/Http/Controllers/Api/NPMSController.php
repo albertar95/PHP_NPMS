@@ -623,10 +623,10 @@ class NPMSController extends Controller
     }
 
     //search section
-    public function AdvancedSearch(string $FsearchText, int $FSectionId = 0, int $FById = 0, bool $FSimilar = true)
+    public function AdvancedSearch(string $FsearchText, int $FSectionId = 0, int $FById = 0, int $FSimilar = 1)
     {
         $repo = new SearchRepository();
-        return $repo->AdvancedSearch($FsearchText,$FSectionId,$FSimilar,$FById);
+        return $repo->AdvancedSearchProcess($FsearchText,$FSectionId,$FSimilar,$FById);
     }
     public function ComplexSearch(string $searchText, int $ById = 0, bool $Similar = true)
     {
