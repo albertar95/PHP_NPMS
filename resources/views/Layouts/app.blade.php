@@ -149,12 +149,12 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if(in_array('5',$sharedData['UserAccessedEntities']))
                             @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',5)->pluck('rowValue')[0])[0] == 1)
-                            <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">ارسال پیام</a>
+                            <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}" style="text-align:right;">ارسال پیام</a>
                             @endif
                         @endif
                         @if(in_array('5',$sharedData['UserAccessedEntities']))
                             @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',5)->pluck('rowValue')[0])[4] == 1)
-                            <a class="collapse-item" href="{{ route('message.Messages') }}" style="text-align:right;">صندوق پیام</a>
+                            <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}" style="text-align:right;">صندوق پیام</a>
                             @endif
                         @endif
                     </div>
@@ -255,17 +255,6 @@
                                 <h6 class="dropdown-header" style="text-align:center;">
                                     اعلان ها
                                 </h6>
-                                @*<a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>*@
                                 <a class="dropdown-item text-center small text-gray-500" href="/alarms/0">نمایش تمامی اعلان ها</a>
                             </div>
                         </li>
@@ -283,21 +272,7 @@
                                 <h6 class="dropdown-header" style="text-align:center;">
                                     پیام ها
                                 </h6>
-                                @*<a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="{{ URL('Content/img/undraw_profile_1.svg') }}"
-                                             alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">
-                                            Hi there! I am wondering if you can help me with a
-                                            problem I've been having.
-                                        </div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>*@
-                                <a class="dropdown-item text-center small text-gray-500" href="{{ route('message.Messages') }}">نمایش تمامی پیام ها</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="/messages/{{ auth()->user()->NidUser }}">نمایش تمامی پیام ها</a>
                             </div>
                         </li>
                         <li class="topbar-divider d-none d-sm-block"></li>
@@ -439,6 +414,21 @@
     $(function()
     {
         GetUsersAlarms();
+        GetUsersMessages();
+            setInterval(function () {
+                $.ajax(
+                {
+                    url: '/getrecievemessageneeded',
+                    type: 'get',
+                    datatype: 'json',
+                    data: { NidUser: $("#txtUserId").text() },
+                    success: function (result) {
+                        if (result.HasValue)
+                            GetUsersMessages();
+                    },
+                    error: function () {}
+                });
+            }, 300 * 1000);
     });
         function AdvanceInProgressBar(newValue)
         {
@@ -567,6 +557,36 @@
                         $("#SearchResult").html('');
                         $("#SearchResultSm").html('');
                     }
+                });
+        }
+        function CheckForMessages()
+        {
+            $.ajax(
+                {
+                    url: '/getrecievemessageneeded/' + $("#txtUserId").text(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (result) {
+                        if (result.HasValue)
+                            GetUsersMessages();
+                    },
+                    error: function () {}
+                });
+        }
+        function GetUsersMessages()
+        {
+            $.ajax(
+                {
+                    url: '/getmessages/' + $("#txtUserId").text(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (result) {
+                        if (result.HasValue) {
+                            $("#MessagesDrop").html(result.Html);
+                            $("#messageCount").text(result.Message);
+                        }
+                    },
+                    error: function () { }
                 });
         }
         function GetUsersAlarms()

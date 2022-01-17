@@ -15,14 +15,15 @@ class messageDTO extends Model
     public string $RelateId;
     public string $Title;
     public string $MessageContent;
-    public Boolean $IsRead;
-    public Boolean $IsRecieved;
-    public Boolean $IsDeleted;
+    public bool $IsRead;
+    public bool $IsRecieved;
+    public bool $IsDeleted;
     public string $SenderUsername;
     public string $SenderName;
     public string $RecieverUsername;
     public string $RecieverName;
-    public DateTime $CreateDate;
-    public DateTime $ReadDate;
-    public DateTime $DeleteDate;
+    public string $CreateDate;
+    public string $PersianCreateDate;
+    public string $ReadDate;
+    public string $DeleteDate;
 }

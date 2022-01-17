@@ -49,6 +49,7 @@ class UserController extends Controller
         $api = new NPMSController();
         $briefs = $api->IndexBriefReport();
         $charts = $api->IndexChartReport();
+        $messages = $api->GetAllUsersMessages(auth()->user()->NidUser);
         $chartarrays = [0,0,0,0,0,0,0,0,0,0,0,0];
         foreach ($charts as $key => $value) {
             $chartarrays[$key-1] = $value;
@@ -56,7 +57,7 @@ class UserController extends Controller
         $chartvals = join(',',$chartarrays);
         $alarms = $api->GetFirstPageAlarms();
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"داشبورد");
-        return view('General.Index',compact('briefs','chartvals','alarms'));
+        return view('General.Index',compact('briefs','chartvals','alarms','messages'));
     }
     public function AddUser(Request $request)
     {

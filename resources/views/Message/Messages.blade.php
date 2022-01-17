@@ -51,8 +51,8 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <select class="form-control allWidth" data-ng-style="btn-primary" name="RecieverId" style="padding:0 .75rem;">
                                             <option value="0" disabled selected>انتخاب دریافت کننده</option>
-                                            @foreach ($Recievers->Where('NidUser','!=','slvm.NidUser')->orderby('LastName') as $rsc)
-                                                <option value="{{ $rsc->NidUser }}">{{ $rsc->Username }}<text> ({{ $rsc->FirstName }}&nbsp;{{ $rsc->LastName }}</text></option>
+                                            @foreach ($Recievers->Where('NidUser','!=','slvm.NidUser')->sortBy('LastName') as $rsc)
+                                                <option value="{{ $rsc->NidUser }}">{{ $rsc->Username }}<i> ({{ $rsc->FirstName }} {{ $rsc->LastName }})</i></option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -62,7 +62,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" value="" id="NidMessage" name="NidMessage" hidden />
-                                        <input type="text" value="@slvm.NidUser" id="SenderId" name="SenderId" hidden />
+                                        <input type="text" value="{{ auth()->user()->NidUser }}" id="SenderId" name="SenderId" hidden />
                                         <input type="text" class="form-control form-control-user" id="Title" name="Title"
                                                placeholder="عنوان">
                                     </div>
@@ -89,7 +89,6 @@
                             </form>
                         </div>
                     </div>
-                    {{ $tmpCounter = 1; }}
                     <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                         <!-- Card Header - Accordion -->
                         <a href="#collapseMessagesItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -119,17 +118,16 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        @foreach ($Inbox as $msg)
+                                        @foreach ($Inbox as $key => $msg)
                                             <tr>
-                                                <td>{{ $tmpCounter }}</td>
+                                                <td>{{ $key + 1 }}</td>
                                                 <td>{{ $msg->SenderName }}</td>
                                                 <td>{{ $msg->Title }}</td>
                                                 <td>{{ $msg->MessageContent }}</td>
                                                 <td>
-                                                    <a href="{{ link_to_route('message.SingleMessage','',[$NidMessage = $msg->NidMessage,$ReadBy = 1]) }}" class="btn btn-secondary">جزییات پیام</a>
+                                                    <a href="/singlemessage/{{ $msg->NidMessage }}/1" class="btn btn-secondary">جزییات پیام</a>
                                                 </td>
                                             </tr>
-                                            {{ $tmpCounter++; }}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -165,17 +163,16 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        @foreach ($SendMessage as $msg)
+                                        @foreach ($SendMessage as $key => $msg)
                                             <tr>
-                                                <td>{{ $tmpCounter }}</td>
+                                                <td>{{ $key + 1 }}</td>
                                                 <td>{{ $msg->RecieverName }}</td>
                                                 <td>{{ $msg->Title }}</td>
                                                 <td>{{ $msg->MessageContent }}</td>
                                                 <td>
-                                                    <a href="{{ link_to_route('message.SingleMessage','',[$NidMessage = $msg->NidMessage]) }}" class="btn btn-secondary">جزییات پیام</a>
+                                                    <a href="/singlemessage/{{ $msg->NidMessage }}/0" class="btn btn-secondary">جزییات پیام</a>
                                                 </td>
                                             </tr>
-                                            {{ $tmpCounter++; }}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -196,7 +193,7 @@
                 e.preventDefault();
                 $.ajax(
                     {
-                        url: '@Url.Action("SubmitSendMessage", "Home")',
+                        url: '/submitsendmessage',
                         type: 'post',
                         datatype: 'json',
                         data: $("#SendMessageForm").serialize(),
@@ -212,8 +209,8 @@
                                 $('#SendMessageForm').each(function () { this.reset(); });
                                 $.ajax(
                                     {
-                                        url: '@Url.Action("GetSendMessages", "Home")',
-                                        type: 'post',
+                                        url: '/getsendmessages',
+                                        type: 'get',
                                         datatype: 'json',
                                         data: { NidUser: $("#SenderId").val() },
                                         success: function (result) {

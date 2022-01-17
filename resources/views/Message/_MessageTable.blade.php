@@ -1,6 +1,5 @@
 {{-- @model List<DataAccessLibrary.DTOs.MessageDTO> --}}
 
-    {{ $tmpCounter = 1; }}
     <div class="collapse show" id="collapseSendMessagesItems" style="padding:.75rem;">
         <div class="table-responsive" dir="ltr" id="SendMessagesTableWrapper">
             <table class="table table-bordered" id="SendMessagesdataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
@@ -23,17 +22,16 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                    @foreach ($messages as $msg)
+                    @foreach ($messages as $key => $msg)
                         <tr>
-                            <td>{{ $tmpCounter }}</td>
+                            <td>{{ $key + 1 }}</td>
                             <td>{{ $msg->RecieverName }}</td>
                             <td>{{ $msg->Title }}</td>
                             <td>{{ $msg->MessageContent }}</td>
                             <td>
-                                <a href="{{ link_to_route('message.SingleMessage','',[$NidMessage = $msg->NidMessage]) }}" class="btn btn-secondary">جزییات پیام</a>
+                                <a href="/singlemessage/{{ $msg->NidMessage }}/0" class="btn btn-secondary">جزییات پیام</a>
                             </td>
                         </tr>
-                        {{ $tmpCounter++; }}
                     @endforeach
                 </tbody>
             </table>

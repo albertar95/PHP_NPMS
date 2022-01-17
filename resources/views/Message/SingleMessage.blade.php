@@ -47,15 +47,25 @@
                                 <p style="text-align:right;" id="ErrorMessage"></p>
                             </div>
                             <form class="user" id="SendMessageForm" enctype="application/x-www-form-urlencoded">
-                                @foreach ($Inbox->orderby('CreateDate') as $msg)
+                                @foreach ($Inbox->sortBy('CreateDate') as $msg)
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;">
                                             <label style="padding-top:.8rem;">فرستنده : </label>
-                                            <input type="text" class="form-control form-control-user" value="@msg.SenderName" readonly>
+                                            <input type="text" class="form-control form-control-user" value="{{ $msg->SenderName }}" readonly>
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
+                                            <label style="padding-top:.8rem;">گیرنده : </label>
+                                            <input type="text" class="form-control form-control-user" value="{{ $msg->RecieverName }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;">
                                             <label style="padding-top:.8rem;">عنوان پیام : </label>
-                                            <input type="text" class="form-control form-control-user" value="@msg.Title" readonly>
+                                            <input type="text" class="form-control form-control-user" value="{{ $msg->Title }}" readonly>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;">
+                                            <label style="padding-top:.8rem;">تاریخ : </label>
+                                            <input type="text" class="form-control form-control-user" value="{{ $msg->PersianCreateDate }}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -63,11 +73,12 @@
                                             <textarea class="form-control" readonly placeholder="متن پیام" rows="5">{{ $msg->MessageContent }}</textarea>
                                         </div>
                                     </div>
+                                    <hr style="border-top: 1px solid rgba(0, 0, 0, 0.25);" />
                                 @endforeach
                                 <h2 style="padding:2rem;">ارسال پاسخ پیام</h2>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="RecieverId" name="RecieverId" value="@Model.SingleMessage.SenderId" readonly hidden
+                                        <input type="text" class="form-control form-control-user" id="RecieverId" name="RecieverId" value="{{ $SingleMessage->SenderId }}" readonly hidden
                                                placeholder="دریافت کننده">
                                     </div>
                                     <div class="col-sm-6">
@@ -75,11 +86,11 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" value="@Model.SingleMessage.NidMessage" id="NidCurrentMessage" hidden>
-                                        <input type="number" value="@Model.ReadBy" id="ReadBy" hidden>
+                                        <input type="text" class="form-control form-control-user" value="{{ $SingleMessage->NidMessage }}" id="NidCurrentMessage" hidden>
+                                        <input type="number" value="{{ $readby }}@Model.ReadBy" id="ReadBy" hidden>
                                         <input type="text" value="" id="NidMessage" name="NidMessage" hidden />
-                                        <input type="text" value="@Model.SingleMessage.NidMessage" id="RelateId" name="RelateId" hidden />
-                                        <input type="text" value="@slvm.NidUser" id="SenderId" name="SenderId" hidden />
+                                        <input type="text" value="{{ $SingleMessage->NidMessage }}" id="RelatedId" name="RelatedId" hidden />
+                                        <input type="text" value="{{ auth()->user()->NidUser }}" id="SenderId" name="SenderId" hidden />
                                         <input type="text" class="form-control form-control-user" id="Title" name="Title"
                                                placeholder="عنوان">
                                     </div>
@@ -119,8 +130,8 @@
             {
             $.ajax(
                 {
-                    url: '@Url.Action("ReadMessage", "Home")',
-                    type: 'post',
+                    url: '/readmessage',
+                    type: 'get',
                     datatype: 'json',
                     data: { NidMessage: $("#NidCurrentMessage").val() },
                     success: function () {},
@@ -132,7 +143,7 @@
                 e.preventDefault();
                 $.ajax(
                     {
-                        url: '@Url.Action("SubmitSendMessage", "Home")',
+                        url: '/submitsendmessage',
                         type: 'post',
                         datatype: 'json',
                         data: $("#SendMessageForm").serialize(),

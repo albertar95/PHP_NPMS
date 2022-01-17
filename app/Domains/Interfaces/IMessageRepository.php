@@ -15,5 +15,5 @@ interface IMessageRepository
     public function RecieveMessage(string $NidMessage, bool $RecieveStatus = true):bool;
     public function RecieveMessageNeeded(string $NidUser) :bool;
     public function GetMessageDTOById(string $NidMessage):messageDTO;
-    public function GetMessageHirarchyById(string $NidMessage):Collection;
+    public function GetMessageHirarchyById(string $NidMessage);
 }

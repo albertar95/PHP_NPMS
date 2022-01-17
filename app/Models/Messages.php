@@ -11,6 +11,7 @@ class Messages extends Model
     protected $table = 'messages';
     protected $primaryKey = 'NidMessage';
     public    $timestamps = false;
+    public $incrementing = false;
     // protected $fillable = [];
     // protected $visible = [];
     // protected $hidden = [];

@@ -33,10 +33,11 @@ Route::get("getalarms",[AlarmController::class,"GetAlarms"])->name('alarm.GetAla
 Route::get("alarms/{type}",[AlarmController::class,"Alarms"])->name('alarm.Alarms');
 
 //message routes
-Route::get("getmessages",[MessageController::class,"GetMessages"])->name('message.GetMessages');
-Route::get("messages",[MessageController::class,"Messages"])->name('message.Messages');
+Route::get("getmessages/{NidUser}",[MessageController::class,"GetMessages"])->name('message.GetMessages');
+Route::get("messages/{NidUser}",[MessageController::class,"Messages"])->name('message.Messages');
 Route::get("getsendmessages",[MessageController::class,"GetSendMessages"])->name('message.GetSendMessages');
-Route::get("singlemessage",[MessageController::class,"SingleMessage"])->name('message.SingleMessage');
+Route::get("getrecievemessageneeded/{NidUser}",[MessageController::class,"GetRecieveMessageNeeded"])->name('message.GetRecieveMessageNeeded');
+Route::get("singlemessage/{NidMessage}/{ReadBy}",[MessageController::class,"SingleMessage"])->name('message.SingleMessage');
 Route::post("submitsendmessage",[MessageController::class,"SubmitSendMessage"])->name('message.SubmitSendMessage');
 Route::post("submitreplymessage",[MessageController::class,"SubmitReplyMessage"])->name('message.SubmitReplyMessage');
 Route::get("readmessage",[MessageController::class,"ReadMessage"])->name('message.ReadMessage');

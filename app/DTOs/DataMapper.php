@@ -22,6 +22,8 @@ use App\Models\UserPermissions;
 use App\Models\Users;
 use Brick\Math\BigInteger;
 use DateTime;
+use Hekmatinasser\Verta\Facades\Verta;
+use Hekmatinasser\Verta\Verta as VertaVerta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Guid\Guid;
@@ -452,19 +454,22 @@ class DataMapper
             $result->NidMessage = $message->NidMessage;
             $result->SenderId = $message->SenderId;
             $result->RecieverId = $message->RecieverId;
-            $result->RelateId = $message->RelateId;
+            $result->RelatedId = $message->RelatedId;
             $result->Title = $message->Title;
             $result->MessageContent = $message->MessageContent;
             $result->IsRead = $message->IsRead;
             $result->IsRecieved = $message->IsRecieved;
             $result->IsDeleted = $message->IsDeleted;
-            $result->SenderUsername = $message->SenderUsername;
-            $result->SenderName = $message->SenderName;
-            $result->RecieverUsername = $message->RecieverUsername;
-            $result->RecieverName = $message->RecieverName;
+            $tmpSender = User::all()->where('NidUser','=',$message->SenderId)->firstOrFail();
+            $result->SenderUsername = $tmpSender->UserName ?? "";
+            $result->SenderName = $tmpSender->FirstName.' '.$tmpSender->LastName ?? "";
+            $tmpReciever = User::all()->where('NidUser','=',$message->RecieverId)->firstOrFail();
+            $result->RecieverUsername = $tmpReciever->UserName ?? "";
+            $result->RecieverName = $tmpReciever->FirstName.' '.$tmpReciever->LastName ?? "";
             $result->CreateDate = $message->CreateDate;
-            $result->ReadDate = $message->ReadDate;
-            $result->DeleteDate = $message->DeleteDate;
+            $result->PersianCreateDate = verta($message->CreateDate);
+            $result->ReadDate = $message->ReadDate ?? "";
+            $result->DeleteDate = $message->DeleteDate ?? "";
             return $result;
         }
         catch (\Exception)

@@ -15,7 +15,7 @@
         پیام ها
     </h6>
     @foreach ($messages as $msg)
-        <a class="dropdown-item d-flex align-items-center" href="{{ link_to_route('message.SingleMessage','',[$NidMessage = $msg->NidMessage,$ReadBy = 1]) }}">
+        <a class="dropdown-item d-flex align-items-center" href="/singlemessage/{{ $msg->NidMessage }}/1">
                 <div class="dropdown-list-image mr-3">
                     <img class="rounded-circle" src="{{ URL('Content/img/undraw_profile_1.svg') }}"
                          alt="...">
@@ -29,4 +29,4 @@
                 </div>
             </a>
     @endforeach
-    <a class="dropdown-item text-center small text-gray-500" href="{{ link_to_route('message.Messages','',[$NidUser = 'slvm.NidUser']) }}">نمایش تمامی پیام ها</a>
+    <a class="dropdown-item text-center small text-gray-500" href="/messages/{{ auth()->user()->NidUser }}">نمایش تمامی پیام ها</a>

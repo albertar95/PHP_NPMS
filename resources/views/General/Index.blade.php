@@ -108,22 +108,31 @@
                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>ردیف</th>
                                 <th>عنوان</th>
                                 <th>عملیات</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>ردیف</th>
                                 <th>عنوان</th>
                                 <th>عملیات</th>
                             </tr>
                         </tfoot>
                         <tbody>
+                            @foreach ($messages as $msg)
+                            <tr>
+                                <td>
+                                    {{ $msg->Title }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary" href="/singlemessage/{{ $msg->NidMessage }}/1">مشاهده
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
-                    <a target="_blank" rel="nofollow" href="https://undraw.co/">مشاهده تمامی پیام ها &larr;</a>
+                    <a target="_blank" rel="nofollow" href="/messages/{{ auth()->user()->NidUser }}">مشاهده تمامی پیام ها &larr;</a>
                 </div>
             </div>
         </div>
@@ -231,7 +240,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <a target="_blank" rel="nofollow" href="https://undraw.co/">مشاهده تمامی اعلان ها &larr;</a>
+                    <a target="_blank" rel="nofollow" href="/alarms/0">مشاهده تمامی اعلان ها &larr;</a>
                 </div>
             </div>
         </div>
