@@ -222,6 +222,22 @@
                                                 @endforelse
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
+                                                @if (!is_null($Project->IsDisabled) && $Project->IsDisabled == true)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsDisabled" name="IsDisabled" class="form-control" value="true" checked onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر فعال شود؟</label>
+                                                @elseif(!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsDisabled" name="IsDisabled" value="false" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر فعال شود؟</label>
+                                                @else
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsDisabled" name="IsDisabled" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر فعال شود؟</label>
+                                                @endforelse
+                                                </div>
+                                                <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                </div>
+                                            </div>
                                 </div>
                             </div>
                         </div>

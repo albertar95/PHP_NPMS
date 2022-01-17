@@ -167,6 +167,14 @@
                                             <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsDisabled" name="IsDisabled" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیرفعال شود؟</label>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -361,7 +361,8 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
                 'SixtyPercentLetterDate' => $project->SixtyPercentLetterDate,
                 'ATFLetterDate' => $project->ATFLetterDate,
                 'FinalApprove' => boolval($project->FinalApprove),
-                'IsConfident' => boolval($project->IsConfident)
+                'IsConfident' => boolval($project->IsConfident),
+                'IsDisabled' => boolval($project->IsDisabled)
             ]
             );
             return true;

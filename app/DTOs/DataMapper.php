@@ -96,6 +96,7 @@ class DataMapper
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
             $result->FinalApprove = boolval($project->FinalApprove) ?? false;
             $result->IsConfident = boolval($project->IsConfident) ?? false;
+            $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -144,6 +145,7 @@ class DataMapper
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
             $result->FinalApprove = boolval($project->FinalApprove)?? false;
             $result->IsConfident = boolval($project->IsConfident) ?? false;
+            $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -174,6 +176,7 @@ class DataMapper
             $result->PersianCreateDate = $project->PersianCreateDate;
             $result->UserId = $project->UserId;
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
+            $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -204,6 +207,7 @@ class DataMapper
             $result->PersianCreateDate = $project->PersianCreateDate;
             $result->UserId = $project->UserId;
             $result->ATFLetterDate = $project->ATFLetterDate;
+            $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -234,6 +238,7 @@ class DataMapper
             $result->PersianCreateDate = $projectInitial->PersianCreateDate;
             $result->UserId = $projectInitial->UserId;
             $result->ATFLetterDate = $projectInitial->ATFLetterDate;
+            $result->IsDisabled = boolval($projectInitial->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)
@@ -618,6 +623,7 @@ class DataMapper
             $result->ATFLetterDate = $project->ATFLetterDate;
             $result->FinalApprove = boolval($project->FinalApprove);
             $result->IsConfident = boolval($project->IsConfident);
+            $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
         }
         catch (\Exception)

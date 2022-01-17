@@ -41,4 +41,5 @@ class projectDTO extends Model
     public string $ATFLetterDate;
     public bool $FinalApprove;
     public bool $IsConfident;
+    public bool $IsDisabled;
 }

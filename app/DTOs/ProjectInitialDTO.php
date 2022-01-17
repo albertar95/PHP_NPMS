@@ -25,4 +25,5 @@ class projectInitialDTO extends Model
     public string $PersianCreateDate;
     public string $UserId;
     public string $ATFLetterDate;
+    public bool $IsDisabled;
 }
