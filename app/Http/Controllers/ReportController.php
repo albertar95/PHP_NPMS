@@ -11,6 +11,7 @@ use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 class ReportController extends Controller
 {
     public function __construct()
@@ -140,6 +141,16 @@ class ReportController extends Controller
         return response()->json($result);
 
         // return view('Report.ExecuteReport',compact('report','inputs','outputs'));
+    }
+    public function DownloadStatisticsReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
+    {
+        $api = new NPMSController();
+        $reportresult = $api->GetStatisticsReport($report->NidReport,$report->PrameterKeys,$report->ParameterValues);
+        $OutputKey = collect($report->OutPutValues);
+        $Scholars = $reportresult->Scholars;
+        $ReportName = $reportresult->ReportName;
+        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','OutputKey','ReportName'));
+        return $pdf->stream($ReportName.'.pdf');
     }
     public function ChartReports(Request $request)
     {

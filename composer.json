@@ -13,6 +13,7 @@
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "niklasravnsborg/laravel-pdf": "^4.1",
         "persian-validator/national-code": "^1.0"
     },
     "require-dev": {
