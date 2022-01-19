@@ -4,7 +4,7 @@
 <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
-        <div class="row">
+        <div class="row" id="ProjectDetailData">
             <div class="col-lg-12">
                 <div class="p-5">
                     <div class="text-center">
@@ -321,6 +321,9 @@
                             </a>
                             @endif
                         @endif
+                        <button id="btnPrint" class="btn btn-outline-primary btn-user btn-block" style="width:25%;margin:auto;">
+                            پرینت
+                            </button>
                         </form>
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -339,5 +342,18 @@
             </div>
         </div>
     </div>
-
+    @section('scripts')
+    <script type="text/javascript">
+        $(function() {
+            $("#btnPrint").click(function(e) {
+                e.preventDefault();
+                var divToPrint = document.getElementById("ProjectDetailData");
+                            newWin = window.open("");
+                            newWin.document.write(divToPrint.outerHTML);
+                            newWin.print();
+                            newWin.close();
+            });
+        });
+    </script>
+@endsection
 @endsection

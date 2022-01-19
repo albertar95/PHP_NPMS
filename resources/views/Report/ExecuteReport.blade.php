@@ -158,10 +158,8 @@
                                     ParameterValues: paramVals,
                                     OutPutValues: selectedOutputs
                                 },
-                                success: function() {
-                                },
-                                error: function() {
-                                }
+                                success: function() {},
+                                error: function() {}
                             });
                             break;
                         case 2:
@@ -171,10 +169,11 @@
                             });
                             break;
                         case 3:
-                            $("#ScholarDataTable").tableHTMLExport({
-                                type: 'txt',
-                                filename: reportname + '.txt'
-                            });
+                            var divToPrint = document.getElementById("ScholarDataTable");
+                            newWin = window.open("");
+                            newWin.document.write(divToPrint.outerHTML);
+                            newWin.print();
+                            newWin.close();
                             break;
                     }
                     break;

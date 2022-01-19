@@ -10,7 +10,7 @@
 @if (!is_null($Scholars))
 
 <div class="table-responsive" dir="ltr">
-    <table class="table table-bordered" id="ScholarDataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+    <table class="table table-bordered" border="1" id="ScholarDataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
         <thead>
             <tr>
                 @if ($OutputKey->contains("FirstName") || $OutputKey->contains("LastName"))

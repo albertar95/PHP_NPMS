@@ -2,7 +2,7 @@
 @if (!is_null($Scholars))
 
     <div class="table-responsive" dir="ltr">
-        <table class="table table-bordered" id="ScholarDataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+        <table class="table table-bordered" border="1" id="ScholarDataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
             <thead>
                 <tr>
                     @if ($OutputKey->contains("FirstName") || $OutputKey->contains("LastName"))
@@ -130,5 +130,5 @@
 <div class="form-group row">
     <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1, 1, '{{ $ReportName }}')">خروجی pdf</button>
     <button class="btn btn-success" style="margin:5px;" onclick="ExportResult(1,2,'{{ $ReportName }}')">خروجی excel</button>
-    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'{{ $ReportName }}')">خروجی word</button>
+    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'{{ $ReportName }}')">پرینت</button>
 </div>
