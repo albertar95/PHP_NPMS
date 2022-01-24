@@ -37,7 +37,7 @@ class ScholarController extends Controller
     {
         $api = new NPMSController();
         $Oreintations = $api->GetOreintationsByMajorId($NidMajor);
-        $newValue = "<option value='0' disabled selected>گرایش</option> ";
+        $newValue = "<option value='0' selected>گرایش</option> ";
         foreach ($Oreintations as $orie) {
             $newValue = Str::of($newValue)->append("<option value='");
             $newValue = Str::of($newValue)->append($orie->NidOreintation);
@@ -58,7 +58,7 @@ class ScholarController extends Controller
         {
             $tmpname = $scholar->FirstName;
             $tmpname = Str::of($tmpname)->append(" ");
-            $tmpname = Str::of($tmpname)->append($scholar->FirstName);
+            $tmpname = Str::of($tmpname)->append($scholar->LastName);
             $result->Message = $tmpname;
             $api->AddLog(auth()->user(),$scholar->ip(),7,0,3,1,"ایجاد محقق موفق");
         }
@@ -110,14 +110,42 @@ class ScholarController extends Controller
     }
     public function UploadThisFile(Request $file)
     {
-        // $imageName = time().'.'.$file->image->extension();
-        // $file->ProfilePictureUpload->storeAs('Images', $imageName);
-        $filename = "File".'_'.time().'_'.$file->fileName;
-        $file->profile->storeAs('/public/Images/', $filename);
-        $result = new JsonResults();
-        $result->HasValue = true;
-        $result->Message = $filename;
-        return response()->json($result);
+        switch ($file->fileType) {
+            case '1':
+                if(substr($file->profile->getMimeType(), 0, 5) == 'image')
+                {
+                    if(intval($file->profile->getsize()) < 1048576)
+                    {
+                    // $imageName = time().'.'.$file->image->extension();
+                    // $file->ProfilePictureUpload->storeAs('Images', $imageName);
+                    $filename = "File".'_'.time().'_'.$file->fileName;
+                    $file->profile->storeAs('/public/Images/', $filename);
+                    $result = new JsonResults();
+                    $result->HasValue = true;
+                    $result->Message = $filename;
+                    return response()->json($result);
+                    }else
+                    {
+                    $result = new JsonResults();
+                    $result->HasValue = false;
+                    // $result->Message = $filename;
+                    $result->Message = "حجم فایل انتخاب شده بیشتر از یک مگابایت می باشد";
+                    return response()->json($result);
+                    }
+                }else
+                {
+                    $result = new JsonResults();
+                    $result->HasValue = false;
+                    // $result->Message = $filename;
+                    $result->Message = "نوع فایل انتخاب شده باید تصویر باشد";
+                    return response()->json($result);
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
     }
     public function DeleteScholar(string $NidScholar,Request $request)
     {

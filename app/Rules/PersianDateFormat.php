@@ -32,7 +32,8 @@ class PersianDateFormat implements Rule
             // return true;
             // else
             // return false;
-            if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,4))))
+            //intval(Casts::PersianToEnglishDigits(substr($Datee,0,8))),intval(Casts::PersianToEnglishDigits(substr(substr($Datee,0,13),-4))),intval(Casts::PersianToEnglishDigits(substr($Datee,-4)))
+            if(is_numeric(Casts::PersianToEnglishDigits(substr($value,0,8))) && is_numeric(Casts::PersianToEnglishDigits(substr(substr($value,0,13),-4))) && is_numeric(Casts::PersianToEnglishDigits(substr($value,-4))))
             return true;
             else
             return false;

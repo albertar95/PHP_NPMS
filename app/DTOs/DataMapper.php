@@ -719,7 +719,10 @@ class DataMapper
             $result->IsDeleted = $scholar->IsDeleted;
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
-            $result->IsConfident = $scholar->IsConfident;
+            if($scholar->IsConfident)
+            $result->IsConfident = 1;
+            else
+            $result->IsConfident = 0;
             return $result;
         }
         catch (\Exception)

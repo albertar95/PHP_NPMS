@@ -38,6 +38,6 @@ class MobileFormat implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'فرمت شماره همراه وارد شده صحیح نمی باشد';
     }
 }

@@ -7,11 +7,13 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
+                <div style="direction: ltr">
                 @if(in_array('1',$sharedData['UserAccessedEntities']))
                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[4] == 1)
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="{{ route('scholar.Scholars') }}">&larr; بازگشت</a>
                     @endif
                 @endif
+                </div>
                 <div class="p-5">
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">ویرایش اطلاعات محقق</h1>
@@ -161,7 +163,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile()" id="ProfilePictureUpload" name="ProfilePictureUpload">
+                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile(1)" id="ProfilePictureUpload" name="ProfilePictureUpload">
                                 <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture" value="{{ $Scholar->ProfilePicture }}" hidden>
                                 <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
                                     تغییر پروفایل کاربر
@@ -182,10 +184,10 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                @if (!is_null($Scholar->IsConfident) && $Scholar->IsConfident == true)
+                                @if (!is_null($Scholar->IsConfident) && $Scholar->IsConfident == 1)
                                 <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" class="form-control" value="true" checked onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                 <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
-                                @elseif(!is_null($Scholar->IsConfident) && $Scholar->IsConfident == false)
+                                @elseif(!is_null($Scholar->IsConfident) && $Scholar->IsConfident == 0)
                                 <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident" name="IsConfident" value="false" class="form-control" onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                 <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است ؟</label>
                                 @else

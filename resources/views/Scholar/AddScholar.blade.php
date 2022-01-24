@@ -13,7 +13,7 @@
                     </div>
                     <form class="user" id="AddScholarForm">
                         @csrf
-                        <input type="text" id="UserId" name="UserId" value="@slvm.NidUser" hidden />
+                        <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}" hidden />
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="FirstName" name="FirstName"
@@ -48,16 +48,16 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>مقطع تحصیلی</option>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId" id="GradeSlt" style="padding:0 .75rem;">
+                                    <option value="0" selected>مقطع تحصیلی</option>
                                     @foreach ($Grades->sortBy('SettingTitle') as $grd)
                                         <option value="{{ $grd->SettingValue }}">{{ $grd->SettingTitle }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="MillitaryStatus" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>وضعیت خدمتی</option>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="MillitaryStatus" id="MillitaryStatusSlt" style="padding:0 .75rem;">
+                                    <option value="0" selected>وضعیت خدمتی</option>
                                     @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
                                         <option value="{{ $mls->SettingValue }}">{{ $mls->SettingTitle }}</option>
                                     @endforeach
@@ -67,7 +67,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId" id="MajorSlt" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>رشته تحصیلی</option>
+                                    <option value="0" selected>رشته تحصیلی</option>
                                     @foreach ($Majors->sortBy('Title') as $mjr)
                                         <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
                                     @endforeach
@@ -75,22 +75,22 @@
                             </div>
                             <div class="col-sm-6">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="OreintationId" id="OrentationSlt" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>گرایش</option>
+                                    <option value="0" selected>گرایش</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="college" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>محل تحصیل</option>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="college" id="collegeSlt" style="padding:0 .75rem;">
+                                    <option value="0" selected>محل تحصیل</option>
                                     @foreach ($Colleges->sortBy('SettingTitle') as $col)
                                     <option value="{{ $col->SettingValue }}">{{ $col->SettingTitle }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <select class="form-control allWidth" data-ng-style="btn-primary" name="CollaborationType" id="CollaborationType" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>نوع همکاری</option>
+                                <select class="form-control allWidth" data-ng-style="btn-primary" name="CollaborationType" id="CollaborationTypeSlt" style="padding:0 .75rem;">
+                                    <option value="0" selected>نوع همکاری</option>
                                     @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
                                     <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}</option>
                                     @endforeach
@@ -99,7 +99,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile()" id="ProfilePictureUpload" name="ProfilePictureUpload">
+                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile(1)" id="ProfilePictureUpload" name="ProfilePictureUpload">
                                 <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture" hidden>
                                 <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
                                     تصویر پروفایل محقق
@@ -237,11 +237,14 @@
                                 $("#uploadedImage").attr('src', '');
                             },
                             error: function (response) {
-                                var message = "";
+                                var message = "<ul>";
                                 jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += "<li>";
                                     message += val;
+                                    message += "</li>";
                                 });
-                                $("#ErrorMessage").text(message)
+                                message += "</ul>";
+                                $("#ErrorMessage").html(message)
                                 // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
@@ -270,7 +273,7 @@
                                 $("#OrentationSlt").html(result.Html)
                             },
                             error: function () {
-                                $("#OrentationSlt").html('<option value="0" disabled selected>گرایش</option> ')
+                                $("#OrentationSlt").html('<option value="0" selected>گرایش</option> ')
                             }
                         });
                 });
@@ -309,28 +312,28 @@
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#MajorSlt").is(':selected'))
+            if($("#MajorSlt").val() == 0)
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "رشته تحصیلی انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#GradeId").is(':selected'))
+            if($("#GradeSlt").val() == 0)
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "مقطع تحصیلی انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#OreintationId").is(':selected'))
+            if($("#OrentationSlt").val() == 0)
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "گرایش انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#CollaborationType").is(':selected'))
+            if($("#CollaborationTypeSlt").val() == 0)
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "نوع همکاری انتخاب نشده است";

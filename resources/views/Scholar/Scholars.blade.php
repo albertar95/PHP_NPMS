@@ -71,7 +71,7 @@
                     <tbody>
                         @foreach ($Scholar as $sch)
                             <tr>
-                                <td>{{ $sch->FirstName ?? "" }}{{  $sch->LastName ?? "" }}</td>
+                                <td>{{ $sch->FirstName ?? "" }} {{  $sch->LastName ?? "" }}</td>
                                 <td>{{ $sch->NationalCode ?? "" }}</td>
                                 <td class="priority-1">{{ $sch->Grade ?? ""}}</td>
                                 <td class="priority-2">{{ $sch->MajorName}}</td>
@@ -88,6 +88,11 @@
                                         <button class="btn btn-danger" onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
                                         @endif
                                     @endif
+                                    @if(in_array('1',$sharedData['UserAccessedEntities']))
+                                        @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',1)->pluck('rowValue')[0])[3] == 1)
+                                        <button class="btn btn-secondary" onclick="ShowModal(1,'{{ $sch->NidScholar }}')">جزییات</button>
+                                        @endif
+                                @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -161,6 +166,21 @@
                     $("#btnCancel").attr('hidden', 'hidden');
                     $("#btnOk").attr('hidden', 'hidden');
                     $("#DeleteQuestion").attr('hidden', 'hidden');
+                    $.ajax(
+                    {
+                        url: '/scholardetail/' + NidScholar,
+                        type: 'get',
+                        datatype: 'json',
+                        success: function (result)
+                        {
+                            if(result.HasValue)
+                            {
+                                $("#ScholarModalBody").html(result.Html)
+                                $("#ScholarModal").modal('show')
+                            }
+                        },
+                        error: function () { }
+                    })
                 }
                 else if (typo == 2)
                 {

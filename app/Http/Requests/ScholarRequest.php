@@ -36,4 +36,14 @@ class ScholarRequest extends FormRequest
             "Mobile" => new MobileFormat()
         ];
     }
+     public function messages()
+    {
+        return[
+            'FirstName.max' => 'طول نام محقق باید کمتر از 75 کاراکتر باشد',
+            'LastName.max' => 'طول نام خانوادگی محقق باید کمتر از 75 کاراکتر باشد',
+            'FatherName.max' => 'طول نام پدر محقق باید کمتر از 75 کاراکتر باشد',
+            'FirstName.required' => 'نام محقق الزامی می باشد',
+            'LastName.required' => 'نام خانوادگی محقق الزامی می باشد',
+        ];
+    }
 }

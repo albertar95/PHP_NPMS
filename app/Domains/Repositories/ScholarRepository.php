@@ -246,16 +246,14 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function DeleteScholar(string $ScholarId):bool
     {
-        $tmpScholar = Scholars::all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',false)->firstOrFail();
-        if (!is_null($tmpScholar))
-        {
-            $tmpScholar->IsDeleted = true;
-            // $tmpScholar->DeleteDate = Carbon::now();
-            //tmpScholar.DeleteUser = //deleted user;
-            $tmpScholar->save();
+        Scholars::where('NidScholar',$ScholarId)->update(
+            [
+                'IsDeleted' => true,
+                'DeleteDate' => Carbon::now(),
+                'DeleteUser' => auth()->user()->NidUser
+            ]
+            );
             return true;
-        }else
-        return false;
     }//tuple<bool,string>
     public function GetScholarListById(string $ScholarId,bool $IsDeleted = false):scholarListDTO
     {
@@ -269,6 +267,10 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function UpdateScholar(Scholars $Scholar):bool
     {
+        if(empty($Scholar->DeleteDate))
+        {
+            $Scholar->DeleteDate = null;
+        }
         $current = Scholars::where('NidScholar',$Scholar->NidScholar)->update(
             [
                 'FirstName' => $Scholar->FirstName,
@@ -288,7 +290,7 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
                 'IsDeleted' => $Scholar->IsDeleted ?? boolval(false),
                 'DeleteDate' => $Scholar->DeleteDate,
                 'DeleteUser' => $Scholar->DeleteUser,
-                'IsConfident' => $Scholar->IsConfident ?? boolval(false),
+                'IsConfident' => $Scholar->IsConfident ?? 0,
             ]
             );
         return true;

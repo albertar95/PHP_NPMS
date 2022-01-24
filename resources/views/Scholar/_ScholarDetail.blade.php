@@ -14,7 +14,7 @@
             <label>مشخصات محقق : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">{{ $Scholar->FirstName }}{{ $Scholar->LastName }}</label>
+            <label class="form-control">{{ $Scholar->FirstName }} {{ $Scholar->LastName }}</label>
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
