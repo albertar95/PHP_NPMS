@@ -159,9 +159,9 @@
                 </tr>
             </tfoot>
             <tbody>
-                @foreach ($BaseInfo->sortBy('SettingKey') as $bi)
+                @foreach ($BaseInfo->sortBy('SettingKey') as $key => $bi)
                     <tr>
-                        <td>{{ $tmpCounter }}</td>
+                        <td>{{ $key + 1 }}</td>
                         @switch ($bi->SettingKey)
                             @case ('CollaborationType')
                                 <td>نوع همکاری</td>

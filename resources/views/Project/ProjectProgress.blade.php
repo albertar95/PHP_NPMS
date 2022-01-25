@@ -7,11 +7,13 @@
         <!-- Nested Row within Card Body -->
         <div class="row">
             <div class="col-lg-12">
+                <div style="direction: ltr;">
                 @if(in_array('2',$sharedData['UserAccessedEntities']))
                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[4] == 1)
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;" href="{{ route('project.Projects') }}">&larr; بازگشت</a>
                     @endif
                 @endif
+            </div>
                 <div class="p-5">
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اطلاعات طرح</h1>
@@ -35,9 +37,9 @@
                                     @foreach ($Scholars->sortBy('LastName') as $sch)
                                     {
                                         @if ($sch->NidScholar == $Project->ScholarId)
-                                            <option value="{{ $sch->NidScholar }}" selected>{{ $sch->FirstName }}{{ $sch->LastName }}</option>
+                                            <option value="{{ $sch->NidScholar }}" selected>{{ $sch->FirstName }} {{ $sch->LastName }}</option>
                                         @else
-                                            <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }}{{ $sch->LastName }}</option>
+                                            <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }} {{ $sch->LastName }}</option>
                                         @endforelse
                                     @endforeach
                                 </select>
@@ -241,7 +243,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <button type="submit" id="btnSubmit" class="btn btn-outline-warning btn-user btn-block" style="width:25%;margin:auto;">
                             ویرایش اطلاعات
                         </button>
@@ -482,15 +483,21 @@
                                     window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                                 } else
                                 {
-                                    window.location.href = '/projects'
+                                    $("#SuccessMessage").text("طرح با موفقیت ویرایش گردید")
+                                    $("#successAlert").removeAttr('hidden')
+                                    window.setTimeout(function () {window.location.href = '/projects' }, 1200);
                                 }
                             },
                             error: function () {
-                                var message = "";
+                                var message = "<ul>";
                                 jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += "<li>";
                                     message += val;
+                                    message += "</li>";
                                 });
-                                $("#ErrorMessage").text(message)
+                                message += "</ul>";
+                                $("#ErrorMessage").html(message)
+                                // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }

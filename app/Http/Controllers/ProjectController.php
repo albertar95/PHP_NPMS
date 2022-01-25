@@ -119,12 +119,12 @@ class ProjectController extends Controller
         {
             $unitname = $api->AddUnit($unit);
             $api->AddLog(auth()->user(),$unit->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
-            $result->Message = sprintf("یگان با نام %s با موفقیت ایجاد گردید",$unitname);
+            $result->Message = sprintf("یگان با نام %s با موفقیت ایجاد گردید",$unit->Title);
         }else
         {
             $unitname = $api->UpdateUnit($unit);
             $api->AddLog(auth()->user(),$unit->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
-            $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unitname);
+            $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$unit->Title);
         }
         $TblId = 1;
         $Units = $api->GetAllUnits();
@@ -142,12 +142,12 @@ class ProjectController extends Controller
         {
             $unitgroupname = $api->AddUnitGroup($unitGroup);
             $api->AddLog(auth()->user(),$unitGroup->ip(),4,0,3,1,"ایجاد اطلاعات پایه موفق");
-            $result->Message = sprintf("گروه با نام %s با موفقیت ایجاد گردید",$unitgroupname);
+            $result->Message = sprintf("گروه با نام %s با موفقیت ایجاد گردید",$unitGroup->Title);
         }else
         {
             $unitgroupname = $api->UpdateUnitGroup($unitGroup);
             $api->AddLog(auth()->user(),$unitGroup->ip(),5,0,3,1,"ویرایش اطلاعات پایه موفق");
-            $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitgroupname);
+            $result->Message = sprintf("گروه با نام %s با موفقیت ویرایش گردید",$unitGroup->Title);
         }
         $TblId = 2;
         $Units = $api->GetAllUnits();
@@ -177,6 +177,7 @@ class ProjectController extends Controller
             }
         }else
         {
+            $grade->IsDeleted = false;
             if($api->UpdateSetting($grade))
             {
                 $result->Message = sprintf("مقطع تحصیلی با نام %s با موفقیت ویرایش گردید",$grade->SettingTitle);
@@ -262,6 +263,7 @@ class ProjectController extends Controller
             }
         }else
         {
+            $college->IsDeleted = false;
             if($api->UpdateSetting($college))
             {
                 $result->Message = sprintf("دانشکده با نام %s با موفقیت ویرایش گردید",$college->SettingTitle);
@@ -300,6 +302,7 @@ class ProjectController extends Controller
             }
         }else
         {
+            $millit->IsDeleted = false;
             if($api->UpdateSetting($millit))
             {
                 $result->Message = sprintf("وضعیت خدمت با نام %s با موفقیت ویرایش گردید",$millit->SettingTitle);
@@ -338,6 +341,7 @@ class ProjectController extends Controller
             }
         }else
         {
+            $collab->IsDeleted = false;
             if($api->UpdateSetting($collab))
             {
                 $result->Message = sprintf("نوع همکاری با نام %s با موفقیت ویرایش گردید",$collab->SettingTitle);
@@ -397,7 +401,7 @@ class ProjectController extends Controller
             $result->HasValue = true;
             $result->Message = "گروه با موفقیت حذف گردید";
             $api->AddLog(auth()->user(),$request->ip(),6,0,3,1,"حذف اطلاعات پایه موفق");
-            $TblId = 1;
+            $TblId = 2;
             $Units = $api->GetAllUnits();
             $UnitGroups = $api->GetAllUnitGroups();
             $result->Html = view('Project._BaseInfoTables',compact('TblId','Units','UnitGroups'))->render();

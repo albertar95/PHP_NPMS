@@ -23,7 +23,7 @@ class LogRepository implements ILogRepository{
     {
         if($LogActionId == 0)
         {
-            if($UserName == "")
+            if(empty($UserName))
             {
                 return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate]);
             }else
@@ -32,7 +32,7 @@ class LogRepository implements ILogRepository{
             }
         }else
         {
-            if($UserName == "")
+            if(empty($UserName))
             {
                 return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId);
             }else

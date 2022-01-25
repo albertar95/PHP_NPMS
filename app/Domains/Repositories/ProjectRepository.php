@@ -266,7 +266,10 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateUnit(Units $unit)
     {
-        return $unit->save();
+        return Units::where('NidUnit',$unit->NidUnit)->update(
+            [
+                'Title' => $unit->Title
+            ]);
     }
     public function DeleteUnit(Units $unit)
     {
@@ -278,7 +281,11 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateUnitGroup(UnitGroups $unitgroup)
     {
-        return $unitgroup->save();
+        return UnitGroups::where('NidGroup',$unitgroup->NidGroup)->update(
+            [
+                'Title' => $unitgroup->Title,
+                'UnitId' => $unitgroup->UnitId
+            ]);
     }
     public function DeleteUnitGroup(UnitGroups $unitgroup)
     {
@@ -290,7 +297,10 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateMajor(Majors $major)
     {
-        return $major->save();
+        return Majors::where('NidMajor',$major->NidMajor)->update(
+            [
+                'Title' => $major->Title
+            ]);
     }
     public function DeleteMajor(Majors $major)
     {
@@ -302,7 +312,11 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function UpdateOreintation(Oreintations $oreintation)
     {
-        return $oreintation->save();
+        return Oreintations::where('NidOreintation',$oreintation->NidOreintation)->update(
+            [
+                'Title' => $oreintation->Title,
+                'MajorId' => $oreintation->MajorId
+            ]);
     }
     public function DeleteOreintation(Oreintations $oreintation)
     {
@@ -355,7 +369,7 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
                 'ReducePeriod' => $project->ReducePeriod,
                 'Commision' => $project->Commision,
                 'HasBookPublish' => boolval($project->HasBookPublish),
-                'UserId' => '68018f1c-3e7f-4ff2-af9e-9fb197a194b9',//$project->UserId,
+                'UserId' => $project->UserId,//,
                 'TitleApproved' => boolval($project->TitleApproved),
                 'ThirtyPercentLetterDate' => $project->ThirtyPercentLetterDate,
                 'SixtyPercentLetterDate' => $project->SixtyPercentLetterDate,

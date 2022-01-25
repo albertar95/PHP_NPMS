@@ -37,25 +37,26 @@
                                 </div>
                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                    <form class="user" id="UnitsForm" enctype="application/x-www-form-urlencoded">
-                                    <div class="form-group row">
-                                        <div class="col-sm-4 mb-3 mb-sm-0">
-                                            <input type="text" value="" id="NidUnit" name="NidUnit" hidden />
-                                            <input type="text" class="form-control form-control-user" id="UnitTitle"
-                                                name="Title" placeholder="عنوان یگان">
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                id="btnAddUnit">
-                                                ایجاد یگان
-                                            </button>
-                                        </div>
-                                    </div>
-                                    </form>
+                                        <form class="user" id="UnitsForm"
+                                            enctype="application/x-www-form-urlencoded">
+                                            <div class="form-group row">
+                                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                                    <input type="text" value="" id="NidUnit" name="NidUnit" hidden />
+                                                    <input type="text" class="form-control form-control-user" id="UnitTitle"
+                                                        name="Title" placeholder="عنوان یگان">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                        id="btnAddUnit">
+                                                        ایجاد یگان
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     @endif
                                 @endif
                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                    <table class="table table-bordered" id="UnitdataTable"
+                                    <table class="table table-bordered" id="UnitTableWrapper"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -80,13 +81,13 @@
                                                         @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                 <button class="btn btn-danger"
-                                                                    onclick="DeleteModal(1,{{ $unit->NidUnit }})">حذف</button>
+                                                                    onclick="DeleteModal(1,'{{ $unit->NidUnit }}')">حذف</button>
                                                             @endif
                                                         @endif
                                                         @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                 <button class="btn btn-warning"
-                                                                    onclick="EditThis(1,{{ $unit->NidUnit }},{{ $unit->Title }},'')">ویرایش</button>
+                                                                    onclick="EditThis(1,'{{ $unit->NidUnit }}','{{ $unit->Title }}','')">ویرایش</button>
                                                             @endif
                                                         @endif
                                                     </td>
@@ -126,30 +127,31 @@
                                 </div>
                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                    <form class="user" id="UnitGroupsForm">
-                                    <div class="form-group row">
-                                        <div class="col-sm-4 mb-3 mb-sm-0">
-                                            <input type="text" value="" id="NidGroup" name="NidGroup" hidden />
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;">
-                                                <option value="0" disabled selected>انتخاب یگان</option>
-                                                @foreach ($Units->sortBy('Title') as $uni)
-                                                    <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-4 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="GroupTitle"
-                                                name="GroupTitle" placeholder="عنوان گروه">
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                id="btnAddGroup">
-                                                ایجاد گروه
-                                            </button>
-                                        </div>
-                                    </div>
-                                    </form>
+                                        <form class="user" id="UnitGroupsForm">
+                                            <div class="form-group row">
+                                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                                    <input type="text" value="" id="NidGroup" name="NidGroup" hidden />
+                                                    <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                        id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;">
+                                                        <option value="0" disabled selected>انتخاب یگان</option>
+                                                        @foreach ($Units->sortBy('Title') as $uni)
+                                                            <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                                    <input type="text" class="form-control form-control-user"
+                                                        id="GroupTitle" name="GroupTitle" placeholder="عنوان گروه">
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                        id="btnAddGroup">
+                                                        ایجاد گروه
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     @endif
                                 @endif
                                 <div class="table-responsive" dir="ltr" id="UnitGroupTableWrapper">
@@ -183,13 +185,13 @@
                                                             @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                     <button class="btn btn-danger"
-                                                                        onclick="DeleteModal(2,{{ $unitgroup->NidGroup }})">حذف</button>
+                                                                        onclick="DeleteModal(2,'{{ $unitgroup->NidGroup }}')">حذف</button>
                                                                 @endif
                                                             @endif
                                                             @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                     <button class="btn btn-warning"
-                                                                        onclick="EditThis(2,{{ $unitgroup->NidGroup }},{{ $unitgroup->Title }},{{ $unitgroup->UnitId }})">ویرایش</button>
+                                                                        onclick="EditThis(2,'{{ $unitgroup->NidGroup }}','{{ $unitgroup->Title }}','{{ $unitgroup->UnitId }}')">ویرایش</button>
                                                                 @endif
                                                             @endif
                                                         </td>
@@ -230,28 +232,29 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="GradesForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="GradeNidSetting" name="NidSetting" hidden />
-                                                <input type="text" value="" id="GradeSettingValue" name="SettingValue"
-                                                    hidden />
-                                                <input type="text" value="GradeId" id="GradeSettingKey" name="SettingKey"
-                                                    hidden />
-                                                <input type="checkbox" value="false" id="GradeIsDeleted" name="IsDeleted"
-                                                    hidden />
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="GradeSettingTitle" name="SettingTitle"
-                                                    placeholder="عنوان مقطع تحصیلی">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddGrade">
-                                                    ایجاد مقطع تحصیلی
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="GradesForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="GradeNidSetting" name="NidSetting"
+                                                            hidden />
+                                                        <input type="text" value="" id="GradeSettingValue"
+                                                            name="SettingValue" hidden />
+                                                        <input type="text" value="GradeId" id="GradeSettingKey"
+                                                            name="SettingKey" hidden />
+                                                        <input type="checkbox" value="false" id="GradeIsDeleted"
+                                                            name="IsDeleted" hidden />
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="GradeSettingTitle" name="SettingTitle"
+                                                            placeholder="عنوان مقطع تحصیلی">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddGrade">
+                                                            ایجاد مقطع تحصیلی
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="GradeTableWrapper">
@@ -287,7 +290,7 @@
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(3,{{ $grade->NidSetting }},{{ $grade->SettingTitle }},{{ $grade->SettingValue }})">ویرایش</button>
+                                                                            onclick="EditThis(3,'{{ $grade->NidSetting }}','{{ $grade->SettingTitle }}','{{ $grade->SettingValue }}')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -329,21 +332,21 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="MajorsForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="NidMajor" name="NidMajor" hidden />
-                                                <input type="text" class="form-control form-control-user" id="MajorTitle"
-                                                    name="Title" placeholder="عنوان رشته تحصیلی">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddMajor">
-                                                    ایجاد رشته تحصیلی
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="MajorsForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="NidMajor" name="NidMajor" hidden />
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="MajorTitle" name="Title" placeholder="عنوان رشته تحصیلی">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddMajor">
+                                                            ایجاد رشته تحصیلی
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="MajorTableWrapper">
@@ -365,21 +368,21 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    @foreach ($Majors as $major)
+                                                    @foreach ($Majors as $key => $major)
                                                         <tr>
-                                                            <td>{{ $tmpCounter }}</td>
+                                                            <td>{{ $key + 1 }}</td>
                                                             <td>{{ $major->Title }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(4,{{ $major->NidMajor }})">حذف</button>
+                                                                            onclick="DeleteModal(4,'{{ $major->NidMajor }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(4,{{ $major->NidMajor }},{{ $major->Title }},'')">ویرایش</button>
+                                                                            onclick="EditThis(4,'{{ $major->NidMajor }}','{{ $major->Title }}','')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -422,32 +425,33 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="OreintationsForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="NidOreintation" name="NidOreintation"
-                                                    hidden />
-                                                <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                    name="MajorId" id="OreintationMajorId" style="padding:0 .75rem;">
-                                                    <option value="0" disabled selected>انتخاب رشته تحصیلی</option>
-                                                    @foreach ($Majors as $ore)
-                                                        <option value="{{ $ore->NidMajor }}">{{ $ore->Title }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="OreintationTitle" name="Title" placeholder="عنوان گرایش">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddOreintation">
-                                                    ایجاد گرایش
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="OreintationsForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="NidOreintation"
+                                                            name="NidOreintation" hidden />
+                                                        <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                            name="MajorId" id="OreintationMajorId"
+                                                            style="padding:0 .75rem;">
+                                                            <option value="0" disabled selected>انتخاب رشته تحصیلی</option>
+                                                            @foreach ($Majors as $ore)
+                                                                <option value="{{ $ore->NidMajor }}">{{ $ore->Title }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="OreintationTitle" name="Title" placeholder="عنوان گرایش">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddOreintation">
+                                                            ایجاد گرایش
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="OreintationTableWrapper">
@@ -471,7 +475,6 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    {{ $tmpCounter = 1 }}
                                                     @foreach ($Oreintations as $key => $oreintation)
                                                         <tr>
                                                             <td>{{ $key }}</td>
@@ -482,13 +485,13 @@
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(5,{{ $oreintation->NidOreintation }})">حذف</button>
+                                                                            onclick="DeleteModal(5,'{{ $oreintation->NidOreintation }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(5,{{ $oreintation->NidOreintation }},{{ $oreintation->Title }},{{ $oreintation->MajorId }})">ویرایش</button>
+                                                                            onclick="EditThis(5,'{{ $oreintation->NidOreintation }}','{{ $oreintation->Title }}','{{ $oreintation->MajorId }}')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -531,29 +534,29 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="CollegesForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="CollegeNidSetting" name="NidSetting"
-                                                    hidden />
-                                                <input type="text" value="" id="CollegeSettingValue" name="SettingValue"
-                                                    hidden />
-                                                <input type="text" value="College" id="CollegeSettingKey" name="SettingKey"
-                                                    hidden />
-                                                <input type="checkbox" value="false" id="CollegeIsDeleted" name="IsDeleted"
-                                                    hidden />
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="CollegeSettingTitle" name="SettingTitle"
-                                                    placeholder="عنوان دانشکده">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddCollege">
-                                                    ایجاد دانشکده
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="CollegesForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="CollegeNidSetting" name="NidSetting"
+                                                            hidden />
+                                                        <input type="text" value="" id="CollegeSettingValue"
+                                                            name="SettingValue" hidden />
+                                                        <input type="text" value="College" id="CollegeSettingKey"
+                                                            name="SettingKey" hidden />
+                                                        <input type="checkbox" value="false" id="CollegeIsDeleted"
+                                                            name="IsDeleted" hidden />
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="CollegeSettingTitle" name="SettingTitle"
+                                                            placeholder="عنوان دانشکده">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddCollege">
+                                                            ایجاد دانشکده
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="CollegeTableWrapper">
@@ -583,13 +586,13 @@
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(6,{{ $college->NidSetting }})">حذف</button>
+                                                                            onclick="DeleteModal(6,'{{ $college->NidSetting }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(6,{{ $college->NidSetting }},{{ $college->SettingTitle }},{{ $college->SettingValue }})">ویرایش</button>
+                                                                            onclick="EditThis(6,'{{ $college->NidSetting }}','{{ $college->SettingTitle }}','{{ $college->SettingValue }}')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -632,29 +635,29 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="MillitsForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="MillitNidSetting" name="NidSetting"
-                                                    hidden />
-                                                <input type="text" value="" id="MillitSettingValue" name="SettingValue"
-                                                    hidden />
-                                                <input type="text" value="MillitaryStatus" id="MillitSettingKey"
-                                                    name="SettingKey" hidden />
-                                                <input type="checkbox" value="false" id="MillitIsDeleted" name="IsDeleted"
-                                                    hidden />
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="MillitSettingTitle" name="SettingTitle"
-                                                    placeholder="عنوان وضعیت خدمتی">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddMillit">
-                                                    ایجاد وضعیت خدمتی
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="MillitsForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="MillitNidSetting" name="NidSetting"
+                                                            hidden />
+                                                        <input type="text" value="" id="MillitSettingValue"
+                                                            name="SettingValue" hidden />
+                                                        <input type="text" value="MillitaryStatus" id="MillitSettingKey"
+                                                            name="SettingKey" hidden />
+                                                        <input type="checkbox" value="false" id="MillitIsDeleted"
+                                                            name="IsDeleted" hidden />
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="MillitSettingTitle" name="SettingTitle"
+                                                            placeholder="عنوان وضعیت خدمتی">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddMillit">
+                                                            ایجاد وضعیت خدمتی
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="MillitTableWrapper">
@@ -684,13 +687,13 @@
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(7,{{ $millit->NidSetting }})">حذف</button>
+                                                                            onclick="DeleteModal(7,'{{ $millit->NidSetting }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(7,{{ $millit->NidSetting }},{{ $millit->SettingTitle }},{{ $millit->SettingValue }})">ویرایش</button>
+                                                                            onclick="EditThis(7,'{{ $millit->NidSetting }}','{{ $millit->SettingTitle }}','{{ $millit->SettingValue }}')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -733,29 +736,29 @@
                                     </div>
                                     @if (in_array('6', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[0] == 1)
-                                        <form class="user" id="CollabsForm">
-                                        <div class="form-group row">
-                                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                                <input type="text" value="" id="CollabNidSetting" name="NidSetting"
-                                                    hidden />
-                                                <input type="text" value="" id="CollabSettingValue" name="SettingValue"
-                                                    hidden />
-                                                <input type="text" value="CollaborationType" id="CollabSettingKey"
-                                                    name="SettingKey" hidden />
-                                                <input type="checkbox" value="false" id="CollabIsDeleted" name="IsDeleted"
-                                                    hidden />
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="CollabSettingTitle" name="SettingTitle"
-                                                    placeholder="عنوان نوع همکاری">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button class="btn btn-primary btn-user btn-block" type="submit"
-                                                    id="btnAddCollab">
-                                                    ایجاد نوع همکاری
-                                                </button>
-                                            </div>
-                                        </div>
-                                        </form>
+                                            <form class="user" id="CollabsForm">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4 mb-3 mb-sm-0">
+                                                        <input type="text" value="" id="CollabNidSetting" name="NidSetting"
+                                                            hidden />
+                                                        <input type="text" value="" id="CollabSettingValue"
+                                                            name="SettingValue" hidden />
+                                                        <input type="text" value="CollaborationType" id="CollabSettingKey"
+                                                            name="SettingKey" hidden />
+                                                        <input type="checkbox" value="false" id="CollabIsDeleted"
+                                                            name="IsDeleted" hidden />
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="CollabSettingTitle" name="SettingTitle"
+                                                            placeholder="عنوان نوع همکاری">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-primary btn-user btn-block" type="submit"
+                                                            id="btnAddCollab">
+                                                            ایجاد نوع همکاری
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         @endif
                                     @endif
                                     <div class="table-responsive" dir="ltr" id="CollabTableWrapper">
@@ -777,21 +780,21 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    @foreach ($CollaborationTypes as $collab)
+                                                    @foreach ($CollaborationTypes as $key => $collab)
                                                         <tr>
-                                                            <td>{{ $tmpCounter }}</td>
+                                                            <td>{{ $key + 1 }}</td>
                                                             <td>{{ $collab->SettingTitle }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(8,{{ $collab->NidSetting }})">حذف</button>
+                                                                            onclick="DeleteModal(8,'{{ $collab->NidSetting }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
                                                                         <button class="btn btn-warning"
-                                                                            onclick="EditThis(8,{{ $collab->NidSetting }},{{ $collab->SettingTitle }},{{ $collab->SettingValue }})">ویرایش</button>
+                                                                            onclick="EditThis(8,'{{ $collab->NidSetting }}','{{ $collab->SettingTitle }}','{{ $collab->SettingValue }}')">ویرایش</button>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -892,10 +895,10 @@
                     },
                     error: function() {
                         var message = "";
-                                jQuery.each( response.responseJSON.errors, function( i, val ) {
-                                    message += val;
-                                });
-                                $("#UnitErrorMessage").text(message)
+                        jQuery.each(response.responseJSON.errors, function(i, val) {
+                            message += val;
+                        });
+                        $("#UnitErrorMessage").text(message)
                         // $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
@@ -946,10 +949,10 @@
                     },
                     error: function() {
                         var message = "";
-                                jQuery.each( response.responseJSON.errors, function( i, val ) {
-                                    message += val;
-                                });
-                                $("#UnitGroupErrorMessage").text(message)
+                        jQuery.each(response.responseJSON.errors, function(i, val) {
+                            message += val;
+                        });
+                        $("#UnitGroupErrorMessage").text(message)
                         // $("#UnitGroupErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitGroupErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
@@ -1057,10 +1060,10 @@
                     },
                     error: function() {
                         var message = "";
-                                jQuery.each( response.responseJSON.errors, function( i, val ) {
-                                    message += val;
-                                });
-                                $("#UnitErrorMessage").text(message)
+                        jQuery.each(response.responseJSON.errors, function(i, val) {
+                            message += val;
+                        });
+                        $("#UnitErrorMessage").text(message)
                         // $("#UnitErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#UnitErrorAlert").removeAttr('hidden');
                         window.setTimeout(function() {
@@ -1111,10 +1114,10 @@
                     },
                     error: function() {
                         var message = "";
-                                jQuery.each( response.responseJSON.errors, function( i, val ) {
-                                    message += val;
-                                });
-                                $("#OreintationErrorMessage").text(message)
+                        jQuery.each(response.responseJSON.errors, function(i, val) {
+                            message += val;
+                        });
+                        $("#OreintationErrorMessage").text(message)
                         // $("#OreintationErrorMessage").text(
                         //     'خطا در سرور.لطفا مجددا امتحان کنید');
                         $("#OreintationErrorAlert").removeAttr('hidden');

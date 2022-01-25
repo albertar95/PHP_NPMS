@@ -66,6 +66,8 @@
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
 @endsection
 @section('scripts')
+<script src="{{ URL('Content/vendor/ExportTable/tableHTMLExport.js') }}"></script>
+<script src="{{ URL('Content/vendor/ExportTable/html2canvas.min.js') }}"></script>
 <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
 <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
 <script type="text/javascript">
@@ -123,5 +125,41 @@ $(function()
                     });
             });
 });
+function ExportResult(contextId, typo, reportname) {
+            switch (contextId) {
+                case 1:
+                    switch (typo) {
+                        case 1:
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+                            $.ajax({
+                                url: '/downloaduserlogreport',
+                                type: 'post',
+                                datatype: 'json',
+                                data: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), LogActionId: $("#LogActionId").val(), UserName:$("#UserName").val() },
+                                success: function() {},
+                                error: function() {}
+                            });
+                            break;
+                        case 2:
+                            $("#logsDataTable").tableHTMLExport({
+                                type: 'csv',
+                                filename: reportname + '.csv'
+                            });
+                            break;
+                        case 3:
+                            var divToPrint = document.getElementById("logsDataTable");
+                            newWin = window.open("");
+                            newWin.document.write(divToPrint.outerHTML);
+                            newWin.print();
+                            newWin.close();
+                            break;
+                    }
+                    break;
+            }
+        }
 </script>
 @endsection

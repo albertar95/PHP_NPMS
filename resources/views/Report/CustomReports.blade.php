@@ -62,7 +62,7 @@
                     @endif
                     @if (in_array('4', $sharedData['UserAccessedEntities']))
                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
-                        <a href="{{ URL('report.StatisticReports') }}" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
+                        <a href="/statisticreports" class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
                        گزارشات
                         </a>
                         @endif

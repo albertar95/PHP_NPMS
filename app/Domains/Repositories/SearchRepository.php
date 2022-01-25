@@ -62,7 +62,7 @@ class SearchRepository implements ISearchRepository{
         $ScholarResult = $this->SearchInScholars($searchText,$Similar,$ById);
         $ProjectResult = $this->SearchInProjects($searchText,$Similar,$ById);
         $UserResult = $this->SearchInUsers($searchText,$Similar,$ById);
-        return [$ScholarResult,$ProjectResult,$UserResult];
+        return [$ProjectResult,$ScholarResult,$UserResult];
     }
     private function SearchInScholars(string $searchText,bool $Similar,int $ById):Collection//scholarlistdto
     {

@@ -163,11 +163,20 @@ class DataMapper
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
-            $result->ScholarName = "";//$project->Scholar->Title;//check
+            if(Scholars::all()->where('NidScholar','=',$project->ScholarId)->count() > 0)
+            $result->ScholarName = Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->FirstName.' '.Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->LastName;
+            else
+            $result->ScholarName = "";
             $result->UnitId = $project->UnitId;
-            $result->UnitName = "";//$project->Unit->Title;//check
+            if(Units::all()->where('NidUnit','=',$project->UnitId)->count() > 0)
+            $result->UnitName = Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title;
+            else
+            $result->UnitName = "";
             $result->GroupId = $project->GroupId;
-            $result->GroupName = "";//$project->unit_group->Title;//check
+            if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->count() > 0)
+            $result->GroupName = UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title;
+            else
+            $result->GroupName = "";
             $result->Supervisor = $project->Supervisor ?? "";
             $result->SupervisorMobile = $project->SupervisorMobile ?? "";
             $result->Advisor = $project->Advisor ?? "";
@@ -286,9 +295,18 @@ class DataMapper
             $result->FirstName = $scholar->FirstName;
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
-            $result->Grade = "";//$scholar->GradeId ?? "";
-            $result->MajorName = "";//check
-            $result->OreintationName = "";//check
+            if(Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->count() > 0)
+            $result->Grade = Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;//$scholar->GradeId ?? "";
+            else
+            $result->Grade = "";
+            if(Majors::all()->where('NidMajor','=',$scholar->MajorId)->count() > 0)
+            $result->MajorName = Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;//check
+            else
+            $result->MajorName = "";
+            if(Oreintations::all()->where('NidOrientation','=',$scholar->OrientationId)->count() > 0)
+            $result->OreintationName = Oreintations::all()->where('NidOrientation','=',$scholar->OrientationId)->firstOrFail()->Title;//check
+            else
+            $result->OreintationName = "";
             $result->collegeName = $scholar->college;
             return $result;
         }
@@ -613,10 +631,13 @@ class DataMapper
             $result->SecurityLetterDate = $project->SecurityLetterDate;
             $result->ThesisDefenceDate = $project->ThesisDefenceDate;
             $result->ThesisDefenceLetterDate = $project->ThesisDefenceLetterDate;
+            if(!empty($project->ReducePeriod))
             $result->ReducePeriod = $project->ReducePeriod;
+            else
+            $result->ReducePeriod = 0;
             $result->Commision = $project->Commision;
             $result->HasBookPublish = boolval($project->HasBookPublish);
-            $result->UserId = '68018f1c-3e7f-4ff2-af9e-9fb197a194b9';//$project->UserId;
+            $result->UserId = $project->UserId;
             $result->TitleApproved = boolval($project->TitleApproved);
             $result->ThirtyPercentLetterDate = $project->ThirtyPercentLetterDate;
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate;

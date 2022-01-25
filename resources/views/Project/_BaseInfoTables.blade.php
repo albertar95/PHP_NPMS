@@ -25,12 +25,12 @@
                     <td>
                         @if(in_array('6',$sharedData['UserAccessedEntities']))
                             @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                            <button class="btn btn-danger" onclick="DeleteModal(1,{{ $unit->NidUnit }})">حذف</button>
+                            <button class="btn btn-danger" onclick="DeleteModal(1,'{{ $unit->NidUnit }}')">حذف</button>
                             @endif
                         @endif
                         @if(in_array('6',$sharedData['UserAccessedEntities']))
                             @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                            <button class="btn btn-warning" onclick="EditThis(1,{{ $unit->NidUnit }},{{ $unit->Title }},'')">ویرایش</button>
+                            <button class="btn btn-warning" onclick="EditThis(1,'{{ $unit->NidUnit }}','{{ $unit->Title }}','')">ویرایش</button>
                             @endif
                         @endif
                     </td>
@@ -69,12 +69,12 @@
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(2,{{ $unitgroup->NidGroup }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(2,'{{ $unitgroup->NidGroup }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(2,{{ $unitgroup->NidGroup }},{{ $unitgroup->Title }},{{ $unitgroup->UnitId }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(2,'{{ $unitgroup->NidGroup }}','{{ $unitgroup->Title }}','{{ $unitgroup->UnitId }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -110,12 +110,12 @@
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(3,{{ $grade->NidSetting }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(3,'{{ $grade->NidSetting }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(3,{{ $grade->NidSetting }},{{ $grade->SettingTitle }},{{ $grade->SettingValue }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(3,'{{ $grade->NidSetting }}','{{ $grade->SettingTitle }}','{{ $grade->SettingValue }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -144,19 +144,19 @@
             </tr>
         </tfoot>
         <tbody>
-            @foreach ($Majors as $major)
+            @foreach ($Majors as $key => $major)
             <tr>
-                <td>{{ $tmpCounter }}</td>
+                <td>{{ $key + 1 }}</td>
                 <td>{{ $major->Title }}</td>
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(4,{{ $major->NidMajor }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(4,'{{ $major->NidMajor }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(4,{{ $major->NidMajor }},{{ $major->Title }},'')">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(4,'{{ $major->NidMajor }}','{{ $major->Title }}','')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -187,7 +187,6 @@
             </tr>
         </tfoot>
         <tbody>
-            {{ $tmpCounter = 1; }}
             @foreach ($Oreintations as $key => $oreintation)
             <tr>
                 <td>{{ $key }}</td>
@@ -196,12 +195,12 @@
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(5,{{ $oreintation->NidOreintation }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(5,'{{ $oreintation->NidOreintation }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(5,{{ $oreintation->NidOreintation }},{{ $oreintation->Title }},{{ $oreintation->MajorId }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(5,'{{ $oreintation->NidOreintation }}','{{ $oreintation->Title }}','{{ $oreintation->MajorId }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -237,12 +236,12 @@
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(6,{{ $college->NidSetting }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(6,'{{ $college->NidSetting }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(6,{{ $college->NidSetting }},{{ $college->SettingTitle }},{{ $college->SettingValue }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(6,'{{ $college->NidSetting }}','{{ $college->SettingTitle }}','{{ $college->SettingValue }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -278,12 +277,12 @@
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(7,{{ $millit->NidSetting }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(7,'{{ $millit->NidSetting }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(7,{{ $millit->NidSetting }},{{ $millit->SettingTitle }},{{ $millit->SettingValue }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(7,'{{ $millit->NidSetting }}','{{ $millit->SettingTitle }}','{{ $millit->SettingValue }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -312,19 +311,19 @@
             </tr>
         </tfoot>
         <tbody>
-            @foreach ($CollaborationTypes as $collab)
+            @foreach ($CollaborationTypes as $key => $collab)
             <tr>
-                <td>{{ $tmpCounter }}</td>
+                <td>{{ $key + 1 }}</td>
                 <td>{{ $collab->SettingTitle }}</td>
                 <td>
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[2] == 1)
-                        <button class="btn btn-danger" onclick="DeleteModal(8,{{ $collab->NidSetting }})">حذف</button>
+                        <button class="btn btn-danger" onclick="DeleteModal(8,'{{ $collab->NidSetting }}')">حذف</button>
                         @endif
                     @endif
                     @if(in_array('6',$sharedData['UserAccessedEntities']))
                         @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',6)->pluck('rowValue')[0])[1] == 1)
-                        <button class="btn btn-warning" onclick="EditThis(8,{{ $collab->NidSetting }},{{ $collab->SettingTitle }},{{ $collab->SettingValue }})">ویرایش</button>
+                        <button class="btn btn-warning" onclick="EditThis(8,'{{ $collab->NidSetting }}','{{ $collab->SettingTitle }}','{{ $collab->SettingValue }}')">ویرایش</button>
                         @endif
                     @endif
                 </td>
@@ -354,9 +353,9 @@
         </tr>
     </tfoot>
     <tbody>
-        @foreach ($Roles as $role)
+        @foreach ($Roles as $key => $role)
             <tr>
-                <td>{{ $tmpCounter }}</td>
+                <td>{{ $key + 1 }}</td>
                 <td>{{ $role->Title }}</td>
                 <td>
                     <button class="btn btn-danger"
@@ -365,7 +364,6 @@
                         onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">ویرایش</button>
                 </td>
             </tr>
-            {{ $tmpCounter++ }}
         @endforeach
     </tbody>
 </table>

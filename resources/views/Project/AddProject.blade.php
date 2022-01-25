@@ -13,7 +13,7 @@
                     </div>
                     <form class="user" id="AddProjectForm">
                         @csrf
-                        <input type="text" id="UserId" name="UserId" value="@slvm.NidUser" hidden />
+                        <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}" hidden />
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="Subject" name="Subject"
@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>انتخاب محقق</option>
+                                    <option value="0" selected>انتخاب محقق</option>
                                     @foreach ($Scholars->sortBy('LastName') as $sch)
                                         <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }} {{ $sch->LastName }}</option>
                                     @endforeach
@@ -31,7 +31,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId" id="UnitId" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>انتخاب یگان</option>
+                                    <option value="0" selected>انتخاب یگان</option>
                                     @foreach ($Units->sortBy('Title') as $uni)
                                     <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
                                     @endforeach
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId" id="GroupId" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>انتخاب گروه</option>
+                                    <option value="0" selected>انتخاب گروه</option>
                                     @foreach ($UnitGroups->sortBy('Title') as $ung)
                                     <option value="{{ $ung->NidGroup }}">{{ $ung->Title }}</option>
                                     @endforeach
@@ -427,15 +427,21 @@
                                     window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                                 } else
                                 {
-                                    window.location.href = '/projects';
+                                    $("#SuccessMessage").text("طرح با موفقیت ایجاد گردید")
+                                    $("#successAlert").removeAttr('hidden')
+                                    window.setTimeout(function () {window.location.href = '/projects'; }, 3000);
                                 }
                             },
                             error: function (response) {
-                                var message = "";
+                                var message = "<ul>";
                                 jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += "<li>";
                                     message += val;
+                                    message += "</li>";
                                 });
-                                $("#ErrorMessage").text(message)
+                                message += "</ul>";
+                                $("#ErrorMessage").html(message)
+                                // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                                 $("#errorAlert").removeAttr('hidden')
                                 window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                             }
@@ -481,21 +487,21 @@
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#ScholarId").is(':selected'))
+            if($("#ScholarId").val() == "0")
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "محقق انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#UnitId").is(':selected'))
+            if($("#UnitId").val() == "0")
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "یگان انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if(!$("#GroupId").is(':selected'))
+            if($("#GroupId").val() == "0")
             {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "گروه تخصصی انتخاب نشده است";

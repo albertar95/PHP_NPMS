@@ -30,5 +30,5 @@
 <div class="form-group row">
 <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1, 1, 'UserActivityReport')">خروجی pdf</button>
 <button class="btn btn-success" style="margin:5px;" onclick="ExportResult(1,2,'UserActivityReport')">خروجی excel</button>
-<button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'UserActivityReport')">خروجی word</button>
+<button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'UserActivityReport')">پرینت</button>
 </div>

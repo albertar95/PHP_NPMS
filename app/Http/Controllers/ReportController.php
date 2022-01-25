@@ -83,7 +83,7 @@ class ReportController extends Controller
     {
         $api = new NPMSController();
         $result = new JsonResults();
-        $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.$this->PersianDateToGeorgian($report->FromDate)[1].'-'.$this->PersianDateToGeorgian($report->FromDate)[2],$this->PersianDateToGeorgian($report->ToDate)[0].'-'.$this->PersianDateToGeorgian($report->ToDate)[1].'-'.$this->PersianDateToGeorgian($report->ToDate)[2],$report->LogActionId,$report->UserName);
+        $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[2]),$this->PersianDateToGeorgian($report->ToDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[2]),$report->LogActionId,$report->UserName);
         $result->HasValue = true;
         $result->Html = view('Report._UserActivityReportResult',compact('logs'))->render();
         return response()->json($result);
@@ -119,10 +119,13 @@ class ReportController extends Controller
         $outputHtml = "";
         foreach ($outputs as $outy)
         {
-            $outputHtml = $outputHtml.'<div class="col-sm-4"><div class="row" style="display:flex;">';
-            $outputHtml = $outputHtml.sprintf("<input type=\"checkbox\" style=\"width:1rem;margin:unset !important;\" id=\"%s\" class=\"form-control checkbox\" alt=\"out\" checked />",$outy->ParameterKey);
-            $outputHtml = $outputHtml.sprintf("<label for=\"%s\" style=\"margin:.45rem .45rem 0 0\">%s</label>",$outy->ParameterKey,$this->GetReportParameterInfos()->where('ParameterType','=',1)->where('FieldName','=',$outy->ParameterKey)->firstOrFail()->PersianName);
-            $outputHtml = $outputHtml.'</div></div>';
+            if($this->GetReportParameterInfos()->where('ParameterType','=',1)->where('FieldName','=',$outy->ParameterKey)->count() > 0)
+            {
+                $outputHtml = $outputHtml.'<div class="col-sm-4"><div class="row" style="display:flex;">';
+                $outputHtml = $outputHtml.sprintf("<input type=\"checkbox\" style=\"width:1rem;margin:unset !important;\" id=\"%s\" class=\"form-control checkbox\" alt=\"out\" checked />",$outy->ParameterKey);
+                $outputHtml = $outputHtml.sprintf("<label for=\"%s\" style=\"margin:.45rem .45rem 0 0\">%s</label>",$outy->ParameterKey,$this->GetReportParameterInfos()->where('ParameterType','=',1)->where('FieldName','=',$outy->ParameterKey)->firstOrFail()->PersianName);
+                $outputHtml = $outputHtml.'</div></div>';
+            }
         }
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارش آماری");
         return view('Report.ExecuteReport',compact('report','inputs','outputs','inputHtml','outputHtml'));
@@ -151,6 +154,13 @@ class ReportController extends Controller
         $ReportName = $reportresult->ReportName;
         $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','OutputKey','ReportName'));
         return $pdf->stream($ReportName.'.pdf');
+    }
+    public function DownloadUserLogReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
+    {
+        $api = new NPMSController();
+        $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[2]),$this->PersianDateToGeorgian($report->ToDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[2]),$report->LogActionId,$report->UserName);
+        $pdf = PDF::loadView('Report._DownloadActivityLogReport',compact('logs'));
+        return $pdf->stream('userActivityLog.pdf');
     }
     public function ChartReports(Request $request)
     {
@@ -189,7 +199,7 @@ class ReportController extends Controller
                 $newIn->IsDeleted = false;
                 $newIn->NidParameter = Str::uuid();
                 $newIn->ParameterKey = $repInp;
-                $newIn->ReportId = $report->NidReport;
+                $newIn->ReportId = $newReport->NidReport;
                 $newIn->Type = 0;
                 $inps->push($newIn);
             }
@@ -199,7 +209,7 @@ class ReportController extends Controller
                 $newOut->IsDeleted = false;
                 $newOut->NidParameter = Str::uuid();
                 $newOut->ParameterKey = $repOut;
-                $newOut->ReportId = $report->NidReport;
+                $newOut->ReportId = $newReport->NidReport;
                 $newOut->Type = 1;
                 $outs->push($newOut);
             }

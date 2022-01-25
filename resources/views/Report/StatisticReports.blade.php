@@ -103,12 +103,6 @@
     <script type="text/javascript">
             $(function ()
             {
-                var successdelete = '@TempData["DeleteReportSuccessMessage"]';
-                if (successdelete != '') {
-                    $("#SuccessMessage").text(successdelete);
-                    $("#successAlert").removeAttr('hidden')
-                    window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden'); }, 5000);
-                }
             });
             function ShowModal(NidReport)
             {

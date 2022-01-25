@@ -20,7 +20,7 @@
             </div>
             @if(in_array('2',$sharedData['UserAccessedEntities']))
                 @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',2)->pluck('rowValue')[0])[0] == 1)
-                <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="{{ URL('project.AddProject') }}">ایجاد طرح</a>
+                <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="/addproject">ایجاد طرح</a>
                 @endif
             @endif
             <div class="table-responsive" dir="ltr">
@@ -91,21 +91,6 @@
         <script type="text/javascript">
             $(function ()
             {
-                var successedit = '@TempData["ProjectSuccessMessage"]';
-                var erroredit = '@TempData["ProjectErrorMessage"]';
-                if(successedit != '')
-                {
-                    $("#SuccessMessage").text(successedit);
-                    $("#successAlert").removeAttr('hidden')
-                    window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden'); }, 10000);
-                }
-                if(erroredit != '')
-                {
-                    $("#ErrorMessage").text(erroredit);
-                    $("#errorAlert").removeAttr('hidden')
-                    window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 10000);
-                }
-
                 // Set new default font family and font color to mimic Bootstrap's default styling
                 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
                 Chart.defaults.global.defaultFontColor = '#858796';

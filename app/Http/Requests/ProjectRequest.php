@@ -33,7 +33,6 @@ class ProjectRequest extends FormRequest
             "AdvisorMobile" => new MobileFormat(),
             "Referee1" => 'max:150',
             "Referee2" => 'max:150',
-            "PersianCreateDate" => new PersianDateFormat(),
             "TenPercentLetterDate" => new PersianDateFormat(),
             "PreImploymentLetterDate" => new PersianDateFormat(),
             "ImploymentDate" => new PersianDateFormat(),

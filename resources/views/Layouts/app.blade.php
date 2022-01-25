@@ -101,12 +101,12 @@
                                     style="text-align:right;">گزارشات آماری</a>
                             @endif
                         @endif
-                        @if (in_array('4', $sharedData['UserAccessedEntities']))
+                        {{-- @if (in_array('4', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('report.ChartReports') }}"
                                     style="text-align:right;">گزارشات نموداری</a>
                             @endif
-                        @endif
+                        @endif --}}
                         <a class="collapse-item" href="{{ route('report.UserLogReport') }}"
                             style="text-align:right;">گزارشات عملکرد کاربران</a>
                         @if (in_array('4', $sharedData['UserAccessedEntities']))
@@ -663,6 +663,48 @@
                 },
                 error: function() {}
             });
+        }
+        function ShowDetailModal(typo, Nid) {
+            if (typo == 1) {
+                $("#DetailModalLabel").text('جزییات اطلاعات محقق');
+                $("#btnClose").removeAttr('hidden');
+                $("#btnCancel").attr('hidden', 'hidden');
+                $("#btnOk").attr('hidden', 'hidden');
+                $("#DeleteQuestion").attr('hidden', 'hidden');
+                $.ajax(
+                    {
+                        url: '/scholardetail/' + Nid,
+                        type: 'get',
+                        datatype: 'json',
+                        success: function (result) {
+                            if (result.HasValue) {
+                                $("#DetailModalBody").html(result.Html)
+                                $("#DetailModal").modal('show')
+                            }
+                        },
+                        error: function () { }
+                    });
+            }
+            else if (typo == 2) {
+                $("#DetailModalLabel").text('جزییات اطلاعات کاربر');
+                $("#btnClose").removeAttr('hidden');
+                $("#btnCancel").attr('hidden', 'hidden');
+                $("#btnOk").attr('hidden', 'hidden');
+                $("#DeleteQuestion").attr('hidden', 'hidden');
+                $.ajax(
+                    {
+                        url: '/userdetail/' + Nid,
+                        type: 'get',
+                        datatype: 'json',
+                        success: function (result) {
+                            if (result.HasValue) {
+                                $("#DetailModalBody").html(result.Html)
+                                $("#DetailModal").modal('show')
+                            }
+                        },
+                        error: function () { }
+                    });
+            }
         }
     </script>
 </body>
