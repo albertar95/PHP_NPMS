@@ -14,6 +14,7 @@ class projectDetailDTO extends Model
     public string $Subject;
     public int $ProjectStatus;//tiny int
     public string $ScholarId;
+    public string $ScholarTitle;
     public string $UnitId;
     public string $UnitTitle;
     public string $GroupId;
@@ -37,6 +38,7 @@ class projectDetailDTO extends Model
     public string $Commision;
     public bool $HasBookPublish;
     public string $UserId;
+    public string $UserTitle;
     public bool $TitleApproved;
     public string $ThirtyPercentLetterDate;
     public string $SixtyPercentLetterDate;

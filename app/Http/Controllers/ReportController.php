@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domains\Repositories\ReportRawData;
 use App\Helpers\Casts;
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\ReportRequest;
 use App\Models\ReportParameters;
 use App\Models\Reports;
 use Hekmatinasser\Verta\Verta;
@@ -35,6 +36,58 @@ class ReportController extends Controller
         $infos->push($tmpinfo);
         $tmpinfo = new ReportParameterInfo(1,6,"NationalCode",0,'کد ملی');
         $infos->push($tmpinfo);
+        //project inputs
+        $tmpinfo = new ReportParameterInfo(2,1,"ProjectStatus",0,'وضعیت طرح');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,2,"UnitId",0,'یگان تخصصی');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,3,"GroupId",0,'گروه تخصصی');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,4,"Supervisor",0,'استاد راهنما');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,5,"Advisor",0,'استاد مشاور');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,6,"Referee",0,'داوران');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,7,"PersianCreateDate",0,'تاریخ ایجاد');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,8,"TenPercentLetterDate",0,'تاریخ نامه 10 درصد');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,9,"PreImploymentLetterDate",0,'تاریخ نامه روگرفت');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,10,"ImploymentDate",0,'تاریخ بکارگیری');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,11,"SecurityLetterDate",0,'تاریخ نامه حفاظت');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,12,"ThesisDefenceDate",0,'تاریخ دفاعیه');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,13,"ThesisDefenceLetterDate",0,'تاریخ نامه دفاعیه');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,14,"ReducePeriod",0,'مدت کسری');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,15,"UserId",0,'کاربر ایجاد کننده');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,16,"ThirtyPercentLetterDate",0,'تاریخ نامه 30 درصد');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,17,"SixtyPercentLetterDate",0,'تاریخ نامه 60 درصد');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,18,"ATFLetterDate",0,'تاریخ نامه عتف');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,19,"FinalApprove",0,'تایید نهایی');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,20,"IsConfident",0,'محرمانه');
+        $infos->push($tmpinfo);
+        //user inputs
+        $tmpinfo = new ReportParameterInfo(4,1,"RoleId",0,'نقش');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,2,"IsLockedOut",0,'قفل شدن');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,3,"IsDisabled",0,'غیرفعال شدن');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,4,"LastLoginDate",0,'آخرین ورود');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,5,"IncorrectPasswordCount",0,'تعداد کلمه عبور اشتباه');
+        $infos->push($tmpinfo);
         //scholar outputs
         $tmpinfo = new ReportParameterInfo(1,1,"FirstName",1,'نام');
         $infos->push($tmpinfo);
@@ -60,6 +113,83 @@ class ReportController extends Controller
         $infos->push($tmpinfo);
         $tmpinfo = new ReportParameterInfo(1,13,"GradeId",1,'مقطع تحصیلی');
         $infos->push($tmpinfo);
+        //project output
+        $tmpinfo = new ReportParameterInfo(2,1,"ProjectStatus",1,'وضعیت طرح');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,2,"UnitTitle",1,'یگان تخصصی');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,3,"GroupTitle",1,'گروه تخصصی');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,4,"Supervisor",1,'استاد راهنما');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,5,"Advisor",1,'استاد مشاور');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,6,"Referee",1,'داوران');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,7,"PersianCreateDate",1,'تاریخ ایجاد');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,8,"TenPercentLetterDate",1,'تاریخ نامه 10 درصد');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,9,"PreImploymentLetterDate",1,'تاریخ نامه روگرفت');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,11,"ImploymentDate",1,'تاریخ بکارگیری');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,11,"SecurityLetterDate",1,'تاریخ نامه حفاظت');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,12,"ThesisDefenceDate",1,'تاریخ دفاعیه');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,13,"ThesisDefenceLetterDate",1,'تاریخ نامه دفاعیه');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,14,"ReducePeriod",1,'مدت کسری');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,15,"UserTitle",1,'کاربر ایجاد کننده');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,16,"ThirtyPercentLetterDate",1,'تاریخ نامه 30 درصد');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,17,"SixtyPercentLetterDate",1,'تاریخ نامه 60 درصد');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,18,"ATFLetterDate",1,'تاریخ نامه عتف');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,19,"FinalApprove",1,'تایید نهایی');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,20,"IsConfident",1,'محرمانه');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,21,"ProjectNumber",1,'شماره پرونده');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,22,"Subject",1,'عنوان');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,23,"ScholarTitle",1,'نام محقق');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,24,"SupervisorMobile",1,'شماره همراه راهنما');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,25,"AdvisorMobile",1,'شماره همراه مشاور');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,26,"Editor",1,'ویراستار');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,27,"HasBookPublish",1,'چاپ کتاب');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(2,28,"TitleApproved",1,'تایید عنوان');//
+        $infos->push($tmpinfo);
+        //user output
+        $tmpinfo = new ReportParameterInfo(4,1,"RoleTitle",1,'نقش');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,2,"IsLockedOut",1,'قفل شدن');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,3,"IsDisabled",1,'غیرفعال شدن');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,4,"LastLoginDate",1,'آخرین ورود');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,5,"IncorrectPasswordCount",1,'تعداد کلمه عبور اشتباه');
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,6,"Username",1,'نام کاربری');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,7,"FirstName",1,'نام');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,8,"LastName",1,'نام خانوادگی');//
+        $infos->push($tmpinfo);
+        $tmpinfo = new ReportParameterInfo(4,9,"ProfilePicture",1,'نمایه');//
+        $infos->push($tmpinfo);
+
         return $infos;
     }
     public function StatisticReports(Request $request)
@@ -102,6 +232,10 @@ class ReportController extends Controller
             $Majors = $api->GetMajors();
             $Orientations = $api->GetOrientations();
             $MillitaryStatuses = $api->GetMillitaryStatuses();
+            $units = $api->GetAllUnits();
+            $unitgroups = $api->GetAllUnitGroups();
+            $users = $api->GetAllUsers();
+            $roles = $api->GetAllRoles();
             for ($i = 0; $i <= $inputs->count() / 3; $i++)
             {
                 $inputHtml = $inputHtml.'<div class="form-group row" style="display:flex;">';
@@ -109,7 +243,7 @@ class ReportController extends Controller
                 {
                     $inputHtml = $inputHtml.'<div class="col-sm-4" style="text-align:right;"> <div style="display:flex;">';
                     $tmpparam = $this->GetReportParameterInfos()->where('ParameterType','=',0)->where('TypeId','=',$ReportType)->where('FieldName','=',$inp->ParameterKey)->firstOrFail();
-                    $tmpview = view('Report._ExecuteReportPartial',compact('tmpparam','ReportType','Grades','Majors','Orientations','MillitaryStatuses'))->render();
+                    $tmpview = view('Report._ExecuteReportPartial',compact('tmpparam','ReportType','units','unitgroups','users','roles','Grades','Majors','Orientations','MillitaryStatuses'))->render();
                     $inputHtml = $inputHtml.$tmpview;
                     $inputHtml = $inputHtml.'</div></div>';
                 }
@@ -136,14 +270,15 @@ class ReportController extends Controller
         $reportresult = $api->GetStatisticsReport($report->NidReport,$report->PrameterKeys,$report->ParameterValues);
         $OutputKey = collect($report->OutPutValues);
         $Scholars = $reportresult->Scholars;
+        $Projects = $reportresult->Projects;
+        $Users = $reportresult->Users;
         $ReportName = $reportresult->ReportName;
         $result = new JsonResults();
         $result->HasValue = true;
-        $result->Html = view('Report._ReportResult',compact('Scholars','OutputKey','ReportName'))->render();
+        $result->Html = view('Report._ReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName'))->render();
         // $api->AddLog(auth()->user(),$report->ip(),24,0,2,2,$report->ReportName);
         return response()->json($result);
-
-        // return view('Report.ExecuteReport',compact('report','inputs','outputs'));
+        // return $reportresult;
     }
     public function DownloadStatisticsReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
@@ -151,8 +286,10 @@ class ReportController extends Controller
         $reportresult = $api->GetStatisticsReport($report->NidReport,$report->PrameterKeys,$report->ParameterValues);
         $OutputKey = collect($report->OutPutValues);
         $Scholars = $reportresult->Scholars;
+        $Projects = $reportresult->Projects;
+        $Users = $reportresult->Users;
         $ReportName = $reportresult->ReportName;
-        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','OutputKey','ReportName'));
+        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName'));
         return $pdf->stream($ReportName.'.pdf');
     }
     public function DownloadUserLogReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
@@ -183,13 +320,14 @@ class ReportController extends Controller
         $result->Html = view('Report._CustomReportPartial',compact('inputs','outputs'))->render();
         return response()->json($result);
     }
-    public function SubmitAddCustomReport(Request $report)//string $Name,int $ContextId,int $FieldId,array $Inputs,array $Outputs
+    public function SubmitAddCustomReport(ReportRequest $report)//string $Name,int $ContextId,int $FieldId,array $Inputs,array $Outputs
     {
+        $report->validated();
         $newReport = new Reports();
         $newReport->NidReport = Str::uuid();
         $newReport->ContextId = $report->ContextId;
         $newReport->FieldId = $report->FieldId;
-        $newReport->ReportName = $report->Name;
+        $newReport->ReportName = $report->ReportName;
         $api = new NPMSController();
         if($api->AddReport($newReport))
         {

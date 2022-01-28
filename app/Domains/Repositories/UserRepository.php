@@ -609,7 +609,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     public function GetIndexChartReport()
     {
         $grouped = Projects::all()->groupBy(function ($item, $key) {
-            return substr($item['PersianCreateDate'],stripos($item['PersianCreateDate'],'/')+1,strrpos($item['PersianCreateDate'],'/')-stripos($item['PersianCreateDate'],'/')-1);
+            return substr($item['PersianCreateDate'],stripos($item['PersianCreateDate'],'-')+1,strrpos($item['PersianCreateDate'],'-')-stripos($item['PersianCreateDate'],'-')-1);
         });
         // $projs = Projects::all()->get('PersianCreateDate');
         // $grouped = $projs->groupBy(function ($item, $key) {

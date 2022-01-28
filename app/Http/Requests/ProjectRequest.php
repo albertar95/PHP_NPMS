@@ -45,4 +45,16 @@ class ProjectRequest extends FormRequest
             "ATFLetterDate" => new PersianDateFormat()
         ];
     }
+    public function messages()
+    {
+        return[
+            'Subject.max' => 'موضوع طرح باید کمتر از 2500 کاراکتر باشد',
+            'Supervisor.max' => 'طول نام استاد راهنما باید کمتر از 150 کاراکتر باشد',
+            'Advisor.max' => 'طول نام استاد مشاور باید کمتر از 150 کاراکتر باشد',
+            'Referee1.max' => 'طول نام داور 1 باید کمتر از 150 کاراکتر باشد',
+            'Referee2.max' => 'طول نام داور 2 باید کمتر از 150 کاراکتر باشد',
+            'Referee2.required' => 'موضوع طرح الزامی می باشد',
+            'ReducePeriod.min' => 'مدت کسری نباید کمتر از 0 باشد',
+        ];
+    }
 }

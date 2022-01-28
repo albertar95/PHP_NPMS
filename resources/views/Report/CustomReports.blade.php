@@ -22,10 +22,9 @@
                             </div>
                             <div class="col-sm-6">
                                 <select class="form-control allWidth" data-ng-style="btn-primary" id="sltContext" name="ContextId" style="padding:0 .75rem;">
-                                    <option value="0" disabled selected>موجودیت گزارش</option>
+                                    <option value="0" selected>موجودیت گزارش</option>
                                     <option value="1">محقق</option>
                                     <option value="2">طرح</option>
-                                    <option value="3">اطلاعات پایه</option>
                                     <option value="4">کاربر</option>
                                 </select>
                             </div>
@@ -34,7 +33,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <select class="form-control allWidth" data-ng-style="btn-primary" id="sltField" name="FieldId" onchange="FieldChange()" style="padding:0 .75rem;">
-                                        <option value="0" disabled selected>جستجو بر اساس</option>
+                                        <option value="0" selected>جستجو بر اساس</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
@@ -87,6 +86,7 @@
 
 @section ('scripts')
     <script type="text/javascript">
+        var ValiditiyMessage = "";
         $(function ()
         {
             $("#sltContext").on('change', function ()
@@ -121,11 +121,12 @@
             });
             $("#btnSubmit").click(function (e) {
                 e.preventDefault();
-                if ($("#ReportName").val == "")
+                if (!CheckInputValidity())
                 {
-                    $("#WarningMessage").text('لطفا نام گزارش را وارد نمایید');
-                    $("#warningAlert").removeAttr('hidden');
-                    window.setTimeout(function () { $("#warningAlert").attr('hidden', 'hidden'); }, 5000);
+                    $("#ErrorMessage").html(ValiditiyMessage)
+                        $("#errorAlert").removeAttr('hidden')
+                        window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
+                        ValiditiyMessage = "";
                 } else {
                 var selectedInputs = [];
                 var selectedOutputs = [];
@@ -145,7 +146,7 @@
                         url: '/submitaddcustomreport',
                         type: 'post',
                         datatype: 'json',
-                        data: { Name: $("#ReportName").val(), ContextId: $("#sltContext").val(), FieldId: $("#sltField").val(), Inputs: selectedInputs, Outputs: selectedOutputs },
+                        data: { ReportName: $("#ReportName").val(), ContextId: $("#sltContext").val(), FieldId: $("#sltField").val(), Inputs: selectedInputs, Outputs: selectedOutputs },
                         success: function (result) {
                             if (!result.HasValue) {
                                 $("#ErrorMessage").text(result.Message);
@@ -156,12 +157,25 @@
                                 $("#successAlert").removeAttr('hidden');
                                 window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden') }, 5000);
                                 $('#AddReportForm').each(function () { this.reset(); });
+                                $("#InputDiv").html('');
+                                $("#OutputDiv").html('');
                             }
                         },
-                        error: function () {
-                            $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجدد امتحان کنید');
-                            $("#errorAlert").removeAttr('hidden');
-                            window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
+                        error: function (response) {
+                            // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجدد امتحان کنید');
+                            // $("#errorAlert").removeAttr('hidden');
+                            // window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
+                            var message = "<ul>";
+                                jQuery.each( response.responseJSON.errors, function( i, val ) {
+                                    message += "<li>";
+                                    message += val;
+                                    message += "</li>";
+                                });
+                                message += "</ul>";
+                                $("#ErrorMessage").html(message)
+                                // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
+                                $("#errorAlert").removeAttr('hidden')
+                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden'); }, 5000);
                         }
                     });
                 }
@@ -178,6 +192,33 @@
                         $(this).prop('checked', false);
                 }
             });
+        }
+        function CheckInputValidity()
+        {
+            var isValid = true;
+            if(!$("#ReportName").val())
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "نام گزارش وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if($("#sltContext").val() == "0")
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "موجودیت انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if($("#sltField").val() == "0")
+            {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "جستجو بر اساس انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
         }
     </script>
     @endsection

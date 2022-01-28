@@ -30,4 +30,16 @@ class UserRequest extends FormRequest
             "Password" => 'required'
         ];
     }
+    public function messages()
+    {
+        return[
+            'FirstName.max' => 'طول نام باید کمتر از 100 کاراکتر باشد',
+            'FirstName.required' => 'نام الزامی می باشد',
+            'LastName.max' => 'طول نام خانوادگی باید کمتر از 100 کاراکتر باشد',
+            'LastName.required' => 'نام خانوادگی الزامی می باشد',
+            'UserName.max' => 'طول نام کاربری باید کمتر از 100 کاراکتر باشد',
+            'UserName.required' => 'نام کاربری الزامی می باشد',
+            'Password.required' => 'کلمه عبور الزامی می باشد',
+        ];
+    }
 }

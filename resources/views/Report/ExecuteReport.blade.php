@@ -78,6 +78,175 @@
                 responsive: true,
                 maxDate: new persianDate()
             });
+            $("#LastLoginDate").persianDatepicker({
+                altField: '#LastLoginDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ATFLetterDate").persianDatepicker({
+                altField: '#ATFLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#SixtyPercentLetterDate").persianDatepicker({
+                altField: '#SixtyPercentLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ThirtyPercentLetterDate").persianDatepicker({
+                altField: '#ThirtyPercentLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ThesisDefenceLetterDate").persianDatepicker({
+                altField: '#ThesisDefenceLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ThesisDefenceDate").persianDatepicker({
+                altField: '#ThesisDefenceDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#SecurityLetterDate").persianDatepicker({
+                altField: '#SecurityLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ImploymentDate").persianDatepicker({
+                altField: '#ImploymentDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#PreImploymentLetterDate").persianDatepicker({
+                altField: '#PreImploymentLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#ImploymentDate").persianDatepicker({
+                altField: '#ImploymentDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#PreImploymentLetterDate").persianDatepicker({
+                altField: '#PreImploymentLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#TenPercentLetterDate").persianDatepicker({
+                altField: '#TenPercentLetterDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
+            $("#PersianCreateDate").persianDatepicker({
+                altField: '#PersianCreateDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
             $("#btnExecute").click(function(e) {
                 e.preventDefault();
                 var paramKeys = [];

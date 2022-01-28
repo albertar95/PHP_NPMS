@@ -28,4 +28,12 @@ class MessageRequest extends FormRequest
             "MessageContent" => 'required|max:8000'
         ];
     }
+    public function messages()
+    {
+        return[
+            'MessageContent.max' => 'متن پیام باید کمتر از 8000 کاراکتر باشد',
+            'MessageContent.required' => 'متن الزامی می باشد',
+            'Title.max' => 'طول عنوان باید کمتر از 100 کاراکتر باشد',
+        ];
+    }
 }

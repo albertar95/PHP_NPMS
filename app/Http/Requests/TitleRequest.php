@@ -27,4 +27,11 @@ class TitleRequest extends FormRequest
             "Title" => 'required|max:100'
         ];
     }
+    public function messages()
+    {
+        return[
+            'Title.max' => 'طول عنوان باید کمتر از 100 کاراکتر باشد',
+            'Title.required' => 'عنوان الزامی می باشد',
+        ];
+    }
 }

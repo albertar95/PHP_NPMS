@@ -114,11 +114,19 @@ class DataMapper
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
+            if(Scholars::all()->where('NidScholar','=',$project->ScholarId)->count() > 0)
+            $result->ScholarTitle = Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->FirstName.' '.Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->LastName;
+            else
+            $result->ScholarTitle = "";
             $result->UnitId = $project->UnitId;
-            // $result->UnitTitle = $project->Unit->Title;//check
+            if(Units::all()->where('NidUnit','=',$project->UnitId)->count() > 0)
+            $result->UnitTitle = Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title;
+            else
             $result->UnitTitle = "";//check
             $result->GroupId = $project->GroupId;
-            // $result->GroupTitle = $project->unit_group->Title;//check
+            if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->count() > 0)
+            $result->GroupTitle = UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title;
+            else
             $result->GroupTitle = "";//check
             $result->Supervisor = $project->Supervisor;
             $result->SupervisorMobile = $project->SupervisorMobile;
@@ -139,6 +147,10 @@ class DataMapper
             $result->Commision = $project->Commision ?? "";
             $result->HasBookPublish = boolval($project->HasBookPublish);
             $result->UserId = $project->UserId;
+            if(User::all()->where('NidUser','=',$project->UserId)->count() > 0)
+            $result->UserTitle = User::all()->where('NidUser','=',$project->UserId)->firstOrFail()->UserName;
+            else
+            $result->UserTitle = "";//check
             $result->TitleApproved = boolval($project->TitleApproved);
             $result->ThirtyPercentLetterDate = $project->ThirtyPercentLetterDate ?? "";
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate ?? "";
