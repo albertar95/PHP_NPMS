@@ -76,7 +76,7 @@ class UserController extends Controller
     public function Users(Request $request)
     {
         $api = new NPMSController();
-        // $Users = $api->GetAllUsers(0);
+        $Users = $api->GetAllUsers(0);
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت کاربران");
         return view('User.Users',compact('Users'));
     }
@@ -155,7 +155,7 @@ class UserController extends Controller
     public function EditUser(string $NidUser,Request $request)
     {
         $api = new NPMSController();
-        $User = $api->GetUserDTOById($NidUser);
+        $User = $api->GetUserById($NidUser);
         $Roles = $api->GetAllRoles();
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ویرایش کاربر");
         return view('User.EditUser',compact('User','Roles'));

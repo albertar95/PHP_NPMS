@@ -67,9 +67,9 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($Roles as $role)
+                                @foreach ($Roles as $key => $role)
                                     <tr>
-                                        <td></td>
+                                        <td>{{ $key + 1 }}</td>
                                         <td>{{ $role->Title }}</td>
                                         @if($role->IsAdmin)
                                         <td>نقش مدیر</td>

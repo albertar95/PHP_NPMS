@@ -357,6 +357,11 @@
             <tr>
                 <td>{{ $key + 1 }}</td>
                 <td>{{ $role->Title }}</td>
+                @if($role->IsAdmin)
+                <td>نقش مدیر</td>
+                @else
+                <td>نقش عادی</td>
+                @endforelse
                 <td>
                     <button class="btn btn-danger"
                         onclick="DeleteModal(1,'{{ $role->NidRole }}')">حذف</button>

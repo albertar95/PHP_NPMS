@@ -314,7 +314,7 @@
                                     <span id="txtUserId" hidden>{{ auth()->user()->NidUser }}</span>
                                     @if (!empty(auth()->user()->ProfilePicture))
                                         <img src="{{ sprintf('/storage/images/%s', auth()->user()->ProfilePicture) }}"
-                                            class="img-profile rounded-circle" /> --}}
+                                            class="img-profile rounded-circle" />
                                     @else
                                         <img class="img-profile rounded-circle"
                                             src="{{ URL('Content/img/User/user3.png') }}">

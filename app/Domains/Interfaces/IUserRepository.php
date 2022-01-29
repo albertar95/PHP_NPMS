@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 interface IUserRepository
 {
     public function GetUserDTOById(string $NidUser):userDTO;
+    public function GetUserById(string $NidUser):User;
     public function AddUser(User $User);
     public function GetUserDTOs(int $pagesize = 10) :Collection;
     public function DisableUser(string $NidUser);

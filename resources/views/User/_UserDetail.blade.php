@@ -47,7 +47,7 @@
         </div>
         <div class="col-sm-4">
             @if (!empty($Users->LastLoginDate))
-                <label class="form-control">{{ $LastLoginDate }}</label>
+                <label class="form-control">{{ $Users->LastLoginDate }}</label>
             @endif
         </div>
     </div>

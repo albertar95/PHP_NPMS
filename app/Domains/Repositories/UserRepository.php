@@ -24,58 +24,53 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
-class UserRepository extends BaseRepository implements IUserRepository{
+class UserRepository extends BaseRepository implements IUserRepository
+{
     public function __construct(User $model)
     {
         parent::__construct($model);
     }
-    public function GetUserDTOById(string $NidUser):userDTO
+    public function GetUserDTOById(string $NidUser): userDTO
     {
-        $tmpuser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
+        $tmpuser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
         return DataMapper::MapToUserDTO($tmpuser);
+    }
+    public function GetUserById(string $NidUser):User
+    {
+        return $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
     }
     public function AddUser(User $User)
     {
         $User->Password = Hash::make($User->Password);
         return $User->save();
     }
-    public function GetUserDTOs(int $pagesize = 10) :Collection
+    public function GetUserDTOs(int $pagesize = 10): Collection
     {
         $result = new Collection();
-        if ($pagesize != 0)
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->take($pagesize);
-            foreach ($tmpUsers as $User)
-            {
+        if ($pagesize != 0) {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', 0)->take($pagesize);
+            foreach ($tmpUsers as $User) {
                 $result->push(DataMapper::MapToUserDTO($User));
             }
-        }
-        else
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',0);
-            foreach ($tmpUsers as $User)
-            {
+        } else {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', 0);
+            foreach ($tmpUsers as $User) {
                 $result->push(DataMapper::MapToUserDTO($User));
             }
         }
         return $result;
     }
-    public function GetOnlineUserDTOs(int $pagesize = 10) :Collection
+    public function GetOnlineUserDTOs(int $pagesize = 10): Collection
     {
         $result = new Collection();
-        if ($pagesize != 0)
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->whereNotNull('last_seen')->sortByDesc('last_seen')->take($pagesize);
-            foreach ($tmpUsers as $User)
-            {
+        if ($pagesize != 0) {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', 0)->whereNotNull('last_seen')->sortByDesc('last_seen')->take($pagesize);
+            foreach ($tmpUsers as $User) {
                 $result->push(DataMapper::MapToUserDTO($User));
             }
-        }
-        else
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',0)->whereNotNull('last_seen')->sortByDesc('last_seen');
-            foreach ($tmpUsers as $User)
-            {
+        } else {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', 0)->whereNotNull('last_seen')->sortByDesc('last_seen');
+            foreach ($tmpUsers as $User) {
                 $result->push(DataMapper::MapToUserDTO($User));
             }
         }
@@ -83,37 +78,45 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function DisableUser(string $NidUser)
     {
-        $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
-        if (!is_null($tmpUser))
-        {
-            User::where('NidUser',$NidUser)->update(
+        $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
+        if (!is_null($tmpUser)) {
+            User::where('NidUser', $NidUser)->update(
                 [
                     'IsDisabled' => boolval(true)
                 ]
-                );
-                return $tmpUser;
-        }
-        else
+            );
+            return $tmpUser;
+        } else
             return null;
     }
     public function LogoutUser(string $NidUser)
     {
-        $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
-        if (!is_null($tmpUser))
-        {
-            User::where('NidUser',$NidUser)->update(
+        $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
+        if (!is_null($tmpUser)) {
+            User::where('NidUser', $NidUser)->update(
                 [
                     'Force_logout' => boolval(true)
                 ]
-                );
-                return $tmpUser;
-        }
-        else
+            );
+            return $tmpUser;
+        } else
             return null;
     }
-    public function UpdateUser(User $User):bool
+    public function UpdateUser(User $User): bool
     {
-        User::where('NidUser',$User->NidUser)->update(
+        if (empty($User->LastLoginDate))
+            $User->LastLoginDate = null;
+        if (empty($User->LockoutDeadLine))
+            $User->LockoutDeadLine = null;
+        if (empty($User->LastPasswordChangeDate))
+            $User->LastPasswordChangeDate = null;
+        if (empty($User->last_seen))
+            $User->last_seen = null;
+        // if (empty($User->Force_logout))
+        //     $User->Force_logout = 0;
+        // if (empty($User->IncorrectPasswordCount))
+        //     $User->IncorrectPasswordCount = 0;
+        User::where('NidUser', $User->NidUser)->update(
             [
                 'UserName' => $User->UserName,
                 'Password' => $User->Password,
@@ -127,27 +130,26 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 'RoleId' => $User->RoleId,
                 'LockoutDeadLine' => $User->LockoutDeadLine,
                 'LastPasswordChangeDate' => $User->LastPasswordChangeDate,
+                'last_seen' => $User->last_seen,
+                'Force_logout' => $User->Force_logout,
                 'ProfilePicture' => $User->ProfilePicture
             ]
-            );
-            return true;
+        );
+        return true;
     }
-    public function GetFilteredUserDTOs(int $FilterType):Collection
+    public function GetFilteredUserDTOs(int $FilterType): Collection
     {
         $result = new Collection();
-        switch ($FilterType)
-        {
+        switch ($FilterType) {
             case 1:
-                $tmpUser = $this->model->all()->where('IsDisabled','=',1);
-                foreach ($tmpUser as $usr)
-                {
+                $tmpUser = $this->model->all()->where('IsDisabled', '=', 1);
+                foreach ($tmpUser as $usr) {
                     $result->push(DataMapper::MapToUserDTO($usr));
                 }
                 break;
             case 2:
-                $tmpUser = $this->model->all()->where('IsLockedOut','=',1);
-                foreach ($tmpUser as $usr)
-                {
+                $tmpUser = $this->model->all()->where('IsLockedOut', '=', 1);
+                foreach ($tmpUser as $usr) {
                     $result->push(DataMapper::MapToUserDTO($usr));
                 }
                 break;
@@ -170,39 +172,36 @@ class UserRepository extends BaseRepository implements IUserRepository{
         }
         return $result;
     }
-    public function CheckPreviousPassword(string $NidUser, string $NewPass) :bool
+    public function CheckPreviousPassword(string $NidUser, string $NewPass): bool
     {
         $result = true;
-        $tmpPasswords = PasswordHistory::all()->where('NidUser','=',$NidUser)->sortByDesc('CreateDate')->take(3);
-        if (!is_null($tmpPasswords))
-        {
+        $tmpPasswords = PasswordHistory::all()->where('NidUser', '=', $NidUser)->sortByDesc('CreateDate')->take(3);
+        if (!is_null($tmpPasswords)) {
             foreach ($tmpPasswords as $Pass) {
-                if (Hash::check($NewPass, $Pass->Password))
-                {
+                if (Hash::check($NewPass, $Pass->Password)) {
                     $result = false;
                 }
             }
         }
         return $result;
     }
-    public function ChangeUserPassword(string $NidUser, string $NewPass) :string
+    public function ChangeUserPassword(string $NidUser, string $NewPass): string
     {
-        $tmpUser = $this->model->all()->where('NidUser','=',$NidUser)->firstOrFail();
-        if (!is_null($tmpUser))
-        {
+        $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
+        if (!is_null($tmpUser)) {
             $passhistory = new PasswordHistory();
             $passhistory->NidUser = $NidUser;
             $passhistory->Password = $tmpUser->Password;
             $passhistory->CreateDate = Carbon::now();
             $passhistory->save();
-            User::where('NidUser',$NidUser)->update(
+            User::where('NidUser', $NidUser)->update(
                 [
                     'Password' => Hash::make($NewPass),
                     'LastPasswordChangeDate' => Carbon::now()
                 ]
-                );
-                return User::all()->where('NidUser','=',$NidUser)->firstOrFail()->Password;
-        }else
+            );
+            return User::all()->where('NidUser', '=', $NidUser)->firstOrFail()->Password;
+        } else
             return "";
     }
     public function LoginUser(string $Username, string $Password)
@@ -210,30 +209,22 @@ class UserRepository extends BaseRepository implements IUserRepository{
         $tmpUser = $this->GetUserByUsername($Username);
         $resultFlag = 0;
         $dateNow = Carbon::now();
-        if (!is_null($tmpUser))
-        {
-            if($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine))
-            {
+        if (!is_null($tmpUser)) {
+            if ($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine)) {
                 $resultFlag = 4;
-            }else
-            {
-                if(is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > 45)
-                $resultFlag = 5;
-                else
-                {
-                    if (Hash::check($Password, $tmpUser->Password))
-                    {
+            } else {
+                if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > 45)
+                    $resultFlag = 5;
+                else {
+                    if (Hash::check($Password, $tmpUser->Password)) {
                         $tmpUser->IsLockedOut = 0;
                         $tmpUser->LastLoginDate = Carbon::now();
                         $tmpUser->IncorrectPasswordCount = 0;
                         $this->UpdateUser($tmpUser);
                         $resultFlag = 1;
-                    }
-                    else
-                    {
+                    } else {
                         $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
-                        if($tmpUser->IncorrectPasswordCount >= 5)
-                        {
+                        if ($tmpUser->IncorrectPasswordCount >= 5) {
                             $tmpUser->IsLockedOut = 1;
                             $tmpUser->LockoutDeadLine = $dateNow->addMinutes(1);
                             $tmpUser->IncorrectPasswordCount = 0;
@@ -243,77 +234,65 @@ class UserRepository extends BaseRepository implements IUserRepository{
                     }
                 }
             }
-        }
-        else
+        } else
             $resultFlag = 3;
-        return response()->json(['result'=>$resultFlag,'nidUser'=>$tmpUser->NidUser]);
+        return response()->json(['result' => $resultFlag, 'nidUser' => $tmpUser->NidUser]);
     }
-    public function GetUserDTOByUsername(string $Username):userDTO
+    public function GetUserDTOByUsername(string $Username): userDTO
     {
-        return DataMapper::MapToUserDTO($this->model->all()->where('UserName','=',trim($Username))->firstOrFail());
+        return DataMapper::MapToUserDTO($this->model->all()->where('UserName', '=', trim($Username))->firstOrFail());
     }
-    public function GetUserByUsername(string $Username):User
+    public function GetUserByUsername(string $Username): User
     {
-        return $this->model->all()->where('UserName','=',trim($Username))->firstOrFail();
+        return $this->model->all()->where('UserName', '=', trim($Username))->firstOrFail();
         // return User::with('role')->where('UserName','=',trim($Username))->firstOrFail();
     }
-    public function GetUserPermissionUsers(int $Pagesize = 10):Collection
+    public function GetUserPermissionUsers(int $Pagesize = 10): Collection
     {
         $result = new Collection();
-        if($Pagesize == 0)
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',false);
-            foreach ($tmpUsers as $user)
-            {
+        if ($Pagesize == 0) {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', false);
+            foreach ($tmpUsers as $user) {
                 $result->push(DataMapper::MapToUserInPermissionDTO($user));
             }
-        }
-        else
-        {
-            $tmpUsers = $this->model->all()->where('IsDisabled','=',false)->take($Pagesize);
-            foreach ($tmpUsers as $user)
-            {
+        } else {
+            $tmpUsers = $this->model->all()->where('IsDisabled', '=', false)->take($Pagesize);
+            foreach ($tmpUsers as $user) {
                 $result->push(DataMapper::MapToUserInPermissionDTO($user));
             }
         }
         return $result;
     }
-    public function GetUserInPermissionById(string $NidUser) :userInPermissionDTO
+    public function GetUserInPermissionById(string $NidUser): userInPermissionDTO
     {
-        return DataMapper::MapToUserInPermissionDTO($this->model->all()->where('NidUser','=',$NidUser)->firstOrFail());
+        return DataMapper::MapToUserInPermissionDTO($this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail());
     }
-    public function GetResources(int $pagesize = 100):Collection
+    public function GetResources(int $pagesize = 100): Collection
     {
         $result = new Collection();
-        if($pagesize == 0)
-        {
+        if ($pagesize == 0) {
             $tmpResources = Resources::all();
-            foreach ($tmpResources as $Resources)
-            {
+            foreach ($tmpResources as $Resources) {
                 $result->push(DataMapper::MapToResourceDTO($Resources));
             }
-        }
-        else
-        {
+        } else {
             $tmpResources = Resources::all()->take($pagesize);
-            foreach ($tmpResources as $Resources)
-            {
+            foreach ($tmpResources as $Resources) {
                 $result->push(DataMapper::MapToResourceDTO($Resources));
             }
         }
         return $result;
     }
-    public function GetUserPermissions(string $NidUser) :Collection
+    public function GetUserPermissions(string $NidUser): Collection
     {
         $result = new Collection();
-        $tmpPermissions = UserPermissions::all()->where('UserId','=',$NidUser);
-        foreach ($tmpPermissions as $perm)
-        {
+        $tmpPermissions = UserPermissions::all()->where('UserId', '=', $NidUser);
+        foreach ($tmpPermissions as $perm) {
             $result->push(DataMapper::MapToUserPermissionDTO($perm));
         }
         return $result;
     }
-    public function UpdateUserUserPermission(string $NidUser,array $Resources)
+    public function UpdateUserUserPermission(string $NidUser, array $Resources)
     {
         // try
         // {
@@ -347,18 +326,16 @@ class UserRepository extends BaseRepository implements IUserRepository{
         // }
 
 
-        $CurrentPermissions = UserPermissions::all()->where('UserId','=',$NidUser);
+        $CurrentPermissions = UserPermissions::all()->where('UserId', '=', $NidUser);
         $ProcessedResources = new Collection();
-        $toadds = array_diff($Resources,$CurrentPermissions->toArray());
-        if($Resources != null)
-        {
-            $todeletes = array_diff($CurrentPermissions->toArray(),$Resources);
+        $toadds = array_diff($Resources, $CurrentPermissions->toArray());
+        if ($Resources != null) {
+            $todeletes = array_diff($CurrentPermissions->toArray(), $Resources);
             foreach ($todeletes as $del) {
-                UserPermissions::all()->where('UserId','=',$NidUser)->where('ResourceId','=',$del)->firstOrFail()->delete();
+                UserPermissions::all()->where('UserId', '=', $NidUser)->where('ResourceId', '=', $del)->firstOrFail()->delete();
             }
-        }else
-        {
-            foreach (UserPermissions::all()->where('UserId','=',$NidUser) as $perm) {
+        } else {
+            foreach (UserPermissions::all()->where('UserId', '=', $NidUser) as $perm) {
                 $perm->delete();
             }
         }
@@ -373,16 +350,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function UpdateUserPasswordPolicy(array $policy)
     {
-        if(!is_null($policy['PasswordDificulty']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordDificulty')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordDificulty')->firstOrFail()->update(
+        if (!is_null($policy['PasswordDificulty'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'PasswordDificulty')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'PasswordDificulty')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['PasswordDificulty']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'PasswordDificulty';
@@ -392,16 +367,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['FullLockoutUser']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','FullLockoutUser')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','FullLockoutUser')->firstOrFail()->update(
+        if (!is_null($policy['FullLockoutUser'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'FullLockoutUser')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'FullLockoutUser')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['FullLockoutUser']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'FullLockoutUser';
@@ -411,16 +384,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['PasswordLength']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordLength')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','PasswordLength')->firstOrFail()->update(
+        if (!is_null($policy['PasswordLength'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'PasswordLength')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'PasswordLength')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['PasswordLength']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'PasswordLength';
@@ -430,16 +401,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['ChangePasswordDuration']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','ChangePasswordDuration')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','ChangePasswordDuration')->firstOrFail()->update(
+        if (!is_null($policy['ChangePasswordDuration'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'ChangePasswordDuration')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'ChangePasswordDuration')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['ChangePasswordDuration']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'ChangePasswordDuration';
@@ -449,16 +418,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['LastPasswordCount']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LastPasswordCount')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LastPasswordCount')->firstOrFail()->update(
+        if (!is_null($policy['LastPasswordCount'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LastPasswordCount')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LastPasswordCount')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['LastPasswordCount']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'LastPasswordCount';
@@ -468,16 +435,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['IncorrectAttemptCount']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','IncorrectAttemptCount')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','IncorrectAttemptCount')->firstOrFail()->update(
+        if (!is_null($policy['IncorrectAttemptCount'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'IncorrectAttemptCount')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'IncorrectAttemptCount')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['IncorrectAttemptCount']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'IncorrectAttemptCount';
@@ -487,16 +452,14 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 $newSet->save();
             }
         }
-        if(!is_null($policy['LockoutDuration']))
-        {
-            if(Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LockoutDuration')->count() > 0)
-            {
-                Settings::all()->where('SettingTitle','=','PasswordPolicies')->where('SettingKey','=','LockoutDuration')->firstOrFail()->update(
+        if (!is_null($policy['LockoutDuration'])) {
+            if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LockoutDuration')->count() > 0) {
+                Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LockoutDuration')->firstOrFail()->update(
                     [
                         'SettingValue' => $policy['LockoutDuration']
-                    ]);
-            }else
-            {
+                    ]
+                );
+            } else {
                 $newSet = new Settings();
                 $newSet->NidSetting = Str::uuid();
                 $newSet->SettingKey = 'LockoutDuration';
@@ -510,7 +473,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function GetUserPasswordPolicy()
     {
-        return Settings::all()->where('SettingTitle','=','PasswordPolicies');
+        return Settings::all()->where('SettingTitle', '=', 'PasswordPolicies');
     }
     public function AddRole(Roles $role)
     {
@@ -518,19 +481,19 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function UpdateRole(Roles $role)
     {
-        if(Roles::all()->where('NidRole','=',$role->NidRole)->count() > 0)
-        {
-            Roles::all()->where('NidRole','=',$role->NidRole)->firstOrFail()->update(
+        if (Roles::all()->where('NidRole', '=', $role->NidRole)->count() > 0) {
+            Roles::all()->where('NidRole', '=', $role->NidRole)->firstOrFail()->update(
                 [
                     'Title' => $role->Title,
                     'IsAdmin' => $role->IsAdmin
-                ]);
+                ]
+            );
         }
     }
     public function DeleteRole(string $NidRole)
     {
         //first need to check for user assigns
-        Roles::all()->where('NidRole','=',$NidRole)->firstOrFail()->delete();
+        Roles::all()->where('NidRole', '=', $NidRole)->firstOrFail()->delete();
         return true;
     }
     public function GetRoles()
@@ -543,7 +506,7 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function UpdateRolePermission(RolePermissions $role)
     {
-        RolePermissions::all()->where('NidPermission','=',$role->NidPermission)->firstOrFail()->update(
+        RolePermissions::all()->where('NidPermission', '=', $role->NidPermission)->firstOrFail()->update(
             [
                 'RoleId' => $role->RoleId,
                 'EntityId' => $role->EntityId,
@@ -554,12 +517,13 @@ class UserRepository extends BaseRepository implements IUserRepository{
                 'Confident' => $role->Confident,
                 'List' => $role->List,
                 'Print' => $role->Print
-            ]);
-            return true;
+            ]
+        );
+        return true;
     }
     public function DeleteRolePermission(string $NidPermission)
     {
-        RolePermissions::all()->where('NidPermission','=',$NidPermission)->firstOrFail()->delete();
+        RolePermissions::all()->where('NidPermission', '=', $NidPermission)->firstOrFail()->delete();
     }
     public function GetRolesPermission()
     {
@@ -567,23 +531,22 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function GetRolesPermissionByUserId(string $NidUser)
     {
-        $tmpRoleId = User::all()->where('NidUser','=',$NidUser)->firstOrFail()->RoleId;
-        return RolePermissions::all()->where('RoleId','=',$tmpRoleId);
+        $tmpRoleId = User::all()->where('NidUser', '=', $NidUser)->firstOrFail()->RoleId;
+        return RolePermissions::all()->where('RoleId', '=', $tmpRoleId);
     }
     public function GetRolesPermissionById(string $NidPermission)
     {
-        return RolePermissions::all()->where('NidPermission','=',$NidPermission)->firstOrFail();
+        return RolePermissions::all()->where('NidPermission', '=', $NidPermission)->firstOrFail();
     }
     public function UpdateSessionSetting(string $newValue)
     {
-        if(Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->count() > 0)
-        {
-            Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->firstOrFail()->update(
+        if (Settings::all()->where('SettingTitle', '=', 'SessionSetting')->where('SettingKey', '=', 'SessionTimeout')->count() > 0) {
+            Settings::all()->where('SettingTitle', '=', 'SessionSetting')->where('SettingKey', '=', 'SessionTimeout')->firstOrFail()->update(
                 [
                     'SettingValue' => $newValue
-                ]);
-        }else
-        {
+                ]
+            );
+        } else {
             $newSet = new Settings();
             $newSet->NidSetting = Str::uuid();
             $newSet->SettingKey = 'SessionTimeout';
@@ -595,21 +558,21 @@ class UserRepository extends BaseRepository implements IUserRepository{
     }
     public function GetSessionSettings()
     {
-        return Settings::all()->where('SettingTitle','=','SessionSetting');
+        return Settings::all()->where('SettingTitle', '=', 'SessionSetting');
     }
-    public function GetIndexBriefReport():array
+    public function GetIndexBriefReport(): array
     {
         $res = [];
-        $scholarCount = Scholars::all()->where('IsDeleted','=',false)->count();
+        $scholarCount = Scholars::all()->where('IsDeleted', '=', false)->count();
         $ProjectCount = Projects::all()->count();
-        $DoneProjectCount = Projects::all()->where('FinalApprove','=',true)->count();
-        $res = [$scholarCount,$ProjectCount,$DoneProjectCount,$ProjectCount - $DoneProjectCount];
+        $DoneProjectCount = Projects::all()->where('FinalApprove', '=', true)->count();
+        $res = [$scholarCount, $ProjectCount, $DoneProjectCount, $ProjectCount - $DoneProjectCount];
         return $res;
     }
     public function GetIndexChartReport()
     {
         $grouped = Projects::all()->groupBy(function ($item, $key) {
-            return substr($item['PersianCreateDate'],stripos($item['PersianCreateDate'],'-')+1,strrpos($item['PersianCreateDate'],'-')-stripos($item['PersianCreateDate'],'-')-1);
+            return substr($item['PersianCreateDate'], stripos($item['PersianCreateDate'], '-') + 1, strrpos($item['PersianCreateDate'], '-') - stripos($item['PersianCreateDate'], '-') - 1);
         });
         // $projs = Projects::all()->get('PersianCreateDate');
         // $grouped = $projs->groupBy(function ($item, $key) {
@@ -626,9 +589,8 @@ class UserRepository extends BaseRepository implements IUserRepository{
 
 class UserRepositoryFactory
 {
-    public static function GetUserRepositoryObj():IUserRepository
+    public static function GetUserRepositoryObj(): IUserRepository
     {
         return new UserRepository(new User());
     }
-
 }

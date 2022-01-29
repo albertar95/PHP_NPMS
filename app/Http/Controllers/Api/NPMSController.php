@@ -154,6 +154,11 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->GetUserDTOById($UserId);
     }
+    public function GetUserById(string $UserId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetUserById($UserId);
+    }
     public function GetAllUsers()
     {
         $repo = new UserRepository(new User());

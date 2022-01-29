@@ -861,7 +861,7 @@ class DataMapper
         {
             $result = new User();
             $result->NidUser = $user->NidUser;
-            $result->Username = $user->Username;
+            $result->UserName = $user->UserName;
             $result->Password = $user->Password;
             $result->FirstName = $user->FirstName;
             $result->LastName = $user->LastName;
@@ -872,6 +872,10 @@ class DataMapper
             $result->IsDisabled = $user->IsDisabled;
             $result->ProfilePicture = $user->ProfilePicture;
             $result->RoleId = $user->RoleId;
+            $result->LockoutDeadLine = $user->LockoutDeadLine;
+            $result->LastPasswordChangeDate = $user->LastPasswordChangeDate;
+            $result->last_seen = $user->last_seen;
+            $result->Force_logout = $user->Force_logout;
             return $result;
         }
         catch (\Exception)

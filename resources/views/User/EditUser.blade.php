@@ -19,8 +19,21 @@
                 </div>
                 <div class="alert alert-danger alert-dismissible" role="alert" id="errorAlert" hidden>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <p style="text-align:right;" id="ErrorMessage"></p>
+                    <p style="text-align:right;" id="ErrorMessage">
+                    </p>
                 </div>
+                @if($errors->any())
+                <div class="alert alert-danger alert-dismissible" role="alert" id="errorAlert2">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p style="text-align:right;" id="ErrorMessage2">
+                        <div class="m-auto text-center">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </div>
+                    </p>
+                </div>
+                @endif
                 <div class="p-5">
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
@@ -28,11 +41,14 @@
                     <form class="user" action="{{ route('user.SubmitEditUser') }}" id="EditUserForm" method="POST">
                         @csrf
                         <input id="CreateDate" value="{{ $User->CreateDate }}" name="CreateDate" type="text" hidden >
-                        <input id="LastLoginDate" value="{{ $User->LastLoginDate }}" name="LastLoginDate" type="text" hidden >
-                        <input id="IncorrectPasswordCount" value="{{ $User->IncorrectPasswordCount }}" name="IncorrectPasswordCount" type="text" hidden >
+                        <input id="LastLoginDate" value="{{ $User->LastLoginDate }}" name="LastLoginDate" type="datetime" hidden >
+                        <input id="IncorrectPasswordCount" value="{{ $User->IncorrectPasswordCount }}" name="IncorrectPasswordCount" type="number" hidden >
                         <input id="IsDisabled" name="IsDisabled" value="{{ $User->IsDisabled }}" type="text" hidden >
                         <input id="IsLockedOut" name="IsLockedOut" value="{{ $User->IsLockedOut }}" type="text" hidden >
-                        <input id="LastLoginDate" name="LastLoginDate" value="{{ $User->LastLoginDate }}" type="text" hidden >
+                        <input id="LockoutDeadLine" name="LockoutDeadLine" value="{{ $User->LockoutDeadLine }}" type="datetime" hidden >
+                        <input id="LastPasswordChangeDate" name="LastPasswordChangeDate" value="{{ $User->LastPasswordChangeDate }}" type="datetime" hidden >
+                        <input id="last_seen" name="last_seen" value="{{ $User->last_seen }}" type="datetime" hidden >
+                        <input id="Force_logout" name="Force_logout" value="{{ $User->Force_logout }}" type="number" hidden >
                         <input id="NidUser" name="NidUser" value="{{ $User->NidUser }}" type="text" hidden >
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
@@ -46,8 +62,8 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="Username" name="Username"
-                                       placeholder="نام کاربری" value="{{ $User->Username }}" readonly>
+                                <input type="text" class="form-control form-control-user" id="UserName" name="UserName"
+                                       placeholder="نام کاربری" value="{{ $User->UserName }}" readonly>
                             </div>
                             <div class="col-sm-6">
                                 <input type="password" class="form-control form-control-user" id="Password" name="Password"
@@ -56,7 +72,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile()" id="ProfilePictureUpload" name="ProfilePictureUpload">
+                                <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile(1)" id="ProfilePictureUpload" name="ProfilePictureUpload">
                                 <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture" value="{{ $User->ProfilePicture }}" hidden>
                                 <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
                                     تغییر پروفایل کاربر
@@ -66,11 +82,11 @@
                             <div class="col-sm-6" style="display:flex;">
                                 @if (!empty($User->ProfilePicture))
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe">
-                                        <img src="/storage/images/{{ $User->ProfilePicture }}" id="userImg" style="width:100%;height:200px;" />
+                                        <img src="/storage/images/{{ $User->ProfilePicture }}" id="uploadedImage" style="width:100%;height:200px;" />
                                     </div>
                                 @else
                                     <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;" id="uploadedframe" hidden>
-                                        <img src="" id="userImg" style="width:100%;height:200px;" />
+                                        <img src="" id="uploadedImage" style="width:100%;height:200px;" />
                                     </div>
                                 @endforelse
                             </div>
@@ -98,13 +114,6 @@
                             ذخیره اطلاعات
                         </button>
                     </form>
-                    @if($errors->any())
-                    <div class="m-auto text-center">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </div>
-                    @endif
                     <hr />
                 </div>
             </div>
@@ -152,6 +161,10 @@
 
 @section ('scripts')
     <script type="text/javascript">
+    $(function()
+    {
+        window.setTimeout(function () { $("#errorAlert2").attr('hidden', 'hidden') }, 10000);
+    });
         function ChangePassword()
         {
             if($("#NewPassword").val() != '' && $("#RepeatNewPassword").val() != '')
@@ -202,48 +215,6 @@
                 $("#warningAlert").removeAttr('hidden');
                 window.setTimeout(function () { $("#warningAlert").attr('hidden', 'hidden') }, 5000);
             }
-        }
-        function UploadFile()
-        {
-            AdvanceInProgressBar(0);
-            $("#UploadModal").modal('show');
-            $("#UploadMessage").attr('hidden', 'hidden');
-            AdvanceInProgressBar(10);
-            var formData = new FormData();
-            formData.append('profile',document.getElementById("ProfilePictureUpload").files[0]);
-            $.ajax(
-                {
-                    url: '@Url.Action("UploadThisFile","Home")',
-                    type: 'post',
-                    datatype: 'json',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (result)
-                    {
-                        if (result.HasValue)
-                        {
-                            window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
-                            window.setTimeout(function () {
-                                $("#ProfilePicture").val(result.Html);
-                                $("#userImg").attr('src', 'data:image/jpg;base64,' + result.Html);
-                            }, 3000);
-                        } else {
-                            window.setTimeout(function () {
-                                $("#UploadMessage").removeAttr('hidden');
-                                $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
-                            }, 3000);
-                        }
-                    },
-                    error: function ()
-                    {
-                        window.setTimeout(function () {
-                            $("#UploadMessage").removeAttr('hidden');
-                            $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
-                        }, 3000);
-                    }
-                });
-            window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
         }
     </script>
 @endsection

@@ -138,33 +138,6 @@
     <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
-        $(function() {
-            var successedit = '@TempData["EditUserSuccessMessage"]';
-            var erroredit = '@TempData["EditUserErrorMessage"]';
-            var successdelete = '@TempData["DisableUserSuccessMessage"]';
-            if (successedit != '') {
-                $("#SuccessMessage").text(successedit);
-                $("#successAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#successAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
-            if (erroredit != '') {
-                $("#ErrorMessage").text(erroredit);
-                $("#errorAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#errorAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
-            if (successdelete != '') {
-                $("#SuccessMessage").text(successdelete);
-                $("#successAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#successAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
-        });
-
         function ShowModal(typo, NidUser) {
             if (typo == 1) {
                 $("#UserModalLabel").text('جزییات اطلاعات کاربر');
