@@ -155,10 +155,11 @@
                             } else {
                                 $("#SuccessMessage").text(result.Message);
                                 $("#successAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden') }, 5000);
+                                // window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden') }, 5000);
                                 $('#AddReportForm').each(function () { this.reset(); });
                                 $("#InputDiv").html('');
                                 $("#OutputDiv").html('');
+                                window.setTimeout(function () {window.location.href = '/statisticreports'; }, 3000);
                             }
                         },
                         error: function (response) {

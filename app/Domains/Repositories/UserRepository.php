@@ -496,6 +496,13 @@ class UserRepository extends BaseRepository implements IUserRepository
         Roles::all()->where('NidRole', '=', $NidRole)->firstOrFail()->delete();
         return true;
     }
+    public function CheckForUserExist(string $NidRole)
+    {
+        if($this->model->all()->where('NidRole','=',$NidRole)->count() > 0)
+        return true;
+        else
+        return false;
+    }
     public function GetRoles()
     {
         return Roles::all();
@@ -528,6 +535,10 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function GetRolesPermission()
     {
         return RolePermissions::all();
+    }
+    public function GetRolesPermissionByRoleId(string $NidRole)
+    {
+        return RolePermissions::all()->where('RoleId','=',$NidRole);
     }
     public function GetRolesPermissionByUserId(string $NidUser)
     {

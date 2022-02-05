@@ -128,10 +128,10 @@ class DataMapper
             $result->GroupTitle = UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title;
             else
             $result->GroupTitle = "";//check
-            $result->Supervisor = $project->Supervisor;
-            $result->SupervisorMobile = $project->SupervisorMobile;
-            $result->Advisor = $project->Advisor;
-            $result->AdvisorMobile = $project->AdvisorMobile;
+            $result->Supervisor = $project->Supervisor ?? "";
+            $result->SupervisorMobile = $project->SupervisorMobile ?? "";
+            $result->Advisor = $project->Advisor ?? "";
+            $result->AdvisorMobile = $project->AdvisorMobile ?? "";
             $result->Referee1 = $project->Referee1 ?? "";
             $result->Referee2 = $project->Referee2 ?? "";
             $result->Editor = $project->Editor ?? "";

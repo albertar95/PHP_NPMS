@@ -424,6 +424,16 @@ class NPMSController extends Controller
         }
         return $res;
     }
+    public function GetAllRolePermissionDTOsByRoleId(string $RoleId)
+    {
+        $repo = new UserRepository(new User());
+        $perms = $repo->GetRolesPermissionByRoleId($RoleId);
+        $res = new Collection();
+        foreach ($perms as $pr) {
+            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        }
+        return $res;
+    }
     public function GetRolePermissionsByUser(string $UserId)
     {
         $repo = new UserRepository(new User());
@@ -592,6 +602,18 @@ class NPMSController extends Controller
             return response()->json(['Message'=>'1']);
         }
     }
+    public function DeleteRole(string $NidRole)
+    {
+        $repo = new UserRepository(new User());
+        if(!$repo->CheckForUserExist($NidRole))
+        {
+            $repo->DeleteRole($NidRole);
+            return response()->json(['Message'=>'2']);
+        }else
+        {
+            return response()->json(['Message'=>'1']);
+        }
+    }
     public function DeleteUnitGroup(string $NidUnitGroup)
     {
         $repo = new ProjectRepository(new Projects());
@@ -645,10 +667,10 @@ class NPMSController extends Controller
         $repo = new AlarmRepository(new Alarms());
         return $repo->GetFirstLevelAlarms();
     }
-    public function GetAllAlarms()
+    public function GetAllAlarms(int $pagesize = 100)
     {
         $repo = new AlarmRepository(new Alarms());
-        return $repo->GetAllAlarms();
+        return $repo->GetAllAlarms($pagesize);
     }
 
     //message section

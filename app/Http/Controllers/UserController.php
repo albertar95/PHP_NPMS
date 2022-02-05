@@ -399,35 +399,35 @@ class UserController extends Controller
     }
     public function SubmitDeleteRole(string $NidRole)
     {
-        // $api = new NPMSController();
-        // $result = new JsonResults();
-        // $tmpResult = $api->deleterole($NidUnit);
-        // $tmpstatus = json_decode($tmpResult->getContent(),true)['Message'];
-        // $result->HasValue = false;
-        // switch($tmpstatus)
-        // {
-        //     case "1":
-        //         $result->Message = "یگان مورد نظر دارای گروه می باشد.امکان حذف وجود ندارد";
-        //         return response()->json($result);
-        //         break;
-        //     case "2":
-        //         $result->HasValue = true;
-        //         $result->Message = "یگان با موفقیت حذف گردید";
-        //         $TblId = 1;
-        //         $Units = $api->GetAllUnits();
-        //         $result->Html = view('Project._BaseInfoTables',compact('TblId','Units'))->render();
-        //         return response()->json($result);
-        //         break;
-        //     case "3":
-        //         $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
-        //         return response()->json($result);
-        //         break;
-        // }
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $tmpResult = $api->DeleteRole($NidRole);
+        $tmpstatus = json_decode($tmpResult->getContent(),true)['Message'];
+        $result->HasValue = false;
+        switch($tmpstatus)
+        {
+            case "1":
+                $result->Message = "نقش مورد نظر دارای کاربر می باشد.امکان حذف وجود ندارد";
+                return response()->json($result);
+                break;
+            case "2":
+                $result->HasValue = true;
+                $result->Message = "نقش با موفقیت حذف گردید";
+                $TblId = 9;
+                $Units = $api->GetAllRoles();
+                $result->Html = view('Project._BaseInfoTables',compact('TblId','Roles'))->render();
+                return response()->json($result);
+                break;
+            case "3":
+                $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                return response()->json($result);
+                break;
+        }
     }
-    public function ManageRolePermissions(Request $request)
+    public function ManageRolePermissions(Request $request,string $NidRole)
     {
         $api = new NPMSController();
-        $Permissions = $api->GetAllRolePermissionDTOs();
+        $Permissions = $api->GetAllRolePermissionDTOsByRoleId($NidRole);
         $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی نقش ها");
         return view('User.ManageRolePermissions',compact('Permissions'));
     }
@@ -450,7 +450,7 @@ class UserController extends Controller
         $api = new NPMSController();
         $api->AddRolePermission($Permission);
         $api->AddLog(auth()->user(),$Permission->ip(),21,0,3,3,"ایجاد دسترسی نقش موفق");
-        return redirect('/managerolepermissions');
+        return redirect(sprintf("/managerolepermissions/%s",$Permission->RoleId));
     }
     public function EditRolePermission(string $NidPermission,Request $request)
     {

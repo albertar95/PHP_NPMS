@@ -33,6 +33,21 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <p style="text-align:right;" id="SuccessMessage"></p>
+                        </div>
+                        <div class="alert alert-warning alert-dismissible" role="alert" id="warningAlert" hidden>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <p style="text-align:right;" id="WarningMessage"></p>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible" role="alert" id="errorAlert" hidden>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <p style="text-align:right;" id="ErrorMessage"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -249,47 +264,57 @@
             });
             $("#btnExecute").click(function(e) {
                 e.preventDefault();
-                var paramKeys = [];
-                var paramVals = [];
-                var selectedOutputs = [];
-                $('.inputParams').each(function() {
-                    paramKeys.push($(this).attr('id'));
-                    paramVals.push($(this).val());
-                });
-                $("input:checkbox").each(function() {
-                    if ($(this).is(":checked")) {
-                        if ($(this).attr('alt') == 'out') {
-                            selectedOutputs.push($(this).attr('id'));
+                if (CheckValidity()) {
+                    $("#warningAlert").attr('hidden', 'hidden');
+                    var paramKeys = [];
+                    var paramVals = [];
+                    var selectedOutputs = [];
+                    $('.inputParams').each(function() {
+                        paramKeys.push($(this).attr('id'));
+                        paramVals.push($(this).val());
+                    });
+                    $("input:checkbox").each(function() {
+                        if ($(this).is(":checked")) {
+                            if ($(this).attr('alt') == 'out') {
+                                selectedOutputs.push($(this).attr('id'));
+                            }
                         }
-                    }
-                });
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '/submitstatisticsreport',
-                    type: 'post',
-                    datatype: 'json',
-                    data: {
-                        NidReport: $("#NidReport").val(),
-                        PrameterKeys: paramKeys,
-                        ParameterValues: paramVals,
-                        OutPutValues: selectedOutputs
-                    },
-                    success: function(result) {
-                        if (result.HasValue)
-                            $("#Resultwrapper").html(result.Html);
-                    },
-                    error: function() {
-                        $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
-                        $("#errorAlert").removeAttr('hidden')
-                        window.setTimeout(function() {
-                            $("#errorAlert").attr('hidden', 'hidden');
-                        }, 5000);
-                    }
-                });
+                    });
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: '/submitstatisticsreport',
+                        type: 'post',
+                        datatype: 'json',
+                        data: {
+                            NidReport: $("#NidReport").val(),
+                            PrameterKeys: paramKeys,
+                            ParameterValues: paramVals,
+                            OutPutValues: selectedOutputs
+                        },
+                        success: function(result) {
+                            if (result.HasValue)
+                                $("#Resultwrapper").html(result.Html);
+                        },
+                        error: function() {
+                            $("#ErrorMessage").text(
+                                'خطا در انجام عملیات.لطفا مجددا امتحان کنید')
+                            $("#errorAlert").removeAttr('hidden')
+                            window.setTimeout(function() {
+                                $("#errorAlert").attr('hidden', 'hidden');
+                            }, 5000);
+                        }
+                    });
+                } else {
+                    $("#WarningMessage").text('لطفا ورودی های گزارش را وارد نمایید')
+                    $("#warningAlert").removeAttr('hidden')
+                    window.setTimeout(function() {
+                        $("#warningAlert").attr('hidden', 'hidden');
+                    }, 10000);
+                }
             });
         });
 
@@ -347,6 +372,23 @@
                     }
                     break;
             }
+        }
+
+        function CheckValidity() {
+            const slts = ["GradeId", "MajorId", "OreintationId", "MillitaryStatus", "UnitId", "GroupId", "UserId",
+                "RoleId"
+            ];
+            var output = true;
+            $('.inputParams').each(function() {
+                if (slts.includes($(this).attr('id'))) {
+                    if ($(this).val() == "0")
+                        output = false;
+                } else {
+                    if (!$(this).val())
+                        output = false;
+                }
+            });
+            return output;
         }
     </script>
 @endsection

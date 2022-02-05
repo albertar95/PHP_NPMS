@@ -115,12 +115,13 @@
                             $('#AddUserForm').each(function() {
                                 this.reset();
                             });
-                            window.setTimeout(function() {
-                                $("#successAlert").attr('hidden', 'hidden');
-                            }, 5000);
+                            // window.setTimeout(function() {
+                            //     $("#successAlert").attr('hidden', 'hidden');
+                            // }, 5000);
                             $("#uploadedframe").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
+                            window.setTimeout(function () {window.location.href = '/users'; }, 3000);
                         },
                         error: function(response) {
                             var message = "<ul>";

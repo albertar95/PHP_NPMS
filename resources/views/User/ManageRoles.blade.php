@@ -81,7 +81,7 @@
                                                 onclick="DeleteModal(1,'{{ $role->NidRole }}')">حذف</button>
                                             <button class="btn btn-warning"
                                                 onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">ویرایش</button>
-                                            <a href="{{ route('user.ManageRolePermissions') }}" class="btn btn-info">اعمال دسترسی</a>
+                                            <a href="/managerolepermissions/{{ $role->NidRole }}" class="btn btn-info">اعمال دسترسی</a>
                                         </td>
                                     </tr>
                                 @endforeach

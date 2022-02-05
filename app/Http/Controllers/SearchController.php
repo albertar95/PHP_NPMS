@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
 class SearchController extends Controller
 {
@@ -126,6 +127,19 @@ class SearchController extends Controller
         // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
         return response()->json($result);
         // return $response[2];
+    }
+    public function DownloadAdvanceSearchResult(Request $SearchInputs)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $response = $api->AdvancedSearch($SearchInputs->searchText,$SearchInputs->Section,$SearchInputs->SearchBy,$SearchInputs->Similar);
+        $Projects = $response[1];
+        $Scholars = $response[0];
+        $Users = $response[2];
+        $BaseInfo = $response[3];
+        $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'));
+        return $pdf->stream('AdvancedSearchResult.pdf');
     }
     public function ComplexSearch(string $Text)
     {

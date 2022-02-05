@@ -39,9 +39,8 @@
                                 </div>
                                 <div class="col-sm-2" style="display:flex;">
                                     <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbSimilar"
-                                        class="form-control"
-                                        onclick="$(this).attr('value', this.checked ? '1' : '0')" value="1"
-                                        checked />
+                                        class="form-control" onclick="$(this).attr('value', this.checked ? '1' : '0')"
+                                        value="1" checked />
                                     <label for="cbSimilar" style="margin:.45rem .45rem 0 0">شامل شود</label>
                                 </div>
                             </div>
@@ -115,10 +114,10 @@
             </div>
         </div>
     </div>
-    @section ('styles')
+@section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
-    @endsection
-    @section ('scripts')
+@endsection
+@section('scripts')
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
@@ -177,9 +176,9 @@
                     $("#CascadeSection").attr('hidden', 'hidden');
 
                     $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
                     });
                     $.ajax({
                         url: '/searchsectionchange',
@@ -250,14 +249,16 @@
             else
                 stext = $("#Subject").val();
 
-                var searchModel = [stext,document.getElementById("SearchSection").value,document.getElementById("SearchBy").value,
-                    $("#cbSimilar").val()];
-                var SearchInp = searchModel.join();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+            var searchModel = [stext, document.getElementById("SearchSection").value, document.getElementById("SearchBy")
+                .value,
+                $("#cbSimilar").val()
+            ];
+            var SearchInp = searchModel.join();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: '/submitadvancesearch/' + SearchInp,
                 type: 'get',
@@ -270,6 +271,54 @@
             });
 
         }
+
+        function ExportResult(typo) {
+            switch (typo) {
+                case 1:
+                    var stext = '';
+                    if ($("#Subject").is(":hidden"))
+                        stext = $("#DateSubject").val();
+                    else
+                        stext = $("#Subject").val();
+
+                    var searchModel = [stext, document.getElementById("SearchSection").value, document.getElementById("SearchBy").value,
+                        $("#cbSimilar").val()
+                    ];
+                    var SearchInp = searchModel.join();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: '/downloadadvancesearchresult',
+                        type: 'post',
+                        datatype: 'json',
+                        data: {
+                            searchText: stext,
+                            Section: document.getElementById("SearchSection").value,
+                            SearchBy: document.getElementById("SearchBy").value,
+                            Similar: $("#cbSimilar").val()
+                        },
+                        success: function() {},
+                        error: function() {}
+                    });
+                    break;
+                case 2:
+                    // $("#ScholarDataTable").tableHTMLExport({
+                    //     type: 'csv',
+                    //     filename: searchResult + '.csv'
+                    // });
+                    break;
+                case 3:
+                    var divToPrint = document.getElementById("Resultwrapper");
+                    newWin = window.open("");
+                    newWin.document.write(divToPrint.outerHTML);
+                    newWin.print();
+                    newWin.close();
+                    break;
+            }
+        }
     </script>
-    @endsection
+@endsection
 @endsection

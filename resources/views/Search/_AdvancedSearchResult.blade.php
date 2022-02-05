@@ -1,3 +1,8 @@
+<div class="form-group row">
+    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1)">خروجی
+        pdf</button>
+    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(3)">پرینت</button>
+</div>
 <h3>طرح ها</h3>
 @if ($Projects->count() > 0)
     <div class="table-responsive" dir="ltr">

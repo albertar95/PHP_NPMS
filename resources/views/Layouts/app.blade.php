@@ -14,6 +14,7 @@
                     <img src="{{ URL('Content/img/Logo/logo192.png') }}" style="width:100%;height:10rem;" />
                 </div>
             </a>
+            <p style="text-align:center;color:whitesmoke;">سامانه مدیریت تحقیقات</p>
             <hr class="sidebar-divider my-0">
             <div class="nav-item">
                 <a class="nav-link" href="{{ route('index') }}">
@@ -195,8 +196,8 @@
                                 style="text-align:right;">خط مشی کلمه عبور</a>
                             <a class="collapse-item" href="{{ route('user.ManageRoles') }}"
                                 style="text-align:right;">مدیریت نقش ها</a>
-                            <a class="collapse-item" href="{{ route('user.ManageRolePermissions') }}"
-                                style="text-align:right;">مدیریت دسترسی ها</a>
+                            {{-- <a class="collapse-item" href="{{ route('user.ManageRolePermissions') }}"
+                                style="text-align:right;">مدیریت دسترسی ها</a> --}}
                             <a class="collapse-item" href="{{ route('user.ManageSessions') }}"
                                 style="text-align:right;">مدیریت نشست ها</a>
                         </div>
@@ -489,58 +490,65 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var sfilename = document.getElementById("ProfilePictureUpload").files[0].name;
-            var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
-            var isValid = false;
-            for (var j = 0; j < _validFileExtensions.length; j++) {
-                var sCurExtension = _validFileExtensions[j];
-                if (sfilename.substr(sfilename.length - sCurExtension.length, sCurExtension.length).toLowerCase() ==
-                    sCurExtension.toLowerCase()) {
-                    isValid = true
-                }
-            }
-            if (isValid) {
-                var formData = new FormData();
-                formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
-                formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
-                formData.append('fileType', typo);
-                $.ajax({
-                    url: '/uploadthisfile',
-                    type: 'post',
-                    datatype: 'json',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(result) {
-                        if (result.HasValue) {
-                            window.setTimeout(function() {
-                                AdvanceInProgressBar(100);
-                            }, 1000);
-                            $("#ProfilePicture").val(result.Message);
-                            window.setTimeout(function() {
-                                $("#uploadedImage").attr('src', '/storage/images/' + result.Message);
-                                $("#uploadedframe").removeAttr('hidden');
-                                $("#uploadedImage").removeAttr('hidden');
-                            }, 3000);
-                        } else {
-                            window.setTimeout(function() {
-                                $("#UploadMessage").removeAttr('hidden');
-                                $("#UploadMessage").text(result.Message);
-                            }, 3000);
+            switch (typo) {
+                case 1:
+                    var sfilename = document.getElementById("ProfilePictureUpload").files[0].name;
+                    var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+                    var isValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sfilename.substr(sfilename.length - sCurExtension.length, sCurExtension.length).toLowerCase() ==
+                            sCurExtension.toLowerCase()) {
+                            isValid = true
                         }
-                    },
-                    error: function() {
+                    }
+                    if (isValid) {
+                        var formData = new FormData();
+                        formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
+                        formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
+                        formData.append('fileType', typo);
+                        $.ajax({
+                            url: '/uploadthisfile',
+                            type: 'post',
+                            datatype: 'json',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(result) {
+                                if (result.HasValue) {
+                                    window.setTimeout(function() {
+                                        AdvanceInProgressBar(100);
+                                    }, 1000);
+                                    $("#ProfilePicture").val(result.Message);
+                                    window.setTimeout(function() {
+                                        $("#uploadedImage").attr('src', '/storage/images/' + result
+                                            .Message);
+                                        $("#uploadedframe").removeAttr('hidden');
+                                        $("#uploadedImage").removeAttr('hidden');
+                                    }, 3000);
+                                } else {
+                                    window.setTimeout(function() {
+                                        $("#UploadMessage").removeAttr('hidden');
+                                        $("#UploadMessage").text(result.Message);
+                                    }, 3000);
+                                }
+                            },
+                            error: function() {
+                                window.setTimeout(function() {
+                                    $("#UploadMessage").removeAttr('hidden');
+                                    $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
+                                }, 3000);
+                            }
+                        });
+                    } else {
                         window.setTimeout(function() {
                             $("#UploadMessage").removeAttr('hidden');
-                            $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
+                            $("#UploadMessage").text('خطا در بارگذاری.فرمت فایل انتخاب شده باید تصویر باشد');
                         }, 3000);
                     }
-                });
-            } else {
-                window.setTimeout(function() {
-                    $("#UploadMessage").removeAttr('hidden');
-                    $("#UploadMessage").text('خطا در بارگذاری.فرمت فایل انتخاب شده باید تصویر باشد');
-                }, 3000);
+                    break;
+                default:
+                    break;
             }
             window.setTimeout(function() {
                 $("#UploadModal").modal('hide');
@@ -664,6 +672,7 @@
                 error: function() {}
             });
         }
+
         function ShowDetailModal(typo, Nid) {
             if (typo == 1) {
                 $("#DetailModalLabel").text('جزییات اطلاعات محقق');
@@ -671,39 +680,36 @@
                 $("#btnCancel").attr('hidden', 'hidden');
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
-                $.ajax(
-                    {
-                        url: '/scholardetail/' + Nid,
-                        type: 'get',
-                        datatype: 'json',
-                        success: function (result) {
-                            if (result.HasValue) {
-                                $("#DetailModalBody").html(result.Html)
-                                $("#DetailModal").modal('show')
-                            }
-                        },
-                        error: function () { }
-                    });
-            }
-            else if (typo == 2) {
+                $.ajax({
+                    url: '/scholardetail/' + Nid,
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#DetailModalBody").html(result.Html)
+                            $("#DetailModal").modal('show')
+                        }
+                    },
+                    error: function() {}
+                });
+            } else if (typo == 2) {
                 $("#DetailModalLabel").text('جزییات اطلاعات کاربر');
                 $("#btnClose").removeAttr('hidden');
                 $("#btnCancel").attr('hidden', 'hidden');
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
-                $.ajax(
-                    {
-                        url: '/userdetail/' + Nid,
-                        type: 'get',
-                        datatype: 'json',
-                        success: function (result) {
-                            if (result.HasValue) {
-                                $("#DetailModalBody").html(result.Html)
-                                $("#DetailModal").modal('show')
-                            }
-                        },
-                        error: function () { }
-                    });
+                $.ajax({
+                    url: '/userdetail/' + Nid,
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#DetailModalBody").html(result.Html)
+                            $("#DetailModal").modal('show')
+                        }
+                    },
+                    error: function() {}
+                });
             }
         }
     </script>

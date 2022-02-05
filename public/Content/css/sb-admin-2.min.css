@@ -4777,9 +4777,9 @@ a.close.disabled { pointer-events: none; }
 
         form.user .custom-checkbox.small label { line-height: 1.5rem; }
 
-        form.user .form-control-user { font-size: 1.2rem; border-radius: 1.2rem; padding: 1.5rem 1rem; }
+        form.user .form-control-user { font-size: 1.2rem; border-radius: 0.5rem; padding: 1.5rem 1rem; }
 
-        form.user .btn-user { font-size: .8rem; border-radius: 10rem; padding: .75rem 1rem; }
+        form.user .btn-user { font-size: .8rem; border-radius: 0.75rem; padding: .75rem 1rem; }
 
         .btn-google { color: #fff; background-color: #ea4335; border-color: #fff; }
 

@@ -97,6 +97,7 @@ Route::get("advancesearch",[SearchController::class,"AdvanceSearch"])->name('sea
 Route::get("searchsectionchange",[SearchController::class,"SearchSectionChange"])->name('search.SearchSectionChange');
 Route::get("submitadvancesearch/{SearchInputs}",[SearchController::class,"SubmitAdvanceSearch"])->name('search.SubmitAdvanceSearch');
 Route::get("complexsearch/{Text}",[SearchController::class,"ComplexSearch"])->name('search.ComplexSearch');
+Route::post("downloadadvancesearchresult",[SearchController::class,"DownloadAdvanceSearchResult"])->name('report.DownloadAdvanceSearchResult');
 
 //user routes
 Route::get("adduser",[UserController::class,"AddUser"])->name('user.AddUser');
@@ -125,7 +126,7 @@ Route::post("submitroleform",[UserController::class,"SubmitRoleForm"])->name('us
 Route::post("submitdeleterole/{NidRole}",[UserController::class,"SubmitDeleteRole"])->name('user.SubmitDeleteRole');
 Route::get("changepassword/{Niduser}",[UserController::class,"ChangePassword"])->name('user.ChangePassword');
 Route::get("getuserspasscode/{Niduser}/{CurrentPassword}",[UserController::class,"getUsersPassCode"])->name('user.getUsersPassCode');
-Route::get("managerolepermissions",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
+Route::get("managerolepermissions/{NidRole}",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
 Route::get("addrolepermission",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
 Route::get("profile",[UserController::class,"Profile"])->name('user.Profile');
 Route::get("managesessions",[UserController::class,"ManageSessions"])->name('user.ManageSessions');
