@@ -363,11 +363,57 @@
                             });
                             break;
                         case 3:
-                            var divToPrint = document.getElementById("ScholarDataTable");
-                            newWin = window.open("");
-                            newWin.document.write(divToPrint.outerHTML);
-                            newWin.print();
-                            newWin.close();
+                            var paramKeys = [];
+                            var paramVals = [];
+                            var selectedOutputs = [];
+                            $('.inputParams').each(function() {
+                                paramKeys.push($(this).attr('id'));
+                                paramVals.push($(this).val());
+                            });
+                            $("input:checkbox").each(function() {
+                                if ($(this).is(":checked")) {
+                                    if ($(this).attr('alt') == 'out') {
+                                        selectedOutputs.push($(this).attr('id'));
+                                    }
+                                }
+                            });
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+                            $.ajax({
+                                url: '/printstatisticsreport',
+                                type: 'post',
+                                datatype: 'json',
+                                data: {
+                                    NidReport: $("#NidReport").val(),
+                                    PrameterKeys: paramKeys,
+                                    ParameterValues: paramVals,
+                                    OutPutValues: selectedOutputs
+                                },
+                                success: function(result) {
+                                    if (result.HasValue) {
+                                        newWin = window.open("");
+                                        newWin.document.write(result.Html);
+                                        newWin.print();
+                                        newWin.close();
+                                    } else {
+                                        var divToPrint = document.getElementById("ScholarDataTable");
+                                        newWin = window.open("");
+                                        newWin.document.write(divToPrint.outerHTML);
+                                        newWin.print();
+                                        newWin.close();
+                                    }
+                                },
+                                error: function() {
+                                    var divToPrint = document.getElementById("ScholarDataTable");
+                                    newWin = window.open("");
+                                    newWin.document.write(divToPrint.outerHTML);
+                                    newWin.print();
+                                    newWin.close();
+                                }
+                            });
                             break;
                     }
                     break;

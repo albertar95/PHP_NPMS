@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\NPMSController;
+use Carbon\Carbon;
+use Hekmatinasser\Verta\Facades\Verta;
+use Hekmatinasser\Verta\Verta as VertaVerta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -138,8 +141,26 @@ class SearchController extends Controller
         $Scholars = $response[0];
         $Users = $response[2];
         $BaseInfo = $response[3];
-        $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'));
+        $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
+        $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
+        $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'));
         return $pdf->stream('AdvancedSearchResult.pdf');
+    }
+    public function PrintAdvanceSearchResult(Request $SearchInputs)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $response = $api->AdvancedSearch($SearchInputs->searchText,$SearchInputs->Section,$SearchInputs->SearchBy,$SearchInputs->Similar);
+        $Projects = $response[1];
+        $Scholars = $response[0];
+        $Users = $response[2];
+        $BaseInfo = $response[3];
+        $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
+        $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
+        $result->HasValue = true;
+        $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'))->render();
+        return response()->json($result);
     }
     public function ComplexSearch(string $Text)
     {

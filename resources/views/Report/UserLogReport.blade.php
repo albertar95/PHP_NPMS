@@ -24,7 +24,8 @@
                                         placeholder="تاریخ تا">
                                 </div>
                                 <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    <select class="form-control allWidth" name="LogActionId" id="LogActionId" placeholder="انتخاب نوع فعالیت">
+                                    <select class="form-control allWidth" name="LogActionId" id="LogActionId"
+                                        placeholder="انتخاب نوع فعالیت">
                                         {{-- <option data-tokens="نوع فعالیت" selected>نوع فعالیت</option> --}}
                                         <option data-tokens="همه" value="0">همه</option>
                                         @foreach ($LogActionTypes->sortBy('Title') as $logaction)
@@ -193,11 +194,43 @@
                             });
                             break;
                         case 3:
-                            var divToPrint = document.getElementById("logsDataTable");
-                            newWin = window.open("");
-                            newWin.document.write(divToPrint.outerHTML);
-                            newWin.print();
-                            newWin.close();
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+                            $.ajax({
+                                url: '/printuserlogreport',
+                                type: 'post',
+                                datatype: 'json',
+                                data: {
+                                    FromDate: $("#FromDate").val(),
+                                    ToDate: $("#ToDate").val(),
+                                    LogActionId: $("#LogActionId").val(),
+                                    UserName: $("#UserName").val()
+                                },
+                                success: function(result) {
+                                    if (result.HasValue) {
+                                        newWin = window.open("");
+                                        newWin.document.write(result.Html);
+                                        newWin.print();
+                                        newWin.close();
+                                    } else {
+                                        var divToPrint = document.getElementById("logsDataTable");
+                                        newWin = window.open("");
+                                        newWin.document.write(divToPrint.outerHTML);
+                                        newWin.print();
+                                        newWin.close();
+                                    }
+                                },
+                                error: function() {
+                                    var divToPrint = document.getElementById("logsDataTable");
+                                    newWin = window.open("");
+                                    newWin.document.write(divToPrint.outerHTML);
+                                    newWin.print();
+                                    newWin.close();
+                                }
+                            });
                             break;
                     }
                     break;

@@ -481,9 +481,15 @@
     </div>
 @endif
 <div class="form-group row">
-    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1, 1, '{{ $ReportName }}')">خروجی
+    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1, 1, '{{ $ReportName }}')">
+        <i class="fas fa-file-pdf"></i>
+        خروجی
         pdf</button>
-    <button class="btn btn-success" style="margin:5px;" onclick="ExportResult(1,2,'{{ $ReportName }}')">خروجی
+    <button class="btn btn-success" style="margin:5px;" onclick="ExportResult(1,2,'{{ $ReportName }}')">
+        <i class="fas fa-file-excel"></i>
+        خروجی
         excel</button>
-    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'{{ $ReportName }}')">پرینت</button>
+    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(1,3,'{{ $ReportName }}')">
+        <i class="fas fa-print"></i>
+        پرینت</button>
 </div>

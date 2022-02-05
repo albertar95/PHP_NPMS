@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\NPMSController;
 use App\Http\Requests\ReportRequest;
 use App\Models\ReportParameters;
 use App\Models\Reports;
+use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -289,15 +290,50 @@ class ReportController extends Controller
         $Projects = $reportresult->Projects;
         $Users = $reportresult->Users;
         $ReportName = $reportresult->ReportName;
-        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName'));
+        $ReportDate = substr(new Verta(Carbon::now()),0,10);
+        $ReportTime = substr(new Verta(Carbon::now()),10,10);
+        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
         return $pdf->stream($ReportName.'.pdf');
+        // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
+    }
+    public function PrintStatisticsReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $reportresult = $api->GetStatisticsReport($report->NidReport,$report->PrameterKeys,$report->ParameterValues);
+        $OutputKey = collect($report->OutPutValues);
+        $Scholars = $reportresult->Scholars;
+        $Projects = $reportresult->Projects;
+        $Users = $reportresult->Users;
+        $ReportName = $reportresult->ReportName;
+        $ReportDate = substr(new Verta(Carbon::now()),0,10);
+        $ReportTime = substr(new Verta(Carbon::now()),10,10);
+        $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
+        $result->Html = view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'))->render();
+        $result->HasValue = true;
+        return response()->json($result);
+        // return $pdf->stream($ReportName.'.pdf');
+        // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
     }
     public function DownloadUserLogReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
         $api = new NPMSController();
         $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[2]),$this->PersianDateToGeorgian($report->ToDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[2]),$report->LogActionId,$report->UserName);
-        $pdf = PDF::loadView('Report._DownloadActivityLogReport',compact('logs'));
+        $ReportDate = substr(new Verta(Carbon::now()),0,10);
+        $ReportTime = substr(new Verta(Carbon::now()),10,10);
+        $pdf = PDF::loadView('Report._DownloadActivityLogReport',compact('logs','ReportDate','ReportTime'));
         return $pdf->stream('userActivityLog.pdf');
+    }
+    public function PrintUserLogReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->FromDate)[2]),$this->PersianDateToGeorgian($report->ToDate)[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($report->ToDate)[2]),$report->LogActionId,$report->UserName);
+        $ReportDate = substr(new Verta(Carbon::now()),0,10);
+        $ReportTime = substr(new Verta(Carbon::now()),10,10);
+        $result->HasValue = true;
+        $result->Html = view('Report._DownloadActivityLogReport',compact('logs','ReportDate','ReportTime'))->render();
+        return response()->json($result);
     }
     public function ChartReports(Request $request)
     {

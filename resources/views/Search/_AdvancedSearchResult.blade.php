@@ -1,7 +1,9 @@
 <div class="form-group row">
-    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1)">خروجی
+    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1)"><i class="fas fa-file-pdf"></i>
+        خروجی
         pdf</button>
-    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(3)">پرینت</button>
+    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(3)"><i class="fas fa-print"></i>
+        پرینت</button>
 </div>
 <h3>طرح ها</h3>
 @if ($Projects->count() > 0)
@@ -40,8 +42,7 @@
                         <td class="priority-2">{{ $prj->GroupName }}</td>
                         <td class="priority-3">% {{ $prj->ProjectStatus }}</td>
                         <td>
-                            <a href="/projectdetail/{{ $prj->NidProject }}"
-                                class="btn btn-secondary">جزییات</a>
+                            <a href="/projectdetail/{{ $prj->NidProject }}" class="btn btn-secondary">جزییات</a>
                         </td>
                     </tr>
                 @endforeach
@@ -120,8 +121,9 @@
                 @foreach ($Users as $usr)
                     <tr>
                         <td>
-                            @if (!Empty($usr->ProfilePicture))
-                                <img src="{{ sprintf("/storage/images/%s", $usr->ProfilePicture) }}" height="100" width="100" />
+                            @if (!empty($usr->ProfilePicture))
+                                <img src="{{ sprintf('/storage/images/%s', $usr->ProfilePicture) }}" height="100"
+                                    width="100" />
                             @endif
                         </td>
                         <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
@@ -129,19 +131,19 @@
                         @if (!$usr->IsAdmin)
                             <td>کاربر عادی</td>
                         @else
-                        <td>کاربر ادمین</td>
+                            <td>کاربر ادمین</td>
                         @endforelse
-                <td>
-                    <button class="btn btn-secondary"
-                        onclick="ShowDetailModal(2,'{{ $usr->NidUser }}')">جزییات</button>
-                </td>
-                </tr>
-@endforeach
-</tbody>
-</table>
-</div>
+                        <td>
+                            <button class="btn btn-secondary"
+                                onclick="ShowDetailModal(2,'{{ $usr->NidUser }}')">جزییات</button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @else
-<p>موردی یافت نشد</p>
+    <p>موردی یافت نشد</p>
 @endforelse
 <h3>اطلاعات پایه</h3>
 
@@ -188,5 +190,5 @@
         </table>
     </div>
 @else
-<p>موردی یافت نشد</p>
+    <p>موردی یافت نشد</p>
 @endforelse

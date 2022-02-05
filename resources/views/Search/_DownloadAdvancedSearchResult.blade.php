@@ -4,20 +4,36 @@
     <style>
         body {
             font-family: 'fa', sans-serif !important;
+            text-align: right;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e3e3e3;
         }
 
     </style>
 </head>
 
 <body>
-
+    <div id="Reportheader" style="display: flex;margin-bottom: 5px;">
+        <div style="border: grey 1px solid;width: 20%;text-align: right;padding: 3px;">
+            {{ auth()->user()->UserName }} : کاربر <br />
+            تاریخ گزارش : {{ $ReportDate }}<br />
+            زمان گزارش : {{ $ReportTime }}
+        </div>
+        <div style="text-align: center;margin: 0 auto;width: 60%;">
+            <h1>نتیجه جستجو</h1>
+        </div>
+        <div style="width: 20%;"></div>
+    </div>
+    <div style="border: cornflowerblue 2px solid;margin-bottom: 25px;"></div>
     <h3>طرح ها</h3>
     @if ($Projects->count() > 0)
         <div class="table-responsive" dir="ltr">
             <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
-                    <tr>
+                    <tr style="background-color: #d2ebfa;">
                         <th>شماره پرونده</th>
                         <th>نام محقق</th>
                         <th>موضوع</th>
@@ -49,21 +65,13 @@
             <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
-                    <tr>
+                    <tr style="background-color: #d2ebfa;">
                         <th>نام محقق</th>
                         <th>کد ملی</th>
                         <th>رشته</th>
                         <th>گرایش</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>نام محقق</th>
-                        <th>کد ملی</th>
-                        <th>رشته</th>
-                        <th>گرایش</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     @foreach ($Scholars as $sch)
                         <tr>
@@ -85,7 +93,7 @@
             <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
-                    <tr>
+                    <tr style="background-color: #d2ebfa;">
                         <th>مشخصات کاربر</th>
                         <th>نام کاربری</th>
                         <th>سطح کاربری</th>
@@ -116,19 +124,12 @@
             <table class="table table-bordered" id="BaseInfodataTable"
                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                 <thead>
-                    <tr>
+                    <tr style="background-color: #d2ebfa;">
                         <th>ردیف</th>
                         <th>نوع</th>
                         <th>عنوان</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>ردیف</th>
-                        <th>نوع</th>
-                        <th>عنوان</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     @foreach ($BaseInfo->sortBy('SettingKey') as $key => $bi)
                         <tr>

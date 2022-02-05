@@ -74,7 +74,9 @@ Route::post("submituserlogreport",[ReportController::class,"SubmitUserLogReport"
 Route::get("executereport/{NidReport}",[ReportController::class,"ExecuteReport"])->name('report.ExecuteReport');
 Route::post("submitstatisticsreport",[ReportController::class,"SubmitStatisticsReport"])->name('report.SubmitStatisticsReport');
 Route::post("downloadstatisticsreport",[ReportController::class,"DownloadStatisticsReport"])->name('report.DownloadStatisticsReport');
+Route::post("printstatisticsreport",[ReportController::class,"PrintStatisticsReport"])->name('report.PrintStatisticsReport');
 Route::post("downloaduserlogreport",[ReportController::class,"DownloadUserLogReport"])->name('report.DownloadUserLogReport');
+Route::post("printuserlogreport",[ReportController::class,"PrintUserLogReport"])->name('report.PrintUserLogReport');
 Route::get("chartreports",[ReportController::class,"ChartReports"])->name('report.ChartReports');
 Route::get("customreports",[ReportController::class,"CustomReports"])->name('report.CustomReports');
 Route::post("customreportcontextchanged/{ContextId}",[ReportController::class,"CustomReportContextChanged"])->name('report.CustomReportContextChanged');
@@ -98,6 +100,7 @@ Route::get("searchsectionchange",[SearchController::class,"SearchSectionChange"]
 Route::get("submitadvancesearch/{SearchInputs}",[SearchController::class,"SubmitAdvanceSearch"])->name('search.SubmitAdvanceSearch');
 Route::get("complexsearch/{Text}",[SearchController::class,"ComplexSearch"])->name('search.ComplexSearch');
 Route::post("downloadadvancesearchresult",[SearchController::class,"DownloadAdvanceSearchResult"])->name('report.DownloadAdvanceSearchResult');
+Route::post("printadvancesearchresult",[SearchController::class,"PrintAdvanceSearchResult"])->name('report.PrintAdvanceSearchResult');
 
 //user routes
 Route::get("adduser",[UserController::class,"AddUser"])->name('user.AddUser');

@@ -281,7 +281,8 @@
                     else
                         stext = $("#Subject").val();
 
-                    var searchModel = [stext, document.getElementById("SearchSection").value, document.getElementById("SearchBy").value,
+                    var searchModel = [stext, document.getElementById("SearchSection").value, document.getElementById(
+                            "SearchBy").value,
                         $("#cbSimilar").val()
                     ];
                     var SearchInp = searchModel.join();
@@ -311,11 +312,54 @@
                     // });
                     break;
                 case 3:
-                    var divToPrint = document.getElementById("Resultwrapper");
-                    newWin = window.open("");
-                    newWin.document.write(divToPrint.outerHTML);
-                    newWin.print();
-                    newWin.close();
+                    var stext = '';
+                    if ($("#Subject").is(":hidden"))
+                        stext = $("#DateSubject").val();
+                    else
+                        stext = $("#Subject").val();
+
+                    var searchModel = [stext, document.getElementById("SearchSection").value, document.getElementById(
+                            "SearchBy").value,
+                        $("#cbSimilar").val()
+                    ];
+                    var SearchInp = searchModel.join();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: '/printadvancesearchresult',
+                        type: 'post',
+                        datatype: 'json',
+                        data: {
+                            searchText: stext,
+                            Section: document.getElementById("SearchSection").value,
+                            SearchBy: document.getElementById("SearchBy").value,
+                            Similar: $("#cbSimilar").val()
+                        },
+                        success: function(result) {
+                            if (result.HasValue) {
+                                newWin = window.open("");
+                                newWin.document.write(result.Html);
+                                newWin.print();
+                                newWin.close();
+                            } else {
+                                var divToPrint = document.getElementById("Resultwrapper");
+                                newWin = window.open("");
+                                newWin.document.write(divToPrint.outerHTML);
+                                newWin.print();
+                                newWin.close();
+                            }
+                        },
+                        error: function() {
+                            var divToPrint = document.getElementById("Resultwrapper");
+                            newWin = window.open("");
+                            newWin.document.write(divToPrint.outerHTML);
+                            newWin.print();
+                            newWin.close();
+                        }
+                    });
                     break;
             }
         }
