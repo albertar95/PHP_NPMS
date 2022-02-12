@@ -511,12 +511,14 @@ class UserRepository extends BaseRepository implements IUserRepository
     {
         $role->save();
     }
+    public function AddUserPermission(UserPermissions $perm)
+    {
+        $perm->save();
+    }
     public function UpdateRolePermission(RolePermissions $role)
     {
         RolePermissions::all()->where('NidPermission', '=', $role->NidPermission)->firstOrFail()->update(
             [
-                'RoleId' => $role->RoleId,
-                'EntityId' => $role->EntityId,
                 'Create' => $role->Create,
                 'Edit' => $role->Edit,
                 'Delete' => $role->Delete,
@@ -531,6 +533,10 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function DeleteRolePermission(string $NidPermission)
     {
         RolePermissions::all()->where('NidPermission', '=', $NidPermission)->firstOrFail()->delete();
+    }
+    public function DeleteUserPermission(string $NidPermission)
+    {
+        UserPermissions::all()->where('NidPermission', '=', $NidPermission)->firstOrFail()->delete();
     }
     public function GetRolesPermission()
     {
@@ -548,6 +554,19 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function GetRolesPermissionById(string $NidPermission)
     {
         return RolePermissions::all()->where('NidPermission', '=', $NidPermission)->firstOrFail();
+    }
+    public function GetRoleById(string $NidRole)
+    {
+        return Roles::all()->where('NidRole', '=', $NidRole)->firstOrFail();
+    }
+    public function GetRoleUsersById(string $NidRole)
+    {
+        $result = new Collection();
+        $tmpUsers = $this->model->all()->where('RoleId','=',$NidRole);
+        foreach ($tmpUsers as $user) {
+            $result->push(DataMapper::MapToUserInPermissionDTO($user));
+        }
+        return $result;
     }
     public function UpdateSessionSetting(string $newValue)
     {

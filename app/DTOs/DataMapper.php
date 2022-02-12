@@ -450,7 +450,15 @@ class DataMapper
             $result = new userPermissionDTO();
             $result->NidPermission = $userpermission->NidPermission;
             $result->UserId = $userpermission->UserId;
-            $result->ResourceId = $userpermission->ResourceId;
+            $result->ResourceId = $userpermission->ResourceId ?? "";
+            $result->EntityId = $userpermission->EntityId;
+            $result->Create = boolval($userpermission->Create);
+            $result->Edit = boolval($userpermission->Edit);
+            $result->Delete = boolval($userpermission->Delete);
+            $result->Detail = boolval($userpermission->Detail);
+            $result->Confident = boolval($userpermission->Confident);
+            $result->List = boolval($userpermission->List);
+            $result->Print = boolval($userpermission->Print);
             return $result;
         }
         catch (\Exception)

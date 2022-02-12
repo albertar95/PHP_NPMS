@@ -4,11 +4,11 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary" style="text-align:right;">مدیریت دسترسی نقش ها</h6>
+            <h6 class="m-0 font-weight-bold text-primary" style="text-align:right;">مدیریت دسترسی کاربر</h6>
         </div>
         <div class="card-body">
             <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">نقش {{ $RoleName }}</h1>
+                <h1 class="h4 text-gray-900 mb-4">نام کاربری : {{ $UserName }}</h1>
             </div>
             <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -26,15 +26,19 @@
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
             <div class="row" style="margin-bottom:1rem;">
-                <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;"
-                    href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
+                @if (in_array('0', $sharedData['UserAccessedEntities']))
+                    <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;"
+                        href="\adduserpermission\{{ $UserId }}">ایجاد دسترسی</a>
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:.25rem;width:15%;direction: ltr;margin-right: 65%;"
+                        href="/managerolesuser/{{ $RoleId }}">&larr; بازگشت</a>
+                @endif
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                     cellspacing="0">
                     <thead>
                         <tr>
-                            <th>نام نقش</th>
+                            <th>نام کاربر</th>
                             <th>نام موجودیت</th>
                             <th>دسترسی ایجاد</th>
                             <th>دسترسی ویرایش</th>
@@ -48,7 +52,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>نام نقش</th>
+                            <th>نام کاربر</th>
                             <th>نام موجودیت</th>
                             <th>دسترسی ایجاد</th>
                             <th>دسترسی ویرایش</th>
@@ -64,7 +68,7 @@
                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                             @foreach ($Permissions as $perm)
                                 <tr>
-                                    <td>{{ $perm->RoleTitle }}</td>
+                                    <td>{{ $UserName }}</td>
                                     @if ($perm->EntityId == 1)
                                         <td>محقق</td>
                                     @elseif($perm->EntityId == 2)
@@ -114,12 +118,6 @@
                                         <td>ندارد</td>
                                     @endforelse
                                     <td>
-                                        @if (in_array('0', $sharedData['UserAccessedEntities']))
-                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[1] == 1)
-                                                <a href="/editrolepermission/{{ $perm->NidPermission }}"
-                                                    class="btn btn-warning">ویرایش</a>
-                                            @endif
-                                        @endif
                                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[2] == 1)
                                                 <button class="btn btn-danger"
@@ -179,7 +177,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/deleterolepermission/' + NidPerm,
+                    url: '/deleteuserpermission/' + NidPerm,
                     type: 'post',
                     datatype: 'json',
                     success: function(result) {

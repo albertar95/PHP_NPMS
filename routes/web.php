@@ -130,11 +130,16 @@ Route::post("submitdeleterole/{NidRole}",[UserController::class,"SubmitDeleteRol
 Route::get("changepassword/{Niduser}",[UserController::class,"ChangePassword"])->name('user.ChangePassword');
 Route::get("getuserspasscode/{Niduser}/{CurrentPassword}",[UserController::class,"getUsersPassCode"])->name('user.getUsersPassCode');
 Route::get("managerolepermissions/{NidRole}",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
-Route::get("addrolepermission",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
+Route::get("managerolesuser/{NidRole}",[UserController::class,"ManageRolesUser"])->name('user.ManageRolesUser');
+Route::get("manageuserpermission/{NidUser}",[UserController::class,"ManageUserPermission"])->name('user.ManageUserPermission');
+Route::get("adduserpermission/{NidUser}",[UserController::class,"AddUserPermission"])->name('user.AddUserPermission');
+Route::post("deleteuserpermission/{NidPermission}",[UserController::class,"DeleteUserPermission"])->name('user.DeleteUserPermission');
+Route::get("addrolepermission/{NidRole}",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
 Route::get("profile",[UserController::class,"Profile"])->name('user.Profile');
 Route::get("managesessions",[UserController::class,"ManageSessions"])->name('user.ManageSessions');
 Route::post("submitsessionsetting",[UserController::class,"SubmitSessionSetting"])->name('user.SubmitSessionSetting');
 Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermission"])->name('user.SubmitAddRolePermission');
+Route::post("submitadduserpermission",[UserController::class,"SubmitAddUserPermission"])->name('user.SubmitAddUserPermission');
 Route::get("editrolepermission/{NidPermission}",[UserController::class,"EditRolePermission"])->name('user.EditRolePermission');
 Route::post("submiteditrolepermission",[UserController::class,"SubmitEditRolePermission"])->name('user.SubmitEditRolePermission');
 Route::post("deleterolepermission/{NidPermission}",[UserController::class,"DeleteRolePermission"])->name('user.DeleteRolePermission');

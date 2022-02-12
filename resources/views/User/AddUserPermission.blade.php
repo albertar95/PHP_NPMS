@@ -13,7 +13,7 @@
                         </div>
                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                             <form class="user" id="AddRolePermissionForm"
-                                action="{{ route('user.SubmitAddRolePermission') }}" method="POST">
+                                action="{{ route('user.SubmitAddUserPermission') }}" method="POST">
                                 @csrf
                                 <input type="text" id="NidPermission" name="NidPermission" hidden>
                                 <input type="text" id="CreateVal" value="0" name="CreateVal" hidden>
@@ -25,10 +25,10 @@
                                 <input type="text" id="PrintVal" value="0" name="PrintVal" hidden>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
-                                            name="RoleId" style="padding:0 .75rem;">
-                                            <option value="0" disabled>نقش</option>
-                                            <option value="{{ $Roles->NidRole }}" selected>{{ $Roles->Title }}</option>
+                                        <select class="form-control allWidth" data-ng-style="btn-primary" id="UserId"
+                                            name="UserId" style="padding:0 .75rem;">
+                                            <option value="0" disabled>کاربر</option>
+                                            <option value="{{ $User->NidUser }}" selected>{{ $User->UserName }} ({{ $User->FirstName }} {{ $User->LastName }})</option>
                                             {{-- @foreach ($Roles as $rls)
                                         @endforeach --}}
                                         </select>

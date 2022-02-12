@@ -22,6 +22,37 @@ class UserController extends Controller
         $this->middleware('auth',['except'=>['Login','SubmitLogin','SetLoginData','ChangePassword','SubmitChangePassword','getUsersPassCode']]);
         $this->middleware('XSS');
     }
+    private function CheckAuthority(bool $checkSub,int $sub,string $cookie,int $entity = 3)
+    {
+        $row = explode('#',$cookie);
+        $AccessedEntities = new Collection();
+        foreach ($row as $r)
+        {
+            $AccessedEntities->push(explode(',',$r)[0]);
+        }
+        if($checkSub)
+        {
+            $AccessedSub = new Collection();
+            foreach ($row as $r)
+            {
+                $AccessedSub->push(["entity" => explode(',',$r)[0],"rowValue" => substr($r,2,strlen($r)-2)]);
+            }
+            if (in_array($entity, $AccessedEntities->toArray()))
+            {
+                if (explode(',', $AccessedSub->where('entity', '=', $entity)->pluck('rowValue')[0])[$sub] == 1)
+                return true;
+                else
+                return false;
+            }else
+            return false;
+        }else
+        {
+            if (in_array($entity, $AccessedEntities->toArray()))
+            return true;
+            else
+            return false;
+        }
+    }
     private static function GetEntityPermissionsFromCache()
     {
         $raw = Cookie::get('NPMS_Permissions');
@@ -61,10 +92,16 @@ class UserController extends Controller
     }
     public function AddUser(Request $request)
     {
-        $api = new NPMSController();
-        $Roles = $api->GetAllRoles();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد کاربر");
-        return view('User.AddUser',compact('Roles'));
+        if ($this->CheckAuthority(true,0,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Roles = $api->GetAllRoles();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد کاربر");
+            return view('User.AddUser',compact('Roles'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitAddUser(UserRequest $user)
     {
@@ -75,20 +112,32 @@ class UserController extends Controller
     }
     public function Users(Request $request)
     {
-        $api = new NPMSController();
-        $Users = $api->GetAllUsers(0);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت کاربران");
-        return view('User.Users',compact('Users'));
+        if ($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Users = $api->GetAllUsers(0);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت کاربران");
+            return view('User.Users',compact('Users'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function UserDetail(string $NidUser,Request $request)
     {
-        $api = new NPMSController();
-        $Users = $api->GetUserDTOById($NidUser);
-        $result = new JsonResults();
-        $result->HasValue = true;
-        $result->Html = view('User._UserDetail',compact('Users'))->render();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات کاربر");
-        return response()->json($result);
+        if ($this->CheckAuthority(true,3,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Users = $api->GetUserDTOById($NidUser);
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $result->Html = view('User._UserDetail',compact('Users'))->render();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات کاربر");
+            return response()->json($result);
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function UploadThisFile()
     {
@@ -154,11 +203,17 @@ class UserController extends Controller
     }
     public function EditUser(string $NidUser,Request $request)
     {
-        $api = new NPMSController();
-        $User = $api->GetUserById($NidUser);
-        $Roles = $api->GetAllRoles();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ویرایش کاربر");
-        return view('User.EditUser',compact('User','Roles'));
+        if ($this->CheckAuthority(true,1,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $User = $api->GetUserById($NidUser);
+            $Roles = $api->GetAllRoles();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ویرایش کاربر");
+            return view('User.EditUser',compact('User','Roles'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitChangePassword(string $NidUser,string $NewPassword,Request $request)
     {
@@ -211,45 +266,69 @@ class UserController extends Controller
     }
     public function UserPermissions(Request $request)
     {
-        $api = new NPMSController();
-        $Users = $api->GetAllUserPermissionUsers();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت دسترسی کاربران");
-        return view('User.UserPermissions',compact('Users'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Users = $api->GetAllUserPermissionUsers();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت دسترسی کاربران");
+            return view('User.UserPermissions',compact('Users'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function UserPermissionDetail(string $NidUser,Request $request)
     {
-        $api = new NPMSController();
-        $UserPermissions = $api->GetAllUserPermissions($NidUser);
-        $User = $api->GetUserInPermissionById($NidUser);
-        $result = new JsonResults();
-        $result->HasValue = true;
-        $result->Html = view('User._UserPermissionDetail',compact('UserPermissions','User'))->render();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات دسترسی کاربران");
-        return response()->json($result);
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $UserPermissions = $api->GetAllUserPermissions($NidUser);
+            $User = $api->GetUserInPermissionById($NidUser);
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $result->Html = view('User._UserPermissionDetail',compact('UserPermissions','User'))->render();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات دسترسی کاربران");
+            return response()->json($result);
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function ManagePermission(string $NidUser,Request $request)
     {
-        $api = new NPMSController();
-        $UserPermissions = $api->GetAllUserPermissions($NidUser);
-        $User = $api->GetUserInPermissionById($NidUser);
-        $Resources = $api->GetAllResources();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"اعمال دسترسی کاربران");
-        return view('User.ManagePermission',compact('UserPermissions','User','Resources'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $UserPermissions = $api->GetAllUserPermissions($NidUser);
+            $User = $api->GetUserInPermissionById($NidUser);
+            $Resources = $api->GetAllResources();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"اعمال دسترسی کاربران");
+            return view('User.ManagePermission',compact('UserPermissions','User','Resources'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function EditUserPermission(Request $permissions)//array $ResourceIds,string $UserId,string $UserInfo
     {
-        $api = new NPMSController();
-        $result = new JsonResults();
-        if($api->UpdateUserUserPermissions($permissions->UserId,$permissions->ResourceIds ?? []))
+        if ($this->CheckAuthority(false,1,$permissions->cookie('NPMS_Permissions'),0))
         {
-            $api->AddLog(auth()->user(),$permissions->ip(),14,0,3,2,"اعمال دسترسی کاربران موفق");
-            $result->HasValue = true;
+            $api = new NPMSController();
+            $result = new JsonResults();
+            if($api->UpdateUserUserPermissions($permissions->UserId,$permissions->ResourceIds ?? []))
+            {
+                $api->AddLog(auth()->user(),$permissions->ip(),14,0,3,2,"اعمال دسترسی کاربران موفق");
+                $result->HasValue = true;
+            }else
+            {
+                $api->AddLog(auth()->user(),$permissions->ip(),14,1,3,2,"اعمال دسترسی کاربران ناموفق");
+                $result->HasValue = false;
+            }
+            return response()->json($result);
         }else
         {
-            $api->AddLog(auth()->user(),$permissions->ip(),14,1,3,2,"اعمال دسترسی کاربران ناموفق");
-            $result->HasValue = false;
+            return view('errors.503');
         }
-        return response()->json($result);
     }
     // [AllowAnonymous]
     public function Login()
@@ -326,15 +405,20 @@ class UserController extends Controller
         $api = new NPMSController();
         $result = new JsonResults();
         $perms = $api->GetRolePermissionsByUser($Niduser);
+        $perms2 = $api->GetAllUserPermissionDTOsByUserId($Niduser);
         $userRole = $api->GetAllRoles()->where('NidRole','=',auth()->user()->RoleId)->firstOrFail()->IsAdmin;
         $tmpPerms = new Collection();
         if($userRole)
         {
-            $tmpPerms->push('0,0,0,0,0,0,0');
+            $tmpPerms->push('0,1,1,1,1,1,1');
         }
         foreach ($perms as $perm)
         {
             $tmpPerms->push($perm->EntityId.','.$perm->Create.','.$perm->Edit.','.$perm->Delete.','.$perm->Detail.','.$perm->List.','.$perm->Print);
+        }
+        foreach ($perms2 as $perm2)
+        {
+            $tmpPerms->push($perm2->EntityId.','.$perm2->Create.','.$perm2->Edit.','.$perm2->Delete.','.$perm2->Detail.','.$perm2->List.','.$perm2->Print);
         }
         $output = "";
         if($tmpPerms->count() > 0)
@@ -354,10 +438,16 @@ class UserController extends Controller
     }
     public function PasswordPolicy(Request $request)
     {
-        $api = new NPMSController();
-        $Policies = $api->GetPolicies();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"خط مشی کلمه عبور");
-        return view('User.PasswordPolicy',compact('Policies'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Policies = $api->GetPolicies();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"خط مشی کلمه عبور");
+            return view('User.PasswordPolicy',compact('Policies'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitPasswordPolicy(Request $Policy)
     {
@@ -370,10 +460,16 @@ class UserController extends Controller
     }
     public function ManageRoles(Request $request)
     {
-        $api = new NPMSController();
-        $Roles = $api->GetAllRoles();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت نقش ها");
-        return view('User.ManageRoles',compact('Roles'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Roles = $api->GetAllRoles();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت نقش ها");
+            return view('User.ManageRoles',compact('Roles'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitRoleForm(Request $role)
     {
@@ -426,24 +522,50 @@ class UserController extends Controller
     }
     public function ManageRolePermissions(Request $request,string $NidRole)
     {
-        $api = new NPMSController();
-        $Permissions = $api->GetAllRolePermissionDTOsByRoleId($NidRole);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی نقش ها");
-        return view('User.ManageRolePermissions',compact('Permissions'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Permissions = $api->GetAllRolePermissionDTOsByRoleId($NidRole);
+            $tmpRole = $api->GetRoleById($NidRole);
+            $RoleName = $tmpRole->Title;
+            $RoleId = $tmpRole->NidRole;
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی نقش ها");
+            return view('User.ManageRolePermissions',compact('Permissions','RoleName','RoleId'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
-    public function AddRolePermission(Request $request)
+    public function AddRolePermission(Request $request,string $NidRole)
     {
-        $api = new NPMSController();
-        $Roles = $api->GetAllRoles();
-        $Entities = new Collection();
-        $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
-        $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
-        $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
-        $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
-        $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
-        $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ایجاد دسترسی نقش ها");
-        return view('User.AddRolePermission',compact('Roles','Entities'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Roles = $api->GetRoleById($NidRole);
+            $Permissions = $api->GetAllRolePermissionDTOsByRoleId($NidRole);
+            $CurrentEntites = [];
+            foreach ($Permissions as $key => $perm) {
+                array_push($CurrentEntites,$perm->EntityId);
+            }
+            $Entities = new Collection();
+            if(!in_array(1,$CurrentEntites))
+            $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
+            if(!in_array(2,$CurrentEntites))
+            $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
+            if(!in_array(3,$CurrentEntites))
+            $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
+            if(!in_array(4,$CurrentEntites))
+            $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
+            if(!in_array(5,$CurrentEntites))
+            $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+            if(!in_array(6,$CurrentEntites))
+            $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ایجاد دسترسی نقش ها");
+            return view('User.AddRolePermission',compact('Roles','Entities'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitAddRolePermission(Request $Permission)
     {
@@ -454,18 +576,30 @@ class UserController extends Controller
     }
     public function EditRolePermission(string $NidPermission,Request $request)
     {
-        $api = new NPMSController();
-        $Roles = $api->GetAllRoles();
-        $Entities = new Collection();
-        $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
-        $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
-        $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
-        $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
-        $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
-        $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
-        $Role = $api->GetRolePermissionsById($NidPermission);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ویرایش دسترسی نقش ها");
-        return view('User.EditRolePermission',compact('Roles','Entities','Role'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Role = $api->GetRolePermissionsById($NidPermission);
+            $Roles = $api->GetRoleById($Role->RoleId);
+            $Entities = new Collection();
+            if($Role->EntityId == 1)
+            $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
+            if($Role->EntityId == 2)
+            $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
+            if($Role->EntityId == 3)
+            $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
+            if($Role->EntityId == 4)
+            $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
+            if($Role->EntityId == 5)
+            $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+            if($Role->EntityId == 6)
+            $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ویرایش دسترسی نقش ها");
+            return view('User.EditRolePermission',compact('Roles','Entities','Role'));
+        }else
+        {
+            return view('errors.503');
+        }
         // return $Role;
     }
     public function SubmitEditRolePermission(Request $Permission)
@@ -473,7 +607,7 @@ class UserController extends Controller
         $api = new NPMSController();
         $api->UpdateRolePermission($Permission);
         $api->AddLog(auth()->user(),$Permission->ip(),22,0,3,3,"ویرایش دسترسی نقش موفق");
-        return redirect('/managerolepermissions');
+        return redirect(sprintf('/managerolepermissions/%s',$Permission->RoleId));
         // return $Permission;
     }
     public function DeleteRolePermission(string $NidPermission,Request $request)
@@ -487,10 +621,16 @@ class UserController extends Controller
     }
     public function ManageSessions(Request $request)
     {
-        $api = new NPMSController();
-        $sets = $api->GetSessionsSettings();
-        $users = $api->GetAllOnlineUsers();
-        return view('User.ManageSessions',compact('sets','users'));
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $sets = $api->GetSessionsSettings();
+            $users = $api->GetAllOnlineUsers();
+            return view('User.ManageSessions',compact('sets','users'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitSessionSetting(Request $request)
     {
@@ -500,5 +640,83 @@ class UserController extends Controller
         $api->UpdateSessionsSettings($request->SessionTimeout);
         return redirect('/managesessions');
         // return $request->SessionTimeout;
+    }
+    public function ManageRolesUser(Request $request, string $NidRole)
+    {
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Users = $api->GetAllRoleUsers($NidRole);
+            $tmpRole = $api->GetRoleById($NidRole);
+            $RoleName = $tmpRole->Title;
+            return view('User.ManageRolesUser',compact('Users','RoleName'));
+        }else
+        {
+            return view('errors.503');
+        }
+    }
+    public function ManageUserPermission(Request $request, string $NidUser)
+    {
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $Permissions = $api->GetAllUserPermissionDTOsByUserId($NidUser);
+            $tmpUser = $api->GetUserById($NidUser);
+            $UserName = $tmpUser->UserName;
+            $UserId = $NidUser;
+            $RoleId = $tmpUser->RoleId;
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی نقش ها");
+            return view('User.ManageUserPermission',compact('Permissions','UserName','UserId','RoleId'));
+        }else
+        {
+            return view('errors.503');
+        }
+    }
+    public function AddUserPermission(Request $request, string $NidUser)
+    {
+        if ($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),0))
+        {
+            $api = new NPMSController();
+            $User = $api->GetUserById($NidUser);
+            $Permissions = $api->GetAllUserPermissionDTOsByUserId($NidUser);
+            $CurrentEntites = [];
+            foreach ($Permissions as $key => $perm) {
+                array_push($CurrentEntites,$perm->EntityId);
+            }
+            $Entities = new Collection();
+            if(!in_array(1,$CurrentEntites))
+            $Entities->push(['EntityId' => 1,'Title' => 'محقق']);
+            if(!in_array(2,$CurrentEntites))
+            $Entities->push(['EntityId' => 2,'Title' => 'پروژه']);
+            if(!in_array(3,$CurrentEntites))
+            $Entities->push(['EntityId' => 3,'Title' => 'کاربر']);
+            if(!in_array(4,$CurrentEntites))
+            $Entities->push(['EntityId' => 4,'Title' => 'گزارش']);
+            if(!in_array(5,$CurrentEntites))
+            $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
+            if(!in_array(6,$CurrentEntites))
+            $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ایجاد دسترسی نقش ها");
+            return view('User.AddUserPermission',compact('User','Entities'));
+        }else
+        {
+            return view('errors.503');
+        }
+    }
+    public function SubmitAddUserPermission(Request $Permission)
+    {
+        $api = new NPMSController();
+        $api->AddUserPermission($Permission);
+        $api->AddLog(auth()->user(),$Permission->ip(),21,0,3,3,"ایجاد دسترسی نقش موفق");
+        return redirect(sprintf("/manageuserpermission/%s",$Permission->UserId));
+    }
+    public function DeleteUserPermission(Request $request, string $NidPermission)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $api->DeleteUserPermission($NidPermission);
+        $result->HasValue = true;
+        $api->AddLog(auth()->user(),$request->ip(),23,0,3,3,"حذف دسترسی نقش موفق");
+        return response()->json($result);
     }
 }

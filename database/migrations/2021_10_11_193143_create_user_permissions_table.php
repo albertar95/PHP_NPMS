@@ -20,7 +20,7 @@ class CreateUserPermissionsTable extends Migration
             $table->collation = 'utf8mb4_persian_ci';
             $table->primary('NidPermission','PK_UserPermissions');
             $table->foreign('UserId','FK_UserUserPermission')->references('NidUser')->on('User');
-            $table->foreign('ResourceId','FK_ResourceUserPermission')->references('NidResource')->on('Resources');
+            // $table->foreign('ResourceId','FK_ResourceUserPermission')->references('NidResource')->on('Resources');
         });
     }
 

@@ -11,61 +11,66 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
                         </div>
-                        <form class="user" id="AddUserForm">
-                            @csrf
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="FirstName"
-                                        name="FirstName" placeholder="نام">
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="LastName" name="LastName"
-                                        placeholder="نام خانوادگی">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="UserName" name="UserName"
-                                        placeholder="نام کاربری">
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="password" class="form-control form-control-user" id="Password"
-                                        name="Password" placeholder="کلمه عبور">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile(1)"
-                                        id="ProfilePictureUpload" name="ProfilePictureUpload">
-                                    <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture"
-                                        hidden>
-                                    <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل"
-                                        style="width:75%;margin:0 auto;">
-                                        انتخاب تصویر کاربر
-                                    </label>
-                                    <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
-                                    <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
-                                        id="uploadedframe" hidden>
-                                        <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                        @if (in_array('3', $sharedData['UserAccessedEntities']))
+                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[0] == 1)
+                                <form class="user" id="AddUserForm">
+                                    @csrf
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="FirstName"
+                                                name="FirstName" placeholder="نام">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user" id="LastName"
+                                                name="LastName" placeholder="نام خانوادگی">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6" style="display:flex;">
-                                    {{-- <label>نقش کاربر : </label> --}}
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
-                                        name="RoleId" style="padding:0 0 0 .75rem;">
-                                        <option value="0" selected>نقش کاربر</option>
-                                        @foreach ($Roles as $rls)
-                                            <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                style="width:25%;margin:auto;">
-                                ذخیره اطلاعات
-                            </button>
-                            <hr />
-                        </form>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="UserName"
+                                                name="UserName" placeholder="نام کاربری">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="password" class="form-control form-control-user" id="Password"
+                                                name="Password" placeholder="کلمه عبور">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="file" accept="image/*" class="custom-file-input"
+                                                onchange="UploadFile(1)" id="ProfilePictureUpload"
+                                                name="ProfilePictureUpload">
+                                            <input type="text" class="custom-file-input" id="ProfilePicture"
+                                                name="ProfilePicture" hidden>
+                                            <label class="custom-file-label" for="ProfilePictureUpload"
+                                                data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
+                                                انتخاب تصویر کاربر
+                                            </label>
+                                            <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
+                                            <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                id="uploadedframe" hidden>
+                                                <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;">
+                                            {{-- <label>نقش کاربر : </label> --}}
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                                name="RoleId" style="padding:0 0 0 .75rem;">
+                                                <option value="0" selected>نقش کاربر</option>
+                                                @foreach ($Roles as $rls)
+                                                    <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
+                                        style="width:25%;margin:auto;">
+                                        ذخیره اطلاعات
+                                    </button>
+                                    <hr />
+                                </form>
+                            @endif
+                        @endif
                         @if (in_array('3', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
                                 <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block"
@@ -121,7 +126,9 @@
                             $("#uploadedframe").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
-                            window.setTimeout(function () {window.location.href = '/users'; }, 3000);
+                            window.setTimeout(function() {
+                                window.location.href = '/users';
+                            }, 3000);
                         },
                         error: function(response) {
                             var message = "<ul>";

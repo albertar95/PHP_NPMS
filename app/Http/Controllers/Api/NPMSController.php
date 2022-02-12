@@ -29,6 +29,7 @@ use App\Models\Roles;
 use App\Models\Scholars;
 use App\Models\Units;
 use App\Models\User;
+use App\Models\UserPermissions;
 use App\Models\Users;
 use Carbon\Carbon;
 use Dflydev\DotAccessData\Data;
@@ -144,6 +145,7 @@ class NPMSController extends Controller
         $User->NidUser = Str::uuid();
         $User->IsLockedOut = boolval(false);
         $User->IsDisabled = boolval(false);
+        $User->Force_logout = 0;
         $repo = new UserRepository(new User());
         $User = DataMapper::MapToUser($User);
         $repo->AddUser($User);
@@ -388,6 +390,23 @@ class NPMSController extends Controller
         $newroleperm->Print = boolval($rolepermission->PrintVal);
         return $repo->AddRolePermission($newroleperm);
     }
+    public function AddUserPermission(Request $userpermission)
+    {
+        $repo = new UserRepository(new User());
+        $newuserperm = new UserPermissions();
+        $newuserperm->NidPermission = Str::uuid();
+        $newuserperm->UserId = $userpermission->UserId;
+        $newuserperm->ResourceId = $userpermission->ResourceId;
+        $newuserperm->EntityId = $userpermission->EntityId;
+        $newuserperm->Create = boolval($userpermission->CreateVal);
+        $newuserperm->Edit = boolval($userpermission->EditVal);
+        $newuserperm->Delete = boolval($userpermission->DeleteVal);
+        $newuserperm->Detail = boolval($userpermission->DetailVal);
+        $newuserperm->Confident = boolval($userpermission->ConfidentVal);
+        $newuserperm->List = boolval($userpermission->ListVal);
+        $newuserperm->Print = boolval($userpermission->PrintVal);
+        return $repo->AddUserPermission($newuserperm);
+    }
     public function UpdateRolePermission(Request $rolepermission)
     {
         $repo = new UserRepository(new User());
@@ -408,6 +427,11 @@ class NPMSController extends Controller
     {
         $repo = new UserRepository(new User());
         return $repo->DeleteRolePermission($NidPermission);
+    }
+    public function DeleteUserPermission(string $NidPermission)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->DeleteUserPermission($NidPermission);
     }
     public function GetAllRolePermissions()
     {
@@ -434,6 +458,17 @@ class NPMSController extends Controller
         }
         return $res;
     }
+    public function GetAllUserPermissionDTOsByUserId(string $UserId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetUserPermissions($UserId);
+    }
+    public function GetAllRoleUsers(string $RoleId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRoleUsersById($RoleId);
+    }
+
     public function GetRolePermissionsByUser(string $UserId)
     {
         $repo = new UserRepository(new User());
@@ -443,6 +478,11 @@ class NPMSController extends Controller
     {
         $repo = new UserRepository(new User());
         return $repo->GetRolesPermissionById($PermissionId);
+    }
+    public function GetRoleById(string $RoleId)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->GetRoleById($RoleId);
     }
     //Project section
     public function GetAllProjectInitials()

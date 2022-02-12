@@ -11,211 +11,226 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">اطلاعات طرح</h1>
                         </div>
-                        <form class="user" id="AddProjectForm">
-                            @csrf
-                            <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}" hidden />
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="Subject" name="Subject"
-                                        placeholder="عنوان طرح">
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="ScholarId"
-                                        id="ScholarId" style="padding:0 .75rem;">
-                                        <option value="0" selected>انتخاب محقق</option>
-                                        @foreach ($Scholars->sortBy('LastName') as $sch)
-                                            <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }}
-                                                {{ $sch->LastName }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId"
-                                        id="UnitId" style="padding:0 .75rem;">
-                                        <option value="0" selected>انتخاب یگان</option>
-                                        @foreach ($Units->sortBy('Title') as $uni)
-                                            <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId"
-                                        id="GroupId" style="padding:0 .75rem;">
-                                        <option value="0" selected>انتخاب گروه</option>
-                                        @foreach ($UnitGroups->sortBy('Title') as $ung)
-                                            <option value="{{ $ung->NidGroup }}">{{ $ung->Title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                    <input type="checkbox" style="width:1rem;margin:unset !important;margin-right:10%;"
-                                        id="TitleApproved" name="TitleApproved" class="form-control"
-                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                    <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید شده
-                                        است؟</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="ATFLetterDate"
-                                        name="ATFLetterDate" placeholder="تاریخ ارسال نامه به عتف">
-                                </div>
-                            </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
-                                <!-- Card Header - Accordion -->
-                                <a href="#collapseExtraItems" class="d-block card-header py-3 collapsed"
-                                    data-toggle="collapse" role="button" aria-expanded="false"
-                                    aria-controls="collapseExtraItems">
-                                    <h6 class="m-0 font-weight-bold text-primary">اطلاعات تکمیلی</h6>
-                                </a>
-                                <!-- Card Content - Collapse -->
-                                <div class="collapse" id="collapseExtraItems">
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" id="Supervisor"
-                                                    name="Supervisor" placeholder="استاد راهنما">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="SupervisorMobile" name="SupervisorMobile"
-                                                    placeholder="شماره تماس استاد راهنما">
-                                                <p id="SupervisorMobileError"
-                                                    style="font-size:.75rem;text-align:center;color:tomato;" hidden></p>
-                                            </div>
+                        @if (in_array('2', $sharedData['UserAccessedEntities']))
+                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[0] == 1)
+                                <form class="user" id="AddProjectForm">
+                                    @csrf
+                                    <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}"
+                                        hidden />
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="Subject"
+                                                name="Subject" placeholder="عنوان طرح">
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" id="Advisor"
-                                                    name="Advisor" placeholder="استاد مشاور">
-                                                <p id="AdvisorMobileError"
-                                                    style="font-size:.75rem;text-align:center;color:tomato;" hidden></p>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user" id="AdvisorMobile"
-                                                    name="AdvisorMobile" placeholder="شماره تماس استاد مشاور">
-                                            </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
+                                                <option value="0" selected>انتخاب محقق</option>
+                                                @foreach ($Scholars->sortBy('LastName') as $sch)
+                                                    <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }}
+                                                        {{ $sch->LastName }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" id="Referee1"
-                                                    name="Referee1" placeholder="داور اول">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user" id="Referee2"
-                                                    name="Referee2" placeholder="داور دوم">
-                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId"
+                                                id="UnitId" style="padding:0 .75rem;">
+                                                <option value="0" selected>انتخاب یگان</option>
+                                                @foreach ($Units->sortBy('Title') as $uni)
+                                                    <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="PreImploymentLetterDate" name="PreImploymentLetterDate"
-                                                    placeholder="تاریخ رو گرفت">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="ImploymentDate" name="ImploymentDate" placeholder="تاریخ بکارگیری">
-                                            </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId"
+                                                id="GroupId" style="padding:0 .75rem;">
+                                                <option value="0" selected>انتخاب گروه</option>
+                                                @foreach ($UnitGroups->sortBy('Title') as $ung)
+                                                    <option value="{{ $ung->NidGroup }}">{{ $ung->Title }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" id="Editor"
-                                                    name="Editor" placeholder="ویراستار">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="TenPercentLetterDate" name="TenPercentLetterDate"
-                                                    placeholder="تاریخ نامه 10 درصد">
-                                            </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
+                                            <input type="checkbox"
+                                                style="width:1rem;margin:unset !important;margin-right:10%;"
+                                                id="TitleApproved" name="TitleApproved" class="form-control"
+                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید شده
+                                                است؟</label>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="ThirtyPercentLetterDate" name="ThirtyPercentLetterDate"
-                                                    placeholder="تاریخ تحویل فرم 30 درصد">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="SixtyPercentLetterDate" name="SixtyPercentLetterDate"
-                                                    placeholder="تاریخ تحویل فرم 60 درصد">
-                                            </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user" id="ATFLetterDate"
+                                                name="ATFLetterDate" placeholder="تاریخ ارسال نامه به عتف">
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="SecurityLetterDate" name="SecurityLetterDate"
-                                                    placeholder="تاریخ نامه حفاظت">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="ThesisDefenceDate" name="ThesisDefenceDate"
-                                                    placeholder="تاریخ دفاعیه">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="ThesisDefenceLetterDate" name="ThesisDefenceLetterDate"
-                                                    placeholder="تاریخ ارسال نامه دفاعیه">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="number" class="form-control form-control-user"
-                                                    id="ReducePeriod" name="ReducePeriod" placeholder="مدت کسری">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <textarea class="form-control" id="Commision" name="Commision"
-                                                    placeholder="کمیسیون" rows="5"></textarea>
-                                            </div>
-                                            <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                                <input type="checkbox"
-                                                    style="width:1rem;margin:unset !important;margin-right:10%;"
-                                                    id="HasBookPublish" name="HasBookPublish" class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="HasBookPublish" style="margin:.25rem .25rem 0 0">چاپ کتاب
-                                                    دارد؟</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="FinalApprove" name="FinalApprove" class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید نهایی
-                                                    طرح</label>
-                                            </div>
-                                            <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="IsConfident" name="IsConfident" class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات
-                                                    محرمانه است ؟</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="IsDisabled" name="IsDisabled" class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیرفعال
-                                                    شود؟</label>
-                                            </div>
-                                            <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                    </div>
+                                    <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                                        <!-- Card Header - Accordion -->
+                                        <a href="#collapseExtraItems" class="d-block card-header py-3 collapsed"
+                                            data-toggle="collapse" role="button" aria-expanded="false"
+                                            aria-controls="collapseExtraItems">
+                                            <h6 class="m-0 font-weight-bold text-primary">اطلاعات تکمیلی</h6>
+                                        </a>
+                                        <!-- Card Content - Collapse -->
+                                        <div class="collapse" id="collapseExtraItems">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="Supervisor" name="Supervisor" placeholder="استاد راهنما">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="SupervisorMobile" name="SupervisorMobile"
+                                                            placeholder="شماره تماس استاد راهنما">
+                                                        <p id="SupervisorMobileError"
+                                                            style="font-size:.75rem;text-align:center;color:tomato;" hidden>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="Advisor" name="Advisor" placeholder="استاد مشاور">
+                                                        <p id="AdvisorMobileError"
+                                                            style="font-size:.75rem;text-align:center;color:tomato;" hidden>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="AdvisorMobile" name="AdvisorMobile"
+                                                            placeholder="شماره تماس استاد مشاور">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="Referee1" name="Referee1" placeholder="داور اول">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="Referee2" name="Referee2" placeholder="داور دوم">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="PreImploymentLetterDate" name="PreImploymentLetterDate"
+                                                            placeholder="تاریخ رو گرفت">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="ImploymentDate" name="ImploymentDate"
+                                                            placeholder="تاریخ بکارگیری">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="Editor" name="Editor" placeholder="ویراستار">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="TenPercentLetterDate" name="TenPercentLetterDate"
+                                                            placeholder="تاریخ نامه 10 درصد">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="ThirtyPercentLetterDate" name="ThirtyPercentLetterDate"
+                                                            placeholder="تاریخ تحویل فرم 30 درصد">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="SixtyPercentLetterDate" name="SixtyPercentLetterDate"
+                                                            placeholder="تاریخ تحویل فرم 60 درصد">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="SecurityLetterDate" name="SecurityLetterDate"
+                                                            placeholder="تاریخ نامه حفاظت">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="ThesisDefenceDate" name="ThesisDefenceDate"
+                                                            placeholder="تاریخ دفاعیه">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            id="ThesisDefenceLetterDate" name="ThesisDefenceLetterDate"
+                                                            placeholder="تاریخ ارسال نامه دفاعیه">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="number" class="form-control form-control-user"
+                                                            id="ReducePeriod" name="ReducePeriod" placeholder="مدت کسری">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <textarea class="form-control" id="Commision" name="Commision"
+                                                            placeholder="کمیسیون" rows="5"></textarea>
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                        <input type="checkbox"
+                                                            style="width:1rem;margin:unset !important;margin-right:10%;"
+                                                            id="HasBookPublish" name="HasBookPublish" class="form-control"
+                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                        <label for="HasBookPublish" style="margin:.25rem .25rem 0 0">چاپ
+                                                            کتاب
+                                                            دارد؟</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0"
+                                                        style="display:flex;padding-right:10%;">
+                                                        <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                            id="FinalApprove" name="FinalApprove" class="form-control"
+                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                        <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                            نهایی
+                                                            طرح</label>
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                        <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                            id="IsConfident" name="IsConfident" class="form-control"
+                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                        <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا
+                                                            اطلاعات
+                                                            محرمانه است ؟</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0"
+                                                        style="display:flex;padding-right:10%;">
+                                                        <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                            id="IsDisabled" name="IsDisabled" class="form-control"
+                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                        <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیرفعال
+                                                            شود؟</label>
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                style="width:25%;margin:auto;">
-                                ذخیره اطلاعات
-                            </button>
-                            <hr>
-                        </form>
+                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
+                                        style="width:25%;margin:auto;">
+                                        ذخیره اطلاعات
+                                    </button>
+                                    <hr>
+                                </form>
+                            @endif
+                        @endif
                         @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
                                 <a class="btn btn-outline-secondary btn-user btn-block"

@@ -119,20 +119,30 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach ($messages as $msg)
-                            <tr>
-                                <td>
-                                    {{ $msg->Title }}
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/singlemessage/{{ $msg->NidMessage }}/1">مشاهده
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
+                            @if (in_array('5', $sharedData['UserAccessedEntities']))
+                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
+                                    @foreach ($messages as $msg)
+                                        <tr>
+                                            <td>
+                                                {{ $msg->Title }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary"
+                                                    href="/singlemessage/{{ $msg->NidMessage }}/1">مشاهده
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            @endif
                         </tbody>
                     </table>
-                    <a target="_blank" rel="nofollow" href="/messages/{{ auth()->user()->NidUser }}">مشاهده تمامی پیام ها &larr;</a>
+                    @if (in_array('5', $sharedData['UserAccessedEntities']))
+                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
+                            <a target="_blank" rel="nofollow" href="/messages/{{ auth()->user()->NidUser }}">مشاهده تمامی
+                                پیام ها &larr;</a>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -161,83 +171,91 @@
                         </tfoot>
                         <tbody>
                             @foreach ($alarms as $alm)
-                            <tr>
-                            @switch ($alm->AlarmSubject)
-                                @case ('PreImployment')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه نامه روگرفتشان دریافت نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/1">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('SecurityLetter')
-                                    <td>
-                                        <span class="font-weight-bold">{{ sprintf("%d پروژه نامه حفاظت شان دریافت نشده است",$alm->Description) }}</span>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-secondary" href="/alarms/2">مشاهده
-                                        </a>
-                                    </td>
-                                    @break
-                                @case ('ThirtyLetter')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه فرم 30 درصدشان دریافت نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/3">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('SixtyLetter')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه فرم 60 درصدشان دریافت نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/4">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('ThesisLetter')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه دفاعیه شان برگزار نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/5">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('RefInfo')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه داور 1 و 2 شان مشخص نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/6">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('EditorInfo')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه ویراستارشان مشخص نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/7">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                                @case ('AdvSupInfo')
-                                <td>
-                                    <span class="font-weight-bold">{{ sprintf("%d پروژه استاد راهنما و مشاورشان مشخص نشده است",$alm->Description) }}</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-secondary" href="/alarms/8">مشاهده
-                                    </a>
-                                </td>
-                                    @break
-                            @endswitch
-                            </tr>
-                        @endforeach
+                                <tr>
+                                    @switch ($alm->AlarmSubject)
+                                        @case ('PreImployment')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه نامه روگرفتشان دریافت نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/1">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('SecurityLetter')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه نامه حفاظت شان دریافت نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/2">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('ThirtyLetter')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه فرم 30 درصدشان دریافت نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/3">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('SixtyLetter')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه فرم 60 درصدشان دریافت نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/4">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('ThesisLetter')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه دفاعیه شان برگزار نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/5">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('RefInfo')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه داور 1 و 2 شان مشخص نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/6">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('EditorInfo')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه ویراستارشان مشخص نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/7">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                        @case ('AdvSupInfo')
+                                            <td>
+                                                <span
+                                                    class="font-weight-bold">{{ sprintf('%d پروژه استاد راهنما و مشاورشان مشخص نشده است', $alm->Description) }}</span>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-secondary" href="/alarms/8">مشاهده
+                                                </a>
+                                            </td>
+                                        @break
+                                    @endswitch
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <a target="_blank" rel="nofollow" href="/alarms/0">مشاهده تمامی اعلان ها &larr;</a>

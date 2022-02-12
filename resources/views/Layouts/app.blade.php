@@ -23,102 +23,98 @@
                 </a>
             </div>
             <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-                بخش تحقیقات
-            </div>
+            @if (in_array('1', $sharedData['UserAccessedEntities']) || in_array('2', $sharedData['UserAccessedEntities']))
+                <div class="sidebar-heading">
+                    بخش تحقیقات
+                </div>
+            @endif
             <!-- Nav Item - Pages Collapse Menu -->
-            <div class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ScholarPart"
-                    aria-expanded="true" aria-controls="ScholarPart">
-                    <i class="fas fa-fw fa-graduation-cap"></i>
-                    <span>محقق</span>
-                </a>
-                <div id="ScholarPart" class="collapse" aria-labelledby="ScholarHeading"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (in_array('1', $sharedData['UserAccessedEntities']))
+            @if (in_array('1', $sharedData['UserAccessedEntities']))
+                <div class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ScholarPart"
+                        aria-expanded="true" aria-controls="ScholarPart">
+                        <i class="fas fa-fw fa-graduation-cap"></i>
+                        <span>محقق</span>
+                    </a>
+                    <div id="ScholarPart" class="collapse" aria-labelledby="ScholarHeading"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[0] == 1)
                                 <a class="collapse-item" href="{{ route('scholar.AddScholar') }}"
                                     style="text-align:right;">محقق جدید</a>
                             @endif
-                        @endif
-                        @if (in_array('1', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('scholar.Scholars') }}"
                                     style="text-align:right;">مدیریت محققان</a>
                             @endif
-                        @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <div class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ProjectPart"
-                    aria-expanded="true" aria-controls="ProjectPart">
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>طرح</span>
-                </a>
-                <div id="ProjectPart" class="collapse" aria-labelledby="ProjectHeading"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (in_array('2', $sharedData['UserAccessedEntities']))
+            @endif
+            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <div class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ProjectPart"
+                        aria-expanded="true" aria-controls="ProjectPart">
+                        <i class="fas fa-fw fa-file"></i>
+                        <span>طرح</span>
+                    </a>
+                    <div id="ProjectPart" class="collapse" aria-labelledby="ProjectHeading"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[0] == 1)
                                 <a class="collapse-item" href="{{ route('project.AddProject') }}"
                                     style="text-align:right;">طرح جدید</a>
                             @endif
-                        @endif
-                        @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('project.Projects') }}"
                                     style="text-align:right;">مدیریت طرح ها</a>
                             @endif
-                        @endif
-                        @if (in_array('6', $sharedData['UserAccessedEntities']))
-                            <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}"
-                                style="text-align:right;">مدیریت اطلاعات پایه</a>
-                        @endif
+                            @if (in_array('6', $sharedData['UserAccessedEntities']))
+                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[4] == 1)
+                                    <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}"
+                                        style="text-align:right;">مدیریت اطلاعات پایه</a>
+                                @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                بخش گزارشات
-            </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <div class="nav-item collapsed">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ReportPart"
-                    aria-expanded="true" aria-controls="ReportPart">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>گزارشات</span>
-                </a>
-                <div id="ReportPart" class="collapse" aria-labelledby="ReportHeading"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (in_array('4', $sharedData['UserAccessedEntities']))
+            @endif
+            @if (in_array('1', $sharedData['UserAccessedEntities']) || in_array('2', $sharedData['UserAccessedEntities']))
+                <hr class="sidebar-divider">
+            @endif
+            @if (in_array('4', $sharedData['UserAccessedEntities']))
+                <div class="sidebar-heading">
+                    بخش گزارشات
+                </div>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <div class="nav-item collapsed">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ReportPart"
+                        aria-expanded="true" aria-controls="ReportPart">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>گزارشات</span>
+                    </a>
+                    <div id="ReportPart" class="collapse" aria-labelledby="ReportHeading"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('report.StatisticReports') }}"
                                     style="text-align:right;">گزارشات آماری</a>
                             @endif
-                        @endif
-                        {{-- @if (in_array('4', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
-                                <a class="collapse-item" href="{{ route('report.ChartReports') }}"
-                                    style="text-align:right;">گزارشات نموداری</a>
+                            @if (in_array('0', $sharedData['UserAccessedEntities']))
+                                <a class="collapse-item" href="{{ route('report.UserLogReport') }}"
+                                    style="text-align:right;">گزارشات عملکرد کاربران</a>
                             @endif
-                        @endif --}}
-                        <a class="collapse-item" href="{{ route('report.UserLogReport') }}"
-                            style="text-align:right;">گزارشات عملکرد کاربران</a>
-                        @if (in_array('4', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[0] == 1)
-                                <a class="collapse-item" href="{{ route('report.CustomReports') }}"
-                                    style="text-align:right;">ایجاد گزارش سفارشی</a>
+                            @if (in_array('4', $sharedData['UserAccessedEntities']))
+                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[0] == 1)
+                                    <a class="collapse-item" href="{{ route('report.CustomReports') }}"
+                                        style="text-align:right;">ایجاد گزارش سفارشی</a>
+                                @endif
                             @endif
-                        @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="nav-item">
                 <a class="nav-link" href="{{ route('search.AdvanceSearch') }}">
                     <i class="fas fa-fw fa-search"></i>
@@ -126,59 +122,58 @@
                 </a>
             </div>
             <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-                بخش کاربران
-            </div>
-            <div class="nav-item collapsed">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#UserPart"
-                    aria-expanded="true" aria-controls="UserPart">
-                    <i class="fas fa-fw fa-user-circle"></i>
-                    <span>کاربر</span>
-                </a>
-                <div id="UserPart" class="collapse" aria-labelledby="UserHeading" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (in_array('3', $sharedData['UserAccessedEntities']))
+            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                <div class="sidebar-heading">
+                    بخش کاربران
+                </div>
+                <div class="nav-item collapsed">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#UserPart"
+                        aria-expanded="true" aria-controls="UserPart">
+                        <i class="fas fa-fw fa-user-circle"></i>
+                        <span>کاربر</span>
+                    </a>
+                    <div id="UserPart" class="collapse" aria-labelledby="UserHeading"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[0] == 1)
                                 <a class="collapse-item" href="{{ route('user.AddUser') }}"
                                     style="text-align:right;">ایجاد کاربر</a>
                             @endif
-                        @endif
-                        @if (in_array('3', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="{{ route('user.Users') }}"
                                     style="text-align:right;">مدیریت کاربران</a>
                             @endif
-                        @endif
-                        <a class="collapse-item" href="{{ route('user.UserPermissions') }}"
-                            style="text-align:right;">مدیریت دسترسی ها</a>
+                            @if (in_array('0', $sharedData['UserAccessedEntities']))
+                                <a class="collapse-item" href="{{ route('user.UserPermissions') }}"
+                                    style="text-align:right;">مدیریت دسترسی ها</a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="nav-item collapsed">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MessagePart"
-                    aria-expanded="true" aria-controls="MessagePart">
-                    <i class="fas fa-fw fa-envelope"></i>
-                    <span>پیام ها</span>
-                </a>
-                <div id="MessagePart" class="collapse" aria-labelledby="MessageHeading"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (in_array('5', $sharedData['UserAccessedEntities']))
+            @endif
+            @if (in_array('5', $sharedData['UserAccessedEntities']))
+                <div class="nav-item collapsed">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MessagePart"
+                        aria-expanded="true" aria-controls="MessagePart">
+                        <i class="fas fa-fw fa-envelope"></i>
+                        <span>پیام ها</span>
+                    </a>
+                    <div id="MessagePart" class="collapse" aria-labelledby="MessageHeading"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[0] == 1)
                                 <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}"
                                     style="text-align:right;">ارسال پیام</a>
                             @endif
-                        @endif
-                        @if (in_array('5', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
                                 <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}"
                                     style="text-align:right;">صندوق پیام</a>
                             @endif
-                        @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <hr class="sidebar-divider d-none d-md-block">
+                <hr class="sidebar-divider d-none d-md-block">
+            @endif
             @if (in_array('0', $sharedData['UserAccessedEntities']))
                 <div class="sidebar-heading">
                     بخش تنظیمات
@@ -299,8 +294,12 @@
                                 <h6 class="dropdown-header" style="text-align:center;">
                                     پیام ها
                                 </h6>
-                                <a class="dropdown-item text-center small text-gray-500"
-                                    href="/messages/{{ auth()->user()->NidUser }}">نمایش تمامی پیام ها</a>
+                                @if (in_array('5', $sharedData['UserAccessedEntities']))
+                                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
+                                        <a class="dropdown-item text-center small text-gray-500"
+                                            href="/messages/{{ auth()->user()->NidUser }}">نمایش تمامی پیام ها</a>
+                                    @endif
+                                @endif
                             </div>
                         </li>
                         <li class="topbar-divider d-none d-sm-block"></li>

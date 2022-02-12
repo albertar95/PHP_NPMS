@@ -10,6 +10,8 @@ use Facade\FlareClient\Api;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use resources\ViewModels;
 use Resources\ViewModels\ScholarViewModel;
@@ -22,16 +24,53 @@ class ScholarController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
+    private function CheckAuthority(bool $checkSub,int $sub,string $cookie,int $entity = 3)
+    {
+        $row = explode('#',$cookie);
+        $AccessedEntities = new Collection();
+        foreach ($row as $r)
+        {
+            $AccessedEntities->push(explode(',',$r)[0]);
+        }
+        if($checkSub)
+        {
+            $AccessedSub = new Collection();
+            foreach ($row as $r)
+            {
+                $AccessedSub->push(["entity" => explode(',',$r)[0],"rowValue" => substr($r,2,strlen($r)-2)]);
+            }
+            if (in_array($entity, $AccessedEntities->toArray()))
+            {
+                if (explode(',', $AccessedSub->where('entity', '=', $entity)->pluck('rowValue')[0])[$sub] == 1)
+                return true;
+                else
+                return false;
+            }else
+            return false;
+        }else
+        {
+            if (in_array($entity, $AccessedEntities->toArray()))
+            return true;
+            else
+            return false;
+        }
+    }
     public function AddScholar(Request $request)
     {
-        $api = new NPMSController();
-        $Majors = $api->GetMajors();
-        $CollaborationTypes = $api->GetCollaborationTypes();
-        $Grades = $api->GetGrades();
-        $MillitaryStatuses = $api->GetMillitaryStatuses();
-        $Colleges = $api->GetColleges();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
-        return view('Scholar.AddScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges'));
+        if ($this->CheckAuthority(true,0,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Majors = $api->GetMajors();
+            $CollaborationTypes = $api->GetCollaborationTypes();
+            $Grades = $api->GetGrades();
+            $MillitaryStatuses = $api->GetMillitaryStatuses();
+            $Colleges = $api->GetColleges();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+            return view('Scholar.AddScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function MajorSelectChanged(string $NidMajor)
     {
@@ -66,39 +105,57 @@ class ScholarController extends Controller
     }
     public function Scholars(Request $request)
     {
-        $api = new NPMSController();
-        $Scholar = $api->GetAllScholarLists(0);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت محققان");
-        return view('Scholar.Scholars',compact('Scholar'));
+        if ($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Scholar = $api->GetAllScholarLists(0);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت محققان");
+            return view('Scholar.Scholars',compact('Scholar'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function ScholarDetail(string $NidScholar,Request $request)
     {
-        $api = new NPMSController();
-        $result = new JsonResults();
-        $result->HasValue = true;
-        $Scholar = $api->GetAllScholarDetails($NidScholar);
-        $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
-        return response()->json($result);
+        if ($this->CheckAuthority(true,3,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $Scholar = $api->GetAllScholarDetails($NidScholar);
+            $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+            return response()->json($result);
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function EditScholar(string $NidScholar,Request $request)
     {
-        $api = new NPMSController();
-        $Majors = $api->GetMajors();
-        $CollaborationTypes = $api->GetCollaborationTypes();
-        $Grades = $api->GetGrades();
-        $MillitaryStatuses = $api->GetMillitaryStatuses();
-        $Colleges = $api->GetColleges();
-        $Scholar = $api->GetScholarDTO($NidScholar);
-        if(!is_null($Scholar))
+        if ($this->CheckAuthority(true,1,$request->cookie('NPMS_Permissions')))
         {
-            $Oreintations = $api->GetOreintationsByMajorId($Scholar->MajorId);
+            $api = new NPMSController();
+            $Majors = $api->GetMajors();
+            $CollaborationTypes = $api->GetCollaborationTypes();
+            $Grades = $api->GetGrades();
+            $MillitaryStatuses = $api->GetMillitaryStatuses();
+            $Colleges = $api->GetColleges();
+            $Scholar = $api->GetScholarDTO($NidScholar);
+            if(!is_null($Scholar))
+            {
+                $Oreintations = $api->GetOreintationsByMajorId($Scholar->MajorId);
+            }else
+            {
+                $Oreintations = new Collection();
+            }
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+            return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
         }else
         {
-            $Oreintations = new Collection();
+            return view('errors.503');
         }
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
-        return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
     }
     public function SubmitEditScholar(ScholarRequest $scholar) //ScholarDTO
     {

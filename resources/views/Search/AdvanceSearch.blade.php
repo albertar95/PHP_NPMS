@@ -51,11 +51,21 @@
                                 <div class="col-sm-8">
                                     <select class="form-control allWidth" data-ng-style="btn-primary" id="SearchSection"
                                         style="padding:0 .75rem;">
-                                        <option value="0" selected>تمامی بخش ها</option>
-                                        <option value="1">محققان</option>
-                                        <option value="2">طرح ها</option>
-                                        <option value="3">کاربران</option>
-                                        <option value="4">اطلاعات پایه</option>
+                                        @if (in_array('0', $sharedData['UserAccessedEntities']))
+                                            <option value="0" selected>تمامی بخش ها</option>
+                                        @endif
+                                        @if (in_array('1', $sharedData['UserAccessedEntities']))
+                                            <option value="1">محققان</option>
+                                        @endif
+                                        @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                            <option value="2">طرح ها</option>
+                                        @endif
+                                        @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                            <option value="3">کاربران</option>
+                                        @endif
+                                        @if (in_array('6', $sharedData['UserAccessedEntities']))
+                                            <option value="4">اطلاعات پایه</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-sm-2">

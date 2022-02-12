@@ -11,129 +11,142 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">اطلاعات محقق</h1>
                         </div>
-                        <form class="user" id="AddScholarForm">
-                            @csrf
-                            <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}" hidden />
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="FirstName"
-                                        name="FirstName" placeholder="نام">
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="LastName" name="LastName"
-                                        placeholder="نام خانوادگی">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="FatherName"
-                                        name="FatherName" placeholder="نام پدر">
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="observer" name="BirthDate"
-                                        placeholder="تاریخ تولد">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="number" class="form-control form-control-user" id="NationalCode"
-                                        name="NationalCode" placeholder="کد ملی">
-                                    <p id="NationalcodeError" style="font-size:.75rem;text-align:center;color:tomato;"
-                                        hidden></p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="number" class="form-control form-control-user" id="Mobile" name="Mobile"
-                                        placeholder="شماره همراه">
-                                    <p id="MobileError" style="font-size:.75rem;text-align:center;color:tomato;" hidden></p>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId"
-                                        id="GradeSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>مقطع تحصیلی</option>
-                                        @foreach ($Grades->sortBy('SettingTitle') as $grd)
-                                            <option value="{{ $grd->SettingValue }}">{{ $grd->SettingTitle }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="MillitaryStatus"
-                                        id="MillitaryStatusSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>وضعیت خدمتی</option>
-                                        @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
-                                            <option value="{{ $mls->SettingValue }}">{{ $mls->SettingTitle }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId"
-                                        id="MajorSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>رشته تحصیلی</option>
-                                        @foreach ($Majors->sortBy('Title') as $mjr)
-                                            <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="OreintationId"
-                                        id="OrentationSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>گرایش</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary" name="college"
-                                        id="collegeSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>محل تحصیل</option>
-                                        @foreach ($Colleges->sortBy('SettingTitle') as $col)
-                                            <option value="{{ $col->SettingValue }}">{{ $col->SettingTitle }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control allWidth" data-ng-style="btn-primary"
-                                        name="CollaborationType" id="CollaborationTypeSlt" style="padding:0 .75rem;">
-                                        <option value="0" selected>نوع همکاری</option>
-                                        @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
-                                            <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="file" accept="image/*" class="custom-file-input" onchange="UploadFile(1)"
-                                        id="ProfilePictureUpload" name="ProfilePictureUpload">
-                                    <input type="text" class="custom-file-input" id="ProfilePicture" name="ProfilePicture"
-                                        hidden>
-                                    <label class="custom-file-label" for="ProfilePictureUpload" data-browse="انتخاب فایل"
-                                        style="width:75%;margin:0 auto;">
-                                        تصویر پروفایل محقق
-                                    </label>
-                                    <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
-                                    <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
-                                        id="uploadedframe" hidden>
-                                        <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                        @if (in_array('1', $sharedData['UserAccessedEntities']))
+                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[0] == 1)
+                                <form class="user" id="AddScholarForm">
+                                    @csrf
+                                    <input type="text" id="UserId" name="UserId" value="{{ auth()->user()->NidUser }}"
+                                        hidden />
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="FirstName"
+                                                name="FirstName" placeholder="نام">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user" id="LastName"
+                                                name="LastName" placeholder="نام خانوادگی">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                    <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsConfident"
-                                        name="IsConfident" class="form-control"
-                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                    <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه است
-                                        ؟</label>
-                                </div>
-                            </div>
-                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                style="width:25%;margin:auto;">
-                                ذخیره اطلاعات
-                            </button>
-                            <hr>
-                        </form>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="FatherName"
+                                                name="FatherName" placeholder="نام پدر">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user" id="observer"
+                                                name="BirthDate" placeholder="تاریخ تولد">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="number" class="form-control form-control-user" id="NationalCode"
+                                                name="NationalCode" placeholder="کد ملی">
+                                            <p id="NationalcodeError"
+                                                style="font-size:.75rem;text-align:center;color:tomato;" hidden></p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control form-control-user" id="Mobile"
+                                                name="Mobile" placeholder="شماره همراه">
+                                            <p id="MobileError" style="font-size:.75rem;text-align:center;color:tomato;"
+                                                hidden></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId"
+                                                id="GradeSlt" style="padding:0 .75rem;">
+                                                <option value="0" selected>مقطع تحصیلی</option>
+                                                @foreach ($Grades->sortBy('SettingTitle') as $grd)
+                                                    <option value="{{ $grd->SettingValue }}">{{ $grd->SettingTitle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                name="MillitaryStatus" id="MillitaryStatusSlt" style="padding:0 .75rem;">
+                                                <option value="0" selected>وضعیت خدمتی</option>
+                                                @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
+                                                    <option value="{{ $mls->SettingValue }}">{{ $mls->SettingTitle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId"
+                                                id="MajorSlt" style="padding:0 .75rem;">
+                                                <option value="0" selected>رشته تحصیلی</option>
+                                                @foreach ($Majors->sortBy('Title') as $mjr)
+                                                    <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                name="OreintationId" id="OrentationSlt" style="padding:0 .75rem;">
+                                                <option value="0" selected>گرایش</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college"
+                                                id="collegeSlt" style="padding:0 .75rem;">
+                                                <option value="0" selected>محل تحصیل</option>
+                                                @foreach ($Colleges->sortBy('SettingTitle') as $col)
+                                                    <option value="{{ $col->SettingValue }}">{{ $col->SettingTitle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                name="CollaborationType" id="CollaborationTypeSlt"
+                                                style="padding:0 .75rem;">
+                                                <option value="0" selected>نوع همکاری</option>
+                                                @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
+                                                    <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="file" accept="image/*" class="custom-file-input"
+                                                onchange="UploadFile(1)" id="ProfilePictureUpload"
+                                                name="ProfilePictureUpload">
+                                            <input type="text" class="custom-file-input" id="ProfilePicture"
+                                                name="ProfilePicture" hidden>
+                                            <label class="custom-file-label" for="ProfilePictureUpload"
+                                                data-browse="انتخاب فایل" style="width:75%;margin:0 auto;">
+                                                تصویر پروفایل محقق
+                                            </label>
+                                            <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
+                                            <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                id="uploadedframe" hidden>
+                                                <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                id="IsConfident" name="IsConfident" class="form-control"
+                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا اطلاعات محرمانه
+                                                است
+                                                ؟</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
+                                        style="width:25%;margin:auto;">
+                                        ذخیره اطلاعات
+                                    </button>
+                                    <hr>
+                                </form>
+                            @endif
+                        @endif
                         @if (in_array('1', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
                                 <a class="btn btn-outline-secondary btn-user btn-block"

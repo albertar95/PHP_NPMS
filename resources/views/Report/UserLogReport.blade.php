@@ -10,43 +10,46 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">گزارش عملکرد کاربران</h1>
                         </div>
-                        <form class="user" id="ExecuteReportForm">
-                            {{-- <input type="text" class="form-control form-control-user" value="{{ $report->NidReport }}" id="NidReport" hidden> --}}
-                            <div class="form-group row" style="text-align:right;">
-                                <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    {{-- <label>تاریخ از : </label> --}}
-                                    <input type="text" class="form-control form-control-user" id="FromDate" name="FromDate"
-                                        placeholder="تاریخ از">
+                        @if (in_array('0', $sharedData['UserAccessedEntities']))
+                            <form class="user" id="ExecuteReportForm">
+                                {{-- <input type="text" class="form-control form-control-user" value="{{ $report->NidReport }}" id="NidReport" hidden> --}}
+                                <div class="form-group row" style="text-align:right;">
+                                    <div class="col-sm-2" style="padding:.5rem;display: flex;">
+                                        {{-- <label>تاریخ از : </label> --}}
+                                        <input type="text" class="form-control form-control-user" id="FromDate"
+                                            name="FromDate" placeholder="تاریخ از">
+                                    </div>
+                                    <div class="col-sm-2" style="padding:.5rem;display: flex;">
+                                        {{-- <label>تاریخ از : </label> --}}
+                                        <input type="text" class="form-control form-control-user" id="ToDate" name="ToDate"
+                                            placeholder="تاریخ تا">
+                                    </div>
+                                    <div class="col-sm-2" style="padding:.5rem;display: flex;">
+                                        <select class="form-control allWidth" name="LogActionId" id="LogActionId"
+                                            placeholder="انتخاب نوع فعالیت">
+                                            {{-- <option data-tokens="نوع فعالیت" selected>نوع فعالیت</option> --}}
+                                            <option data-tokens="همه" value="0">همه</option>
+                                            @foreach ($LogActionTypes->sortBy('Title') as $logaction)
+                                                <option value="{{ $logaction->NidAction }}"
+                                                    data-tokens="{{ $logaction->Title }}">{{ $logaction->Title }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2" style="padding:.5rem;display: flex;">
+                                        {{-- <label>تاریخ از : </label> --}}
+                                        <input type="text" class="form-control form-control-user" id="UserName"
+                                            name="UserName" placeholder="نام کاربری">
+                                    </div>
+                                    <div class="col-sm-2" style="padding:.5rem;display: flex;">
+                                        <button type="submit" id="btnExecute" class="btn btn-success btn-user btn-block"
+                                            style="margin:auto;">
+                                            اجرای گزارش
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    {{-- <label>تاریخ از : </label> --}}
-                                    <input type="text" class="form-control form-control-user" id="ToDate" name="ToDate"
-                                        placeholder="تاریخ تا">
-                                </div>
-                                <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    <select class="form-control allWidth" name="LogActionId" id="LogActionId"
-                                        placeholder="انتخاب نوع فعالیت">
-                                        {{-- <option data-tokens="نوع فعالیت" selected>نوع فعالیت</option> --}}
-                                        <option data-tokens="همه" value="0">همه</option>
-                                        @foreach ($LogActionTypes->sortBy('Title') as $logaction)
-                                            <option value="{{ $logaction->NidAction }}"
-                                                data-tokens="{{ $logaction->Title }}">{{ $logaction->Title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    {{-- <label>تاریخ از : </label> --}}
-                                    <input type="text" class="form-control form-control-user" id="UserName" name="UserName"
-                                        placeholder="نام کاربری">
-                                </div>
-                                <div class="col-sm-2" style="padding:.5rem;display: flex;">
-                                    <button type="submit" id="btnExecute" class="btn btn-success btn-user btn-block"
-                                        style="margin:auto;">
-                                        اجرای گزارش
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        @endif
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>

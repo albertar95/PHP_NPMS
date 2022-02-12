@@ -9,6 +9,7 @@ use App\Http\Requests\TitleRequest;
 use App\Models\Projects;
 use App\Models\Scholars;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
@@ -18,14 +19,51 @@ class ProjectController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
+    private function CheckAuthority(bool $checkSub,int $sub,string $cookie,int $entity = 2)
+    {
+        $row = explode('#',$cookie);
+        $AccessedEntities = new Collection();
+        foreach ($row as $r)
+        {
+            $AccessedEntities->push(explode(',',$r)[0]);
+        }
+        if($checkSub)
+        {
+            $AccessedSub = new Collection();
+            foreach ($row as $r)
+            {
+                $AccessedSub->push(["entity" => explode(',',$r)[0],"rowValue" => substr($r,2,strlen($r)-2)]);
+            }
+            if (in_array($entity, $AccessedEntities->toArray()))
+            {
+                if (explode(',', $AccessedSub->where('entity', '=', $entity)->pluck('rowValue')[0])[$sub] == 1)
+                return true;
+                else
+                return false;
+            }else
+            return false;
+        }else
+        {
+            if (in_array($entity, $AccessedEntities->toArray()))
+            return true;
+            else
+            return false;
+        }
+    }
     public function Projects(Request $request)
     {
         try
         {
-            $api = new NPMSController();
-            $Projects = $api->GetAllProjectInitials();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
-            return view('Project.Projects',compact('Projects'));
+            if($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $Projects = $api->GetAllProjectInitials();
+                $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
+                return view('Project.Projects',compact('Projects'));
+            }else
+            {
+                return view('errors.503');
+            }
         }catch(\Exception $e)
         {
             throw new \App\Exceptions\LogExecptions($e);
@@ -33,12 +71,18 @@ class ProjectController extends Controller
     }
     public function AddProject(Request $request)
     {
-        $api = new NPMSController();
-        $Scholars = $api->GetAllProjectScholars();
-        $UnitGroups = $api->GetAllUnitGroups();
-        $Units = $api->GetAllUnits();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد طرح");
-        return view('Project.AddProject',compact('Scholars','UnitGroups','Units'));
+        if($this->CheckAuthority(true,0,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Scholars = $api->GetAllProjectScholars();
+            $UnitGroups = $api->GetAllUnitGroups();
+            $Units = $api->GetAllUnits();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد طرح");
+            return view('Project.AddProject',compact('Scholars','UnitGroups','Units'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitAddProject(ProjectRequest $Project)
     {
@@ -60,21 +104,33 @@ class ProjectController extends Controller
     }
     public function ProjectDetail(string $NidProject,Request $request)
     {
-        $api = new NPMSController();
-        $Project = $api->GetProjectDetailDTOById($NidProject);
-        $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات طرح");
-        return view('Project.ProjectDetail',compact('Project','Scholar'));
+        if($this->CheckAuthority(true,3,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Project = $api->GetProjectDetailDTOById($NidProject);
+            $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات طرح");
+            return view('Project.ProjectDetail',compact('Project','Scholar'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function ProjectProgress(string $NidProject,Request $request)
     {
-        $api = new NPMSController();
-        $Scholars = $api->GetAllProjectScholars();
-        $UnitGroups = $api->GetAllUnitGroups();
-        $Units = $api->GetAllUnits();
-        $Project = $api->GetProjectDTOById($NidProject);
-        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"پیشرفت طرح");
-        return view('Project.ProjectProgress',compact('Scholars','UnitGroups','Units','Project'));
+        if($this->CheckAuthority(true,1,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Scholars = $api->GetAllProjectScholars();
+            $UnitGroups = $api->GetAllUnitGroups();
+            $Units = $api->GetAllUnits();
+            $Project = $api->GetProjectDTOById($NidProject);
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"پیشرفت طرح");
+            return view('Project.ProjectProgress',compact('Scholars','UnitGroups','Units','Project'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function UpdateProject(ProjectRequest $Project)
     {
@@ -98,17 +154,23 @@ class ProjectController extends Controller
     }
     public function ManageBaseInfo(Request $request)
     {
-        $api = new NPMSController();
-        $UnitGroups = $api->GetAllUnitGroups();
-        $Units = $api->GetAllUnits();
-        $Majors = $api->GetMajors();
-        $CollaborationTypes = $api->GetCollaborationTypes();
-        $MillitaryStatuses = $api->GetMillitaryStatuses();
-        $Oreintations = $api->GetOrientations();
-        $Colleges = $api->GetColleges();
-        $Grades = $api->GetGrades();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت اطلاعات پایه");
-        return view('Project.ManageBaseInfo',compact('UnitGroups','Units','Majors','CollaborationTypes','MillitaryStatuses','Oreintations','Colleges','Grades'));
+        if($this->CheckAuthority(false,1,$request->cookie('NPMS_Permissions'),6))
+        {
+            $api = new NPMSController();
+            $UnitGroups = $api->GetAllUnitGroups();
+            $Units = $api->GetAllUnits();
+            $Majors = $api->GetMajors();
+            $CollaborationTypes = $api->GetCollaborationTypes();
+            $MillitaryStatuses = $api->GetMillitaryStatuses();
+            $Oreintations = $api->GetOrientations();
+            $Colleges = $api->GetColleges();
+            $Grades = $api->GetGrades();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت اطلاعات پایه");
+            return view('Project.ManageBaseInfo',compact('UnitGroups','Units','Majors','CollaborationTypes','MillitaryStatuses','Oreintations','Colleges','Grades'));
+        }else
+        {
+            return view('errors.503');
+        }
     }
     public function SubmitUnitForm(TitleRequest $unit)
     {

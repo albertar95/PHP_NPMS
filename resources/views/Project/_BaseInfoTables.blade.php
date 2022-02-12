@@ -363,10 +363,18 @@
                 <td>نقش عادی</td>
                 @endforelse
                 <td>
+                    @if (in_array('0', $sharedData['UserAccessedEntities']))
+                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[2] == 1)
                     <button class="btn btn-danger"
                         onclick="DeleteModal(1,'{{ $role->NidRole }}')">حذف</button>
+                    @endif
+                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[1] == 1)
                     <button class="btn btn-warning"
                         onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">ویرایش</button>
+                    @endif
+                    <a href="/managerolepermissions/{{ $role->NidRole }}"
+                        class="btn btn-info">اعمال دسترسی</a>
+                @endif
                 </td>
             </tr>
         @endforeach
