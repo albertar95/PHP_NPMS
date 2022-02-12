@@ -456,6 +456,10 @@
     @yield('scripts')
     <script type="text/javascript">
         $(function() {
+            // $('select').selectize({
+            //     sortField: 'value'
+            // });
+            // $('select[name="dataTable_length"]')[0].selectize.disable();
             GetUsersAlarms();
             GetUsersMessages();
             setInterval(function() {

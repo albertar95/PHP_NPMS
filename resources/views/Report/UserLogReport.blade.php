@@ -85,17 +85,15 @@
 @endsection
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
-    <link href="{{ URL('Content/vendor/selectize/selectize.bootstrap3.min.css') }}" rel="stylesheet" />
 @endsection
 @section('scripts')
-    <script src="{{ URL('Content/vendor/selectize/selectize.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/ExportTable/tableHTMLExport.js') }}"></script>
     <script src="{{ URL('Content/vendor/ExportTable/html2canvas.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-            $('select').selectize({
+            $('#LogActionId').selectize({
                 sortField: 'value'
             });
             $("#FromDate").persianDatepicker({

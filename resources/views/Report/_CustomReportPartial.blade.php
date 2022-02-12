@@ -1,9 +1,9 @@
 <div class="form-group row">
     <div class="col-sm-6 mb-3 mb-sm-0">
-        <select class="form-control allWidth" data-ng-style="btn-primary" id="sltField" name="FieldId" onchange="FieldChange()" style="padding:0 .75rem;">
+        <select class="form-control allWidth" data-ng-style="btn-primary" id="sltField" name="FieldId" placeholder="جستجو بر اساس" onchange="FieldChange()" style="padding:0 .75rem;">
             <option value="0" disabled selected>جستجو بر اساس</option>
             @foreach ($inputs as $inp)
-                <option value="{{ $inp->FieldId }}">{{ $inp->PersianName }}</option>
+                <option value="{{ $inp->FieldId }}" data-tokens="{{ $inp->PersianName }}">{{ $inp->PersianName }}</option>
             @endforeach
         </select>
     </div>

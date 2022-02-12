@@ -8,38 +8,38 @@
                         name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (2)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="مقطع تحصیلی"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>مقطع تحصیلی</option>
                         @foreach ($Grades->sortBy('SettingTitle') as $grd)
-                            <option value="{{ $grd->SettingValue }}">{{ $grd->SettingTitle }}</option>
+                            <option value="{{ $grd->SettingValue }}" data-tokens="{{ $grd->SettingTitle }}">{{ $grd->SettingTitle }}</option>
                         @endforeach
                     </select>
                 @break
                 @case (3)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="رشته تحصیلی"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>رشته تحصیلی</option>
                         @foreach ($Majors->sortBy('Title') as $mjr)
-                            <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
+                            <option value="{{ $mjr->NidMajor }}" data-tokens="{{ $mjr->Title }}">{{ $mjr->Title }}</option>
                         @endforeach
                     </select>
                 @break
                 @case (4)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="گرایش"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>گرایش</option>
                         @foreach ($Orientations->sortBy('MajorId') as $ore)
-                            <option value="{{ $ore->NidOreintation }}">{{ $ore->Title }}</option>
+                            <option value="{{ $ore->NidOreintation }}" data-tokens="{{ $ore->Title }}">{{ $ore->Title }}</option>
                         @endforeach
                     </select>
                 @break
                 @case (5)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="وضعیت خدمتی"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>وضعیت خدمتی</option>
                         @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $typ)
-                            <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}</option>
+                            <option value="{{ $typ->SettingValue }}" data-tokens="{{ $typ->SettingTitle }}">{{ $typ->SettingTitle }}</option>
                         @endforeach
                     </select>
                 @break
@@ -58,20 +58,20 @@
                         name="{{ $tmpparam->FieldName }}"><label style="font-size: xx-large;">%</label>
                 @break
                 @case (2)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="یگان تخصصی"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>یگان تخصصی</option>
                         @foreach ($units->sortBy('Title') as $un)
-                            <option value="{{ $un->NidUnit }}">{{ $un->Title }}</option>
+                            <option value="{{ $un->NidUnit }}" data-tokens="{{ $un->Title }}">{{ $un->Title }}</option>
                         @endforeach
                     </select>
                 @break
                 @case (3)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="گروه تخصصی"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>گروه تخصصی</option>
                         @foreach ($unitgroups->sortBy('Title') as $gp)
-                            <option value="{{ $gp->NidGroup }}">{{ $gp->Title }}</option>
+                            <option value="{{ $gp->NidGroup }}" data-tokens="{{ $gp->Title }}">{{ $gp->Title }}</option>
                         @endforeach
                     </select>
                 @break
@@ -131,11 +131,11 @@
                         required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (15)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="انتخاب کاربر"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>کاربر</option>
                         @foreach ($users->sortBy('UserName') as $usr)
-                            <option value="{{ $usr->NidUser }}">{{ $usr->Username }}</option>
+                            <option value="{{ $usr->NidUser }}" data-tokens="{{ $usr->Username }}">{{ $usr->Username }}</option>
                         @endforeach
                     </select>
                 @break
@@ -175,11 +175,11 @@
         @case (4)
             @switch ($tmpparam->FieldId)
                 @case (1)
-                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary" placeholder="انتخاب نقش"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>نقش</option>
                         @foreach ($roles->sortBy('Title') as $rl)
-                            <option value="{{ $rl->NidRole }}">{{ $rl->Title }}</option>
+                            <option value="{{ $rl->NidRole }}" data-tokens="{{ $rl->Title }}">{{ $rl->Title }}</option>
                         @endforeach
                     </select>
                 @break

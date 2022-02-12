@@ -132,10 +132,10 @@
                                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                                     <input type="text" value="" id="NidGroup" name="NidGroup" hidden />
                                                     <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                        id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;">
+                                                        id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
                                                         <option value="0" disabled selected>انتخاب یگان</option>
                                                         @foreach ($Units->sortBy('Title') as $uni)
-                                                            <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}
+                                                            <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -431,11 +431,11 @@
                                                         <input type="text" value="" id="NidOreintation"
                                                             name="NidOreintation" hidden />
                                                         <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                            name="MajorId" id="OreintationMajorId"
+                                                            name="MajorId" id="OreintationMajorId" placeholder="انتخاب رشته تحصیلی"
                                                             style="padding:0 .75rem;">
                                                             <option value="0" disabled selected>انتخاب رشته تحصیلی</option>
                                                             @foreach ($Majors as $ore)
-                                                                <option value="{{ $ore->NidMajor }}">{{ $ore->Title }}
+                                                                <option value="{{ $ore->NidMajor }}" data-tokens="{{ $ore->Title }}">{{ $ore->Title }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -847,6 +847,12 @@
 @section('scripts')
     <script type="text/javascript">
         $(function() {
+            $('#UnitGroupsUnitId').selectize({
+                sortField: 'value'
+            });
+            $('#OreintationMajorId').selectize({
+                sortField: 'value'
+            });
             $("#btnAddUnit").click(function(e) {
                 e.preventDefault();
                 var model = {

@@ -432,7 +432,7 @@
             var output = true;
             $('.inputParams').each(function() {
                 if (slts.includes($(this).attr('id'))) {
-                    if ($(this).val() == "0")
+                    if ($(this).val() == "0" || !$(this).val())
                         output = false;
                 } else {
                     if (!$(this).val())

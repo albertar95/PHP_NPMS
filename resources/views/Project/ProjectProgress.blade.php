@@ -39,16 +39,16 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
+                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;"
+                                                placeholder="انتخاب محقق">
                                                 <option value="0" disabled>انتخاب محقق</option>
                                                 @foreach ($Scholars->sortBy('LastName') as $sch)
-                                                    {
                                                     @if ($sch->NidScholar == $Project->ScholarId)
-                                                        <option value="{{ $sch->NidScholar }}" selected>
+                                                        <option value="{{ $sch->NidScholar }}" selected data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">
                                                             {{ $sch->FirstName }}
                                                             {{ $sch->LastName }}</option>
                                                     @else
-                                                        <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }}
+                                                        <option value="{{ $sch->NidScholar }}" data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">{{ $sch->FirstName }}
                                                             {{ $sch->LastName }}</option>
                                                     @endforelse
                                                 @endforeach
@@ -58,29 +58,29 @@
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId"
-                                                id="UnitId" style="padding:0 .75rem;">
+                                                id="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
                                                 <option value="0" disabled>انتخاب یگان</option>
                                                 @foreach ($Units->sortBy('Title') as $uni)
                                                     @if ($uni->NidUnit == $Project->UnitId)
-                                                        <option value="{{ $uni->NidUnit }}" selected>{{ $uni->Title }}
+                                                        <option value="{{ $uni->NidUnit }}" selected data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
+                                                        <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}</option>
                                                     @endforelse
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId"
-                                                id="GroupId" style="padding:0 .75rem;">
+                                                id="GroupId" style="padding:0 .75rem;" placeholder="انتخاب گروه">
                                                 <option value="0" disabled>انتخاب گروه</option>
                                                 @foreach ($UnitGroups->sortBy('Title') as $ung)
                                                     @if ($ung->NidGroup == $Project->GroupId)
-                                                        <option value="{{ $ung->NidGroup }}" selected>
+                                                        <option value="{{ $ung->NidGroup }}" selected data-tokens="{{ $ung->Title }}">
                                                             {{ $ung->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $ung->NidGroup }}">{{ $uni->Title }}
+                                                        <option value="{{ $ung->NidGroup }}" data-tokens="{{ $ung->Title }}">{{ $uni->Title }}
                                                         </option>
                                                     @endforelse
                                                 @endforeach
@@ -422,6 +422,15 @@
     <script type="text/javascript">
         var ValiditiyMessage = "";
         $(function() {
+            $('#ScholarId').selectize({
+                sortField: 'value'
+            });
+            $('#UnitId').selectize({
+                sortField: 'value'
+            });
+            $('#GroupId').selectize({
+                sortField: 'value'
+            });
             $("#TenPercentLetterDate").persianDatepicker({
                 altField: '#TenPercentLetterDate',
                 altFormat: "YYYY/MM/DD",

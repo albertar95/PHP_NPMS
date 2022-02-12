@@ -24,10 +24,10 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;">
+                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;" placeholder="انتخاب محقق">
                                                 <option value="0" selected>انتخاب محقق</option>
                                                 @foreach ($Scholars->sortBy('LastName') as $sch)
-                                                    <option value="{{ $sch->NidScholar }}">{{ $sch->FirstName }}
+                                                    <option value="{{ $sch->NidScholar }}" data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">{{ $sch->FirstName }}
                                                         {{ $sch->LastName }}</option>
                                                 @endforeach
                                             </select>
@@ -36,19 +36,19 @@
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId"
-                                                id="UnitId" style="padding:0 .75rem;">
+                                                id="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
                                                 <option value="0" selected>انتخاب یگان</option>
                                                 @foreach ($Units->sortBy('Title') as $uni)
-                                                    <option value="{{ $uni->NidUnit }}">{{ $uni->Title }}</option>
+                                                    <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary" name="GroupId"
-                                                id="GroupId" style="padding:0 .75rem;">
+                                                id="GroupId" style="padding:0 .75rem;" placeholder="انتخاب گروه">
                                                 <option value="0" selected>انتخاب گروه</option>
                                                 @foreach ($UnitGroups->sortBy('Title') as $ung)
-                                                    <option value="{{ $ung->NidGroup }}">{{ $ung->Title }}</option>
+                                                    <option value="{{ $ung->NidGroup }}" data-tokens="{{ $ung->Title }}">{{ $ung->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -269,6 +269,15 @@
     <script type="text/javascript">
         var ValiditiyMessage = "";
         $(function() {
+            $('#ScholarId').selectize({
+                sortField: 'value'
+            });
+            $('#UnitId').selectize({
+                sortField: 'value'
+            });
+            $('#GroupId').selectize({
+                sortField: 'value'
+            });
             var isvalidSupervisorTel = true;
             $("#Subject").focus();
             $("#TenPercentLetterDate").persianDatepicker({
@@ -562,19 +571,19 @@
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if ($("#ScholarId").val() == "0") {
+            if ($("#ScholarId").val() == "0" || !$("#ScholarId").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "محقق انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if ($("#UnitId").val() == "0") {
+            if ($("#UnitId").val() == "0" || !$("#UnitId").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "یگان انتخاب نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if ($("#GroupId").val() == "0") {
+            if ($("#GroupId").val() == "0" || !$("#GroupId").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "گروه تخصصی انتخاب نشده است";
                 ValiditiyMessage += '</li>';

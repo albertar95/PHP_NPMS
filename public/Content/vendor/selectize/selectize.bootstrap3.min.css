@@ -286,11 +286,13 @@
 .selectize-dropdown [data-disabled],
 .selectize-dropdown [data-disabled] [data-selectable].option {
     cursor: inherit;
-    opacity: .5
+    opacity: .5;
+    text-align: right;
 }
 
 .selectize-dropdown [data-selectable].option {
-    opacity: 1
+    opacity: 1;
+    text-align: right;
 }
 
 .selectize-dropdown .optgroup:first-child .optgroup-header {
@@ -325,7 +327,8 @@
 
 .selectize-control.single .selectize-input,
 .selectize-control.single .selectize-input input {
-    cursor: pointer
+    cursor: pointer;
+    text-align: right;
 }
 
 .selectize-control.single .selectize-input.input-active,

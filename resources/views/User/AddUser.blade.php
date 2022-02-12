@@ -54,11 +54,11 @@
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             {{-- <label>نقش کاربر : </label> --}}
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId" placeholder="نقش کاربر"
                                                 name="RoleId" style="padding:0 0 0 .75rem;">
                                                 <option value="0" selected>نقش کاربر</option>
                                                 @foreach ($Roles as $rls)
-                                                    <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
+                                                    <option value="{{ $rls->NidRole }}" data-tokens="{{ $rls->Title }}">{{ $rls->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -104,6 +104,9 @@
         var ValiditiyMessage = "";
         var upload = null;
         $(function() {
+            $('#RoleId').selectize({
+                sortField: 'value'
+            });
             $("#FirstName").focus();
             $("#btnSubmit").click(function(e) {
                 e.preventDefault();

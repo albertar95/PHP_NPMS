@@ -42,10 +42,10 @@
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                                     <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                        name="RecieverId" id="RecieverId" style="padding:0 .75rem;">
+                                                        name="RecieverId" id="RecieverId" style="padding:0 .75rem;" placeholder="انتخاب دریافت کننده">
                                                         <option value="0" selected>انتخاب دریافت کننده</option>
                                                         @foreach ($Recievers->Where('NidUser', '!=', auth()->user()->NidUser)->sortBy('LastName') as $rsc)
-                                                            <option value="{{ $rsc->NidUser }}">
+                                                            <option value="{{ $rsc->NidUser }}" data-tokens="{{ $rsc->Username }}">
                                                                 <i style="direction: rtl;text-align: right;">{{ $rsc->Username }}
                                                                     ({{ $rsc->FirstName }} {{ $rsc->LastName }})</i>
                                                             </option>
@@ -208,6 +208,9 @@
     <script type="text/javascript">
         var ValiditiyMessage = "";
         $(function() {
+            $('#RecieverId').selectize({
+                sortField: 'value'
+            });
             $("#btnSendMessage").click(function(e) {
                 e.preventDefault();
                 if(CheckInputValidity())
@@ -288,7 +291,7 @@
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }
-            if ($("#RecieverId").val() == "0") {
+            if ($("#RecieverId").val() == "0" || !$("#RecieverId").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "گیرنده انتخاب نشده است";
                 ValiditiyMessage += '</li>';

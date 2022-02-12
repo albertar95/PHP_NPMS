@@ -73,21 +73,21 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId" placeholder="مقطع تحصیلی" id="GradeSlt"
                                                 style="padding:0 .75rem;">
                                                 <option value="0" disabled>مقطع تحصیلی</option>
                                                 @foreach ($Grades->sortBy('SettingTitle') as $grd)
                                                     @if ($grd->IsDeleted)
                                                         @if ($grd->SettingValue == $Scholar->GradeId)
-                                                            <option value="{{ $Scholar->SettingValue }}" selected>
+                                                            <option value="{{ $Scholar->SettingValue }}" selected data-tokens="{{ $Scholar->SettingTitle }}">
                                                                 {{ $Scholar->SettingTitle }}</option>
                                                         @endif
                                                     @else
                                                         @if ($grd->SettingValue == $Scholar->GradeId)
-                                                            <option value="{{ $grd->SettingValue }}" selected>
+                                                            <option value="{{ $grd->SettingValue }}" selected data-tokens="{{ $Scholar->SettingTitle }}">
                                                                 {{ $grd->SettingTitle }}</option>
                                                         @else
-                                                            <option value="{{ $grd->SettingValue }}">
+                                                            <option value="{{ $grd->SettingValue }}" data-tokens="{{ $Scholar->SettingTitle }}">
                                                                 {{ $grd->SettingTitle }}
                                                             </option>
                                                         @endforelse
@@ -96,21 +96,21 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="وضعیت خدمتی" id="MillitaryStatusSlt"
                                                 name="MillitaryStatus" style="padding:0 .75rem;">
                                                 <option value="0" disabled>وضعیت خدمتی</option>
                                                 @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
                                                     @if ($mls->IsDeleted)
                                                         @if ($mls->SettingValue == $Scholar->MillitaryStatus)
-                                                            <option value="{{ $mls->SettingValue }}" selected>
+                                                            <option value="{{ $mls->SettingValue }}" selected data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}</option>
                                                         @endif
                                                     @else
                                                         @if ($grd->SettingValue == $Scholar->GradeId)
-                                                            <option value="{{ $mls->SettingValue }}" selected>
+                                                            <option value="{{ $mls->SettingValue }}" selected data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}</option>
                                                         @else
-                                                            <option value="{{ $mls->SettingValue }}">
+                                                            <option value="{{ $mls->SettingValue }}" data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}
                                                             </option>
                                                         @endforelse
@@ -121,32 +121,32 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId" placeholder="رشته تحصیلی" id="MajorSlt"
                                                 id="MajorSlt" style="padding:0 .75rem;">
                                                 <option value="0" disabled>رشته تحصیلی</option>
                                                 @foreach ($Majors->sortBy('Title') as $mjr)
                                                     @if ($mjr->NidMajor == $Scholar->MajorId)
-                                                        <option value="{{ $mjr->NidMajor }}" selected>
+                                                        <option value="{{ $mjr->NidMajor }}" selected data-tokens="{{ $mjr->Title }}">
                                                             {{ $mjr->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}
+                                                        <option value="{{ $mjr->NidMajor }}" data-tokens="{{ $mjr->Title }}">{{ $mjr->Title }}
                                                         </option>
                                                     @endforelse
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="گرایش"
                                                 name="OreintationId" id="OrentationSlt" style="padding:0 .75rem;">
                                                 <option value="0" disabled>گرایش</option>
                                                 @foreach ($Oreintations->sortBy('Title') as $orn)
                                                     @if ($orn->NidOreintation == $Scholar->OreintationId)
-                                                        <option value="{{ $orn->NidOreintation }}" selected>
+                                                        <option value="{{ $orn->NidOreintation }}" selected data-tokens="{{ $orn->Title }}">
                                                             {{ $orn->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $orn->NidOreintation }}">{{ $orn->Title }}
+                                                        <option value="{{ $orn->NidOreintation }}" data-tokens="{{ $orn->Title }}">{{ $orn->Title }}
                                                         </option>
                                                     @endforelse
                                                 @endforeach
@@ -155,21 +155,21 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college" placeholder="محل تحصیل" id="collegeSlt"
                                                 style="padding:0 .75rem;">
                                                 <option value="0" disabled>محل تحصیل</option>
                                                 @foreach ($Colleges->sortBy('SettingTitle') as $mls)
                                                     @if ($mls->IsDeleted)
                                                         @if ($mls->SettingValue == $Scholar->college)
-                                                            <option value="{{ $mls->SettingValue }}" selected>
+                                                            <option value="{{ $mls->SettingValue }}" selected data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}</option>
                                                         @endif
                                                     @else
                                                         @if ($mls->SettingValue == $Scholar->college)
-                                                            <option value="{{ $mls->SettingValue }}" selected>
+                                                            <option value="{{ $mls->SettingValue }}" selected data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}</option>
                                                         @else
-                                                            <option value="{{ $mls->SettingValue }}">
+                                                            <option value="{{ $mls->SettingValue }}" data-tokens="{{ $mls->SettingTitle }}">
                                                                 {{ $mls->SettingTitle }}
                                                             </option>
                                                         @endforelse
@@ -178,21 +178,21 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" palceholder="نوع همکاری" id="CollaborationTypeSlt"
                                                 name="CollaborationType" style="padding:0 .75rem;">
                                                 <option value="0" disabled>نوع همکاری</option>
                                                 @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
                                                     @if ($typ->IsDeleted)
                                                         @if ($typ->SettingValue == $Scholar->CollaborationType)
-                                                            <option value="{{ $typ->SettingValue }}" selected>
+                                                            <option value="{{ $typ->SettingValue }}" selected data-tokens="{{ $typ->SettingTitle }}">
                                                                 {{ $typ->SettingTitle }}</option>
                                                         @endif
                                                     @else
                                                         @if ($mls->SettingValue == $Scholar->CollaborationType)
-                                                            <option value="{{ $typ->SettingValue }}" selected>
+                                                            <option value="{{ $typ->SettingValue }}" selected data-tokens="{{ $typ->SettingTitle }}">
                                                                 {{ $typ->SettingTitle }}</option>
                                                         @else
-                                                            <option value="{{ $typ->SettingValue }}">
+                                                            <option value="{{ $typ->SettingValue }}" data-tokens="{{ $typ->SettingTitle }}">
                                                                 {{ $typ->SettingTitle }}
                                                             </option>
                                                         @endforelse
@@ -292,6 +292,21 @@
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+            $('#GradeSlt').selectize({
+                sortField: 'value'
+            });
+            $('#MillitaryStatusSlt').selectize({
+                sortField: 'value'
+            });
+            $('#MajorSlt').selectize({
+                sortField: 'value'
+            });
+            $('#collegeSlt').selectize({
+                sortField: 'value'
+            });
+            $('#CollaborationTypeSlt').selectize({
+                sortField: 'value'
+            });
             $("#observer").persianDatepicker({
                 altField: '#observer',
                 altFormat: "YYYY/MM/DD",
@@ -316,6 +331,7 @@
                         // $.each(result, function (i, item) {
                         //     newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
                         // });
+                        $('#OrentationSlt').selectize()[0].selectize.destroy();
                         $("#OrentationSlt").html(result.Html)
                     },
                     error: function() {

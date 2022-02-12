@@ -53,21 +53,21 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId" placeholder="مقطع تحصیلی"
                                                 id="GradeSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>مقطع تحصیلی</option>
                                                 @foreach ($Grades->sortBy('SettingTitle') as $grd)
-                                                    <option value="{{ $grd->SettingValue }}">{{ $grd->SettingTitle }}
+                                                    <option value="{{ $grd->SettingValue }}" data-tokens="{{ $grd->SettingTitle }}">{{ $grd->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="وضعیت خدمتی"
                                                 name="MillitaryStatus" id="MillitaryStatusSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>وضعیت خدمتی</option>
                                                 @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
-                                                    <option value="{{ $mls->SettingValue }}">{{ $mls->SettingTitle }}
+                                                    <option value="{{ $mls->SettingValue }}" data-tokens="{{ $mls->SettingTitle }}">{{ $mls->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -75,16 +75,16 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId" placeholder="رشته تحصیلی"
                                                 id="MajorSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>رشته تحصیلی</option>
                                                 @foreach ($Majors->sortBy('Title') as $mjr)
-                                                    <option value="{{ $mjr->NidMajor }}">{{ $mjr->Title }}</option>
+                                                    <option value="{{ $mjr->NidMajor }}" data-tokens="{{ $mjr->Title }}">{{ $mjr->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="گرایش"
                                                 name="OreintationId" id="OrentationSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>گرایش</option>
                                             </select>
@@ -92,22 +92,22 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college" placeholder="محل تحصیل"
                                                 id="collegeSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>محل تحصیل</option>
                                                 @foreach ($Colleges->sortBy('SettingTitle') as $col)
-                                                    <option value="{{ $col->SettingValue }}">{{ $col->SettingTitle }}
+                                                    <option value="{{ $col->SettingValue }}" data-tokens="{{ $col->SettingTitle }}">{{ $col->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="نوع همکاری"
                                                 name="CollaborationType" id="CollaborationTypeSlt"
                                                 style="padding:0 .75rem;">
                                                 <option value="0" selected>نوع همکاری</option>
                                                 @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
-                                                    <option value="{{ $typ->SettingValue }}">{{ $typ->SettingTitle }}
+                                                    <option value="{{ $typ->SettingValue }}" data-tokens="{{ $typ->SettingTitle }}">{{ $typ->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -185,6 +185,21 @@
         var ValiditiyMessage = "";
         var upload = "";
         $(function() {
+            $('#GradeSlt').selectize({
+                sortField: 'value'
+            });
+            $('#MillitaryStatusSlt').selectize({
+                sortField: 'value'
+            });
+            $('#MajorSlt').selectize({
+                sortField: 'value'
+            });
+            $('#collegeSlt').selectize({
+                sortField: 'value'
+            });
+            $('#CollaborationTypeSlt').selectize({
+                sortField: 'value'
+            });
             var isValidNational = false;
             var isValidTel = false;
             $("#FirstName").focus();
@@ -303,6 +318,7 @@
                         // $.each(result, function (i, item) {
                         //     newValue += "<option value='" + item.NidOreintation + "'>" + item.Title + "</option> "
                         // });
+                        $('#OrentationSlt').selectize()[0].selectize.destroy();
                         $("#OrentationSlt").html(result.Html)
                     },
                     error: function() {

@@ -118,15 +118,15 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId" placeholder="نقش"
                                                 name="RoleId" style="padding:0 .75rem;">
                                                 <option value="0" disabled>نقش</option>
                                                 @foreach ($Roles as $rls)
                                                     @if ($rls->NidRole == $User->RoleId)
-                                                        <option value="{{ $rls->NidRole }}" selected>{{ $rls->Title }}
+                                                        <option value="{{ $rls->NidRole }}" selected data-tokens="{{ $rls->Title }}">{{ $rls->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $rls->NidRole }}">{{ $rls->Title }}</option>
+                                                        <option value="{{ $rls->NidRole }}" data-tokens="{{ $rls->Title }}">{{ $rls->Title }}</option>
                                                     @endforelse
                                                 @endforeach
                                             </select>
@@ -205,6 +205,9 @@
 @section('scripts')
     <script type="text/javascript">
         $(function() {
+            $('#RoleId').selectize({
+                sortField: 'value'
+            });
             window.setTimeout(function() {
                 $("#errorAlert2").attr('hidden', 'hidden')
             }, 10000);
