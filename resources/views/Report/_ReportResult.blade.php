@@ -1,4 +1,4 @@
-@if (!is_null($Scholars))
+@if ($Scholars->count() > 0)
 
     <div class="table-responsive" dir="ltr">
         <table class="table table-bordered" border="1" id="ScholarDataTable"
@@ -126,7 +126,7 @@
         </table>
     </div>
 @endif
-@if (!is_null($Projects))
+@if ($Projects->count() > 0)
     <div class="table-responsive" dir="ltr">
         <table class="table table-bordered" border="1" id="ProjectDataTable"
             style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
@@ -379,9 +379,9 @@
         </table>
     </div>
 @endif
-@if (!is_null($Users))
+@if ($Users->count() > 0)
     <div class="table-responsive" dir="ltr">
-        <table class="table table-bordered" border="1" id="ScholarDataTable"
+        <table class="table table-bordered" border="1" id="UserDataTable"
             style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
             <thead>
                 <tr>
@@ -493,3 +493,10 @@
         <i class="fas fa-print"></i>
         پرینت</button>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#ScholarDataTable').DataTable();
+  $('#ProjectDataTable').DataTable();
+  $('#UserDataTable').DataTable();
+});
+</script>

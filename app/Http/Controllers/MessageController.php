@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\MessageRequest;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -26,6 +27,12 @@ class MessageController extends Controller
         $result->Message = $messages->count();
         return response()->json($result);
     }
+    public function SendMessage()
+    {
+        $api = new NPMSController();
+        $Recievers = $api->GetAllUserPermissionUsers();
+        return view('Message.SendMessage',compact('Recievers'));
+    }
     public function GetRecieveMessageNeeded(string $NidUser)
     {
         $api = new NPMSController();
@@ -43,9 +50,9 @@ class MessageController extends Controller
     {
         $api = new NPMSController();
         $result = new JsonResults();
-        $res = $api->GetAllUsersSendMessages($NidUser);
+        $messages = $api->GetAllUsersSendMessages($NidUser);
         $result->HasValue = true;
-        $result->Html = view('Message._MessageTable',compact('res'))->render();
+        $result->Html = view('Message._MessageTable',compact('messages'))->render();
         return response()->json($result);
     }
     public function SingleMessage(string $NidMessage,int $ReadBy)
@@ -57,8 +64,9 @@ class MessageController extends Controller
         $readby = $ReadBy;
         return view('Message.SingleMessage',compact('Inbox','SingleMessage','Recievers','readby'));
     }
-    public function SubmitSendMessage(Request $Message)
+    public function SubmitSendMessage(MessageRequest $Message)
     {
+        $Message->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         $res = $api->SendMessage($Message);
@@ -73,8 +81,9 @@ class MessageController extends Controller
         }
         return response()->json($result);
     }
-    public function SubmitReplyMessage(Request $Message)
+    public function SubmitReplyMessage(MessageRequest $Message)
     {
+        $Message->validated();
         $api = new NPMSController();
         $result = new JsonResults();
         $res = $api->SendMessage($Message);

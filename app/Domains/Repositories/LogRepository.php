@@ -43,7 +43,7 @@ class LogRepository implements ILogRepository{
     }
     public function CurrentUserLogReport(string $NidUser)
     {
-        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogDate')->take(200);
+        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogDate')->sortByDesc('LogTime')->take(200);
     }
     public function CurrentUserLoginReport(string $NidUser)
     {
@@ -51,8 +51,8 @@ class LogRepository implements ILogRepository{
         foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',15)->sortByDesc('LogDate')->take(5) as $key => $value) {
             $res->push($value);
         }
-        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',16)->sortByDesc('LogDate')->take(5) as $key => $value) {
-            $res->push($value);
+        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',16)->sortByDesc('LogDate')->take(5) as $key2 => $value2) {
+            $res->push($value2);
         }
         return $res;
     }

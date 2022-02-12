@@ -35,12 +35,13 @@ Route::get("alarms/{type}",[AlarmController::class,"Alarms"])->name('alarm.Alarm
 //message routes
 Route::get("getmessages/{NidUser}",[MessageController::class,"GetMessages"])->name('message.GetMessages');
 Route::get("messages/{NidUser}",[MessageController::class,"Messages"])->name('message.Messages');
-Route::get("getsendmessages",[MessageController::class,"GetSendMessages"])->name('message.GetSendMessages');
+Route::get("getsendmessages/{NidUser}",[MessageController::class,"GetSendMessages"])->name('message.GetSendMessages');
 Route::get("getrecievemessageneeded/{NidUser}",[MessageController::class,"GetRecieveMessageNeeded"])->name('message.GetRecieveMessageNeeded');
 Route::get("singlemessage/{NidMessage}/{ReadBy}",[MessageController::class,"SingleMessage"])->name('message.SingleMessage');
+Route::get("sendmessage",[MessageController::class,"SendMessage"])->name('message.SendMessage');
 Route::post("submitsendmessage",[MessageController::class,"SubmitSendMessage"])->name('message.SubmitSendMessage');
 Route::post("submitreplymessage",[MessageController::class,"SubmitReplyMessage"])->name('message.SubmitReplyMessage');
-Route::get("readmessage",[MessageController::class,"ReadMessage"])->name('message.ReadMessage');
+Route::get("readmessage/{NidMessage}",[MessageController::class,"ReadMessage"])->name('message.ReadMessage');
 
 //project routes
 Route::get("projects",[ProjectController::class,"Projects"])->name('project.Projects');
@@ -136,6 +137,7 @@ Route::get("adduserpermission/{NidUser}",[UserController::class,"AddUserPermissi
 Route::post("deleteuserpermission/{NidPermission}",[UserController::class,"DeleteUserPermission"])->name('user.DeleteUserPermission');
 Route::get("addrolepermission/{NidRole}",[UserController::class,"AddRolePermission"])->name('user.AddRolePermission');
 Route::get("profile",[UserController::class,"Profile"])->name('user.Profile');
+Route::get("profileuseractivityreport/{NidUser}",[UserController::class,"ProfileUserActivityReport"])->name('user.ProfileUserActivityReport');
 Route::get("managesessions",[UserController::class,"ManageSessions"])->name('user.ManageSessions');
 Route::post("submitsessionsetting",[UserController::class,"SubmitSessionSetting"])->name('user.SubmitSessionSetting');
 Route::post("submitaddrolepermission",[UserController::class,"SubmitAddRolePermission"])->name('user.SubmitAddRolePermission');

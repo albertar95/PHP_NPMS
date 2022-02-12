@@ -26,4 +26,5 @@ class messageDTO extends Model
     public string $PersianCreateDate;
     public string $ReadDate;
     public string $DeleteDate;
+    public string $UserProfile;
 }

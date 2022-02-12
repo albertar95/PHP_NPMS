@@ -159,7 +159,7 @@
                                 $('#AddReportForm').each(function () { this.reset(); });
                                 $("#InputDiv").html('');
                                 $("#OutputDiv").html('');
-                                window.setTimeout(function () {window.location.href = '/statisticreports'; }, 3000);
+                                // window.setTimeout(function () {window.location.href = '/statisticreports'; }, 3000);
                             }
                         },
                         error: function (response) {

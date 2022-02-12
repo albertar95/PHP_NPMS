@@ -19,12 +19,18 @@
         @foreach ($messages as $msg)
             <a class="dropdown-item d-flex align-items-center" href="/singlemessage/{{ $msg->NidMessage }}/1">
                 <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="{{ URL('Content/img/undraw_profile_1.svg') }}" alt="...">
+                    @if (!empty($msg->UserProfile))
+                        <img src="{{ sprintf('/storage/images/%s', $msg->UserProfile) }}"
+                            class="img-profile rounded-circle" />
+                    @else
+                        <img class="img-profile rounded-circle" src="{{ URL('Content/img/User/user3.png') }}">
+                    @endforelse
+                    {{-- <img class="rounded-circle" src="{{ URL('Content/img/User/user3.png') }}" alt="..."> --}}
                     <div class="status-indicator bg-success"></div>
                 </div>
                 <div class="font-weight-bold">
                     <div class="text-truncate">
-                        {{ $msg->MessageContent }}
+                        {{ $msg->Title }}
                     </div>
                     <div class="small text-gray-500" style="text-align:right;">{{ $msg->SenderName }}</div>
                 </div>

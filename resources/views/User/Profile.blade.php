@@ -132,7 +132,7 @@
                          </tr>
                     </thead>
                     <tbody>
-            @foreach ($logins->sortByDesc('LogDate')->sortBy('LogTime') as $lg)
+            @foreach ($logins as $lg)
                 <tr>
                     <td>{{ $lg->LogDate ?? "" }}</td>
                     <td>{{ $lg->LogTime ?? "" }}</td>
@@ -210,7 +210,7 @@
                     cellspacing="0">
                     <thead>
                         <tr>
-                            <th>نام نقش</th>
+                            <th>نام نقش / کاربر</th>
                             <th>نام موجودیت</th>
                             <th>دسترسی ایجاد</th>
                             <th>دسترسی ویرایش</th>
@@ -223,7 +223,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>نام نقش</th>
+                            <th>نام نقش / کاربر</th>
                             <th>نام موجودیت</th>
                             <th>دسترسی ایجاد</th>
                             <th>دسترسی ویرایش</th>
@@ -288,6 +288,59 @@
                                 @endforelse
                             </tr>
                         @endforeach
+                        @foreach ($userPermissions as $perm2)
+                        <tr>
+                            <td>{{ $Users->Username }}</td>
+                            @if($perm2->EntityId == 1)
+                            <td>محقق</td>
+                            @elseif($perm2->EntityId == 2)
+                            <td>پروژه</td>
+                            @elseif($perm2->EntityId == 3)
+                            <td>کاربر</td>
+                            @elseif($perm2->EntityId == 4)
+                            <td>گزارش</td>
+                            @elseif($perm2->EntityId == 5)
+                            <td>پیام</td>
+                            @elseif($perm2->EntityId == 6)
+                            <td>اطلاعات پایه</td>
+                            @endforelse
+                            @if ($perm2->Create)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->Edit)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->Delete)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->Detail)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->Confident)
+                            <td>دارد</td>
+                            @else
+                            <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->List)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                            @if ($perm2->Print)
+                                <td>دارد</td>
+                            @else
+                                <td>ندارد</td>
+                            @endforelse
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
                 </div>

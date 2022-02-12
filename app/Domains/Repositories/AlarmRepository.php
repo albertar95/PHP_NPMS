@@ -45,9 +45,9 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
         }
         if (empty($CurrentProj->SecurityLetterDate))
         {
-            $cdate = $this->PersianDateToGeorgian($CurrentProj->CreateDate);
-            $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
-            $diff = $nowDate->diffInDays(Carbon::parse($parsedDate));
+            // $cdate = $this->PersianDateToGeorgian($CurrentProj->CreateDate);
+            // $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+            $diff = $nowDate->diffInDays($CurrentProj->CreateDate);
             $res->push($this->AlarmProcess($CurrentProj->NidProject, 2, $diff, $CurrentProj->Subject));
         }
         else
@@ -691,6 +691,19 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
         }
         return $result;
     }
+    public function GetUsersFirstLevelAlarms(string $NidUser) :Collection
+    {
+        $result = new Collection();
+        $tmpGrouped = DB::select('select AlarmSubject as Subject,count(*) as cnt from Alarms where AlarmStatus <> ? and NidMaster in (select NidProject from Projects where UserId = ?) group by AlarmSubject', [0,$NidUser]);// db.Alarms.Where(p => p.AlarmStatus != 0).GroupBy(q => q.AlarmSubject).Select(w => new { Subject = w.Key,cnt = w.Count()});
+        foreach ($tmpGrouped as $tmp)
+        {
+            $tmpAlarm = new Alarms();
+            $tmpAlarm->AlarmSubject = $tmp->Subject;
+            $tmpAlarm->Description = $tmp->cnt;
+            $result->push($tmpAlarm);
+        }
+        return $result;
+    }
     public function GetAllAlarms(int $pagesize = 100):Collection
     {
         if($pagesize != 0)
@@ -701,6 +714,16 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
         {
             return $this->model->all()->where('AlarmStatus','!=',0);
         }
+    }
+    public function GetAlarmsByCreator(string $NidUser):Collection
+    {
+        $allAlarms = $this->model->all()->where('AlarmStatus','!=',0);
+        $Usersprojects = new Collection();
+        foreach ($allAlarms as $key => $alm) {
+            if(Projects::all()->where('NidProject','=',$alm->NidMaster)->firstOrFail()->UserId == $NidUser)
+            $Usersprojects->push($alm);
+        }
+        return $Usersprojects;
     }
 }
 

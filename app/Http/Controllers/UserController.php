@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\NPMSController;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Models\Users;
+use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -242,10 +243,19 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $Users = $api->GetUserDTOById(auth()->user()->NidUser);
+        $Users->CreateDate = verta($Users->CreateDate);
+        $Users->LastLoginDate = verta($Users->LastLoginDate);
         $logs = $api->GetCurrentUserLogReport(auth()->user()->NidUser);
         $logins = $api->GetCurrentUserLoginReport(auth()->user()->NidUser);
-        $Permissions = $api->GetAllRolePermissionDTOs();
-        return view('User.Profile',compact('Users','logs','Permissions','logins'));
+        $Permissions = $api->GetRolePermissionsByUser(auth()->user()->NidUser);
+        $userPermissions = $api->GetAllUserPermissionDTOsByUserId(auth()->user()->NidUser);
+        return view('User.Profile',compact('Users','logs','Permissions','logins','userPermissions'));
+    }
+    public function ProfileUserActivityReport(string $NidUser)
+    {
+        $api = new NPMSController();
+        $logs = $api->GetCurrentUserLogReport(auth()->user()->NidUser);
+        return view('User.ProfileUserActivityReport',compact('logs'));
     }
     public function SubmitEditUser(UserRequest $User)
     {
@@ -358,19 +368,22 @@ class UserController extends Controller
             $api->AddLog($user,$logindata->ip(),15,0,3,1,"ورود موفق");
         }else if($loginresult['result'] == 2)//incorrect password
         {
-            // $api->AddLog(new User(),$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            $user = $api->GetThisUserByUsername($logindata->Username);
+            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق");
             $result->HasValue = false;
             $result->AltProp = "2";
             $result->Message = "نام کاربری یا کلمه عبور صحیح نمی باشد";
         }else if($loginresult['result'] == 3)//user not found
         {
-            // $api->AddLog(new User(),$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            // $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق");
             $result->HasValue = false;
             $result->AltProp = "3";
             $result->Message = "نام کاربری یافت نشد";
         }
         else if($loginresult['result'] == 4) //lockout
         {
+            $user = $api->GetThisUserByUsername($logindata->Username);
+            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق");
             $result->HasValue = false;
             $result->AltProp = "4";
             $result->Message = "کاربر در حالت تعلیق می باشد";

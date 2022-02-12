@@ -513,6 +513,7 @@ class DataMapper
             $result->PersianCreateDate = verta($message->CreateDate);
             $result->ReadDate = $message->ReadDate ?? "";
             $result->DeleteDate = $message->DeleteDate ?? "";
+            $result->UserProfile = $tmpSender->ProfilePicture ?? "";
             return $result;
         }
         catch (\Exception)

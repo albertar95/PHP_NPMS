@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+    <div class="card shadow" style="margin-bottom:1rem;">
         <!-- Card Header - Accordion -->
         <a href="#collapseSearchResultItems" class="d-block card-header py-3" data-toggle="collapse" role="button"
             aria-expanded="true" aria-controls="collapseSearchResultItems">
@@ -68,6 +68,7 @@
 
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/jquery/jquery.min.js') }}"></script>
@@ -78,8 +79,12 @@
     <script src="{{ URL('Content/vendor/ExportTable/jspdf.plugin.autotable.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+            $('#ScholarDataTable').DataTable();
             $("#BirthDate").persianDatepicker({
                 altField: '#BirthDate',
                 altFormat: "YYYY/MM/DD",

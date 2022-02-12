@@ -54,8 +54,8 @@
             @switch ($tmpparam->FieldId)
                 @case (1)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="number" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        name="{{ $tmpparam->FieldName }}"><label style="font-size: xx-large;">%</label>
                 @break
                 @case (2)
                     <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
@@ -77,125 +77,137 @@
                 @break
                 @case (4)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (5)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (6)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (7)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (8)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (9)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (10)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (11)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (12)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (13)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="number" min="0" class="form-control form-control-user inputParams"
+                    <input type="text" min="0" class="form-control form-control-user inputParams"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (14)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (15)
                     <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
                         <option value="0" selected>کاربر</option>
                         @foreach ($users->sortBy('UserName') as $usr)
-                            <option value="{{ $usr->NidUser }}">{{ $usr->UserName }}</option>
+                            <option value="{{ $usr->NidUser }}">{{ $usr->Username }}</option>
                         @endforeach
                     </select>
                 @break
                 @case (16)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (17)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (18)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        required name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (19)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="checkbox" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                        <option value="1" selected>دارد</option>
+                        <option value="0">ندارد</option>
+                    </select>
                 @break
                 @case (20)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="checkbox" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}" required
-                        name="{{ $tmpparam->FieldName }}">
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                        <option value="1" selected>باشد</option>
+                        <option value="0">نباشد</option>
+                    </select>
                 @break
             @endswitch
         @break
         @case (4)
             @switch ($tmpparam->FieldId)
                 @case (1)
-                <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
-                id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
-                <option value="0" selected>نقش</option>
-                @foreach ($roles->sortBy('Title') as $rl)
-                    <option value="{{ $rl->NidRole }}">{{ $rl->Title }}</option>
-                @endforeach
-            </select>
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                        <option value="0" selected>نقش</option>
+                        @foreach ($roles->sortBy('Title') as $rl)
+                            <option value="{{ $rl->NidRole }}">{{ $rl->Title }}</option>
+                        @endforeach
+                    </select>
                 @break
                 @case (2)
-                <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                <input type="checkbox" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
-                    name="{{ $tmpparam->FieldName }}">
+                    <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                        <option value="1" selected>باشد</option>
+                        <option value="0">نباشد</option>
+                    </select>
                 @break
                 @case (3)
-                <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                <input type="checkbox" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
-                    name="{{ $tmpparam->FieldName }}">
+                    <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
+                    <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                        <option value="1" selected>باشد</option>
+                        <option value="0">نباشد</option>
+                    </select>
                 @break
                 @case (4)
-                <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
-                    name="{{ $tmpparam->FieldName }}">
+                    <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                        name="{{ $tmpparam->FieldName }}">
                 @break
                 @case (5)
-                <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                <input type="number" min="0" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
-                    name="{{ $tmpparam->FieldName }}">
+                    <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
+                    <input type="number" min="0" class="form-control form-control-user inputParams"
+                        id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}">
                 @break
             @endswitch
         @break

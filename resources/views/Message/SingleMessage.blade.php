@@ -34,21 +34,6 @@
                             </a>
                             <!-- Card Content - Collapse -->
                             <div class="collapse show" id="collapseSendMessageItems" style="padding:.75rem;">
-                                <div class="alert alert-success alert-dismissible" role="alert" id="SuccessAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <p style="text-align:right;" id="SuccessMessage"></p>
-                                </div>
-                                <div class="alert alert-warning alert-dismissible" role="alert" id="WarningAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <p style="text-align:right;" id="WarningMessage"></p>
-                                </div>
-                                <div class="alert alert-danger alert-dismissible" role="alert" id="ErrorAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert"
-                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <p style="text-align:right;" id="ErrorMessage"></p>
-                                </div>
                                 <form class="user" id="SendMessageForm"
                                     enctype="application/x-www-form-urlencoded">
                                     @foreach ($Inbox->sortBy('CreateDate') as $msg)
@@ -87,6 +72,21 @@
                                     @if (in_array('5', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[0] == 1)
                                             <h2 style="padding:2rem;">ارسال پاسخ پیام</h2>
+                                            <div class="alert alert-success alert-dismissible" role="alert" id="SuccessAlert" hidden>
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <p style="text-align:right;" id="SuccessMessage"></p>
+                                            </div>
+                                            <div class="alert alert-warning alert-dismissible" role="alert" id="WarningAlert" hidden>
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <p style="text-align:right;" id="WarningMessage"></p>
+                                            </div>
+                                            <div class="alert alert-danger alert-dismissible" role="alert" id="ErrorAlert" hidden>
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <p style="text-align:right;" id="ErrorMessage"></p>
+                                            </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                                     <input type="text" class="form-control form-control-user"
@@ -144,47 +144,86 @@
     </div>
 @section('scripts')
     <script type="text/javascript">
+        var ValiditiyMessage = "";
         $(function() {
             if ($("#ReadBy").val() == 1) {
                 $.ajax({
-                    url: '/readmessage',
+                    url: '/readmessage/' + $("#NidCurrentMessage").val(),
                     type: 'get',
                     datatype: 'json',
-                    data: {
-                        NidMessage: $("#NidCurrentMessage").val()
-                    },
                     success: function() {},
                     error: function() {}
                 });
             }
             $("#btnSendMessage").click(function(e) {
                 e.preventDefault();
-                $.ajax({
-                    url: '/submitsendmessage',
-                    type: 'post',
-                    datatype: 'json',
-                    data: $("#SendMessageForm").serialize(),
-                    success: function(result) {
-                        if (!result.HasValue) {
-                            $("#ErrorMessage").text(result.Message)
-                            $("#errorAlert").removeAttr('hidden')
+                if (CheckInputValidity()) {
+                    $.ajax({
+                        url: '/submitsendmessage',
+                        type: 'post',
+                        datatype: 'json',
+                        data: $("#SendMessageForm").serialize(),
+                        success: function(result) {
+                            if (!result.HasValue) {
+                                $("#ErrorMessage").text(result.Message)
+                                $("#errorAlert").removeAttr('hidden')
+                                window.setTimeout(function() {
+                                    $("#errorAlert").attr('hidden', 'hidden');
+                                }, 5000);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function(response) {
+                            var message = "<ul>";
+                            jQuery.each(response.responseJSON.errors, function(i, val) {
+                                message += "<li>";
+                                message += val;
+                                message += "</li>";
+                            });
+                            message += "</ul>";
+                            $("#ErrorMessage").html(message)
+                            // $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
+                            $("#ErrorAlert").removeAttr('hidden')
                             window.setTimeout(function() {
-                                $("#errorAlert").attr('hidden', 'hidden');
+                                $("#ErrorAlert").attr('hidden', 'hidden');
                             }, 5000);
-                        } else {
-                            location.reload();
                         }
-                    },
-                    error: function() {
-                        $("#ErrorMessage").text('خطا در سرور')
-                        $("#errorAlert").removeAttr('hidden')
-                        window.setTimeout(function() {
-                            $("#errorAlert").attr('hidden', 'hidden');
-                        }, 5000);
-                    }
-                });
+                    });
+                } else {
+                    $("#ErrorMessage").html(ValiditiyMessage)
+                    $("#ErrorAlert").removeAttr('hidden')
+                    window.setTimeout(function() {
+                        $("#ErrorAlert").attr('hidden', 'hidden');
+                    }, 5000);
+                    ValiditiyMessage = "";
+                }
             });
         });
+
+        function CheckInputValidity() {
+            var isValid = true;
+            if (!$("#Title").val()) {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "عنوان پیام وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if (!$("#MessageContent").val()) {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "متن پیام وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if ($("#RecieverId").val() == "0") {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "گیرنده انتخاب نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
+            return isValid;
+        }
     </script>
 @endsection
 

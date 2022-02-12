@@ -90,7 +90,7 @@ class ReportRepository extends BaseRepository implements IReportRepository
     {
         $CurrentReport = Reports::all()->where('NidReport', '=', $NidReport)->firstOrFail();
         return $this->ExecuteReport(1, $this->QueryBuilder($NidReport, $paramsKey, $paramsValue, $CurrentReport), $CurrentReport);
-        // return $this->QueryBuilder($NidReport, $paramsKey, $paramsValue, $CurrentReport);
+        // return $paramsValue;
     }
     public function PersianDateToGeorgian(string $Datee)
     {
@@ -147,16 +147,39 @@ class ReportRepository extends BaseRepository implements IReportRepository
                         $tmpConstaintAdd = true;
                     } else {
                         if (!(in_array($paramsKey[$i], $PersianDateFileds))) {
-                            if ($tmpConstaintAdd) {
-                                $query = Str::of($query)->append(' and ');
-                                $tmpConstaintAdd = false;
+                            if ($paramsKey[$i] == "Referee")
+                            {
+                                if ($tmpConstaintAdd) {
+                                    $query = Str::of($query)->append(' and ');
+                                    $tmpConstaintAdd = false;
+                                }
+                                $query = Str::of($query)->append('(');
+                                $query = Str::of($query)->append('Referee1');
+                                $query = Str::of($query)->append(' = ');
+                                $query = Str::of($query)->append("'");
+                                $query = Str::of($query)->append($paramsValue[$i]);
+                                $query = Str::of($query)->append("'");
+                                $query = Str::of($query)->append(" or ");
+                                $query = Str::of($query)->append('Referee2');
+                                $query = Str::of($query)->append(' = ');
+                                $query = Str::of($query)->append("'");
+                                $query = Str::of($query)->append($paramsValue[$i]);
+                                $query = Str::of($query)->append("'");
+                                $query = Str::of($query)->append(')');
+                                $tmpConstaintAdd = true;
+                            }else
+                            {
+                                if ($tmpConstaintAdd) {
+                                    $query = Str::of($query)->append(' and ');
+                                    $tmpConstaintAdd = false;
+                                }
+                                $query = Str::of($query)->append($paramsKey[$i]);
+                                $query = Str::of($query)->append(' = ');
+                                $query = Str::of($query)->append("'");
+                                $query = Str::of($query)->append($paramsValue[$i]);
+                                $query = Str::of($query)->append("'");
+                                $tmpConstaintAdd = true;
                             }
-                            $query = Str::of($query)->append($paramsKey[$i]);
-                            $query = Str::of($query)->append(' = ');
-                            $query = Str::of($query)->append("'");
-                            $query = Str::of($query)->append($paramsValue[$i]);
-                            $query = Str::of($query)->append("'");
-                            $tmpConstaintAdd = true;
                         } else {
                             if ($tmpConstaintAdd) {
                                 $query = Str::of($query)->append(' and ');
@@ -170,6 +193,21 @@ class ReportRepository extends BaseRepository implements IReportRepository
                             $tmpConstaintAdd = true;
                         }
                     }
+                }
+            }else
+            {
+                if($paramsValue[$i] == "0")
+                {
+                    if ($tmpConstaintAdd) {
+                        $query = Str::of($query)->append(' and ');
+                        $tmpConstaintAdd = false;
+                    }
+                    $query = Str::of($query)->append($paramsKey[$i]);
+                    $query = Str::of($query)->append(' = ');
+                    $query = Str::of($query)->append("'");
+                    $query = Str::of($query)->append($paramsValue[$i]);
+                    $query = Str::of($query)->append("'");
+                    $tmpConstaintAdd = true;
                 }
             }
         }

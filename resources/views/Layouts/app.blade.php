@@ -143,10 +143,10 @@
                                 <a class="collapse-item" href="{{ route('user.Users') }}"
                                     style="text-align:right;">مدیریت کاربران</a>
                             @endif
-                            @if (in_array('0', $sharedData['UserAccessedEntities']))
+                            {{-- @if (in_array('0', $sharedData['UserAccessedEntities']))
                                 <a class="collapse-item" href="{{ route('user.UserPermissions') }}"
                                     style="text-align:right;">مدیریت دسترسی ها</a>
-                            @endif
+                            @endif --}}
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[0] == 1)
-                                <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}"
+                                <a class="collapse-item" href="/sendmessage"
                                     style="text-align:right;">ارسال پیام</a>
                             @endif
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
@@ -329,11 +329,11 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     پروفایل
                                 </a>
-                                <a class="dropdown-item" href="#" style="text-align:right;">
+                                {{-- <a class="dropdown-item" href="#" style="text-align:right;">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     تنظیمات
-                                </a>
-                                <a class="dropdown-item" href="#" style="text-align:right;">
+                                </a> --}}
+                                <a class="dropdown-item" href="/profileuseractivityreport/{{ auth()->user()->NidUser }}" style="text-align:right;">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     گزارش کاربری
                                 </a>
@@ -460,12 +460,9 @@
             GetUsersMessages();
             setInterval(function() {
                 $.ajax({
-                    url: '/getrecievemessageneeded',
+                    url: '/getrecievemessageneeded/' + $("#txtUserId").text(),
                     type: 'get',
                     datatype: 'json',
-                    data: {
-                        NidUser: $("#txtUserId").text()
-                    },
                     success: function(result) {
                         if (result.HasValue)
                             GetUsersMessages();

@@ -81,9 +81,9 @@ class ReportController extends Controller
         //user inputs
         $tmpinfo = new ReportParameterInfo(4,1,"RoleId",0,'نقش');
         $infos->push($tmpinfo);
-        $tmpinfo = new ReportParameterInfo(4,2,"IsLockedOut",0,'قفل شدن');
+        $tmpinfo = new ReportParameterInfo(4,2,"IsLockedOut",0,'قفل');
         $infos->push($tmpinfo);
-        $tmpinfo = new ReportParameterInfo(4,3,"IsDisabled",0,'غیرفعال شدن');
+        $tmpinfo = new ReportParameterInfo(4,3,"IsDisabled",0,'غیرفعال');
         $infos->push($tmpinfo);
         $tmpinfo = new ReportParameterInfo(4,4,"LastLoginDate",0,'آخرین ورود');
         $infos->push($tmpinfo);
@@ -240,7 +240,7 @@ class ReportController extends Controller
             for ($i = 0; $i <= $inputs->count() / 3; $i++)
             {
                 $inputHtml = $inputHtml.'<div class="form-group row" style="display:flex;">';
-                foreach ($inputs->sortBy('NidParameter')->skip($i*3)->take(3) as $inp)
+                foreach ($inputs->sortBy('ParameterValue')->skip($i*3)->take(3) as $inp)
                 {
                     $inputHtml = $inputHtml.'<div class="col-sm-4" style="text-align:right;"> <div style="display:flex;">';
                     $tmpparam = $this->GetReportParameterInfos()->where('ParameterType','=',0)->where('TypeId','=',$ReportType)->where('FieldName','=',$inp->ParameterKey)->firstOrFail();
@@ -252,7 +252,7 @@ class ReportController extends Controller
             }
         }
         $outputHtml = "";
-        foreach ($outputs as $outy)
+        foreach ($outputs->sortBy('ParameterValue') as $outy)
         {
             if($this->GetReportParameterInfos()->where('ParameterType','=',1)->where('FieldName','=',$outy->ParameterKey)->count() > 0)
             {
@@ -373,6 +373,7 @@ class ReportController extends Controller
                 $newIn->IsDeleted = false;
                 $newIn->NidParameter = Str::uuid();
                 $newIn->ParameterKey = $repInp;
+                $newIn->ParameterValue = $this->GetReportParameterInfos()->where('ParameterType','=',0)->where('TypeId','=',$report->ContextId)->where('FieldName','=',$repInp)->firstOrFail()->FieldId;
                 $newIn->ReportId = $newReport->NidReport;
                 $newIn->Type = 0;
                 $inps->push($newIn);
@@ -383,6 +384,7 @@ class ReportController extends Controller
                 $newOut->IsDeleted = false;
                 $newOut->NidParameter = Str::uuid();
                 $newOut->ParameterKey = $repOut;
+                $newOut->ParameterValue = $this->GetReportParameterInfos()->where('ParameterType','=',1)->where('TypeId','=',$report->ContextId)->where('FieldName','=',$repOut)->firstOrFail()->FieldId;
                 $newOut->ReportId = $newReport->NidReport;
                 $newOut->Type = 1;
                 $outs->push($newOut);

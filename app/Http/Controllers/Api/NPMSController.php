@@ -472,7 +472,12 @@ class NPMSController extends Controller
     public function GetRolePermissionsByUser(string $UserId)
     {
         $repo = new UserRepository(new User());
-        return $repo->GetRolesPermissionByUserId($UserId);
+        $perms = $repo->GetRolesPermissionByUserId($UserId);
+        $res = new Collection();
+        foreach ($perms as $pr) {
+            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        }
+        return $res;
     }
     public function GetRolePermissionsById(string $PermissionId)
     {
@@ -707,12 +712,21 @@ class NPMSController extends Controller
         $repo = new AlarmRepository(new Alarms());
         return $repo->GetFirstLevelAlarms();
     }
+    public function GetUsersFirstPageAlarms(string $UserId)
+    {
+        $repo = new AlarmRepository(new Alarms());
+        return $repo->GetUsersFirstLevelAlarms($UserId);
+    }
     public function GetAllAlarms(int $pagesize = 100)
     {
         $repo = new AlarmRepository(new Alarms());
         return $repo->GetAllAlarms($pagesize);
     }
-
+    public function GetUsersAlarms(string $UserId)
+    {
+        $repo = new AlarmRepository(new Alarms());
+        return $repo->GetAlarmsByCreator($UserId);
+    }
     //message section
     public function DeleteMessage(string $NidMessage)
     {
