@@ -18,13 +18,13 @@
                 <div class="card-body">
                     <div class="form-group row" style="text-align:right;">
                         <div class="col-sm-6" style="padding:.5rem;">
+                            @if (!empty($Users->ProfilePicture))
                             <div class="frame">
-                                @if (!empty($Users->ProfilePicture))
                                     <img src="/storage/images/{{ $Users->ProfilePicture }}" style="width:100%;height:10rem;" />
-                                @else
-                                  <img src="" style="width:100%;height:10rem;" alt="بدون نمایه" />
-                                @endforelse
                             </div>
+                            @else
+                            <label>نمایه : </label>
+                            @endforelse
                       </div>
                       <div class="col-sm-2" style="padding:.5rem;">
                           <label>نام کاربری : </label>
@@ -113,8 +113,8 @@
             <!-- Card Content - Collapse -->
             <div class="collapse" style="padding:.75rem;" id="collapseSecurity">
                 <div class="card-body">
-                    <div class="col-sm-12 col-lg-12" style="display:flex;">
-                        <a class="btn btn-outline-primary btn-block" style="margin:1rem;width:25%;" href="changepassword/{{ auth()->user()->NidUser }}"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
+                    <div class="col-sm-6 col-lg-6" style="margin-bottom: 2rem;">
+                        <a class="btn btn-outline-primary btn-block" href="changepassword/{{ auth()->user()->NidUser }}"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
                     </div>
                     @if (!is_null($logs))
                     <div class="text-center">
@@ -352,6 +352,13 @@
 
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - پروفایل</title>
+    <style>
+        label
+        {
+            overflow: hidden;
+        }
+    </style>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

@@ -41,7 +41,12 @@
                                 <td>{{ $user->FirstName }} {{ $user->LastName }}</td>
                                 <td>{{ $user->Username }}</td>
                                 <td>
-                                    <a href="/manageuserpermission/{{ $user->NidUser }}" class="btn btn-info">اعمال دسترسی</a>
+                                    <a href="/manageuserpermission/{{ $user->NidUser }}" class="btn btn-info btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-door-open"></i>
+                                        </span>
+                                        <span class="text">اعمال دسترسی</span>
+                                    </a>
                                 </td>
                             </tr>
                           @endforeach
@@ -52,6 +57,7 @@
     </div>
     @section('styles')
         <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+        <title>سامانه مدیریت تحقیقات - کاربران نقش</title>
     @endsection
     @section('scripts')
         <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

@@ -1,23 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-    {{-- @model List<DataAccessLibrary.DTOs.ScholarListDTO>
-
-    @{
-        ViewBag.Title = "مدیریت محققان";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm1 = null;
-        if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-        {
-            var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-            slvm1 = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1);
-        }
-        else
-        {
-            slvm1.UserPermissions = new List<Guid>();
-        }
-    } --}}
-    <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:right;">مدیریت محققان</h6>
@@ -38,14 +21,18 @@
                         aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
-            @if (in_array('1', $sharedData['UserAccessedEntities']))
-                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[0] == 1)
-                    <div class="row" style="margin-bottom:1rem;">
-                        <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;"
-                            href="{{ route('scholar.AddScholar') }}">ایجاد محقق</a>
-                    </div>
-                @endif
-            @endif
+            <div class="row">
+                <div class="col-sm-6 col-md-3 col-lg-2 col-xl-2">
+                    @if (in_array('1', $sharedData['UserAccessedEntities']))
+                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[0] == 1)
+                            <div class="row" style="margin-bottom:1rem;">
+                                <a class="btn btn-outline-success btn-block"
+                                    href="{{ route('scholar.AddScholar') }}">ایجاد محقق</a>
+                            </div>
+                        @endif
+                    @endif
+                </div>
+            </div>
             <div class="table-responsive" dir="ltr">
                 @if (in_array('1', $sharedData['UserAccessedEntities']))
                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
@@ -88,19 +75,37 @@
                                                     @if (in_array('1', $sharedData['UserAccessedEntities']))
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[1] == 1)
                                                             <a href="{{ route('scholar.EditScholar', $sch->NidScholar) }}"
-                                                                class="btn btn-warning">ویرایش</a>
+                                                                style="margin: 2px;width: 110px;"
+                                                                class="btn btn-warning btn-icon-split">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                </span>
+                                                                <span class="text">ویرایش</span>
+                                                            </a>
                                                         @endif
                                                     @endif
                                                     @if (in_array('1', $sharedData['UserAccessedEntities']))
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[2] == 1)
-                                                            <button class="btn btn-danger"
-                                                                onclick="ShowModal(2,'{{ $sch->NidScholar }}')">حذف</button>
+                                                            <button class="btn btn-danger btn-icon-split"
+                                                                style="margin: 2px;width: 110px;"
+                                                                onclick="ShowModal(2,'{{ $sch->NidScholar }}')">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </span>
+                                                                <span class="text">&nbsp; &nbsp; حذف</span>
+                                                            </button>
                                                         @endif
                                                     @endif
                                                     @if (in_array('1', $sharedData['UserAccessedEntities']))
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[3] == 1)
-                                                            <button class="btn btn-secondary"
-                                                                onclick="ShowModal(1,'{{ $sch->NidScholar }}')">جزییات</button>
+                                                            <button class="btn btn-info btn-icon-split"
+                                                                style="margin: 2px;width: 110px;"
+                                                                onclick="ShowModal(1,'{{ $sch->NidScholar }}')">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-info-circle"></i>
+                                                                </span>
+                                                                <span class="text">جزییات</span>
+                                                            </button>
                                                         @endif
                                                     @endif
                                                 </td>
@@ -130,20 +135,20 @@
                 <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;" hidden>آیا برای حذف این
                     محقق اطمینان دارید؟</p>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal"
-                        style="margin:0 auto;width:10%;" hidden>بستن</button>
-                    <div class="col-lg-12">
-                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk"
-                            hidden>بلی</button>
-                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
-                            data-dismiss="modal" id="btnCancel" hidden>خیر</button>
-                    </div>
+                    <div class="row" style="margin: 0 auto;">
+                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal" hidden>بستن</button>
+                        </div>
+                        <div class="col-lg-12">
+                            <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk" hidden>بلی</button>
+                            <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel" hidden>خیر</button>
+                        </div>
                 </div>
             </div>
         </div>
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - مدیریت محققان</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

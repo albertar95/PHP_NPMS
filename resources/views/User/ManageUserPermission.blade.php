@@ -27,10 +27,15 @@
             </div>
             <div class="row" style="margin-bottom:1rem;">
                 @if (in_array('0', $sharedData['UserAccessedEntities']))
-                    <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;"
+                <div class="col-sm-3">
+                    <a class="btn btn-outline-success btn-block"
                         href="\adduserpermission\{{ $UserId }}">ایجاد دسترسی</a>
-                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:.25rem;width:15%;direction: ltr;margin-right: 65%;"
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
                         href="/managerolesuser/{{ $RoleId }}">&larr; بازگشت</a>
+                </div>
                 @endif
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
@@ -120,8 +125,13 @@
                                     <td>
                                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[2] == 1)
-                                                <button class="btn btn-danger"
-                                                    onclick="ShowModal('{{ $perm->NidPermission }}')">حذف</button>
+                                                <button class="btn btn-danger btn-icon-split"
+                                                    onclick="ShowModal('{{ $perm->NidPermission }}')">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                    <span class="text">حذف</span>
+                                                </button>
                                             @endif
                                         @endif
                                     </td>
@@ -161,6 +171,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - مدیریت دسترسی کاربر</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

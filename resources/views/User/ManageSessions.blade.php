@@ -30,10 +30,15 @@
                                         @endforelse
                                     </div>
                                 </div>
-                                <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                    style="width:25%;margin:auto;margin-top: 3rem;">
-                                    ذخیره اطلاعات
-                                </button>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                        <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                            ذخیره اطلاعات
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                </div>
                                 <hr />
                             </form>
                         @endif
@@ -104,8 +109,13 @@
                                                     </td>
                                                     <td>
                                                         @if (Cache::has('user-is-online-' . $usr->NidUser))
-                                                            <button class="btn btn-danger"
-                                                                onclick="ShowModal('{{ $usr->NidUser }}')">خروج</button>
+                                                            <button class="btn btn-danger btn-icon-split"
+                                                                onclick="ShowModal('{{ $usr->NidUser }}')">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-sign-out-alt"></i>
+                                                                </span>
+                                                                <span class="text">خروج</span>
+                                                            </button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -132,7 +142,7 @@
                 </div>
                 <div class="modal-body" id="UserModalBody">
                 </div>
-                <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;">آیا برای خروج
+                <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;">آیا برای خارج
                     نمودن این کاربر اطمینان دارید؟</p>
                 <div class="modal-footer">
                     <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk">بلی</button>
@@ -145,6 +155,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - مدیریت نشست ها</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

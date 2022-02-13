@@ -9,7 +9,7 @@
                 <div class="col-lg-12">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">اطلاعات محقق</h1>
+                            <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">ایجاد محقق</h1>
                         </div>
                         @if (in_array('1', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[0] == 1)
@@ -53,21 +53,24 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId" placeholder="مقطع تحصیلی"
-                                                id="GradeSlt" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="GradeId"
+                                                placeholder="مقطع تحصیلی" id="GradeSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>مقطع تحصیلی</option>
                                                 @foreach ($Grades->sortBy('SettingTitle') as $grd)
-                                                    <option value="{{ $grd->SettingValue }}" data-tokens="{{ $grd->SettingTitle }}">{{ $grd->SettingTitle }}
+                                                    <option value="{{ $grd->SettingValue }}"
+                                                        data-tokens="{{ $grd->SettingTitle }}">{{ $grd->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="وضعیت خدمتی"
-                                                name="MillitaryStatus" id="MillitaryStatusSlt" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                placeholder="وضعیت خدمتی" name="MillitaryStatus" id="MillitaryStatusSlt"
+                                                style="padding:0 .75rem;">
                                                 <option value="0" selected>وضعیت خدمتی</option>
                                                 @foreach ($MillitaryStatuses->sortBy('SettingTitle') as $mls)
-                                                    <option value="{{ $mls->SettingValue }}" data-tokens="{{ $mls->SettingTitle }}">{{ $mls->SettingTitle }}
+                                                    <option value="{{ $mls->SettingValue }}"
+                                                        data-tokens="{{ $mls->SettingTitle }}">{{ $mls->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -75,39 +78,45 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId" placeholder="رشته تحصیلی"
-                                                id="MajorSlt" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="MajorId"
+                                                placeholder="رشته تحصیلی" id="MajorSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>رشته تحصیلی</option>
                                                 @foreach ($Majors->sortBy('Title') as $mjr)
-                                                    <option value="{{ $mjr->NidMajor }}" data-tokens="{{ $mjr->Title }}">{{ $mjr->Title }}</option>
+                                                    <option value="{{ $mjr->NidMajor }}"
+                                                        data-tokens="{{ $mjr->Title }}">{{ $mjr->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="گرایش"
-                                                name="OreintationId" id="OrentationSlt" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                placeholder="گرایش" name="OreintationId" id="OrentationSlt"
+                                                style="padding:0 .75rem;">
                                                 <option value="0" selected>گرایش</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college" placeholder="محل تحصیل"
-                                                id="collegeSlt" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" name="college"
+                                                placeholder="محل تحصیل" id="collegeSlt" style="padding:0 .75rem;">
                                                 <option value="0" selected>محل تحصیل</option>
                                                 @foreach ($Colleges->sortBy('SettingTitle') as $col)
-                                                    <option value="{{ $col->SettingValue }}" data-tokens="{{ $col->SettingTitle }}">{{ $col->SettingTitle }}
+                                                    <option value="{{ $col->SettingValue }}"
+                                                        data-tokens="{{ $col->SettingTitle }}">
+                                                        {{ $col->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" placeholder="نوع همکاری"
-                                                name="CollaborationType" id="CollaborationTypeSlt"
+                                            <select class="form-control allWidth" data-ng-style="btn-primary"
+                                                placeholder="نوع همکاری" name="CollaborationType" id="CollaborationTypeSlt"
                                                 style="padding:0 .75rem;">
                                                 <option value="0" selected>نوع همکاری</option>
                                                 @foreach ($CollaborationTypes->sortBy('SettingTitle') as $typ)
-                                                    <option value="{{ $typ->SettingValue }}" data-tokens="{{ $typ->SettingTitle }}">{{ $typ->SettingTitle }}
+                                                    <option value="{{ $typ->SettingValue }}"
+                                                        data-tokens="{{ $typ->SettingTitle }}">
+                                                        {{ $typ->SettingTitle }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -139,18 +148,29 @@
                                                 ؟</label>
                                         </div>
                                     </div>
-                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ذخیره اطلاعات
-                                    </button>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                                ذخیره اطلاعات
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                     <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                    @if (in_array('1', $sharedData['UserAccessedEntities']))
+                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
+                                            <a class="btn btn-outline-secondary btn-user btn-block"
+                                                href="{{ route('scholar.Scholars') }}">لیست محققان</a>
+                                        @endif
+                                    @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                 </form>
-                            @endif
-                        @endif
-                        @if (in_array('1', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
-                                <a class="btn btn-outline-secondary btn-user btn-block"
-                                    href="{{ route('scholar.Scholars') }}" style="width:25%;margin:auto;">لیست محققان</a>
                             @endif
                         @endif
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
@@ -175,6 +195,7 @@
     </div>
 
 @section('styles')
+    <title>سامانه مدیریت تحقیقات - ایجاد محقق</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
 @endsection

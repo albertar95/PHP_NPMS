@@ -5181,6 +5181,7 @@ input[type="button"].btn-block {
     flex: 1 1 auto;
     min-height: 1px;
     padding: 1.25rem;
+    /* overflow: scroll; */
 }
 
 .card-title {
@@ -11378,6 +11379,7 @@ a:focus {
 
 .text-gray-500 {
     color: #b7b9cc !important;
+    text-align: right;
 }
 
 .text-gray-600 {
@@ -11717,8 +11719,8 @@ a:focus {
 
 .sidebar .nav-item .collapse {
     position: absolute;
-    left: calc(6.5rem + 1.5rem / 2);
-    z-index: 1;
+    right: calc(6.5rem + 1.5rem / 2);
+    z-index: 3;
     top: 2px;
 }
 
@@ -11882,7 +11884,7 @@ a:focus {
 
     .sidebar .nav-item .collapse {
         position: relative;
-        left: 0;
+        right: 0;
         z-index: 1;
         top: 0;
         -webkit-animation: none;

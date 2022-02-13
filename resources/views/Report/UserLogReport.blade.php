@@ -85,6 +85,7 @@
 @endsection
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <title>سامانه مدیریت تحقیقات - گزارش عملکرد کاربران</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/ExportTable/tableHTMLExport.js') }}"></script>

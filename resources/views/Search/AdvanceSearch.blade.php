@@ -126,6 +126,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <title>سامانه مدیریت تحقیقات - جستجو پیشرفته</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>

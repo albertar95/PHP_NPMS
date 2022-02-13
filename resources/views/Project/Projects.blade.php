@@ -21,12 +21,19 @@
                         aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
-            @if (in_array('2', $sharedData['UserAccessedEntities']))
-                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[0] == 1)
-                    <a class="btn btn-outline-success btn-block" style="margin:1rem;width:15%;" href="/addproject">ایجاد
-                        طرح</a>
-                @endif
-            @endif
+
+            <div class="row">
+                <div class="col-sm-6 col-md-3 col-lg-2 col-xl-2">
+                    @if (in_array('2', $sharedData['UserAccessedEntities']))
+                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[0] == 1)
+                            <div class="row" style="margin-bottom:1rem;">
+                                <a class="btn btn-outline-success btn-block" href="/addproject">ایجاد
+                                    طرح</a>
+                            </div>
+                        @endif
+                    @endif
+                </div>
+            </div>
             <div class="table-responsive" dir="ltr">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
                     cellspacing="0">
@@ -71,14 +78,24 @@
                                         <td>
                                             @if (in_array('2', $sharedData['UserAccessedEntities']))
                                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
-                                                    <a href="/projectdetail/{{ $prj->NidProject }}"
-                                                        class="btn btn-secondary">جزییات</a>
+                                                    <a href="/projectdetail/{{ $prj->NidProject }}" style="margin: 2px;width: 110px;"
+                                                        class="btn btn-info btn-icon-split">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                        <span class="text">جزییات</span>
+                                                    </a>
                                                 @endif
                                             @endif
                                             @if (in_array('2', $sharedData['UserAccessedEntities']))
                                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[1] == 1)
-                                                    <a href="/projectprogress/{{ $prj->NidProject }}"
-                                                        class="btn btn-info">پیشرفت</a>
+                                                    <a href="/projectprogress/{{ $prj->NidProject }}" style="margin: 2px;width: 110px;"
+                                                        class="btn btn-warning btn-icon-split">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </span>
+                                                        <span class="text">ویرایش</span>
+                                                    </a>
                                                 @endif
                                             @endif
                                         </td>
@@ -93,6 +110,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - مدیریت طرح ها</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

@@ -6,14 +6,16 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-12">
-                    @if (in_array('3', $sharedData['UserAccessedEntities']))
-                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
-                            <div dir="ltr">
-                                <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;"
-                                    href="{{ route('user.Users') }}">&larr; بازگشت</a>
-                            </div>
+                    <div class="row" style="direction: ltr;margin: 10px;">
+                        @if (in_array('3', $sharedData['UserAccessedEntities']))
+                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
+                                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                    <a id="btnReturn" class="btn btn-outline-info btn-block"
+                                        href="{{ route('user.Users') }}">&larr; بازگشت</a>
+                                </div>
+                            @endif
                         @endif
-                    @endif
+                    </div>
                     <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
@@ -40,7 +42,7 @@
                     @endif
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
+                            <h1 class="h4 text-gray-900 mb-4">ویرایش کاربر</h1>
                         </div>
                         @if (in_array('3', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[1] == 1)
@@ -118,39 +120,52 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId" placeholder="نقش"
-                                                name="RoleId" style="padding:0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                                placeholder="نقش" name="RoleId" style="padding:0 .75rem;">
                                                 <option value="0" disabled>نقش</option>
                                                 @foreach ($Roles as $rls)
                                                     @if ($rls->NidRole == $User->RoleId)
-                                                        <option value="{{ $rls->NidRole }}" selected data-tokens="{{ $rls->Title }}">{{ $rls->Title }}
+                                                        <option value="{{ $rls->NidRole }}" selected
+                                                            data-tokens="{{ $rls->Title }}">{{ $rls->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $rls->NidRole }}" data-tokens="{{ $rls->Title }}">{{ $rls->Title }}</option>
+                                                        <option value="{{ $rls->NidRole }}"
+                                                            data-tokens="{{ $rls->Title }}">{{ $rls->Title }}</option>
                                                     @endforelse
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             <a data-toggle="modal" data-target="#UserPasswordModal"
-                                                class="btn btn-outline-primary btn-block" style="margin:1rem;width:25%;"
+                                                class="btn btn-outline-primary btn-block" style="margin-right: 2rem;margin-left: 2rem;"
                                                 href="#"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
                                         </div>
                                     </div>
-
-                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ذخیره اطلاعات
-                                    </button>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                                ذخیره اطلاعات
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
+                                                    <a href="{{ route('user.Users') }}"
+                                                        class="btn btn-outline-secondary btn-user btn-block">
+                                                        لیست کاربران
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                 </form>
-                            @endif
-                        @endif
-                        @if (in_array('3', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
-                                <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block"
-                                    style="width:25%;margin:auto;">
-                                    لیست کاربران
-                                </a>
                             @endif
                         @endif
                         <hr />
@@ -201,7 +216,9 @@
             </div>
         </div>
     </div>
-
+@section('styles')
+<title>سامانه مدیریت تحقیقات - ویرایش کاربر</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(function() {

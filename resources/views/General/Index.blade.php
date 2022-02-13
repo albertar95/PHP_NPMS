@@ -264,7 +264,9 @@
         </div>
     </div>
 @endsection
-
+@section('styles')
+<title>سامانه مدیریت تحقیقات - میزکار</title>
+@endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/chart.js/Chart.min.js') }}"></script>
 

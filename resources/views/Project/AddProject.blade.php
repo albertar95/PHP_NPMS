@@ -9,7 +9,7 @@
                 <div class="col-lg-12">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">اطلاعات طرح</h1>
+                            <h1 class="h4 text-gray-900 mb-4">ایجاد طرح</h1>
                         </div>
                         @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[0] == 1)
@@ -24,10 +24,13 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;" placeholder="انتخاب محقق">
+                                                name="ScholarId" id="ScholarId" style="padding:0 .75rem;"
+                                                placeholder="انتخاب محقق">
                                                 <option value="0" selected>انتخاب محقق</option>
                                                 @foreach ($Scholars->sortBy('LastName') as $sch)
-                                                    <option value="{{ $sch->NidScholar }}" data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">{{ $sch->FirstName }}
+                                                    <option value="{{ $sch->NidScholar }}"
+                                                        data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">
+                                                        {{ $sch->FirstName }}
                                                         {{ $sch->LastName }}</option>
                                                 @endforeach
                                             </select>
@@ -39,7 +42,8 @@
                                                 id="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
                                                 <option value="0" selected>انتخاب یگان</option>
                                                 @foreach ($Units->sortBy('Title') as $uni)
-                                                    <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}</option>
+                                                    <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">
+                                                        {{ $uni->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -48,7 +52,8 @@
                                                 id="GroupId" style="padding:0 .75rem;" placeholder="انتخاب گروه">
                                                 <option value="0" selected>انتخاب گروه</option>
                                                 @foreach ($UnitGroups->sortBy('Title') as $ung)
-                                                    <option value="{{ $ung->NidGroup }}" data-tokens="{{ $ung->Title }}">{{ $ung->Title }}</option>
+                                                    <option value="{{ $ung->NidGroup }}"
+                                                        data-tokens="{{ $ung->Title }}">{{ $ung->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -222,20 +227,29 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ذخیره اطلاعات
-                                    </button>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                                ذخیره اطلاعات
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                     <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
+                                                    <a class="btn btn-outline-secondary btn-user btn-block"
+                                                        href="{{ route('project.Projects') }}">لیست طرح ها</a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                 </form>
-                            @endif
-                        @endif
-                        @if (in_array('2', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
-                                <a class="btn btn-outline-secondary btn-user btn-block"
-                                    href="{{ route('project.Projects') }}" style="width:25%;margin:auto;">لیست طرح
-                                    ها</a>
                             @endif
                         @endif
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
@@ -262,6 +276,7 @@
 
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <title>سامانه مدیریت تحقیقات - ایجاد طرح</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>

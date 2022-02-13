@@ -90,6 +90,9 @@
             </div>
         </div>
     </div>
+@section('styles')
+<title>سامانه مدیریت تحقیقات - ارسال پیام</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
     var ValiditiyMessage = "";

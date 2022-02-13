@@ -661,3 +661,6 @@
     </div>
 </div>
 @endsection
+@section('styles')
+<title>سامانه مدیریت تحقیقات - اعلان ها</title>
+@endsection

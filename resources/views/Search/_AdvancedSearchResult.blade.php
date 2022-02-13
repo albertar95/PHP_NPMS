@@ -1,9 +1,21 @@
 <div class="form-group row">
-    <button class="btn btn-danger" style="margin:5px;" onclick="ExportResult(1)"><i class="fas fa-file-pdf"></i>
-        خروجی
-        pdf</button>
-    <button class="btn btn-primary" style="margin:5px;" onclick="ExportResult(3)"><i class="fas fa-print"></i>
-        پرینت</button>
+    <button class="btn btn-danger btn-icon-split" style="margin:5px;" onclick="ExportResult(1)">
+        <span class="icon text-white-50">
+            <i class="fas fa-file-pdf"></i>
+        </span>
+        <span class="text">
+            خروجی
+            pdf
+        </span>
+    </button>
+    <button class="btn btn-primary btn-icon-split" style="margin:5px;" onclick="ExportResult(3)">
+        <span class="icon text-white-50">
+            <i class="fas fa-print"></i>
+        </span>
+        <span class="text">
+            پرینت
+        </span>
+    </button>
 </div>
 @if (in_array('2', $sharedData['UserAccessedEntities']))
     <h3>طرح ها</h3>

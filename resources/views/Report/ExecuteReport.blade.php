@@ -23,13 +23,13 @@
                                 {!! $outputHtml !!}
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-5">
+                                <div class="col-sm-4 col-md-4 col-lg-5">
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-4 col-md-4 col-lg-2">
                                     <a href="#" id="btnExecute" class="btn btn-outline-success btn-user btn-block">اجرای
                                         گزارش</a>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-4 col-md-4 col-lg-5">
                                 </div>
                             </div>
                         </form>
@@ -69,6 +69,7 @@
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - گزارش</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/jquery/jquery.min.js') }}"></script>

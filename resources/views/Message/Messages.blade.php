@@ -135,7 +135,12 @@
                                                                 @if (in_array('5', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[3] == 1)
                                                                         <a href="/singlemessage/{{ $msg->NidMessage }}/1"
-                                                                            class="btn btn-secondary">جزییات پیام</a>
+                                                                            class="btn btn-info btn-icon-split">
+                                                                            <span class="icon text-white-50">
+                                                                                <i class="fas fa-envelope"></i>
+                                                                            </span>
+                                                                            <span class="text">جزییات</span>
+                                                                        </a>
                                                                     @endif
                                                                 @endif
                                                             </td>
@@ -190,7 +195,12 @@
                                                         {{ $msg->MessageContent }}</td>
                                                     <td>
                                                         <a href="/singlemessage/{{ $msg->NidMessage }}/0"
-                                                            class="btn btn-secondary">جزییات پیام</a>
+                                                            class="btn btn-secondary btn-icon-split">
+                                                            <span class="icon text-white-50">
+                                                                <i class="fas fa-envelope"></i>
+                                                            </span>
+                                                            <span class="text">جزییات</span>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -204,6 +214,9 @@
             </div>
         </div>
     </div>
+    @section('styles')
+    <title>سامانه مدیریت تحقیقات - پیام ها</title>
+    @endsection
 @section('scripts')
     <script type="text/javascript">
         var ValiditiyMessage = "";

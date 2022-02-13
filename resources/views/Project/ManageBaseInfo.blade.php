@@ -10,7 +10,7 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">مدیریت اطلاعات پایه</h1>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;overflow:scroll;">
                             <!-- Card Header - Accordion -->
                             <a href="#collapseUnitItems" class="d-block card-header py-3 collapsed" data-toggle="collapse"
                                 role="button" aria-expanded="false" aria-controls="collapseUnitItems">
@@ -808,14 +808,19 @@
                             </div>
                         </div>
                         <hr>
-                        @if (in_array('2', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
-                                <a href="{{ route('project.Projects') }}" id="btnSubmit"
-                                    class="btn btn-outline-secondary btn-user btn-block" style="width:25%;margin:auto;">
-                                    بازگشت به لیست طرح ها
-                                </a>
-                            @endif
-                        @endif
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
+                                        <a class="btn btn-outline-secondary btn-user btn-block"
+                                            href="{{ route('project.Projects') }}">لیست طرح
+                                            ها</a>
+                                    @endif
+                                @endif
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -843,6 +848,7 @@
     </div>
 @section('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>سامانه مدیریت تحقیقات - مدیریت اطلاعات پایه</title>
 @endsection
 @section('scripts')
     <script type="text/javascript">

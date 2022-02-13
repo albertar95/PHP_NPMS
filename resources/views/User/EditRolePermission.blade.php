@@ -9,7 +9,7 @@
                 <div class="col-lg-12">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">دسترسی نقش</h1>
+                            <h1 class="h4 text-gray-900 mb-4">ویرایش دسترسی نقش</h1>
                         </div>
                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                             <form class="user" id="EditRolePermissionForm"
@@ -140,10 +140,15 @@
                                         <label for="Print" style="margin:.45rem .45rem 0 0">چاپ</label>
                                     </div>
                                 </div>
-                                <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block"
-                                    style="width:25%;margin:auto;margin-top: 3rem;">
-                                    ویرایش اطلاعات
-                                </button>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                        <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block">
+                                            ویرایش اطلاعات
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                </div>
                                 <hr />
                             </form>
                         @endif
@@ -167,6 +172,9 @@
             </div>
         </div>
     </div>
+@section('styles')
+<title>سامانه مدیریت تحقیقات - ویرایش دسترسی نقش</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(function() {

@@ -7,17 +7,21 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-12">
-                    <div style="direction: ltr;">
+                    <div class="row" style="direction: ltr;margin: 10px;">
                         @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
-                                <a id="btnReturn" class="btn btn-outline-info btn-block" style="margin:1rem;width:25%;"
-                                    href="{{ route('project.Projects') }}">&larr; بازگشت</a>
+                                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                    <a id="btnReturn" class="btn btn-outline-info btn-block"
+                                        href="{{ route('project.Projects') }}">&larr; بازگشت</a>
+                                </div>
                             @endif
                         @endif
                     </div>
+                    <div style="direction: ltr;">
+                    </div>
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">اطلاعات طرح</h1>
+                            <h1 class="h4 text-gray-900 mb-4">ویرایش طرح</h1>
                         </div>
                         @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[1] == 1)
@@ -44,11 +48,14 @@
                                                 <option value="0" disabled>انتخاب محقق</option>
                                                 @foreach ($Scholars->sortBy('LastName') as $sch)
                                                     @if ($sch->NidScholar == $Project->ScholarId)
-                                                        <option value="{{ $sch->NidScholar }}" selected data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">
+                                                        <option value="{{ $sch->NidScholar }}" selected
+                                                            data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">
                                                             {{ $sch->FirstName }}
                                                             {{ $sch->LastName }}</option>
                                                     @else
-                                                        <option value="{{ $sch->NidScholar }}" data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">{{ $sch->FirstName }}
+                                                        <option value="{{ $sch->NidScholar }}"
+                                                            data-tokens="{{ $sch->FirstName }} {{ $sch->LastName }}">
+                                                            {{ $sch->FirstName }}
                                                             {{ $sch->LastName }}</option>
                                                     @endforelse
                                                 @endforeach
@@ -62,10 +69,12 @@
                                                 <option value="0" disabled>انتخاب یگان</option>
                                                 @foreach ($Units->sortBy('Title') as $uni)
                                                     @if ($uni->NidUnit == $Project->UnitId)
-                                                        <option value="{{ $uni->NidUnit }}" selected data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
+                                                        <option value="{{ $uni->NidUnit }}" selected
+                                                            data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}</option>
+                                                        <option value="{{ $uni->NidUnit }}"
+                                                            data-tokens="{{ $uni->Title }}">{{ $uni->Title }}</option>
                                                     @endforelse
                                                 @endforeach
                                             </select>
@@ -76,11 +85,13 @@
                                                 <option value="0" disabled>انتخاب گروه</option>
                                                 @foreach ($UnitGroups->sortBy('Title') as $ung)
                                                     @if ($ung->NidGroup == $Project->GroupId)
-                                                        <option value="{{ $ung->NidGroup }}" selected data-tokens="{{ $ung->Title }}">
+                                                        <option value="{{ $ung->NidGroup }}" selected
+                                                            data-tokens="{{ $ung->Title }}">
                                                             {{ $ung->Title }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $ung->NidGroup }}" data-tokens="{{ $ung->Title }}">{{ $uni->Title }}
+                                                        <option value="{{ $ung->NidGroup }}"
+                                                            data-tokens="{{ $ung->Title }}">{{ $uni->Title }}
                                                         </option>
                                                     @endforelse
                                                 @endforeach
@@ -376,19 +387,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" id="btnSubmit" class="btn btn-outline-warning btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ویرایش اطلاعات
-                                    </button>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block">
+                                                ویرایش اطلاعات
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                     <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
+                                                    <a class="btn btn-outline-secondary btn-user btn-block"
+                                                        href="{{ route('project.Projects') }}">لیست طرح
+                                                        ها</a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                 </form>
-                            @endif
-                        @endif
-                        @if (in_array('2', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
-                                <a class="btn btn-outline-secondary btn-user btn-block"
-                                    href="{{ route('project.Projects') }}" style="width:25%;margin:auto;">لیست طرح
-                                    ها</a>
                             @endif
                         @endif
                         <hr />
@@ -415,6 +437,7 @@
 
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <title>سامانه مدیریت تحقیقات - ویرایش طرح</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>

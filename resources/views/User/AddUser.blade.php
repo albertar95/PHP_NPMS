@@ -9,7 +9,7 @@
                 <div class="col-lg-12">
                     <div class="p-5">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">اطلاعات کاربر</h1>
+                            <h1 class="h4 text-gray-900 mb-4">ایجاد کاربر</h1>
                         </div>
                         @if (in_array('3', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[0] == 1)
@@ -63,20 +63,31 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ذخیره اطلاعات
-                                    </button>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                            ذخیره اطلاعات
+                                        </button>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
+                                                <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block">
+                                                    لیست کاربران
+                                                </a>
+                                            @endif
+                                        @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                     <hr />
                                 </form>
-                            @endif
-                        @endif
-                        @if (in_array('3', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
-                                <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block"
-                                    style="width:25%;margin:auto;">
-                                    لیست کاربران
-                                </a>
                             @endif
                         @endif
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
@@ -99,6 +110,9 @@
             </div>
         </div>
     </div>
+@section('styles')
+<title>سامانه مدیریت تحقیقات - ایجاد کاربر</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         var ValiditiyMessage = "";

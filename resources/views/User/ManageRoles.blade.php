@@ -79,17 +79,37 @@
                                                 <td>
                                                     @if (in_array('0', $sharedData['UserAccessedEntities']))
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[2] == 1)
-                                                            <button class="btn btn-danger"
-                                                                onclick="DeleteModal(1,'{{ $role->NidRole }}')">حذف</button>
+                                                            <button class="btn btn-danger btn-icon-split" style="margin: 2px;"
+                                                                onclick="DeleteModal(1,'{{ $role->NidRole }}')">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </span>
+                                                                <span class="text">حذف</span>
+                                                            </button>
                                                         @endif
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[1] == 1)
-                                                            <button class="btn btn-warning"
-                                                                onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">ویرایش</button>
+                                                            <button class="btn btn-warning btn-icon-split" style="margin: 2px;"
+                                                                onclick="EditThis('{{ $role->NidRole }}','{{ $role->Title }}','{{ $role->CreateDate }}','{{ $role->IsAdmin }}')">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                </span>
+                                                                <span class="text">ویرایش</span>
+                                                            </button>
                                                         @endif
-                                                        <a href="/managerolepermissions/{{ $role->NidRole }}"
-                                                            class="btn btn-info">اعمال دسترسی</a>
-                                                        <a href="/managerolesuser/{{ $role->NidRole }}"
-                                                            class="btn btn-secondary">نمایش کاربران</a>
+                                                        <a href="/managerolepermissions/{{ $role->NidRole }}" style="margin: 2px;"
+                                                            class="btn btn-info btn-icon-split">
+                                                            <span class="icon text-white-50">
+                                                                <i class="fas fa-door-open"></i>
+                                                            </span>
+                                                            <span class="text">اعمال دسترسی</span>
+                                                        </a>
+                                                        <a href="/managerolesuser/{{ $role->NidRole }}" style="margin: 2px;"
+                                                            class="btn btn-secondary btn-icon-split">
+                                                            <span class="icon text-white-50">
+                                                                <i class="fas fa-user"></i>
+                                                            </span>
+                                                            <span class="text">کاربران</span>
+                                                        </a>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -115,14 +135,17 @@
                 </div>
                 <div class="modal-body">آیا برای حذف اطمینان دارید ؟</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">خیر</button>
-                    <a class="btn btn-primary" id="btnDeleteModalSubmit" href="#">بله</a>
+                    <a class="btn btn-success" id="btnDeleteModalSubmit" href="#">بله</a>
+                    <button class="btn btn-danger" type="button" data-dismiss="modal">خیر</button>
                     <input type="text" id="CurrentDeleteNid" value="" hidden />
                     <input type="text" id="CurrentDeleteTypo" value="" hidden />
                 </div>
             </div>
         </div>
     </div>
+@section('styles')
+<title>سامانه مدیریت تحقیقات - مدیریت نقش ها</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(function() {

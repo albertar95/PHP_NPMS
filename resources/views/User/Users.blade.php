@@ -25,19 +25,20 @@
             <div class="row" style="margin-bottom:1rem;">
                 @if(in_array('3',$sharedData['UserAccessedEntities']))
                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[0] == 1)
-                    <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;" href="{{ route('user.AddUser') }}">ایجاد کاربر</a>
+                    <div class="col-sm-3">
+                    <a class="btn btn-outline-success btn-block" href="{{ route('user.AddUser') }}">ایجاد کاربر</a>
+                </div>
                     @endif
                 @endif
-                <a id="btnDisabled" onclick="ChangeTableSource(1)" class="btn btn-outline-secondary btn-block"
-                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران غیرفعال</a>
-                <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-dark btn-block"
-                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران تعلیق شده</a>
-                {{-- <a id="btnAdmin" onclick="ChangeTableSource(3)" class="btn btn-outline-info btn-block"
-                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران ادمین</a> --}}
-                <a id="btnOnline" onclick="ChangeTableSource(4)" class="btn btn-outline-primary btn-block"
-                    style="margin:.25rem;width:15%;" href="#">نمایش کاربران برخط</a>
-                <a id="btnDefault" onclick="ChangeTableSource(5)" class="btn btn-outline-warning btn-block"
-                    style="margin:.25rem;width:15%;" href="#">حالت پیش فرض</a>
+                <div class="col-sm-3">
+                <a id="btnDisabled" onclick="ChangeTableSource(1)" class="btn btn-outline-danger btn-block" href="#">کاربران غیرفعال</a>
+                </div>
+                <div class="col-sm-3">
+                <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-warning btn-block" href="#">کاربران تعلیق شده</a>
+                </div>
+                <div class="col-sm-3">
+                <a id="btnDefault" onclick="ChangeTableSource(5)" class="btn btn-outline-secondary btn-block" href="#">حالت پیش فرض</a>
+                </div>
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
             @if(in_array('3',$sharedData['UserAccessedEntities']))
@@ -78,19 +79,34 @@
                                 <td>
                                 @if(in_array('3',$sharedData['UserAccessedEntities']))
                                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[3] == 1)
-                                    <button class="btn btn-secondary"
-                                    onclick="ShowModal(1,'{{ $usr->NidUser }}')">جزییات</button>
+                                    <button class="btn btn-info btn-icon-split" style="margin: 2px;width: 110px;"
+                                    onclick="ShowModal(1,'{{ $usr->NidUser }}')">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    <span class="text">جزییات</span>
+                                </button>
                                     @endif
                                 @endif
                                 @if(in_array('3',$sharedData['UserAccessedEntities']))
                                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[1] == 1)
-                                    <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning">ویرایش</a>
+                                    <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;" >
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </span>
+                                        <span class="text">ویرایش</span>
+                                    </a>
                                     @endif
                                 @endif
                                 @if(in_array('3',$sharedData['UserAccessedEntities']))
                                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[2] == 1)
-                                    <button class="btn btn-danger"
-                                    onclick="ShowModal(2,'{{ $usr->NidUser }}')">غیرفعال</button>
+                                    <button class="btn btn-danger btn-icon-split" style="margin: 2px;width: 110px;"
+                                    onclick="ShowModal(2,'{{ $usr->NidUser }}')">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                    <span class="text">غیرفعال</span>
+                                </button>
                                     @endif
                                 @endif
                                 </td>
@@ -118,8 +134,9 @@
                 <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;" hidden>آیا برای غیرفعال
                     نمودن این کاربر اطمینان دارید؟</p>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal"
-                        style="margin:0 auto;width:10%;" hidden>بستن</button>
+                    <div class="row" style="margin: 0 auto;">
+                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal" hidden>بستن</button>
+                        </div>
                     <div class="col-lg-12">
                         <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk"
                             hidden>بلی</button>
@@ -132,6 +149,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - مدیریت کاربران</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

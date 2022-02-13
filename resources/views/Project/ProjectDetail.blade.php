@@ -23,159 +23,148 @@
                                         <div class="collapse show" id="collapseBriefItems" style="padding:.75rem;">
                                             <div class="form-group row" style="text-align:right;">
                                                 <div class="col-lg-12">
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if ($Project->TitleApproved)
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>تاییدیه عنوان</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>تاییدیه عنوان</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>تاییدیه عنوان</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->SecurityLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>نامه حفاظت</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>نامه حفاظت</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>نامه حفاظت</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->PreImploymentLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>نامه روگرفت</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>نامه روگرفت</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>نامه روگرفت</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->ImploymentDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>نامه بکارگیری</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>نامه بکارگیری</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>نامه بکارگیری</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->TenPercentLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>دفاع 10 درصد</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>دفاع 10 درصد</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>دفاع 10 درصد</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->ThirtyPercentLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>دفاع 30 درصد</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>دفاع 30 درصد</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>دفاع 30 درصد</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->SixtyPercentLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>دفاع 60 درصد</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>دفاع 60 درصد</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>دفاع 60 درصد</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->ThesisDefenceLetterDate))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>نامه دفاعیه</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>نامه دفاعیه</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>نامه دفاعیه</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if (!empty($Project->Commision))
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>کمیسیون</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>کمیسیون</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>کمیسیون</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if ($Project->HasBookPublish)
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>چاپ کتاب</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>چاپ کتاب</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>چاپ کتاب</h3>
-                                                        </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row" style="margin: 2px;">
                                                         @if ($Project->FinalApprove)
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/check-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
                                                             </div>
+                                                            <h5>تایید نهایی</h5>
                                                         @else
-                                                            <div class="col-lg-2"
-                                                                style="background-image: url({{ URL('Content/img/Icon/uncheck-icon-32.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
                                                             </div>
+                                                            <h5>تایید نهایی</h5>
                                                         @endforelse
-                                                        <div class="col-lg-10">
-                                                            <h3>تایید نهایی</h3>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -484,8 +473,8 @@
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                                         <textarea class="form-control" id="Commision" name="Commision"
                                                             placeholder="کمیسیون" rows="5" readonly>
-                                                                                          {{ $Project->Commision }}
-                                                                                    </textarea>
+                                                                                                  {{ $Project->Commision }}
+                                                                                            </textarea>
                                                     </div>
                                                     <div class="col-sm-6" style="display:flex;padding-right:10%;">
                                                         @if (!is_null($Project->HasBookPublish) && $Project->HasBookPublish == true)
@@ -507,24 +496,35 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[5] == 1)
+                                                    <button id="btnPrint"
+                                                        class="btn btn-outline-primary btn-user btn-block">
+                                                        پرینت
+                                                    </button>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                     <hr>
-                                    @if (in_array('2', $sharedData['UserAccessedEntities']))
-                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
-                                            <a href="{{ route('project.Projects') }}" id="btnSubmit"
-                                                class="btn btn-outline-secondary btn-user btn-block"
-                                                style="width:25%;margin:auto;">
-                                                بازگشت به لیست طرح ها
-                                            </a>
-                                        @endif
-                                    @endif
-                                    @if (in_array('2', $sharedData['UserAccessedEntities']))
-                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[5] == 1)
-                                            <button id="btnPrint" class="btn btn-outline-primary btn-user btn-block"
-                                                style="width:25%;margin:auto;">
-                                                پرینت
-                                            </button>
-                                        @endif
-                                    @endif
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
+                                                    <a href="{{ route('project.Projects') }}" id="btnSubmit"
+                                                        class="btn btn-outline-secondary btn-user btn-block">
+                                                        لیست طرح ها
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    </div>
                                 </form>
                             @endif
                         @endif
@@ -548,6 +548,19 @@
             </div>
         </div>
     </div>
+@section('styles')
+    <title>سامانه مدیریت تحقیقات - جزییات طرح</title>
+    <style>
+        label {
+            overflow: hidden;
+        }
+
+        h5 {
+            margin: 2px;
+        }
+
+    </style>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         $(function() {

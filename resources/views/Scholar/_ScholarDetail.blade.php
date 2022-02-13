@@ -1,13 +1,19 @@
+<style>
+label
+{
+    overflow: hidden;
+}
+</style>
 <form class="user">
     <div class="form-group row" style="text-align:right;">
         <div class="col-sm-6" style="padding:.5rem;">
+            @if (!empty($Scholar->ProfilePicture))
             <div class="frame">
-                @if (!empty($Scholar->ProfilePicture))
                     <img src="{{ sprintf("/storage/images/%s", $Scholar->ProfilePicture) }}" style="width:100%;height:10rem;" />
-                @else
-                    <img src="" style="width:100%;height:10rem;" alt="بدون نمایه"/>
-                @endforelse
             </div>
+            @else
+            <label>نمایه : </label>
+            @endforelse
 
         </div>
         <div class="col-sm-2" style="padding:.5rem;">

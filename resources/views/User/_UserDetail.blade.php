@@ -1,13 +1,19 @@
+<style>
+label
+{
+    overflow: hidden;
+}
+</style>
 <form class="user">
     <div class="form-group row" style="text-align:right;">
               <div class="col-sm-6" style="padding:.5rem;">
+                @if (!empty($Users->ProfilePicture))
                   <div class="frame">
-                      @if (!empty($Users->ProfilePicture))
                           <img src="/storage/images/{{ $Users->ProfilePicture }}" style="width:100%;height:10rem;" />
-                      @else
-                        <img src="" style="width:100%;height:10rem;" alt="بدون نمایه" />
-                      @endforelse
                   </div>
+                  @else
+                  <label>نمایه : </label>
+                  @endforelse
             </div>
             <div class="col-sm-2" style="padding:.5rem;">
                 <label>نام کاربری : </label>
@@ -31,11 +37,6 @@
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
-        {{-- @{
-            System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
-            string Create = $"{pc.GetYear(Model.CreateDate)}/{pc.GetMonth(Model.CreateDate)}/{pc.GetDayOfMonth(Model.CreateDate)}";
-            string Login = $"{pc.GetYear(Model.LastLoginDate ?? DateTime.Now)}/{pc.GetMonth(Model.LastLoginDate ?? DateTime.Now)}/{pc.GetDayOfMonth(Model.LastLoginDate ?? DateTime.Now)}";
-            } --}}
         <div class="col-sm-2" style="padding:.5rem;">
             <label>تاریخ ایجاد کاربر : </label>
         </div>

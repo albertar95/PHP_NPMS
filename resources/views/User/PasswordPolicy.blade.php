@@ -135,10 +135,15 @@
                                     <div class="col-sm-2" style="display: flex;">
                                     </div>
                                 </div>
-                                <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                    style="width:25%;margin:auto;margin-top: 3rem;">
-                                    ذخیره اطلاعات
-                                </button>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                        <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                        ذخیره اطلاعات
+                                    </button>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                                </div>
                                 <hr />
                             </form>
                         @endif
@@ -162,6 +167,9 @@
             </div>
         </div>
     </div>
+@endsection
+@section('styles')
+<title>سامانه مدیریت تحقیقات - خط مشی کلمه عبور</title>
 @endsection
 @section('scripts')
     <script type="text/javascript">

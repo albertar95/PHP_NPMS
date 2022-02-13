@@ -25,9 +25,17 @@
                         aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-3 col-lg-2 col-xl-2">
+                    @if (in_array('0', $sharedData['UserAccessedEntities']))
+                            <div class="row" style="margin-bottom:1rem;">
+                                <a class="btn btn-outline-success btn-block"
+                                href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
+                            </div>
+                    @endif
+                </div>
+            </div>
             <div class="row" style="margin-bottom:1rem;">
-                <a class="btn btn-outline-success btn-block" style="margin:.25rem;width:15%;"
-                    href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
@@ -117,13 +125,23 @@
                                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[1] == 1)
                                                 <a href="/editrolepermission/{{ $perm->NidPermission }}"
-                                                    class="btn btn-warning">ویرایش</a>
+                                                    class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </span>
+                                                    <span class="text">ویرایش</span>
+                                                </a>
                                             @endif
                                         @endif
                                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[2] == 1)
-                                                <button class="btn btn-danger"
-                                                    onclick="ShowModal('{{ $perm->NidPermission }}')">حذف</button>
+                                                <button class="btn btn-danger btn-icon-split" style="margin: 2px;width: 110px;"
+                                                    onclick="ShowModal('{{ $perm->NidPermission }}')">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                    <span class="text">&nbsp; &nbsp; حذف</span>
+                                                </button>
                                             @endif
                                         @endif
                                     </td>
@@ -163,6 +181,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <title>سامانه مدیریت تحقیقات - دسترسی نقش</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

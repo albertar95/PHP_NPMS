@@ -142,6 +142,9 @@
             </div>
         </div>
     </div>
+    @section('styles')
+<title>سامانه مدیریت تحقیقات - پیام</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         var ValiditiyMessage = "";

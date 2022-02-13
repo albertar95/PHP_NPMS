@@ -56,22 +56,33 @@
                                         </div>
                                         <div class="form-group row" style="text-align:right;" id="OutputDiv"></div>
                                     </div>
-                                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block"
-                                        style="width:25%;margin:auto;">
-                                        ایجاد گزارش
-                                    </button>
                                     <hr>
                                 </form>
                             @endif
                         @endif
-                        @if (in_array('4', $sharedData['UserAccessedEntities']))
-                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
-                                <a href="/statisticreports" class="btn btn-outline-secondary btn-user btn-block"
-                                    style="width:25%;margin:auto;">
-                                    گزارشات
-                                </a>
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                ایجاد گزارش
+                            </button>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                @if (in_array('4', $sharedData['UserAccessedEntities']))
+                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
+                                    <a href="/statisticreports" class="btn btn-outline-secondary btn-user btn-block">
+                                        گزارشات
+                                    </a>
+                                @endif
                             @endif
-                        @endif
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
+                        </div>
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>
@@ -92,7 +103,9 @@
             </div>
         </div>
     </div>
-
+@section('styles')
+<title>سامانه مدیریت تحقیقات - ایجاد گزارش</title>
+@endsection
 @section('scripts')
     <script type="text/javascript">
         var ValiditiyMessage = "";

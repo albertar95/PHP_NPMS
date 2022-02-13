@@ -55,10 +55,10 @@
                                         @break
                                 @endswitch
                                 <td>
-                                    <a href="executereport/{{ $rpt->NidReport }}" class="btn btn-outline-success">اجرای گزارش</a>
+                                    <a href="executereport/{{ $rpt->NidReport }}" class="btn btn-outline-success" style="margin: 2px;width: 110px;">اجرای گزارش</a>
                                     @if (in_array('4', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[2] == 1)
-                                        <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')">حذف</button>
+                                        <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')" style="margin: 2px;width: 110px;">حذف</button>
                                         @endif
                                     @endif
                                 </td>
@@ -95,6 +95,7 @@
     </div>
     @section ('styles')
         <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+        <title>سامانه مدیریت تحقیقات - گزارشات</title>
     @endsection
     @section ('scripts')
         <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

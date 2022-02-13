@@ -33,7 +33,7 @@
         </div>
         <!-- Outer Row -->
         <div class="row justify-content-center" id="FormWrapper">
-            <div class="col-xl-4 col-lg-6 col-md-4"
+            <div class="col-xl-6 col-lg-6 col-md-6"
                 style="position: absolute;left:50%;top: 50%;transform: translate(-50%, -50%);padding-left: 3rem;padding-right: 3rem;">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
