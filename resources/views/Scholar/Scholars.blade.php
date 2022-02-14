@@ -142,6 +142,7 @@
                             <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk" hidden>بلی</button>
                             <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel" hidden>خیر</button>
                         </div>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                 </div>
             </div>
         </div>
@@ -224,11 +225,13 @@
         }
 
         function DeleteScholar(NidScholar) {
+            $("#waitText").removeAttr('hidden');
             $.ajax({
                 url: '/deletescholar/' + NidScholar, //'@Url.Action("DeleteScholar","Home")',
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
+                    $("#waitText").attr('hidden', 'hidden');
                     if (result.Message == "1")
                         window.location.reload()
                     else if (result.Message == "2") {
@@ -248,7 +251,10 @@
                         }, 10000);
                     }
                 },
-                error: function() {}
+                error: function()
+                {
+                    $("#waitText").attr('hidden', 'hidden');
+                }
             });
         }
     </script>

@@ -188,6 +188,7 @@
                                     aria-hidden="true">&times;</span></button>
                             <p style="text-align:right;" id="ErrorMessage"></p>
                         </div>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -276,6 +277,7 @@
             });
             $("#btnSubmit").click(function(e) {
                 e.preventDefault();
+                $("#waitText").removeAttr('hidden')
                 if (CheckInputValidity()) {
                     var data = $("#AddScholarForm").serializeArray();
                     // for (var item in data) {
@@ -289,6 +291,7 @@
                         datatype: 'json',
                         data: $("#AddScholarForm").serialize(),
                         success: function(result) {
+                            $("#waitText").attr('hidden', 'hidden');
                             $("#SuccessMessage").text(' محقق با نام ' + result.Message +
                                 ' با موفقیت ایجاد گردید ')
                             $("#successAlert").removeAttr('hidden')
@@ -304,6 +307,7 @@
                             }, 3000);
                         },
                         error: function(response) {
+                            $("#waitText").attr('hidden', 'hidden');
                             var message = "<ul>";
                             jQuery.each(response.responseJSON.errors, function(i, val) {
                                 message += "<li>";
@@ -320,6 +324,7 @@
                         }
                     });
                 } else {
+                    $("#waitText").attr('hidden', 'hidden');
                     $("#ErrorMessage").html(ValiditiyMessage)
                     $("#errorAlert").removeAttr('hidden')
                     window.setTimeout(function() {

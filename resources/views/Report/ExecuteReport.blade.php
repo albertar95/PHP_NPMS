@@ -48,6 +48,7 @@
                                     aria-hidden="true">&times;</span></button>
                             <p style="text-align:right;" id="ErrorMessage"></p>
                         </div>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -270,6 +271,7 @@
             });
             $("#btnExecute").click(function(e) {
                 e.preventDefault();
+                $("#waitText").removeAttr('hidden')
                 if (CheckValidity()) {
                     $("#warningAlert").attr('hidden', 'hidden');
                     var paramKeys = [];
@@ -302,10 +304,12 @@
                             OutPutValues: selectedOutputs
                         },
                         success: function(result) {
+                            $("#waitText").attr('hidden', 'hidden');
                             if (result.HasValue)
                                 $("#Resultwrapper").html(result.Html);
                         },
                         error: function() {
+                            $("#waitText").attr('hidden', 'hidden');
                             $("#ErrorMessage").text(
                                 'خطا در انجام عملیات.لطفا مجددا امتحان کنید')
                             $("#errorAlert").removeAttr('hidden')
@@ -315,6 +319,7 @@
                         }
                     });
                 } else {
+                    $("#waitText").attr('hidden', 'hidden');
                     $("#WarningMessage").text('لطفا ورودی های گزارش را وارد نمایید')
                     $("#warningAlert").removeAttr('hidden')
                     window.setTimeout(function() {

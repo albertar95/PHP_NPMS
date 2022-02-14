@@ -88,6 +88,7 @@
                     <div class="col-lg-12">
                         <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk">بلی</button>
                         <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel">خیر</button>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -112,6 +113,7 @@
             }
             function DeleteReport(NidReport)
             {
+                $("#waitText").removeAttr('hidden');
                 $.ajaxSetup({
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -124,6 +126,7 @@
                         datatype: 'json',
                         success: function (result)
                         {
+                            $("#waitText").attr('hidden', 'hidden');
                             if(result.HasValue)
                                 window.location.reload()
                             else
@@ -136,6 +139,7 @@
                         },
                         error: function ()
                         {
+                            $("#waitText").attr('hidden', 'hidden');
                             $("#ReportModal").modal('hide');
                             $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید');
                             $("#errorAlert").removeAttr('hidden');

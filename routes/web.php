@@ -68,6 +68,7 @@ Route::post("submitdeleteoreintation/{NidOreintation}",[ProjectController::class
 Route::post("submitdeletecollege/{NidCollege}",[ProjectController::class,"SubmitDeleteCollege"])->name('project.SubmitDeleteCollege');
 Route::post("submitdeletemillit/{NidMillit}",[ProjectController::class,"SubmitDeleteMillit"])->name('project.SubmitDeleteMillit');
 Route::post("submitdeletecollab/{NidCollab}",[ProjectController::class,"SubmitDeleteCollab"])->name('project.SubmitDeleteCollab');
+Route::get("deleteproject/{NidProject}",[ProjectController::class,"DeleteProject"])->name('project.DeleteProject');
 
 //report routes
 Route::get("statisticreports",[ReportController::class,"StatisticReports"])->name('report.StatisticReports');

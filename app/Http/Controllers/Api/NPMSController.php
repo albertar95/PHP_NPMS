@@ -526,6 +526,13 @@ class NPMSController extends Controller
         $repo2->HandleAlarmsByProjectId($project->NidProject);
         return $res;
     }
+    public function DeleteProject(string $NidProject)
+    {
+        $repo = new ProjectRepository(new Projects());
+        $repo2 = new AlarmRepository(new Alarms());
+        $repo2->RemoveProjectAlarms($NidProject);
+        return $repo->DeleteProject($repo->GetProjectById($NidProject));
+    }
     public function GetProjectDTOById(string $NidProject)
     {
         $repo = new ProjectRepository(new Projects());

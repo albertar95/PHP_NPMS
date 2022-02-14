@@ -128,15 +128,24 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="DeleteModalLabel">حذف</h5>
+                    <h5 class="modal-title" id="DeleteModalLabel">حذف نقش</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">آیا برای حذف اطمینان دارید ؟</div>
+                <div class="modal-body">
+                    <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;text-align: right;">
+                        آیا برای حذف این نقش اطمینان دارید ؟
+                    </p>
+                </div>
                 <div class="modal-footer">
-                    <a class="btn btn-success" id="btnDeleteModalSubmit" href="#">بله</a>
-                    <button class="btn btn-danger" type="button" data-dismiss="modal">خیر</button>
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;"
+                            id="btnDeleteModalSubmit">بلی</button>
+                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
+                            data-dismiss="modal" id="btnCancel">خیر</button>
+                    </div>
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                     <input type="text" id="CurrentDeleteNid" value="" hidden />
                     <input type="text" id="CurrentDeleteTypo" value="" hidden />
                 </div>
@@ -223,6 +232,7 @@
         }
         $("#btnDeleteModalSubmit").click(function(e) {
             e.preventDefault();
+            $("#waitText").removeAttr('hidden');
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -233,6 +243,7 @@
                 type: 'post',
                 datatype: 'json',
                 success: function(result) {
+                    $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue) {
                         $("#RoleTableWrapper").html(result.Html);
                         $("#RoleSuccessMessage").text(result.Message);
@@ -249,6 +260,7 @@
                     }
                 },
                 error: function() {
+                    $("#waitText").attr('hidden', 'hidden');
                     $("#RoleErrorMessage").text('خطا در سرور.لطفا مجددا امتحان کنید');
                     $("#RoleErrorAlert").removeAttr('hidden');
                     window.setTimeout(function() {

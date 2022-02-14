@@ -107,6 +107,7 @@
                                 </div>
                             </div>
                         </form>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -253,6 +254,7 @@
         });
 
         function SearchThis() {
+            $("#waitText").removeAttr('hidden')
             $("#Resultwrapper").html("");
             var stext = '';
             if ($("#Subject").is(":hidden"))
@@ -275,10 +277,14 @@
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
+                    $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue)
                         $("#Resultwrapper").html(result.Html);
                 },
-                error: function() {}
+                error: function()
+                {
+                    $("#waitText").attr('hidden', 'hidden');
+                }
             });
 
         }

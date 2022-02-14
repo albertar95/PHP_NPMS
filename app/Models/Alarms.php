@@ -9,7 +9,7 @@ class Alarms extends Model
 {
     use HasFactory;
     protected $table = 'alarms';
-    protected $primaryKey = ['NidMaster','AlarmSubject'];
+    protected $primaryKey = 'NidAlarm';
     public $incrementing = false;
     public    $timestamps = false;
     // protected $fillable = [];

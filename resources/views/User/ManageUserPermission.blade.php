@@ -165,6 +165,7 @@
                         <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
                             data-dismiss="modal" id="btnCancel">خیر</button>
                     </div>
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
                 </div>
             </div>
         </div>
@@ -182,6 +183,7 @@
         $(function() {
             $("#btnOk").click(function(e) {
                 e.preventDefault();
+                $("#waitText").removeAttr('hidden');
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -192,6 +194,7 @@
                     type: 'post',
                     datatype: 'json',
                     success: function(result) {
+                        $("#waitText").attr('hidden', 'hidden');
                         if (result.HasValue)
                             window.location.reload()
                         else {
@@ -203,7 +206,10 @@
                             }, 10000);
                         }
                     },
-                    error: function() {}
+                    error: function()
+                    {
+                        $("#waitText").attr('hidden', 'hidden');
+                    }
                 });
             });
         });

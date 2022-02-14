@@ -8,6 +8,7 @@ use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\TitleRequest;
 use App\Models\Projects;
 use App\Models\Scholars;
+use Dotenv\Util\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use resources\ViewModels\ManageBaseInfoViewModel;
@@ -169,6 +170,13 @@ class ProjectController extends Controller
             return response()->json($result);
         }
         // return $Project;
+    }
+    public function DeleteProject(string $NidProject)
+    {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = $api->DeleteProject($NidProject);
+        return response()->json($result);
     }
     public function ManageBaseInfo(Request $request)
     {

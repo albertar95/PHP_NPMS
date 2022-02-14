@@ -725,6 +725,13 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
         }
         return $Usersprojects;
     }
+    public function RemoveProjectAlarms(string $NidProject)
+    {
+        $alarms = Alarms::all()->where('NidMaster','=',$NidProject);
+        foreach ($alarms as $key => $alm) {
+            $alm->delete();
+        }
+    }
 }
 
 class AlarmRepositoryFactory

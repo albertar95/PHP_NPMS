@@ -322,6 +322,10 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     {
         return $oreintation->delete();
     }
+    public function DeleteProject(Projects $project)
+    {
+        return $project->delete();
+    }
     public function AddSetting(Settings $setting)
     {
         return $setting->save();

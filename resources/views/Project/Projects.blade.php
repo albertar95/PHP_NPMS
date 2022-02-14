@@ -77,17 +77,6 @@
                                         </td>
                                         <td>
                                             @if (in_array('2', $sharedData['UserAccessedEntities']))
-                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
-                                                    <a href="/projectdetail/{{ $prj->NidProject }}" style="margin: 2px;width: 110px;"
-                                                        class="btn btn-info btn-icon-split">
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </span>
-                                                        <span class="text">جزییات</span>
-                                                    </a>
-                                                @endif
-                                            @endif
-                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
                                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[1] == 1)
                                                     <a href="/projectprogress/{{ $prj->NidProject }}" style="margin: 2px;width: 110px;"
                                                         class="btn btn-warning btn-icon-split">
@@ -98,6 +87,29 @@
                                                     </a>
                                                 @endif
                                             @endif
+                                            @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[2] == 1)
+                                                <button class="btn btn-danger btn-icon-split"
+                                                    style="margin: 2px;width: 110px;"
+                                                    onclick="ShowModal(2,'{{ $prj->NidProject }}')">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                    <span class="text">&nbsp; &nbsp; حذف</span>
+                                                </button>
+                                            @endif
+                                        @endif
+                                        @if (in_array('2', $sharedData['UserAccessedEntities']))
+                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
+                                            <a href="/projectdetail/{{ $prj->NidProject }}" style="margin: 2px;width: 110px;"
+                                                class="btn btn-info btn-icon-split">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                                <span class="text">جزییات</span>
+                                            </a>
+                                        @endif
+                                    @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -108,6 +120,30 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="ProjectModal" tabindex="-1" role="dialog" aria-labelledby="ProjectModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ProjectModalLabel">حذف طرح</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="ProjectModalBody">
+            </div>
+            <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;">آیا برای حذف این
+                طرح اطمینان دارید؟</p>
+            <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk">بلی</button>
+                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel">خیر</button>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <title>سامانه مدیریت تحقیقات - مدیریت طرح ها</title>
@@ -161,6 +197,41 @@
                         }
                     }
                 },
+            });
+        }
+        function ShowModal(typo, NidProject) {
+            $("#btnOk").attr('onclick', 'DeleteProject(' + "'" + NidProject + "'" + ')');
+            $("#ProjectModal").modal('show')
+        }
+        function DeleteProject(NidProject) {
+            $("#waitText").removeAttr('hidden');
+            $.ajax({
+                url: '/deleteproject/' + NidProject,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue == true)
+                        window.location.reload()
+                    else {
+                        $("#waitText").attr('hidden', 'hidden');
+                        $("#ProjectModal").modal('hide');
+                        $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان نمایید');
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+                    }
+                },
+                error: function()
+                {
+                    $("#waitText").attr('hidden', 'hidden');
+                    $("#ProjectModal").modal('hide');
+                        $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان نمایید');
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+                }
             });
         }
     </script>
