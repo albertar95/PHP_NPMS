@@ -48,6 +48,7 @@ Route::get("projects",[ProjectController::class,"Projects"])->name('project.Proj
 Route::get("addproject",[ProjectController::class,"AddProject"])->name('project.AddProject');
 Route::post("submitaddproject",[ProjectController::class,"SubmitAddProject"])->name('project.SubmitAddProject');
 Route::get("projectdetail/{NidProject}",[ProjectController::class,"ProjectDetail"])->name('project.ProjectDetail');
+Route::get("printprojectdetail/{NidProject}",[ProjectController::class,"PrintProjectDetail"])->name('project.PrintProjectDetail');
 Route::get("projectprogress/{NidProject}",[ProjectController::class,"ProjectProgress"])->name('project.ProjectProgress');
 Route::post("updateproject",[ProjectController::class,"UpdateProject"])->name('project.UpdateProject');
 Route::get("managebaseinfo",[ProjectController::class,"ManageBaseInfo"])->name('project.ManageBaseInfo');

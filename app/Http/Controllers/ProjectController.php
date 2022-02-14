@@ -62,7 +62,7 @@ class ProjectController extends Controller
                 return view('Project.Projects',compact('Projects'));
             }else
             {
-                return view('errors.503');
+                return view('errors.401');
             }
         }catch(\Exception $e)
         {
@@ -81,7 +81,7 @@ class ProjectController extends Controller
             return view('Project.AddProject',compact('Scholars','UnitGroups','Units'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitAddProject(ProjectRequest $Project)
@@ -113,7 +113,25 @@ class ProjectController extends Controller
             return view('Project.ProjectDetail',compact('Project','Scholar'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
+        }
+    }
+    public function PrintProjectDetail(string $NidProject,Request $request)
+    {
+        $result = new JsonResults();
+        if($this->CheckAuthority(true,3,$request->cookie('NPMS_Permissions')))
+        {
+            $api = new NPMSController();
+            $Project = $api->GetProjectDetailDTOById($NidProject);
+            $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
+            $api->AddLog(auth()->user(),$request->ip(),40,0,2,1,sprintf("جزییات طرح %s",$Project->Subject));
+            $result->Html = view('Project.PrintProjectDetail',compact('Project','Scholar'))->render();
+            $result->HasValue = true;
+            return response()->json($result);
+        }else
+        {
+            $result->HasValue = false;
+            return response()->json($result);
         }
     }
     public function ProjectProgress(string $NidProject,Request $request)
@@ -129,7 +147,7 @@ class ProjectController extends Controller
             return view('Project.ProjectProgress',compact('Scholars','UnitGroups','Units','Project'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function UpdateProject(ProjectRequest $Project)
@@ -169,7 +187,7 @@ class ProjectController extends Controller
             return view('Project.ManageBaseInfo',compact('UnitGroups','Units','Majors','CollaborationTypes','MillitaryStatuses','Oreintations','Colleges','Grades'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitUnitForm(TitleRequest $unit)

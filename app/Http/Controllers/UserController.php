@@ -101,7 +101,7 @@ class UserController extends Controller
             return view('User.AddUser',compact('Roles'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitAddUser(UserRequest $user)
@@ -121,7 +121,7 @@ class UserController extends Controller
             return view('User.Users',compact('Users'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function UserDetail(string $NidUser,Request $request)
@@ -137,7 +137,7 @@ class UserController extends Controller
             return response()->json($result);
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function UploadThisFile()
@@ -213,7 +213,7 @@ class UserController extends Controller
             return view('User.EditUser',compact('User','Roles'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitChangePassword(string $NidUser,string $NewPassword,Request $request)
@@ -286,7 +286,7 @@ class UserController extends Controller
             return view('User.UserPermissions',compact('Users'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function UserPermissionDetail(string $NidUser,Request $request)
@@ -303,7 +303,7 @@ class UserController extends Controller
             return response()->json($result);
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function ManagePermission(string $NidUser,Request $request)
@@ -318,7 +318,7 @@ class UserController extends Controller
             return view('User.ManagePermission',compact('UserPermissions','User','Resources'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function EditUserPermission(Request $permissions)//array $ResourceIds,string $UserId,string $UserInfo
@@ -339,7 +339,7 @@ class UserController extends Controller
             return response()->json($result);
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     // [AllowAnonymous]
@@ -461,7 +461,7 @@ class UserController extends Controller
             return view('User.PasswordPolicy',compact('Policies'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitPasswordPolicy(Request $Policy)
@@ -483,7 +483,7 @@ class UserController extends Controller
             return view('User.ManageRoles',compact('Roles'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitRoleForm(Request $role)
@@ -551,7 +551,7 @@ class UserController extends Controller
             return view('User.ManageRolePermissions',compact('Permissions','RoleName','RoleId'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function AddRolePermission(Request $request,string $NidRole)
@@ -582,7 +582,7 @@ class UserController extends Controller
             return view('User.AddRolePermission',compact('Roles','Entities'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitAddRolePermission(Request $Permission)
@@ -616,7 +616,7 @@ class UserController extends Controller
             return view('User.EditRolePermission',compact('Roles','Entities','Role'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
         // return $Role;
     }
@@ -648,7 +648,7 @@ class UserController extends Controller
             return view('User.ManageSessions',compact('sets','users'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitSessionSetting(Request $request)
@@ -673,7 +673,7 @@ class UserController extends Controller
             return view('User.ManageRolesUser',compact('Users','RoleName'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function ManageUserPermission(Request $request, string $NidUser)
@@ -690,7 +690,7 @@ class UserController extends Controller
             return view('User.ManageUserPermission',compact('Permissions','UserName','UserId','RoleId'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function AddUserPermission(Request $request, string $NidUser)
@@ -721,7 +721,7 @@ class UserController extends Controller
             return view('User.AddUserPermission',compact('User','Entities'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitAddUserPermission(Request $Permission)

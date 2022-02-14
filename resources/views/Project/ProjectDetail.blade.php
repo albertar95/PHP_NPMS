@@ -13,6 +13,7 @@
                         @if (in_array('2', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
                                 <form class="user" id="ProjectDetailForm">
+                                    <input type="text" id="txtNidProject" value="{{ $Project->NidProject }}" hidden />
                                     <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
                                         <!-- Card Header - Accordion -->
                                         <a href="#collapseBriefItems" class="d-block card-header py-3" data-toggle="collapse"
@@ -472,27 +473,64 @@
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                                         <textarea class="form-control" id="Commision" name="Commision"
-                                                            placeholder="کمیسیون" rows="5" readonly>
-                                                                                                  {{ $Project->Commision }}
-                                                                                            </textarea>
+                                                            placeholder="کمیسیون" rows="5"
+                                                            readonly>{{ $Project->Commision }}</textarea>
                                                     </div>
-                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                        <label>وضعیت چاپ کتاب : </label>
+                                                    </div>
+                                                    <div class="col-sm-4">
                                                         @if (!is_null($Project->HasBookPublish) && $Project->HasBookPublish == true)
-                                                            <label for="HasBookPublish" style="margin:.25rem .25rem 0 0">چاپ
-                                                                کتاب
-                                                                دارد</label>
+                                                            <label for="HasBookPublish" class="form-control">دارد</label>
                                                         @elseif (!is_null($Project->HasBookPublish) && $Project->HasBookPublish == false)
-                                                            <label for="HasBookPublish" style="margin:.25rem .25rem 0 0">چاپ
-                                                                کتاب
-                                                                ندارد</label>
+                                                            <label for="HasBookPublish"
+                                                                class="form-control">ندارد</label>
                                                         @else
-                                                            <label for="HasBookPublish" style="margin:.25rem .25rem 0 0">چاپ
-                                                                کتاب
-                                                                ندارد</label>
+                                                            <label for="HasBookPublish"
+                                                                class="form-control">ندارد</label>
                                                         @endforelse
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group row">
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                        <label>تایید نهایی : </label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        @if (!is_null($Project->FinalApprove) && $Project->FinalApprove == true)
+                                                            <label for="FinalApprove" class="form-control">دارد</label>
+                                                        @elseif (!is_null($Project->FinalApprove) && $Project->FinalApprove == false)
+                                                            <label for="FinalApprove" class="form-control">ندارد</label>
+                                                        @else
+                                                            <label for="FinalApprove" class="form-control">ندارد</label>
+                                                        @endforelse
+                                                    </div>
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                        <label>وضعیت محرمانگی : </label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        @if (!is_null($Project->IsConfident) && $Project->IsConfident == true)
+                                                            <label for="IsConfident" class="form-control">دارد</label>
+                                                        @elseif (!is_null($Project->IsConfident) && $Project->IsConfident == false)
+                                                            <label for="IsConfident" class="form-control">ندارد</label>
+                                                        @else
+                                                            <label for="IsConfident" class="form-control">ندارد</label>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                        <label>غیر فعال : </label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        @if (!is_null($Project->IsDisabled) && $Project->IsDisabled == true)
+                                                            <label for="IsDisabled" class="form-control">می باشد</label>
+                                                        @elseif (!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
+                                                            <label for="IsDisabled" class="form-control">نمی باشد</label>
+                                                        @else
+                                                            <label for="IsDisabled" class="form-control">نمی باشد</label>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -566,11 +604,37 @@
         $(function() {
             $("#btnPrint").click(function(e) {
                 e.preventDefault();
-                var divToPrint = document.getElementById("ProjectDetailData");
-                newWin = window.open("");
-                newWin.document.write(divToPrint.outerHTML);
-                newWin.print();
-                newWin.close();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/printprojectdetail/' + $("#txtNidProject").val(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            newWin = window.open("");
+                            newWin.document.write(result.Html);
+                            newWin.print();
+                            newWin.close();
+                        } else {
+                            var divToPrint = document.getElementById("ProjectDetailData");
+                            newWin = window.open("");
+                            newWin.document.write(divToPrint.outerHTML);
+                            newWin.print();
+                            newWin.close();
+                        }
+                    },
+                    error: function() {
+                        var divToPrint = document.getElementById("ProjectDetailData");
+                        newWin = window.open("");
+                        newWin.document.write(divToPrint.outerHTML);
+                        newWin.print();
+                        newWin.close();
+                    }
+                });
             });
         });
     </script>

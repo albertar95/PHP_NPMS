@@ -69,7 +69,7 @@ class ScholarController extends Controller
             return view('Scholar.AddScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function MajorSelectChanged(string $NidMajor)
@@ -113,7 +113,7 @@ class ScholarController extends Controller
             return view('Scholar.Scholars',compact('Scholar'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function ScholarDetail(string $NidScholar,Request $request)
@@ -129,7 +129,7 @@ class ScholarController extends Controller
             return response()->json($result);
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function EditScholar(string $NidScholar,Request $request)
@@ -154,7 +154,7 @@ class ScholarController extends Controller
             return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
         }else
         {
-            return view('errors.503');
+            return view('errors.401');
         }
     }
     public function SubmitEditScholar(ScholarRequest $scholar) //ScholarDTO
