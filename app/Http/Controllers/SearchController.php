@@ -18,8 +18,10 @@ class SearchController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
-    public function AdvanceSearch()
+    public function AdvanceSearch(Request $request)
     {
+        $api = new NPMSController();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جستجو پیشرفته");
         return view('Search.AdvanceSearch');
     }
     public function SearchSectionChange(Request $request)
@@ -115,7 +117,7 @@ class SearchController extends Controller
         $results->Html = $result;
         return response()->json($results);
     }
-    public function SubmitAdvanceSearch(string $SearchInputs)
+    public function SubmitAdvanceSearch(Request $request,string $SearchInputs)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -127,7 +129,7 @@ class SearchController extends Controller
         $Users = $response[2];
         $BaseInfo = $response[3];
         $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
-        // $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+        $api->AddLog(auth()->user(),$request->ip(),33,0,3,1,"");
         return response()->json($result);
         // return $response[2];
     }
@@ -144,6 +146,7 @@ class SearchController extends Controller
         $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
         $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
         $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'));
+        $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");
         return $pdf->stream('AdvancedSearchResult.pdf');
     }
     public function PrintAdvanceSearchResult(Request $SearchInputs)
@@ -160,6 +163,7 @@ class SearchController extends Controller
         $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
         $result->HasValue = true;
         $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'))->render();
+        $api->AddLog(auth()->user(),$SearchInputs->ip(),35,0,3,1,"");
         return response()->json($result);
     }
     public function ComplexSearch(string $Text)

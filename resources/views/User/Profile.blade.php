@@ -165,7 +165,7 @@
                     @if (!is_null($logs))
 
                     <div class="table-responsive" dir="ltr">
-                    <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                    <table class="table table-bordered" id="userlogdataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                       <thead>
                          <tr>
                          <th>تاریخ</th>
@@ -364,6 +364,14 @@
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+    <script type="text/javascript">
+        $(function()
+        {
+            $('#userlogdataTable').DataTable( {
+                        "order": [[ 0, "desc" ],[ 1, "desc" ]],
+                    } );
+        });
+        </script>
 @endsection
 
 @endsection

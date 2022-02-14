@@ -43,15 +43,15 @@ class LogRepository implements ILogRepository{
     }
     public function CurrentUserLogReport(string $NidUser)
     {
-        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogDate')->sortByDesc('LogTime')->take(200);
+        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(500);
     }
     public function CurrentUserLoginReport(string $NidUser)
     {
         $res = new Collection();
-        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',15)->sortByDesc('LogDate')->take(5) as $key => $value) {
+        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',15)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(5) as $key => $value) {
             $res->push($value);
         }
-        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',16)->sortByDesc('LogDate')->take(5) as $key2 => $value2) {
+        foreach (Logs::all()->where('UserId','=',$NidUser)->where('ActionId','=',16)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(5) as $key2 => $value2) {
             $res->push($value2);
         }
         return $res;

@@ -200,10 +200,11 @@ class ReportController extends Controller
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارشات آماری");
         return view('Report.StatisticReports',compact('Report'));
     }
-    public function UserLogReport()
+    public function UserLogReport(Request $request)
     {
         $api = new NPMSController();
         $LogActionTypes = $api->GetLogActionTypes();
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارش عمکلرد کاربران");
         return view('Report.UserLogReport',compact('LogActionTypes'));
     }
     public function PersianDateToGeorgian(string $Datee)
@@ -277,7 +278,7 @@ class ReportController extends Controller
         $result = new JsonResults();
         $result->HasValue = true;
         $result->Html = view('Report._ReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName'))->render();
-        // $api->AddLog(auth()->user(),$report->ip(),24,0,2,2,$report->ReportName);
+        $api->AddLog(auth()->user(),$report->ip(),24,0,2,2,$ReportName);
         return response()->json($result);
         // return $reportresult;
     }
@@ -293,6 +294,7 @@ class ReportController extends Controller
         $ReportDate = substr(new Verta(Carbon::now()),0,10);
         $ReportTime = substr(new Verta(Carbon::now()),10,10);
         $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
+        $api->AddLog(auth()->user(),$report->ip(),29,0,3,2,$ReportName);
         return $pdf->stream($ReportName.'.pdf');
         // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
     }
@@ -311,6 +313,7 @@ class ReportController extends Controller
         $pdf = PDF::loadView('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
         $result->Html = view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'))->render();
         $result->HasValue = true;
+        $api->AddLog(auth()->user(),$report->ip(),30,0,3,2,$ReportName);
         return response()->json($result);
         // return $pdf->stream($ReportName.'.pdf');
         // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
@@ -322,6 +325,7 @@ class ReportController extends Controller
         $ReportDate = substr(new Verta(Carbon::now()),0,10);
         $ReportTime = substr(new Verta(Carbon::now()),10,10);
         $pdf = PDF::loadView('Report._DownloadActivityLogReport',compact('logs','ReportDate','ReportTime'));
+        $api->AddLog(auth()->user(),$report->ip(),31,0,3,2,'');
         return $pdf->stream('userActivityLog.pdf');
     }
     public function PrintUserLogReport(Request $report)//string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
@@ -333,6 +337,7 @@ class ReportController extends Controller
         $ReportTime = substr(new Verta(Carbon::now()),10,10);
         $result->HasValue = true;
         $result->Html = view('Report._DownloadActivityLogReport',compact('logs','ReportDate','ReportTime'))->render();
+        $api->AddLog(auth()->user(),$report->ip(),32,0,3,2,'');
         return response()->json($result);
     }
     public function ChartReports(Request $request)

@@ -99,7 +99,7 @@ class ScholarController extends Controller
             $tmpname = Str::of($tmpname)->append(" ");
             $tmpname = Str::of($tmpname)->append($scholar->LastName);
             $result->Message = $tmpname;
-            $api->AddLog(auth()->user(),$scholar->ip(),7,0,3,1,"ایجاد محقق موفق");
+            $api->AddLog(auth()->user(),$scholar->ip(),7,0,3,1,sprintf("ایجاد محقق موفق.نام محقق %s",$tmpname));
         }
         return response()->json($result);
     }
@@ -125,7 +125,7 @@ class ScholarController extends Controller
             $result->HasValue = true;
             $Scholar = $api->GetAllScholarDetails($NidScholar);
             $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,sprintf("جزییات محقق.نام محقق : %s",$Scholar->FirstName.' '.$Scholar->LastName));
             return response()->json($result);
         }else
         {
@@ -150,7 +150,7 @@ class ScholarController extends Controller
             {
                 $Oreintations = new Collection();
             }
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ایجاد محقق");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ویرایش محقق");
             return view('Scholar.EditScholar',compact('Majors','CollaborationTypes','Grades','MillitaryStatuses','Colleges','Scholar','Oreintations'));
         }else
         {
@@ -162,7 +162,7 @@ class ScholarController extends Controller
         $scholar->validated();
         $api = new NPMSController();
         $api->UpdateScholar($scholar);
-        $api->AddLog(auth()->user(),$scholar->ip(),8,0,3,1,"ویرایش محقق موفق");
+        $api->AddLog(auth()->user(),$scholar->ip(),8,0,3,1,sprintf("ویرایش محقق موفق.نام محقق : %s",$scholar->FirstName.' '.$scholar->LastName));
         return redirect('scholars');
     }
     public function UploadThisFile(Request $file)
@@ -214,7 +214,7 @@ class ScholarController extends Controller
         {
             $result->Message = "1";
             $result->Html = sprintf('محقق با نام %s با موفقیت حذف گردید',json_decode($Scholar->getContent(),true)['Html']);
-            $api->AddLog(auth()->user(),$request->ip(),9,0,3,1,"حذف محقق موفق");
+            $api->AddLog(auth()->user(),$request->ip(),9,0,3,1,sprintf("حذف محقق موفق.نام محقق : %s",json_decode($Scholar->getContent(),true)['Html']));
         }elseif(json_decode($Scholar->getContent(),true)['Message'] == "0")
         {
             $result->Message = "2";
@@ -224,7 +224,7 @@ class ScholarController extends Controller
         {
             $result->Message = "3";
             $result->Html = sprintf('محقق دارای %s طرح ثبت شده در سیستم می باشد.امکان حذف وجود ندارد',json_decode($Scholar->getContent(),true)['Message']);
-            $api->AddLog(auth()->user(),$request->ip(),9,1,3,1,"حذف محقق ناموفق");
+            $api->AddLog(auth()->user(),$request->ip(),9,1,3,1,sprintf("حذف محقق ناموفق.نام محقق : %s",json_decode($Scholar->getContent(),true)['Html']));
         }
         return response()->json($result);
     }

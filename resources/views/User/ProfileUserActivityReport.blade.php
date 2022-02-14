@@ -13,7 +13,7 @@
                     <div class="card-body">
                         @if (!is_null($logs))
                             <div class="table-responsive" dir="ltr">
-                                <table class="table table-bordered" id="dataTable"
+                                <table class="table table-bordered" id="userlogdataTable"
                                     style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -25,7 +25,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($logs->sortByDesc('LogDate')->sortBy('LogTime') as $lg)
+                                        @foreach ($logs as $lg)
                                             <tr>
                                                 <td>{{ $lg->LogDate ?? '' }}</td>
                                                 <td>{{ $lg->LogTime ?? '' }}</td>
@@ -52,5 +52,13 @@
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+    <script type="text/javascript">
+    $(function()
+    {
+        $('#userlogdataTable').DataTable( {
+                    "order": [[ 0, "desc" ],[ 1, "desc" ]],
+                } );
+    });
+    </script>
 @endsection
 @endsection

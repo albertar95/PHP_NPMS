@@ -72,6 +72,7 @@ class AlarmController extends Controller
             $Alarms = $api->GetUsersAlarms(auth()->user()->NidUser);
         }
         $Typo = $type;
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"اعلان ها");
         return view('Alarm.Alarms',compact('Alarms','Typo'));
     }
 }

@@ -88,7 +88,7 @@ class UserController extends Controller
         }
         $chartvals = join(',',$chartarrays);
         $alarms = $api->GetFirstPageAlarms();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"داشبورد");
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"میزکار");
         return view('General.Index',compact('briefs','chartvals','alarms','messages'));
     }
     public function AddUser(Request $request)
@@ -108,7 +108,7 @@ class UserController extends Controller
     {
         $user->validated();
         $api = new NPMSController();
-        $api->AddLog(auth()->user(),$user->ip(),10,0,3,1,"ایجاد کاربر موفق");
+        $api->AddLog(auth()->user(),$user->ip(),10,0,3,1,sprintf("ایجاد کاربر موفق.نام کاربر : %s",$user->UserName));
         return $api->AddUser($user);
     }
     public function Users(Request $request)
@@ -133,7 +133,7 @@ class UserController extends Controller
             $result = new JsonResults();
             $result->HasValue = true;
             $result->Html = view('User._UserDetail',compact('Users'))->render();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"جزییات کاربر");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,sprintf("جزییات کاربر.نام کاربر : %s",$Users->Username));
             return response()->json($result);
         }else
         {
@@ -173,7 +173,7 @@ class UserController extends Controller
             $result->HasValue = true;
             $tmpUser = $api->DisableUserById($NidUser);
             $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید",$tmpUser->Username);
-            $api->AddLog(auth()->user(),$request->ip(),12,0,3,1,"ایجاد کاربر موفق");
+            $api->AddLog(auth()->user(),$request->ip(),12,0,3,1,sprintf("غیر فعال کردن کاربر موفق.نام کاربری : %s",$tmpUser->Username));
             return response()->json($result);
         }else
         {
@@ -191,8 +191,8 @@ class UserController extends Controller
         if(!is_null($tmpresult))
         {
             $result->HasValue = true;
-            $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید",$tmpresult->Username);
-            // $api->AddLog(auth()->user(),$request->ip(),12,0,3,1,"ایجاد کاربر موفق");
+            $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت خارج گردید",$tmpresult->UserName);
+            $api->AddLog(auth()->user(),$request->ip(),36,0,3,1,sprintf("خارج کردن کاربر موفق.نام کاربری : %s",$tmpresult->UserName));
             return response()->json($result);
         }else
         {
@@ -209,7 +209,7 @@ class UserController extends Controller
             $api = new NPMSController();
             $User = $api->GetUserById($NidUser);
             $Roles = $api->GetAllRoles();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"ویرایش کاربر");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,sprintf("ویرایش کاربر.نام کاربر : %s",$User->UserName));
             return view('User.EditUser',compact('User','Roles'));
         }else
         {
@@ -224,7 +224,7 @@ class UserController extends Controller
             $jsonresult = new JsonResults();
             $jsonresult->HasValue = false;
             $jsonresult->AltProp = "1";
-            // $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,"تغییر رمز کاربر موفق");
+            $api->AddLog(auth()->user(),$request->ip(),13,1,3,2,sprintf("تغییر رمز کاربر ناموفق.شناسه کاربر : %s",$NidUser));
             return response()->json($jsonresult);
         }else
         {
@@ -235,11 +235,11 @@ class UserController extends Controller
             $jsonresult->HasValue = $state;
             $jsonresult->Message = $newPass;
             $jsonresult->AltProp = "2";
-            // $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,"تغییر رمز کاربر موفق");
+            $api->AddLog(auth()->user(),$request->ip(),13,0,3,2,sprintf("تغییر رمز کاربر موفق.شناسه کاربر : %s",$NidUser));
             return response()->json($jsonresult);
         }
     }
-    public function Profile()
+    public function Profile(Request $request)
     {
         $api = new NPMSController();
         $Users = $api->GetUserDTOById(auth()->user()->NidUser);
@@ -249,12 +249,14 @@ class UserController extends Controller
         $logins = $api->GetCurrentUserLoginReport(auth()->user()->NidUser);
         $Permissions = $api->GetRolePermissionsByUser(auth()->user()->NidUser);
         $userPermissions = $api->GetAllUserPermissionDTOsByUserId(auth()->user()->NidUser);
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"پروفایل");
         return view('User.Profile',compact('Users','logs','Permissions','logins','userPermissions'));
     }
-    public function ProfileUserActivityReport(string $NidUser)
+    public function ProfileUserActivityReport(Request $request,string $NidUser)
     {
         $api = new NPMSController();
         $logs = $api->GetCurrentUserLogReport(auth()->user()->NidUser);
+        $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,"گزارش کاربری");
         return view('User.ProfileUserActivityReport',compact('logs'));
     }
     public function SubmitEditUser(UserRequest $User)
@@ -262,7 +264,7 @@ class UserController extends Controller
         $User->validated();
         $api = new NPMSController();
         $api->UpdateUser($User);
-        $api->AddLog(auth()->user(),$User->ip(),11,0,3,1,"ویرایش کاربر موفق");
+        $api->AddLog(auth()->user(),$User->ip(),11,0,3,1,sprintf("ویرایش کاربر موفق.نام کاربر : %s",$User->UserName));
         return redirect('users');
     }
     public function UserSourceChange(int $SourceId)
@@ -369,7 +371,7 @@ class UserController extends Controller
         }else if($loginresult['result'] == 2)//incorrect password
         {
             $user = $api->GetThisUserByUsername($logindata->Username);
-            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق.نام کاربری یا کلمه عبور اشتباه است");
             $result->HasValue = false;
             $result->AltProp = "2";
             $result->Message = "نام کاربری یا کلمه عبور صحیح نمی باشد";
@@ -383,7 +385,7 @@ class UserController extends Controller
         else if($loginresult['result'] == 4) //lockout
         {
             $user = $api->GetThisUserByUsername($logindata->Username);
-            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق");
+            $api->AddLog($user,$logindata->ip(),16,1,3,1,"ورود ناموفق.کاربر در حالت تعلیق می باشد");
             $result->HasValue = false;
             $result->AltProp = "4";
             $result->Message = "کاربر در حالت تعلیق می باشد";
@@ -492,12 +494,12 @@ class UserController extends Controller
         {
             $api->AddRole($role);
             $result->Message = sprintf("نقش با نام %s با موفقیت ایجاد گردید",$role->Title);
-            $api->AddLog(auth()->user(),$role->ip(),19,0,3,3,"ایجاد نقش موفق");
+            $api->AddLog(auth()->user(),$role->ip(),19,0,3,3,sprintf("ایجاد نقش موفق.نام نقش : %s",$role->Title));
         }else
         {
             $api->UpdateRole($role);
             $result->Message = sprintf("یگان با نام %s با موفقیت ویرایش گردید",$role->Title);
-            $api->AddLog(auth()->user(),$role->ip(),19,1,3,3,"ایجاد نقش ناموفق");
+            $api->AddLog(auth()->user(),$role->ip(),19,1,3,3,sprintf("ایجاد نقش ناموفق.نام نقش : %s",$role->Title));
         }
         $TblId = 9;
         $Roles = $api->GetAllRoles();
@@ -506,7 +508,7 @@ class UserController extends Controller
         return response()->json($result);
         // return $role;
     }
-    public function SubmitDeleteRole(string $NidRole)
+    public function SubmitDeleteRole(Request $request,string $NidRole)
     {
         $api = new NPMSController();
         $result = new JsonResults();
@@ -517,6 +519,7 @@ class UserController extends Controller
         {
             case "1":
                 $result->Message = "نقش مورد نظر دارای کاربر می باشد.امکان حذف وجود ندارد";
+                $api->AddLog(auth()->user(),$request->ip(),20,1,3,3,sprintf("ایجاد نقش ناموفق.شناسه نقش : %s",$NidRole));
                 return response()->json($result);
                 break;
             case "2":
@@ -525,10 +528,12 @@ class UserController extends Controller
                 $TblId = 9;
                 $Units = $api->GetAllRoles();
                 $result->Html = view('Project._BaseInfoTables',compact('TblId','Roles'))->render();
+                $api->AddLog(auth()->user(),$request->ip(),20,0,3,3,sprintf("ایجاد نقش موفق.شناسه نقش : %s",$NidRole));
                 return response()->json($result);
                 break;
             case "3":
                 $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                $api->AddLog(auth()->user(),$request->ip(),20,1,3,3,sprintf("ایجاد نقش ناموفق.شناسه نقش : %s",$NidRole));
                 return response()->json($result);
                 break;
         }
@@ -584,7 +589,7 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $api->AddRolePermission($Permission);
-        $api->AddLog(auth()->user(),$Permission->ip(),21,0,3,3,"ایجاد دسترسی نقش موفق");
+        $api->AddLog(auth()->user(),$Permission->ip(),21,0,3,3,sprintf("ایجاد دسترسی نقش موفق.شناسه نقش : %s",$Permission->RoleId));
         return redirect(sprintf("/managerolepermissions/%s",$Permission->RoleId));
     }
     public function EditRolePermission(string $NidPermission,Request $request)
@@ -619,7 +624,7 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $api->UpdateRolePermission($Permission);
-        $api->AddLog(auth()->user(),$Permission->ip(),22,0,3,3,"ویرایش دسترسی نقش موفق");
+        $api->AddLog(auth()->user(),$Permission->ip(),22,0,3,3,sprintf("ویرایش دسترسی نقش موفق.شناسه نقش : %s",$Permission->RoleId));
         return redirect(sprintf('/managerolepermissions/%s',$Permission->RoleId));
         // return $Permission;
     }
@@ -629,7 +634,7 @@ class UserController extends Controller
         $result = new JsonResults();
         $api->DeleteRolePermission($NidPermission);
         $result->HasValue = true;
-        $api->AddLog(auth()->user(),$request->ip(),23,0,3,3,"حذف دسترسی نقش موفق");
+        $api->AddLog(auth()->user(),$request->ip(),23,0,3,3,sprintf("حذف دسترسی نقش موفق.شناسه نقش : %s",$NidPermission));
         return response()->json($result);
     }
     public function ManageSessions(Request $request)
@@ -639,6 +644,7 @@ class UserController extends Controller
             $api = new NPMSController();
             $sets = $api->GetSessionsSettings();
             $users = $api->GetAllOnlineUsers();
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت نشست ها");
             return view('User.ManageSessions',compact('sets','users'));
         }else
         {
@@ -651,6 +657,7 @@ class UserController extends Controller
         // config('session.lifetime',$request->SessionTimeout);
         $api = new NPMSController();
         $api->UpdateSessionsSettings($request->SessionTimeout);
+        $api->AddLog(auth()->user(),$request->ip(),37,0,2,3,"ثبت تغییرات نشست");
         return redirect('/managesessions');
         // return $request->SessionTimeout;
     }
@@ -662,6 +669,7 @@ class UserController extends Controller
             $Users = $api->GetAllRoleUsers($NidRole);
             $tmpRole = $api->GetRoleById($NidRole);
             $RoleName = $tmpRole->Title;
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"کاربران نقش");
             return view('User.ManageRolesUser',compact('Users','RoleName'));
         }else
         {
@@ -678,7 +686,7 @@ class UserController extends Controller
             $UserName = $tmpUser->UserName;
             $UserId = $NidUser;
             $RoleId = $tmpUser->RoleId;
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی نقش ها");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"مدیریت دسترسی کاربر ها");
             return view('User.ManageUserPermission',compact('Permissions','UserName','UserId','RoleId'));
         }else
         {
@@ -709,7 +717,7 @@ class UserController extends Controller
             $Entities->push(['EntityId' => 5,'Title' => 'پیام']);
             if(!in_array(6,$CurrentEntites))
             $Entities->push(['EntityId' => 6,'Title' => 'اطلاعات پایه']);
-            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ایجاد دسترسی نقش ها");
+            $api->AddLog(auth()->user(),$request->ip(),1,0,2,3,"ایجاد دسترسی کاربر ها");
             return view('User.AddUserPermission',compact('User','Entities'));
         }else
         {
@@ -720,7 +728,7 @@ class UserController extends Controller
     {
         $api = new NPMSController();
         $api->AddUserPermission($Permission);
-        $api->AddLog(auth()->user(),$Permission->ip(),21,0,3,3,"ایجاد دسترسی نقش موفق");
+        $api->AddLog(auth()->user(),$Permission->ip(),38,0,3,3,"ایجاد دسترسی کاربر موفق");
         return redirect(sprintf("/manageuserpermission/%s",$Permission->UserId));
     }
     public function DeleteUserPermission(Request $request, string $NidPermission)
@@ -729,7 +737,7 @@ class UserController extends Controller
         $result = new JsonResults();
         $api->DeleteUserPermission($NidPermission);
         $result->HasValue = true;
-        $api->AddLog(auth()->user(),$request->ip(),23,0,3,3,"حذف دسترسی نقش موفق");
+        $api->AddLog(auth()->user(),$request->ip(),39,0,3,3,"حذف دسترسی کاربر موفق");
         return response()->json($result);
     }
 }
