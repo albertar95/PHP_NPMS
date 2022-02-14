@@ -35,7 +35,7 @@ class UserRepository extends BaseRepository implements IUserRepository
         $tmpuser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
         return DataMapper::MapToUserDTO($tmpuser);
     }
-    public function GetUserById(string $NidUser):User
+    public function GetUserById(string $NidUser): User
     {
         return $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
     }
@@ -175,7 +175,10 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function CheckPreviousPassword(string $NidUser, string $NewPass): bool
     {
         $result = true;
-        $tmpPasswords = PasswordHistory::all()->where('NidUser', '=', $NidUser)->sortByDesc('CreateDate')->take(3);
+        $PassCheckOffset = 3;
+        if (Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LastPasswordCount')->count() > 0)
+            $PassCheckOffset = Settings::all()->where('SettingTitle', '=', 'PasswordPolicies')->where('SettingKey', '=', 'LastPasswordCount')->firstOrFail()->SettingValue;
+        $tmpPasswords = PasswordHistory::all()->where('NidUser', '=', $NidUser)->sortByDesc('CreateDate')->take($PassCheckOffset);
         if (!is_null($tmpPasswords)) {
             foreach ($tmpPasswords as $Pass) {
                 if (Hash::check($NewPass, $Pass->Password)) {
@@ -204,16 +207,52 @@ class UserRepository extends BaseRepository implements IUserRepository
         } else
             return "";
     }
+    public function CheckPasswordPolicy(string $newPass)
+    {
+        $PasswordLength = 4;
+        $PasswordDifficultyLevel = 1;
+        $PasswordCheckFlag = true;
+        if (Settings::all()->where('SettingKey', '=', 'PasswordLength')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+            $PasswordLength = Settings::all()->where('SettingKey', '=', 'PasswordLength')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+        if (Settings::all()->where('SettingKey', '=', 'PasswordDificulty')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+            $PasswordDifficultyLevel = Settings::all()->where('SettingKey', '=', 'PasswordDificulty')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+        if (strlen($newPass) < $PasswordLength)
+            $PasswordCheckFlag = false;
+        switch ($PasswordDifficultyLevel) {
+            case 1:
+                break;
+            case 2:
+                if (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $newPass)) {
+                    $PasswordCheckFlag = false;
+                }
+                break;
+            case 3:
+                if (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $newPass)) {
+                    $PasswordCheckFlag = false;
+                } else {
+                    if (!preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $newPass)) {
+                        $PasswordCheckFlag = false;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        return $PasswordCheckFlag;
+    }
     public function LoginUser(string $Username, string $Password)
     {
         $tmpUser = $this->GetUserByUsername($Username);
         $resultFlag = 0;
+        $changePassDuration = 45;
+        if (Settings::all()->where('SettingKey', '=', 'ChangePasswordDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+            $changePassDuration = Settings::all()->where('SettingKey', '=', 'ChangePasswordDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
         $dateNow = Carbon::now();
         if (!is_null($tmpUser)) {
             if ($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine)) {
                 $resultFlag = 4;
             } else {
-                if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > 45)
+                if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > $changePassDuration)
                     $resultFlag = 5;
                 else {
                     if (Hash::check($Password, $tmpUser->Password)) {
@@ -223,10 +262,23 @@ class UserRepository extends BaseRepository implements IUserRepository
                         $this->UpdateUser($tmpUser);
                         $resultFlag = 1;
                     } else {
+                        $incorrectPassAttempt = 20;
+                        $lockoutDuration = 5;
+                        $fullLockout = 0;
+                        if (Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $incorrectPassAttempt = Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                        if (Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $lockoutDuration = Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                        if (Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $fullLockout = Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
                         $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
-                        if ($tmpUser->IncorrectPasswordCount >= 5) {
+                        if ($tmpUser->IncorrectPasswordCount >= $incorrectPassAttempt) {
                             $tmpUser->IsLockedOut = 1;
-                            $tmpUser->LockoutDeadLine = $dateNow->addMinutes(1);
+                            if (!$fullLockout) {
+                                $tmpUser->LockoutDeadLine = $dateNow->addMinutes($lockoutDuration);
+                            } else {
+                                $tmpUser->LockoutDeadLine = $dateNow->addDays(365);
+                            }
                             $tmpUser->IncorrectPasswordCount = 0;
                         }
                         $this->UpdateUser($tmpUser);
@@ -498,10 +550,10 @@ class UserRepository extends BaseRepository implements IUserRepository
     }
     public function CheckForUserExist(string $NidRole)
     {
-        if($this->model->all()->where('NidRole','=',$NidRole)->count() > 0)
-        return true;
+        if ($this->model->all()->where('NidRole', '=', $NidRole)->count() > 0)
+            return true;
         else
-        return false;
+            return false;
     }
     public function GetRoles()
     {
@@ -544,7 +596,7 @@ class UserRepository extends BaseRepository implements IUserRepository
     }
     public function GetRolesPermissionByRoleId(string $NidRole)
     {
-        return RolePermissions::all()->where('RoleId','=',$NidRole);
+        return RolePermissions::all()->where('RoleId', '=', $NidRole);
     }
     public function GetRolesPermissionByUserId(string $NidUser)
     {
@@ -562,7 +614,7 @@ class UserRepository extends BaseRepository implements IUserRepository
     public function GetRoleUsersById(string $NidRole)
     {
         $result = new Collection();
-        $tmpUsers = $this->model->all()->where('RoleId','=',$NidRole);
+        $tmpUsers = $this->model->all()->where('RoleId', '=', $NidRole);
         foreach ($tmpUsers as $user) {
             $result->push(DataMapper::MapToUserInPermissionDTO($user));
         }

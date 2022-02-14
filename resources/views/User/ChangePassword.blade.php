@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,9 +17,12 @@
     <link href="{{ URL('Content/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ URL('Content/vendor/PasswordStrength/bootstrap-theme.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gradient-primary" style="background-color:#4e73df;background-image:linear-gradient(180deg,#4e73df 10%,#224abe 100%);">
+
+<body class="bg-gradient-primary"
+    style="background-color:#4e73df;background-image:linear-gradient(180deg,#4e73df 10%,#224abe 100%);">
     <div class="container">
-        <div class="d-flex justify-content-center" style="position: absolute;top: 50%;left: 50%;margin-top: -50px;margin-left: -50px;" id="loadingTime" hidden>
+        <div class="d-flex justify-content-center"
+            style="position: absolute;top: 50%;left: 50%;margin-top: -50px;margin-left: -50px;" id="loadingTime" hidden>
             <div class="spinner-border text-info" role="status" style="margin-right:10px;" id="spinnerDiv" hidden>
                 <span class="sr-only">...</span>
             </div>
@@ -28,7 +32,8 @@
         </div>
         <!-- Outer Row -->
         <div class="row justify-content-center" id="FormWrapper">
-            <div class="col-xl-6 col-lg-10 col-md-8" style="position: absolute;left:50%;top: 50%;transform: translate(-50%, -50%);padding-left: 3rem;padding-right: 3rem;">
+            <div class="col-xl-6 col-lg-10 col-md-8"
+                style="position: absolute;left:50%;top: 50%;transform: translate(-50%, -50%);padding-left: 3rem;padding-right: 3rem;">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
@@ -38,46 +43,60 @@
                             <div class="col-lg-10">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">فرم تغییر کلمه عبور</h1>
+                                        <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">فرم تغییر کلمه عبور
+                                        </h1>
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" style="text-align:right;width:75%;margin:0 auto;" hidden
+                                            <input type="text" class="form-control form-control-user"
+                                                style="text-align:right;width:75%;margin:0 auto;" hidden
                                                 value="{{ $Niduser }}" id="txtUserId">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" style="text-align:right;width:75%;margin:0 auto;" tabindex="1"
-                                                   id="txtOldPassword" placeholder="کلمه عبور فعلی">
+                                            <input type="password" class="form-control form-control-user"
+                                                style="text-align:right;width:75%;margin:0 auto;" tabindex="1"
+                                                id="txtOldPassword" placeholder="کلمه عبور فعلی">
                                         </div>
                                         <div class="form-group">
                                             <div>
-                                                <input type="password" class="form-control form-control-user" style="text-align:right;width:75%;margin:0 auto;" tabindex="2"
-                                                id="txtNewPassword" placeholder="کلمه عبور جدید">
+                                                <input type="password" class="form-control form-control-user"
+                                                    style="text-align:right;width:75%;margin:0 auto;" tabindex="2"
+                                                    id="txtNewPassword" placeholder="کلمه عبور جدید">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                        <div class="progress progress-striped active" style="width: 75%;margin: auto;">
-                                            <div id="jak_pstrength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-                                          </div>
+                                            <div class="progress progress-striped active"
+                                                style="width: 75%;margin: auto;">
+                                                <div id="jak_pstrength" class="progress-bar" role="progressbar"
+                                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                                    style="width: 0%"></div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" style="text-align:right;width:75%;margin:0 auto;" tabindex="3"
-                                                   id="txtNewPasswordRepeat" placeholder="تکرار کلمه عبور جدید">
+                                            <input type="password" class="form-control form-control-user"
+                                                style="text-align:right;width:75%;margin:0 auto;" tabindex="3"
+                                                id="txtNewPasswordRepeat" placeholder="تکرار کلمه عبور جدید">
                                         </div>
-                                        <button class="btn btn-primary btn-user btn-block" style="width:75%;margin:0 auto;" id="btnSave" tabindex="4">ذخیره</button>
+                                        <button class="btn btn-primary btn-user btn-block"
+                                            style="width:75%;margin:0 auto;" id="btnSave" tabindex="4">ذخیره</button>
                                         <hr>
                                     </form>
                                 </div>
-                                <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <div class="alert alert-success alert-dismissible" role="alert" id="successAlert"
+                                    hidden>
+                                    <button type="button" class="close" data-dismiss="alert"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <p style="text-align:right;" id="SuccessMessage"></p>
                                 </div>
-                                <div class="alert alert-warning alert-dismissible" role="alert" id="warningAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <div class="alert alert-warning alert-dismissible" role="alert" id="warningAlert"
+                                    hidden>
+                                    <button type="button" class="close" data-dismiss="alert"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <p style="text-align:right;" id="WarningMessage"></p>
                                 </div>
                                 <div class="alert alert-danger alert-dismissible" role="alert" id="errorAlert" hidden>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <button type="button" class="close" data-dismiss="alert"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <p style="text-align:right;" id="ErrorMessage"></p>
                                 </div>
                             </div>
@@ -96,102 +115,143 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ URL('Content/js/sb-admin-2.min.js') }}"></script>
     <script type="text/javascript">
-    var passHash = "";
-        $(function ()
-        {
+        var passHash = "";
+        var passDifficulty = 1;
+        var passLength = 4;
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '/getpasswordpolicy',
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    passDifficulty = result.Message;
+                    passLength = result.AltProp;
+                },
+                error: function() {}
+            });
             jQuery("#txtNewPassword").keyup(function() {
-    	    passwordStrength(jQuery(this).val());
-    	        });
+                passwordStrength(jQuery(this).val(), passDifficulty, passLength);
+            });
             $("#txtOldPassword").focus();
-            $("#txtNewPasswordRepeat").on("keypress", function (e)
-            {
+            $("#txtNewPasswordRepeat").on("keypress", function(e) {
                 if (e.keyCode == 13)
                     changeThisPasword();
             });
-            $("#btnSave").click(function (e)
-            {
+            $("#btnSave").click(function(e) {
                 e.preventDefault();
                 changeThisPasword();
             });
         });
-        function changeThisPasword()
-        {
-            if($("#txtOldPassword").val() == '' || $("#txtNewPassword").val() == '' || $("#txtNewPasswordRepeat").val() == '')
-            {
+
+        function changeThisPasword() {
+            if ($("#txtOldPassword").val() == '' || $("#txtNewPassword").val() == '' || $("#txtNewPasswordRepeat").val() ==
+                '') {
                 $("#WarningMessage").text('لطفا اطلاعات مورد نظر را وارد نمایید');
                 $("#warningAlert").removeAttr('hidden');
-                window.setTimeout(function () { $("#warningAlert").attr('hidden', 'hidden') }, 5000);
-            } else
-            {
+                window.setTimeout(function() {
+                    $("#warningAlert").attr('hidden', 'hidden')
+                }, 5000);
+            } else {
                 $.ajaxSetup({
-                headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
                 });
-                $.ajax(
-                    {
-                        url: '/getuserspasscode/' + $("#txtUserId").val() + '/' + $("#txtOldPassword").val(),
-                        type: 'get',
-                        datatype: 'json',
-                        success: function (result)
-                        {
-                            if (result.HasValue)
-                            {
-                                $.ajaxSetup({
-                headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax(
-                    {
-                        url: '/submitchangepassword/' + $("#txtUserId").val() + '/' + $("#txtNewPassword").val(),
-                        type: 'post',
-                        datatype: 'json',
-                        success: function (result)
-                        {
-                            if (result.HasValue)
-                            {
-                                $("#SuccessMessage").text('کلمه عبور با موفقیت تغییر کرد');
-                                $("#successAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#successAlert").attr('hidden', 'hidden') }, 2000);
-                                window.setTimeout(function () { window.location.href = '/login'; }, 3000);
-                            }
-                            else
-                            {
-                                if(result.AltProp == "1")
-                                {
-                                $("#ErrorMessage").text('کلمه عبور جدید قبلا استفاده شده است.لطفا کلمه عبور دیگری انتخاب نمایید');
-                                $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
-                                }else
-                                {
-                                $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
-                                $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
+                $.ajax({
+                    url: '/getuserspasscode/' + $("#txtUserId").val() + '/' + $("#txtOldPassword").val(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 }
-                            }
-                        },
-                        error: function ()
-                        {
-                            $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
-                            $("#errorAlert").removeAttr('hidden');
-                            window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 5000);
+                            });
+                            $.ajax({
+                                url: '/submitchangepassword/' + $("#txtUserId").val() + '/' + $(
+                                    "#txtNewPassword").val(),
+                                type: 'post',
+                                datatype: 'json',
+                                success: function(result) {
+                                    if (result.HasValue) {
+                                        $("#SuccessMessage").text('کلمه عبور با موفقیت تغییر کرد');
+                                        $("#successAlert").removeAttr('hidden');
+                                        window.setTimeout(function() {
+                                            $("#successAlert").attr('hidden', 'hidden')
+                                        }, 2000);
+                                        window.setTimeout(function() {
+                                            window.location.href = '/login';
+                                        }, 3000);
+                                    } else {
+                                        if (result.AltProp == "1") {
+                                            $("#ErrorMessage").text(
+                                                'کلمه عبور جدید قبلا استفاده شده است.لطفا کلمه عبور دیگری انتخاب نمایید'
+                                            );
+                                            $("#errorAlert").removeAttr('hidden');
+                                            window.setTimeout(function() {
+                                                $("#errorAlert").attr('hidden', 'hidden')
+                                            }, 10000);
+                                        } else if (result.AltProp == "3") {
+                                            var message =
+                                                'کلمه عبور جدید با خط مشی تعریف شده در سامانه مطابقت ندارد.لطفا کلمه عبور قوی تر وارد نمایید \n';
+                                            message += '<ul style="direction:rtl;">';
+                                            message += '<li>حداقل طول کلمه عبور : ' + passLength;
+                                            message += '</li>';
+                                            if (passDifficulty == 1) {
+                                                message += '<li>پیچیدگی کلمه عبور : بدون پیچیدگی';
+                                                message += '</li>';
+                                            }
+                                            if (passDifficulty == 2) {
+                                                message += '<li>پیچیدگی کلمه عبور : شامل حروف و اعداد باشد' ;
+                                                message += '</li>';
+                                            }
+                                            if (passDifficulty == 3) {
+                                                message += '<li>پیچیدگی کلمه عبور : شامل حروف و اعداد و حروف خاص مانند @ باشد' ;
+                                                message += '</li>';
+                                            }
+                                            message += '</ul>';
+                                            $("#ErrorMessage").html(message);
+                                            $("#errorAlert").removeAttr('hidden');
+                                            window.setTimeout(function() {
+                                                $("#errorAlert").attr('hidden', 'hidden')
+                                            }, 100000);
+                                        } else {
+                                            $("#ErrorMessage").text(
+                                                'خطا در سرور.لطفا مجدد امتحان کنید');
+                                            $("#errorAlert").removeAttr('hidden');
+                                            window.setTimeout(function() {
+                                                $("#errorAlert").attr('hidden', 'hidden')
+                                            }, 10000);
+                                        }
+                                    }
+                                },
+                                error: function() {
+                                    $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
+                                    $("#errorAlert").removeAttr('hidden');
+                                    window.setTimeout(function() {
+                                        $("#errorAlert").attr('hidden', 'hidden')
+                                    }, 10000);
+                                }
+                            });
+                        } else {
+                            $("#WarningMessage").text('کلمه عبور فعلی صحیح نمی باشد');
+                            $("#warningAlert").removeAttr('hidden');
+                            window.setTimeout(function() {
+                                $("#warningAlert").attr('hidden', 'hidden')
+                            }, 10000);
                         }
-                    });
-                            }
-                            else
-                            {
-                                $("#WarningMessage").text('کلمه عبور فعلی صحیح نمی باشد');
-                                $("#warningAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#warningAlert").attr('hidden', 'hidden') }, 5000);
-                            }
-                        },
-                        error: function ()
-                        {
-                        }
-                    });
+                    },
+                    error: function() {}
+                });
             }
         }
     </script>
 </body>
+
 </html>

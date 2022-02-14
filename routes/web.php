@@ -131,6 +131,7 @@ Route::post("submitroleform",[UserController::class,"SubmitRoleForm"])->name('us
 Route::post("submitdeleterole/{NidRole}",[UserController::class,"SubmitDeleteRole"])->name('user.SubmitDeleteRole');
 Route::get("changepassword/{Niduser}",[UserController::class,"ChangePassword"])->name('user.ChangePassword');
 Route::get("getuserspasscode/{Niduser}/{CurrentPassword}",[UserController::class,"getUsersPassCode"])->name('user.getUsersPassCode');
+Route::get("getpasswordpolicy",[UserController::class,"GetPasswordPolicy"])->name('user.GetPasswordPolicy');
 Route::get("managerolepermissions/{NidRole}",[UserController::class,"ManageRolePermissions"])->name('user.ManageRolePermissions');
 Route::get("managerolesuser/{NidRole}",[UserController::class,"ManageRolesUser"])->name('user.ManageRolesUser');
 Route::get("manageuserpermission/{NidUser}",[UserController::class,"ManageUserPermission"])->name('user.ManageUserPermission');

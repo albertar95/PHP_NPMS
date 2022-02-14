@@ -251,11 +251,22 @@
                                     $("#successAlert").attr('hidden', 'hidden')
                                 }, 10000);
                             } else {
-                                $("#ErrorMessage").text('خطا در تغییر کلمه عبور.لطفا مجدد امتحان کنید');
+                                if(result.AltProp == "1")
+                                {
+                                $("#ErrorMessage").text('کلمه عبور جدید قبلا استفاده شده است.لطفا کلمه عبور دیگری انتخاب نمایید');
                                 $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function() {
-                                    $("#errorAlert").attr('hidden', 'hidden')
-                                }, 10000);
+                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
+                                }else if(result.AltProp == "3")
+                                {
+                                $("#ErrorMessage").text('کلمه عبور جدید با خط مشی تعریف شده در سامانه مطابقت ندارد.لطفا کلمه عبور قوی تر وارد نمایید');
+                                $("#errorAlert").removeAttr('hidden');
+                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
+                                }else
+                                {
+                                $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
+                                $("#errorAlert").removeAttr('hidden');
+                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
+                                }
                             }
                         },
                         error: function() {

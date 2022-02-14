@@ -204,6 +204,11 @@ class NPMSController extends Controller
         $repo = new UserRepository(new User());
         return $repo->CheckPreviousPassword($NidUser,$NewPassword);
     }
+    public function CheckPasswordsPolicy(string $NewPassword)
+    {
+        $repo = new UserRepository(new User());
+        return $repo->CheckPasswordPolicy($NewPassword);
+    }
     public function LoginThisUser(string $Username, string $Password)
     {
         $repo = new UserRepository(new User());
