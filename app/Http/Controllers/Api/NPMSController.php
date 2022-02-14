@@ -146,6 +146,7 @@ class NPMSController extends Controller
         $User->IsLockedOut = boolval(false);
         $User->IsDisabled = boolval(false);
         $User->Force_logout = 0;
+        $User->IncorrectPasswordCount = 0;
         $repo = new UserRepository(new User());
         $User = DataMapper::MapToUser($User);
         $repo->AddUser($User);
@@ -495,10 +496,10 @@ class NPMSController extends Controller
         return $repo->GetRoleById($RoleId);
     }
     //Project section
-    public function GetAllProjectInitials()
+    public function GetAllProjectInitials(int $pagesize = 0)
     {
         $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectInitials(0);
+        return $repo->GetProjectInitials($pagesize);
     }
     public function AddProjectInitial(Request $ProjectInitial,string $NidUser)
     {

@@ -505,7 +505,7 @@ class UserController extends Controller
                 $result->HasValue = true;
                 $result->Message = "نقش با موفقیت حذف گردید";
                 $TblId = 9;
-                $Units = $api->GetAllRoles();
+                $Roles = $api->GetAllRoles();
                 $result->Html = view('Project._BaseInfoTables', compact('TblId', 'Roles'))->render();
                 $api->AddLog(auth()->user(), $request->ip(), 20, 0, 3, 3, sprintf("ایجاد نقش موفق.شناسه نقش : %s", $NidRole));
                 return response()->json($result);

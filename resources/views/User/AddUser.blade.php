@@ -148,7 +148,8 @@
                             }, 3000);
                         },
                         error: function(response) {
-                            var message = "<ul>";
+                            var message = 'خطا در انجام عملیات.لطفا مجددا امتحان کنید \n';
+                            message += "<ul>";
                             jQuery.each(response.responseJSON.errors, function(i, val) {
                                 message += "<li>";
                                 message += val;

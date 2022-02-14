@@ -25,17 +25,17 @@
                         aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-3 col-lg-2 col-xl-2">
-                    @if (in_array('0', $sharedData['UserAccessedEntities']))
-                            <div class="row" style="margin-bottom:1rem;">
-                                <a class="btn btn-outline-success btn-block"
-                                href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
-                            </div>
-                    @endif
-                </div>
-            </div>
             <div class="row" style="margin-bottom:1rem;">
+                @if (in_array('0', $sharedData['UserAccessedEntities']))
+                <div class="col-sm-3">
+                    <a class="btn btn-outline-success btn-block" href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
+                        href="/manageroles">&larr; بازگشت</a>
+                </div>
+                @endif
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
@@ -175,7 +175,7 @@
                         <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
                             data-dismiss="modal" id="btnCancel">خیر</button>
                     </div>
-                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;margin: 0 auto;" id="waitText" hidden>لطفا منتظر بمانید</p>
                 </div>
             </div>
         </div>

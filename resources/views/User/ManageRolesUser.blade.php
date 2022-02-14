@@ -19,6 +19,17 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
+            <div class="row" style="margin-bottom:1rem;">
+                @if (in_array('0', $sharedData['UserAccessedEntities']))
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
+                        href="/manageroles">&larr; بازگشت</a>
+                </div>
+                @endif
+            </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
                 <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                     <thead>

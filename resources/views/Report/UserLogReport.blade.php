@@ -65,7 +65,8 @@
                                     aria-hidden="true">&times;</span></button>
                             <p style="text-align:right;" id="ErrorMessage"></p>
                         </div>
-                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText"
+                            hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -86,6 +87,7 @@
 @endsection
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <title>سامانه مدیریت تحقیقات - گزارش عملکرد کاربران</title>
 @endsection
 @section('scripts')
@@ -93,6 +95,9 @@
     <script src="{{ URL('Content/vendor/ExportTable/html2canvas.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $('#LogActionId').selectize({
@@ -127,7 +132,7 @@
             $("#btnExecute").click(function(e) {
                 e.preventDefault();
                 $("#waitText").removeAttr('hidden')
-                if (!$("#FromDate").val() || !$("#ToDate").val() || $("#LogActionId").val() == 0) {
+                if (!$("#FromDate").val() || !$("#ToDate").val()) {
                     $("#WarningMessage").text('لطفا ورودی های گزارش را وارد نمایید')
                     $("#warningAlert").removeAttr('hidden')
                     window.setTimeout(function() {
@@ -155,6 +160,12 @@
                             $("#waitText").attr('hidden', 'hidden');
                             if (result.HasValue)
                                 $("#Resultwrapper").html(result.Html);
+                            $('#logsDataTable').DataTable({
+                                "order": [
+                                    [0, "desc"],
+                                    [1, "desc"]
+                                ],
+                            });
                         },
                         error: function() {
                             $("#waitText").attr('hidden', 'hidden');

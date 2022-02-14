@@ -4,6 +4,17 @@
 
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
+            <div class="row" style="margin:1rem;">
+                @if (in_array('0', $sharedData['UserAccessedEntities']))
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                    <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
+                        href="/managerolepermissions/{{ $Roles->NidRole }}">&larr; بازگشت</a>
+                </div>
+                @endif
+            </div>
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-12">

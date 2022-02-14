@@ -58,7 +58,7 @@ class ProjectController extends Controller
             if($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
             {
                 $api = new NPMSController();
-                $Projects = $api->GetAllProjectInitials();
+                $Projects = $api->GetAllProjectInitials(100);
                 $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت طرح ها");
                 return view('Project.Projects',compact('Projects'));
             }else

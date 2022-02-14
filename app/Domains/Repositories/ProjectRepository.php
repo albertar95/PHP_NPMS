@@ -55,7 +55,6 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
                 $result->push($tmpprojectinitial);
             }
         }
-        // return $result;
         return $result;
     }
     public function AddProjectInitial(projectInitialDTO $projectInitial):bool

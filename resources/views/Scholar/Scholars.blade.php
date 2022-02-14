@@ -136,13 +136,17 @@
                     محقق اطمینان دارید؟</p>
                 <div class="modal-footer">
                     <div class="row" style="margin: 0 auto;">
-                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal" hidden>بستن</button>
-                        </div>
-                        <div class="col-lg-12">
-                            <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk" hidden>بلی</button>
-                            <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;" data-dismiss="modal" id="btnCancel" hidden>خیر</button>
-                        </div>
-                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal"
+                            hidden>بستن</button>
+                    </div>
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk"
+                            hidden>بلی</button>
+                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
+                            data-dismiss="modal" id="btnCancel" hidden>خیر</button>
+                    </div>
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;margin: 0 auto;" hidden id="waitText">لطفا
+                        منتظر بمانید</p>
                 </div>
             </div>
         </div>
@@ -251,8 +255,7 @@
                         }, 10000);
                     }
                 },
-                error: function()
-                {
+                error: function() {
                     $("#waitText").attr('hidden', 'hidden');
                 }
             });

@@ -4,6 +4,8 @@ namespace App\DTOs;
 
 use App\Domains\Repositories\ReportRawData;
 use App\Models\Alarms;
+use App\Models\LogActionTypes;
+use App\Models\Logs;
 use App\Models\Majors;
 use App\Models\Messages;
 use App\Models\Oreintations;
@@ -684,6 +686,30 @@ class DataMapper
             $result->ParameterValue = $reportparameter->ParameterValue;
             $result->IsDeleted = $reportparameter->IsDeleted;
             $result->Type = $reportparameter->Type;
+            return $result;
+        }
+        catch (\Exception)
+        {
+            return null;
+        }
+    }
+    public static function MapToLogDTO(Logs $log)
+    {
+        try
+        {
+            $result = new LogDTO();
+            $result->NidLog = $log->NidLog;
+            $result->UserId = $log->UserId;
+            $result->Username = $log->Username;
+            $result->LogDate = $log->LogDate;
+            $result->IP = $log->IP;
+            $result->LogTime = $log->LogTime;
+            $result->ActionId = $log->ActionId;
+            $result->ActionName = LogActionTypes::all()->where('NidAction','=',$log->ActionId)->firstOrFail()->Title;
+            $result->Description = $log->Description;
+            $result->LogStatus = $log->LogStatus;
+            $result->ImportanceLevel = $log->ImportanceLevel;
+            $result->ConfidentialLevel = $log->ConfidentialLevel;
             return $result;
         }
         catch (\Exception)

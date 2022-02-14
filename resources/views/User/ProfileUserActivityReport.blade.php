@@ -20,7 +20,9 @@
                                             <th>تاریخ</th>
                                             <th>زمان</th>
                                             <th>نام کاربری</th>
+                                            <th>نوع فعالیت</th>
                                             <th>توضیحات</th>
+                                            <th>ای پی</th>
                                             <th>درجه اهمیت</th>
                                         </tr>
                                     </thead>
@@ -30,7 +32,9 @@
                                                 <td>{{ $lg->LogDate ?? '' }}</td>
                                                 <td>{{ $lg->LogTime ?? '' }}</td>
                                                 <td>{{ $lg->Username ?? '' }}</td>
+                                                <td>{{ $lg->ActionName ?? '' }}</td>
                                                 <td>{{ $lg->Description ?? '' }}</td>
+                                                <td>{{ $lg->IP ?? '' }}</td>
                                                 <td>{{ $lg->ImportanceLevel ?? '' }}</td>
                                             </tr>
                                         @endforeach

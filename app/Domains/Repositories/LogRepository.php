@@ -3,6 +3,7 @@
 namespace App\Domains\Repositories;
 
 use App\Domains\Interfaces\ILogRepository;
+use App\DTOs\DataMapper;
 use App\Models\LogActionTypes;
 use App\Models\Logs;
 use App\Models\User;
@@ -21,29 +22,40 @@ class LogRepository implements ILogRepository{
     }
     public function UserLogReport(string $FromDate,string $ToDate,int $LogActionId,string $UserName = "")
     {
+        $result = new Collection();
         if($LogActionId == 0)
         {
             if(empty($UserName))
             {
-                return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate]);
+                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate]);
             }else
             {
-                return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('Username','=',$UserName);
+                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('Username','=',$UserName);
             }
         }else
         {
             if(empty($UserName))
             {
-                return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId);
+                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId);
             }else
             {
-                return Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId)->where('Username','=',$UserName);
+                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId)->where('Username','=',$UserName);
             }
         }
+        $resultDto = new Collection();
+        foreach ($result as $lg) {
+            $resultDto->push(DataMapper::MapToLogDTO($lg));
+        }
+        return $resultDto;
     }
     public function CurrentUserLogReport(string $NidUser)
     {
-        return Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(500);
+        $result = Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(500);
+        $resultDto = new Collection();
+        foreach ($result as $lg) {
+            $resultDto->push(DataMapper::MapToLogDTO($lg));
+        }
+        return $resultDto;
     }
     public function CurrentUserLoginReport(string $NidUser)
     {

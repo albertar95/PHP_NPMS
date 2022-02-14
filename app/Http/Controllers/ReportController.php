@@ -204,7 +204,7 @@ class ReportController extends Controller
     {
         $api = new NPMSController();
         $LogActionTypes = $api->GetLogActionTypes();
-        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارش عمکلرد کاربران");
+        $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"گزارش عملکرد کاربران");
         return view('Report.UserLogReport',compact('LogActionTypes'));
     }
     public function PersianDateToGeorgian(string $Datee)
