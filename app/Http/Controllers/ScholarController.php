@@ -108,7 +108,7 @@ class ScholarController extends Controller
         if ($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
         {
             $api = new NPMSController();
-            $Scholar = $api->GetAllScholarLists(0);
+            $Scholar = $api->GetAllScholarLists(200);
             $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت محققان");
             return view('Scholar.Scholars',compact('Scholar'));
         }else

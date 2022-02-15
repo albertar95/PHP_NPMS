@@ -17,18 +17,18 @@ class Projects extends Model
     // protected $hidden = [];
     public function scholar()
     {
-        return $this->belongsTo(Scholars::class);
+        return $this->belongsTo(Scholars::class,'ScholarId','NidScholar');
     }
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'UserId','NidUser');
     }
     public function unit()
     {
-        return $this->belongsTo(Units::class);
+        return $this->belongsTo(Units::class,'UnitId','NidUnit');
     }
     public function unitGroup()
     {
-        return $this->belongsTo(UnitGroups::class);
+        return $this->belongsTo(UnitGroups::class,'GroupId','NidGroup');
     }
 }

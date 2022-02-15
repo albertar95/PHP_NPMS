@@ -26,45 +26,41 @@ use Brick\Math\BigInteger;
 use DateTime;
 use Hekmatinasser\Verta\Facades\Verta;
 use Hekmatinasser\Verta\Verta as VertaVerta;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Guid\Guid;
+use stdClass;
 
 class DataMapper
 {
     public static function MapToMajorDTO(Majors $major)
     {
-        try
-        {
+        try {
             $result = new majorDTO();
             $result->NidMajor = $major->NidMajor;
             $result->Title = $major->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToOreintationDTO(Oreintations $oreintation)
     {
-        try
-        {
+        try {
             $result = new OrientationDTO();
             $result->NidOreintation = $oreintation->NidOreintation;
             $result->MajorId = $oreintation->MajorId;
             $result->Title = $oreintation->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToProjectDTO(Projects $project)
     {
-        try
-        {
+        try {
             $result = new projectDTO();
             $result->NidProject = $project->NidProject;
             $result->ProjectNumber = BigInteger::of($project->ProjectNumber);
@@ -100,36 +96,33 @@ class DataMapper
             $result->IsConfident = boolval($project->IsConfident) ?? false;
             $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToProjectDetailDTO(Projects $project)
     {
-        try
-        {
+        try {
             $result = new projectDetailDTO();
             $result->NidProject = $project->NidProject;
             $result->ProjectNumber = BigInteger::of($project->ProjectNumber);
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
-            if(Scholars::all()->where('NidScholar','=',$project->ScholarId)->count() > 0)
-            $result->ScholarTitle = Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->FirstName.' '.Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->LastName;
+            if (Scholars::all()->where('NidScholar', '=', $project->ScholarId)->count() > 0)
+                $result->ScholarTitle = Scholars::all()->where('NidScholar', '=', $project->ScholarId)->firstOrFail()->FirstName . ' ' . Scholars::all()->where('NidScholar', '=', $project->ScholarId)->firstOrFail()->LastName;
             else
-            $result->ScholarTitle = "";
+                $result->ScholarTitle = "";
             $result->UnitId = $project->UnitId;
-            if(Units::all()->where('NidUnit','=',$project->UnitId)->count() > 0)
-            $result->UnitTitle = Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title;
+            if (Units::all()->where('NidUnit', '=', $project->UnitId)->count() > 0)
+                $result->UnitTitle = Units::all()->where('NidUnit', '=', $project->UnitId)->firstOrFail()->Title;
             else
-            $result->UnitTitle = "";//check
+                $result->UnitTitle = ""; //check
             $result->GroupId = $project->GroupId;
-            if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->count() > 0)
-            $result->GroupTitle = UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title;
+            if (UnitGroups::all()->where('NidGroup', '=', $project->GroupId)->count() > 0)
+                $result->GroupTitle = UnitGroups::all()->where('NidGroup', '=', $project->GroupId)->firstOrFail()->Title;
             else
-            $result->GroupTitle = "";//check
+                $result->GroupTitle = ""; //check
             $result->Supervisor = $project->Supervisor ?? "";
             $result->SupervisorMobile = $project->SupervisorMobile ?? "";
             $result->Advisor = $project->Advisor ?? "";
@@ -149,21 +142,51 @@ class DataMapper
             $result->Commision = $project->Commision ?? "";
             $result->HasBookPublish = boolval($project->HasBookPublish);
             $result->UserId = $project->UserId;
-            if(User::all()->where('NidUser','=',$project->UserId)->count() > 0)
-            $result->UserTitle = User::all()->where('NidUser','=',$project->UserId)->firstOrFail()->UserName;
+            if (User::all()->where('NidUser', '=', $project->UserId)->count() > 0)
+                $result->UserTitle = User::all()->where('NidUser', '=', $project->UserId)->firstOrFail()->UserName;
             else
-            $result->UserTitle = "";//check
+                $result->UserTitle = ""; //check
             $result->TitleApproved = boolval($project->TitleApproved);
             $result->ThirtyPercentLetterDate = $project->ThirtyPercentLetterDate ?? "";
             $result->SixtyPercentLetterDate = $project->SixtyPercentLetterDate ?? "";
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
-            $result->FinalApprove = boolval($project->FinalApprove)?? false;
+            $result->FinalApprove = boolval($project->FinalApprove) ?? false;
             $result->IsConfident = boolval($project->IsConfident) ?? false;
             $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
+        } catch (\Exception) {
+            return null;
         }
-        catch (\Exception)
-        {
+    }
+    public static function MapToProjectInitialDTO2(Collection $projects)
+    {
+        try {
+            $res = new Collection();
+            foreach ($projects as $project) {
+                $result = new projectInitialDTO();
+                $result->NidProject = $project->NidProject;
+                $result->ProjectNumber = BigInteger::of($project->ProjectNumber);
+                $result->Subject = $project->Subject;
+                $result->ProjectStatus = $project->ProjectStatus;
+                $result->ScholarId = $project->ScholarId;
+                $result->ScholarName = $project->scholar->FirstName;
+                $result->UnitId = $project->UnitId;
+                $result->UnitName = $project->unit->Title;
+                $result->GroupId = $project->GroupId;
+                $result->GroupName = $project->unitGroup->Title;
+                $result->Supervisor = $project->Supervisor ?? "";
+                $result->SupervisorMobile = $project->SupervisorMobile ?? "";
+                $result->Advisor = $project->Advisor ?? "";
+                $result->AdvisorMobile = $project->AdvisorMobile ?? "";
+                $result->CreateDate = new DateTime($project->CreateDate);
+                $result->PersianCreateDate = $project->PersianCreateDate;
+                $result->UserId = $project->UserId;
+                $result->ATFLetterDate = $project->ATFLetterDate ?? "";
+                $result->IsDisabled = boolval($project->IsDisabled) ?? false;
+                $res->push($result);
+            }
+            return $res;
+        } catch (\Exception) {
             return null;
         }
     }
@@ -209,19 +232,18 @@ class DataMapper
     }
     public static function MapToProjectInitialDTOFromRequest(Request $project)
     {
-        try
-        {
+        try {
             $result = new projectInitialDTO();
             $result->NidProject = $project->NidProject;
             $result->ProjectNumber = $project->ProjectNumber;
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
-            $result->ScholarName = $project->Scholar->Title;//check
+            $result->ScholarName = $project->Scholar->Title; //check
             $result->UnitId = $project->UnitId;
-            $result->UnitName = $project->Unit->Title;//check
+            $result->UnitName = $project->Unit->Title; //check
             $result->GroupId = $project->GroupId;
-            $result->GroupName = $project->unit_group->Title;//check
+            $result->GroupName = $project->unit_group->Title; //check
             $result->Supervisor = $project->Supervisor;
             $result->SupervisorMobile = $project->SupervisorMobile;
             $result->Advisor = $project->Advisor;
@@ -232,27 +254,24 @@ class DataMapper
             $result->ATFLetterDate = $project->ATFLetterDate;
             $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToProjectFromProjectInitialDTO(ProjectInitialDTO $projectInitial)
     {
-        try
-        {
+        try {
             $result = new Projects();
             $result->NidProject = $projectInitial->NidProject;
             $result->ProjectNumber = $projectInitial->ProjectNumber;
             $result->Subject = $projectInitial->Subject;
             $result->ProjectStatus = $projectInitial->ProjectStatus;
             $result->ScholarId = $projectInitial->ScholarId;
-            $result->ScholarName = $projectInitial->Scholar->Title;//check
+            $result->ScholarName = $projectInitial->Scholar->Title; //check
             $result->UnitId = $projectInitial->UnitId;
-            $result->UnitName = $projectInitial->Unit->Title;//check
+            $result->UnitName = $projectInitial->Unit->Title; //check
             $result->GroupId = $projectInitial->GroupId;
-            $result->GroupName = $projectInitial->unit_group->Title;//check
+            $result->GroupName = $projectInitial->unit_group->Title; //check
             $result->Supervisor = $projectInitial->Supervisor;
             $result->SupervisorMobile = $projectInitial->SupervisorMobile;
             $result->Advisor = $projectInitial->Advisor;
@@ -263,16 +282,13 @@ class DataMapper
             $result->ATFLetterDate = $projectInitial->ATFLetterDate;
             $result->IsDisabled = boolval($projectInitial->IsDisabled) ?? false;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToScholarDTO(Scholars $scholar)
     {
-        try
-        {
+        try {
             $result = new scholarDTO();
             $result->NidScholar = $scholar->NidScholar;
             $result->FirstName = $scholar->FirstName;
@@ -294,9 +310,7 @@ class DataMapper
             $result->DeleteUser = $scholar->DeleteUser;
             $result->IsConfident = boolval($scholar->IsConfident);
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -310,7 +324,7 @@ class DataMapper
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
             if(Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->count() > 0)
-            $result->Grade = Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;//$scholar->GradeId ?? "";
+            $result->Grade = Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;
             else
             $result->Grade = "";
             if(Majors::all()->where('NidMajor','=',$scholar->MajorId)->count() > 0)
@@ -321,7 +335,10 @@ class DataMapper
             $result->OreintationName = Oreintations::all()->where('NidOrientation','=',$scholar->OrientationId)->firstOrFail()->Title;//check
             else
             $result->OreintationName = "";
-            $result->collegeName = $scholar->college;
+            if(Settings::all()->where('SettingKey','=','College')->where('SettingValue','=',$scholar->college)->count() > 0)
+            $result->collegeName = Settings::all()->where('SettingKey','=','College')->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
+            else
+            $result->collegeName = "";
             return $result;
         }
         catch (\Exception)
@@ -329,10 +346,43 @@ class DataMapper
             return null;
         }
     }
+    public static function MapToScholarListDTO2(Collection $scholars)
+    {
+        try {
+            $res = new Collection();
+            if ($scholars->count() > 0) {
+                $grades = Settings::all()->where('SettingKey', '=', 'GradeId');
+                $colleges = Settings::all()->where('SettingKey', '=', 'College');
+                foreach ($scholars as $scholar) {
+                    $result = new scholarListDTO();
+                    $result->NidScholar = $scholar->NidScholar;
+                    $result->FirstName = $scholar->FirstName;
+                    $result->LastName = $scholar->LastName;
+                    $result->NationalCode = $scholar->NationalCode;
+                    if ($grades->where('SettingValue', '=', $scholar->GradeId)->count() > 0)
+                        $result->Grade = $grades->where('SettingValue', '=', $scholar->GradeId)->firstOrFail()->SettingTitle; //$scholar->GradeId ?? "";
+                    else
+                        $result->Grade = "";
+                    $result->MajorName = $scholar->major->Title;
+                    if (Oreintations::all()->where('NidOrientation', '=', $scholar->OrientationId)->count() > 0)
+                        $result->OreintationName = Oreintations::all()->where('NidOrientation', '=', $scholar->OrientationId)->firstOrFail()->Title; //check
+                    else
+                        $result->OreintationName = $scholar->orientation->Title;;
+                    if ($colleges->where('SettingValue', '=', $scholar->college)->count() > 0)
+                        $result->collegeName = $colleges->where('SettingValue', '=', $scholar->college)->firstOrFail()->SettingTitle; //$scholar->GradeId ?? "";
+                    else
+                        $result->collegeName = "";
+                    $res->push($result);
+                }
+            }
+            return $res;
+        } catch (\Exception) {
+            return null;
+        }
+    }
     public static function MapToScholarDetailDTO(Scholars $scholar)
     {
-        try
-        {
+        try {
             $result = new scholarDetailDTO();
             $result->NidScholar = $scholar->NidScholar;
             $result->FirstName = $scholar->FirstName ?? "";
@@ -342,47 +392,39 @@ class DataMapper
             $result->FatherName = $scholar->FatherName;
             $result->Mobile = $scholar->Mobile;
             $result->MillitaryStatusTitle = $scholar->MillitaryStatus;
-            $result->GradeTitle = $scholar->GradeId;//check
-            $result->Major = new majorDTO();//check
-            $result->Oreintation = new OrientationDTO();//check
+            $result->GradeTitle = $scholar->GradeId; //check
+            $result->Major = new majorDTO(); //check
+            $result->Oreintation = new OrientationDTO(); //check
             $result->CollegeTitle = $scholar->college;
             $result->CollaborationTypeTitle = $scholar->CollaborationType;
             $result->ProfilePicture = $scholar->ProfilePicture ?? "";
             $result->IsConfident = boolval($scholar->IsConfident) ?? false;
-            $result->Projects = new Collection();//check
+            $result->Projects = new Collection(); //check
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUnitDTO(Units $unit)
     {
-        try
-        {
+        try {
             $result = new unitDTO();
             $result->NidUnit = $unit->NidUnit;
             $result->Title = $unit->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUnitGroupDTO(UnitGroups $unitgroup)
     {
-        try
-        {
+        try {
             $result = new unitGroupDTO();
             $result->NidGroup = $unitgroup->NidGroup;
             $result->UnitId = $unitgroup->UnitId;
             $result->Title = $unitgroup->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -400,14 +442,11 @@ class DataMapper
         $result->IsLockedOut = boolval($user->IsLockedOut);
         $result->IsDisabled = boolval($user->IsDisabled);
         $result->ProfilePicture = $user->ProfilePicture;
-        $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
+        $result->RoleTitle = Roles::all()->where('NidRole', '=', $user->RoleId)->firstOrFail()->Title;
         $result->RoleId = $user->RoleId;
         return $result;
-        try
-        {
-        }
-        catch (\Exception)
-        {
+        try {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -418,20 +457,16 @@ class DataMapper
         $result->Username = $user->UserName;
         $result->FirstName = $user->FirstName;
         $result->LastName = $user->LastName;
-        $result->RoleTitle = Roles::all()->where('NidRole','=',$user->RoleId)->firstOrFail()->Title;
+        $result->RoleTitle = Roles::all()->where('NidRole', '=', $user->RoleId)->firstOrFail()->Title;
         return $result;
-        try
-        {
-        }
-        catch (\Exception)
-        {
+        try {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToResourceDTO(Resources $resource)
     {
-        try
-        {
+        try {
             $result = new resourceDTO();
             $result->NidResource = $resource->NidResource;
             $result->ResourceName = $resource->ResourceName;
@@ -439,16 +474,13 @@ class DataMapper
             $result->ClassLevel = $resource->ClassLevel;
             $result->SortNumber = $resource->SortNumber;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUserPermissionDTO(UserPermissions $userpermission)
     {
-        try
-        {
+        try {
             $result = new userPermissionDTO();
             $result->NidPermission = $userpermission->NidPermission;
             $result->UserId = $userpermission->UserId;
@@ -462,16 +494,13 @@ class DataMapper
             $result->List = boolval($userpermission->List);
             $result->Print = boolval($userpermission->Print);
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToRolePermissionDTO(RolePermissions $rolepermission)
     {
-        try
-        {
+        try {
             $result = new RolePermissionDTO();
             $result->NidPermission = $rolepermission->NidPermission;
             $result->RoleId = $rolepermission->RoleId;
@@ -483,18 +512,15 @@ class DataMapper
             $result->Confident = boolval($rolepermission->Confident);
             $result->List = boolval($rolepermission->List);
             $result->Print = boolval($rolepermission->Print);
-            $result->RoleTitle = Roles::all()->where('NidRole','=',$rolepermission->RoleId)->firstOrFail()->Title;
+            $result->RoleTitle = Roles::all()->where('NidRole', '=', $rolepermission->RoleId)->firstOrFail()->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToMessageDTO(Messages $message)
     {
-        try
-        {
+        try {
             $result = new messageDTO();
             $result->NidMessage = $message->NidMessage;
             $result->SenderId = $message->SenderId;
@@ -505,44 +531,38 @@ class DataMapper
             $result->IsRead = $message->IsRead;
             $result->IsRecieved = $message->IsRecieved;
             $result->IsDeleted = $message->IsDeleted;
-            $tmpSender = User::all()->where('NidUser','=',$message->SenderId)->firstOrFail();
+            $tmpSender = User::all()->where('NidUser', '=', $message->SenderId)->firstOrFail();
             $result->SenderUsername = $tmpSender->UserName ?? "";
-            $result->SenderName = $tmpSender->FirstName.' '.$tmpSender->LastName ?? "";
-            $tmpReciever = User::all()->where('NidUser','=',$message->RecieverId)->firstOrFail();
+            $result->SenderName = $tmpSender->FirstName . ' ' . $tmpSender->LastName ?? "";
+            $tmpReciever = User::all()->where('NidUser', '=', $message->RecieverId)->firstOrFail();
             $result->RecieverUsername = $tmpReciever->UserName ?? "";
-            $result->RecieverName = $tmpReciever->FirstName.' '.$tmpReciever->LastName ?? "";
+            $result->RecieverName = $tmpReciever->FirstName . ' ' . $tmpReciever->LastName ?? "";
             $result->CreateDate = $message->CreateDate;
             $result->PersianCreateDate = verta($message->CreateDate);
             $result->ReadDate = $message->ReadDate ?? "";
             $result->DeleteDate = $message->DeleteDate ?? "";
             $result->UserProfile = $tmpSender->ProfilePicture ?? "";
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToReportDTO(Reports $report)
     {
-        try
-        {
+        try {
             $result = new reportDTO();
             $result->NidReport = $report->NidReport;
             $result->ReportName = $report->ReportName;
             $result->ContextId = $report->ContextId;
             $result->FieldId = $report->FieldId;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToReportParameterDTO(ReportParameters $reportParameter)
     {
-        try
-        {
+        try {
             $result = new reportParameterDTO();
             $result->NidParameter = $reportParameter->NidParameter;
             $result->ReportId = $reportParameter->ReportId;
@@ -551,16 +571,13 @@ class DataMapper
             $result->IsDeleted = boolval($reportParameter->IsDeleted);
             $result->Type = $reportParameter->Type;
             return $result;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return null;
         }
     }
     public static function MapToAlarm(Request $alarm)
     {
-        try
-        {
+        try {
             $result = new Alarms();
             $result->NidAlarm = $alarm->NidAlarm;
             $result->NidMaster = $alarm->NidMaster;
@@ -568,30 +585,24 @@ class DataMapper
             $result->AlarmStatus = $alarm->AlarmStatus;
             $result->Description = $alarm->Description;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToMajor(Request $major)
     {
-        try
-        {
+        try {
             $result = new Majors();
             $result->NidMajor = $major->NidMajor;
             $result->Title = $major->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToMessage(Request $message)
     {
-        try
-        {
+        try {
             $result = new Messages();
             $result->NidMessage = $message->NidMessage;
             $result->SenderId = $message->SenderId;
@@ -606,31 +617,25 @@ class DataMapper
             $result->ReadDate = $message->ReadDate;
             $result->DeleteDate = $message->DeleteDate;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToOreintation(Request $Oreintation)
     {
-        try
-        {
+        try {
             $result = new Oreintations();
             $result->NidOreintation = $Oreintation->NidOreintation;
             $result->MajorId = $Oreintation->MajorId;
             $result->Title = $Oreintation->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToProject(Request $project)
     {
-        try
-        {
+        try {
             $result = new Projects();
             $result->NidProject = $project->NidProject;
             $result->ProjectNumber = $project->ProjectNumber;
@@ -654,10 +659,10 @@ class DataMapper
             $result->SecurityLetterDate = $project->SecurityLetterDate;
             $result->ThesisDefenceDate = $project->ThesisDefenceDate;
             $result->ThesisDefenceLetterDate = $project->ThesisDefenceLetterDate;
-            if(!empty($project->ReducePeriod))
-            $result->ReducePeriod = $project->ReducePeriod;
+            if (!empty($project->ReducePeriod))
+                $result->ReducePeriod = $project->ReducePeriod;
             else
-            $result->ReducePeriod = 0;
+                $result->ReducePeriod = 0;
             $result->Commision = $project->Commision;
             $result->HasBookPublish = boolval($project->HasBookPublish);
             $result->UserId = $project->UserId;
@@ -669,16 +674,13 @@ class DataMapper
             $result->IsConfident = boolval($project->IsConfident);
             $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToReportParameter(ReportParameters $reportparameter)
     {
-        try
-        {
+        try {
             $result = new ReportParameters();
             $result->NidParameter = $reportparameter->NidParameter;
             $result->ReportId = $reportparameter->ReportId;
@@ -687,16 +689,13 @@ class DataMapper
             $result->IsDeleted = $reportparameter->IsDeleted;
             $result->Type = $reportparameter->Type;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToLogDTO(Logs $log)
     {
-        try
-        {
+        try {
             $result = new LogDTO();
             $result->NidLog = $log->NidLog;
             $result->UserId = $log->UserId;
@@ -705,52 +704,43 @@ class DataMapper
             $result->IP = $log->IP;
             $result->LogTime = $log->LogTime;
             $result->ActionId = $log->ActionId;
-            $result->ActionName = LogActionTypes::all()->where('NidAction','=',$log->ActionId)->firstOrFail()->Title;
+            $result->ActionName = LogActionTypes::all()->where('NidAction', '=', $log->ActionId)->firstOrFail()->Title;
             $result->Description = $log->Description;
             $result->LogStatus = $log->LogStatus;
             $result->ImportanceLevel = $log->ImportanceLevel;
             $result->ConfidentialLevel = $log->ConfidentialLevel;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToReport(Request $report)
     {
-        try
-        {
+        try {
             $result = new Reports();
             $result->NidReport = $report->NidReport;
             $result->ReportName = $report->ReportName;
             $result->ContextId = $report->ContextId;
             $result->FieldId = $report->FieldId;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToReportRawData(Request $rawdata)
     {
-        try
-        {
+        try {
             $result = new ReportRawData();
             $result->NidReport = $rawdata->NidReport;
             $result->paramsKey = $rawdata->paramsKey;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToResource(Request $resource)
     {
-        try
-        {
+        try {
             $result = new Resources();
             $result->NidResource = $resource->NidResource;
             $result->ResourceName = $resource->ResourceName;
@@ -758,16 +748,13 @@ class DataMapper
             $result->ClassLevel = $resource->ClassLevel;
             $result->SortNumber = $resource->SortNumber;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToScholar(Request $scholar)
     {
-        try
-        {
+        try {
             $result = new Scholars();
             $result->NidScholar = $scholar->NidScholar;
             $result->FirstName = $scholar->FirstName;
@@ -787,21 +774,18 @@ class DataMapper
             $result->IsDeleted = $scholar->IsDeleted;
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
-            if($scholar->IsConfident)
-            $result->IsConfident = 1;
+            if ($scholar->IsConfident)
+                $result->IsConfident = 1;
             else
-            $result->IsConfident = 0;
+                $result->IsConfident = 0;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToScholarFromArray(array $scholar)
     {
-        try
-        {
+        try {
             $result = new Scholars();
             $result->NidScholar = $scholar[0];
             $result->FirstName = $scholar[1];
@@ -823,16 +807,13 @@ class DataMapper
             $result->DeleteUser = $scholar[17];
             $result->IsConfident = $scholar[18];
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToSetting(Request $setting)
     {
-        try
-        {
+        try {
             $result = new Settings();
             $result->NidSetting = $setting->NidSetting;
             $result->SettingKey = $setting->SettingKey;
@@ -840,60 +821,48 @@ class DataMapper
             $result->SettingTitle = $setting->SettingTitle;
             $result->IsDeleted = boolval($setting->IsDeleted);
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUnitGroup(Request $unitGroup)
     {
-        try
-        {
+        try {
             $result = new UnitGroups();
             $result->NidGroup = $unitGroup->NidGroup;
             $result->UnitId = $unitGroup->UnitId;
             $result->Title = $unitGroup->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUnit(Request $unit)
     {
-        try
-        {
+        try {
             $result = new Units();
             $result->NidUnit = $unit->NidUnit;
             $result->Title = $unit->Title;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUserPermission(Request $userpermission)
     {
-        try
-        {
+        try {
             $result = new UserPermissions();
             $result->NidPermission = $userpermission->NidPermission;
             $result->UserId = $userpermission->UserId;
             $result->ResourceId = $userpermission->ResourceId;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
     public static function MapToUser(Request $user)
     {
-        try
-        {
+        try {
             $result = new User();
             $result->NidUser = $user->NidUser;
             $result->UserName = $user->UserName;
@@ -912,11 +881,8 @@ class DataMapper
             $result->last_seen = $user->last_seen;
             $result->Force_logout = $user->Force_logout;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
-
 }

@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 
 interface IProjectRepository
 {
-    public function GetProjectInitials(int $pagesize = 100):Collection;
+    public function GetProjectInitials(int $pagesize = 100,int $skip = 0);
     public function AddProjectInitial(projectInitialDTO $projectInitial):bool;
     public function ProjectProgress(Projects $project) :bool;
     public function GetProjectDTOById(string $NidProject):projectDTO;

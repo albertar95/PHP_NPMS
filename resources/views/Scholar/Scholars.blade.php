@@ -33,10 +33,11 @@
                     @endif
                 </div>
             </div>
-            <div class="table-responsive" dir="ltr">
+            <div class="table-responsive" dir="ltr" id="TableContainer">
+                <input type="number" value="1" id="LoadCount" hidden>
                 @if (in_array('1', $sharedData['UserAccessedEntities']))
                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
-                        <table class="table table-bordered" id="dataTable"
+                        <table class="table table-bordered" id="dataTable1"
                             style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                             <thead>
                                 <tr>
@@ -118,6 +119,7 @@
                     @endif
                 @endif
             </div>
+            <a rel="nofollow" href="#" id="btnMorePage" style="font-size: 17px;text-align: right;">&plus; نمایش محقق های بیشتر</a>
         </div>
     </div>
     <div class="modal" id="ScholarModal" tabindex="-1" role="dialog" aria-labelledby="ScholarModalLabel"
@@ -161,30 +163,24 @@
     <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-            // var successedit = '@TempData["EditScholarSuccessMessage"]';
-            // var erroredit = '@TempData["EditScholarErrorMessage"]';
-            // var successdelete = '@TempData["DeleteScholarSuccessMessage"]';
-            if (successedit != '') {
-                $("#SuccessMessage").text(successedit);
-                $("#successAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#successAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
-            if (erroredit != '') {
-                $("#ErrorMessage").text(erroredit);
-                $("#errorAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#errorAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
-            if (successdelete != '') {
-                $("#SuccessMessage").text(successdelete);
-                $("#successAlert").removeAttr('hidden')
-                window.setTimeout(function() {
-                    $("#successAlert").attr('hidden', 'hidden');
-                }, 10000);
-            }
+            $('#dataTable1').dataTable();
+            $("#btnMorePage").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/pagination/2/' + $("#LoadCount").val(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue == true) {
+                            $("#TableContainer").html(result.Html);
+                            $('#dataTable1').dataTable();
+                        } else {
+                            $("#btnMorePage").attr('hidden', 'hidden');
+                        }
+                    },
+                    error: function() {}
+                });
+            });
         });
 
         function ShowModal(typo, NidScholar) {

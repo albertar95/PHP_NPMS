@@ -26,6 +26,7 @@ use Symfony\Component\Mime\MessageConverter;
 //     return view('General.Index');
 // })->middleware('auth')->name('index');
 Route::get("/",[UserController::class,"Index"])->name('index');
+Route::get("pagination/{TypeId}/{LoadCount}",[ProjectController::class,"Pagination"])->name('project.Pagination');
 
 
 //alarm routes

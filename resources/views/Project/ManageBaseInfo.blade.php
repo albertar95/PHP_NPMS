@@ -10,9 +10,9 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">مدیریت اطلاعات پایه</h1>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;overflow:scroll;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseUnitItems" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                            <a href="#collapseUnitItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
                                 role="button" aria-expanded="false" aria-controls="collapseUnitItems">
                                 <h6 class="m-0 font-weight-bold text-primary">یگان تخصصی</h6>
                             </a>
@@ -56,7 +56,8 @@
                                     @endif
                                 @endif
                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                    <table class="table table-bordered" id="UnitTableWrapper"
+                                <div class="table-responsive" dir="ltr" id="UnitTableWrapper">
+                                    <table class="table table-bordered" id="UnitdataTable"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -95,12 +96,13 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                </div>
                                 @endif
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseUnitGroupsItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseUnitGroupsItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseUnitGroupsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">گروه تخصصی</h6>
@@ -203,9 +205,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseGradesItems" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                            <a href="#collapseGradesItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
                                 role="button" aria-expanded="false" aria-controls="collapseGradesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">مقطع تحصیلی</h6>
                             </a>
@@ -303,9 +305,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseMajorsItems" class="d-block card-header py-3 collapsed" data-toggle="collapse"
+                            <a href="#collapseMajorsItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
                                 role="button" aria-expanded="false" aria-controls="collapseMajorsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">رشته تحصیلی</h6>
                             </a>
@@ -395,9 +397,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseOreintationsItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseOreintationsItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseOreintationsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">گرایش</h6>
@@ -504,9 +506,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseCollegesItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseCollegesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseCollegesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">محل تحصیل</h6>
@@ -605,9 +607,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseMillitaryStatusesItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseMillitaryStatusesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseMillitaryStatusesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">وضعیت خدمتی</h6>
@@ -706,9 +708,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseCollaborationTypesItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseCollaborationTypesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseCollaborationTypesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">نوع همکاری</h6>
@@ -848,11 +850,23 @@
     </div>
 @section('styles')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <title>سامانه مدیریت تحقیقات - مدیریت اطلاعات پایه</title>
 @endsection
 @section('scripts')
+<script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+            $("#UnitdataTable").dataTable();
+            $("#UnitGroupdataTable").dataTable();
+            $("#GradedataTable").dataTable();
+            $("#MajordataTable").dataTable();
+            $("#OreintationdataTable").dataTable();
+            $("#CollegedataTable").dataTable();
+            $("#MillitdataTable").dataTable();
+            $("#CollabdataTable").dataTable();
             $('#UnitGroupsUnitId').selectize({
                 sortField: 'value'
             });
@@ -879,6 +893,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#UnitTableWrapper").html(result.Html);
+                            $("#UnitdataTable").dataTable();
                             $("#UnitsForm").each(function() {
                                 this.reset();
                             });
@@ -940,6 +955,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#UnitGroupTableWrapper").html(result.Html);
+                            $("#UnitGroupdataTable").dataTable();
                             $("#UnitGroupsForm").each(function() {
                                 this.reset();
                             });
@@ -996,6 +1012,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#GradeTableWrapper").html(result.Html);
+                            $("#GradedataTable").dataTable();
                             $("#GradesForm").each(function() {
                                 this.reset();
                             });
@@ -1044,6 +1061,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#MajorTableWrapper").html(result.Html);
+                            $("#MajordataTable").dataTable();
                             $("#MajorsForm").each(function() {
                                 this.reset();
                             });
@@ -1105,6 +1123,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#OreintationTableWrapper").html(result.Html);
+                            $("#OreintationdataTable").dataTable();
                             $("#OreintationsForm").each(function() {
                                 this.reset();
                             });
@@ -1162,6 +1181,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#CollegeTableWrapper").html(result.Html);
+                            $("#CollegedataTable").dataTable();
                             $("#CollegesForm").each(function() {
                                 this.reset();
                             });
@@ -1213,6 +1233,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#MillitTableWrapper").html(result.Html);
+                            $("#MillitdataTable").dataTable();
                             $("#MillitsForm").each(function() {
                                 this.reset();
                             });
@@ -1264,6 +1285,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#CollabTableWrapper").html(result.Html);
+                            $("#CollabdataTable").dataTable();
                             $("#CollabsForm").each(function() {
                                 this.reset();
                             });
@@ -1398,6 +1420,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#UnitTableWrapper").html(result.Html);
+                                $("#UnitdataTable").dataTable();
                                 $("#UnitSuccessMessage").text(result.Message);
                                 $("#UnitSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1433,6 +1456,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#UnitGroupTableWrapper").html(result.Html);
+                                $("#UnitGroupdataTable").dataTable();
                                 $("#UnitGroupSuccessMessage").text(result.Message);
                                 $("#UnitGroupSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1463,6 +1487,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#GradeTableWrapper").html(result.Html);
+                                $("#GradedataTable").dataTable();
                                 $("#GradeSuccessMessage").text(result.Message);
                                 $("#GradeSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1493,6 +1518,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#MajorTableWrapper").html(result.Html);
+                                $("#MajordataTable").dataTable();
                                 $("#MajorSuccessMessage").text(result.Message);
                                 $("#MajorSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1528,6 +1554,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#OreintationTableWrapper").html(result.Html);
+                                $("#OreintationdataTable").dataTable();
                                 $("#OreintationSuccessMessage").text(result.Message);
                                 $("#OreintationSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1558,6 +1585,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#CollegeTableWrapper").html(result.Html);
+                                $("#CollegedataTable").dataTable();
                                 $("#CollegeSuccessMessage").text(result.Message);
                                 $("#CollegeSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1588,6 +1616,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#MillitTableWrapper").html(result.Html);
+                                $("#MillitdataTable").dataTable();
                                 $("#MillitSuccessMessage").text(result.Message);
                                 $("#MillitSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {
@@ -1618,6 +1647,7 @@
                         success: function(result) {
                             if (result.HasValue) {
                                 $("#CollabTableWrapper").html(result.Html);
+                                $("#CollabdataTable").dataTable();
                                 $("#CollabSuccessMessage").text(result.Message);
                                 $("#CollabSuccessAlert").removeAttr('hidden');
                                 window.setTimeout(function() {

@@ -177,46 +177,15 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }
     public function GetScholarList(int $Pagesize = 10) :Collection
     {
-        $result = new Collection();
         if ($Pagesize != 0)
         {
-            $tmpScholars = Scholars::all()->where('IsDeleted','=',0)->take($Pagesize);
-            foreach ($tmpScholars as $scholar)
-            {
-                $tmpScholarList = DataMapper::MapToScholarListDTO($scholar);
-                try
-                {
-                    $tmpScholarList->Grade = ($this->GetGrades(0, true)->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle)->get();
-                    $tmpScholarList->collegeName = $this->GetColleges(0, true)->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
-                    $tmpScholarList->MajorName = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;
-                    $tmpScholarList->OreintationName = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title;
-                }
-                catch (\Exception)
-                {
-                }
-                $result->push($tmpScholarList);
-            }
+            // $tmpScholars = Scholars::all()->where('IsDeleted','=',0)->take($Pagesize);
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get()->take($Pagesize));
         }
         else
         {
-            $tmpScholars = Scholars::all()->where('IsDeleted','=',0);
-            foreach ($tmpScholars as $scholar)
-            {
-                $tmpScholarList = DataMapper::MapToScholarListDTO($scholar);
-                try
-                {
-                    $tmpScholarList->Grade = $this->GetGrades(0, true)->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;
-                    $tmpScholarList->collegeName = $this->GetColleges(0, true)->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
-                    $tmpScholarList->MajorName = $this->GetMajors(0)->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;
-                    $tmpScholarList->OreintationName = $this->GetOreintations(0)->where('NidOreintation','=',$scholar->OreintationId)->firstOrFail()->Title;
-                }
-                catch (\Exception)
-                {
-                }
-                $result->push($tmpScholarList);
-            }
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get());
         }
-        return $result;
     }
     public function GetScholarDetail(string $ScholarId):scholarDetailDTO
     {
@@ -257,7 +226,7 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     }//tuple<bool,string>
     public function GetScholarListById(string $ScholarId,bool $IsDeleted = false):scholarListDTO
     {
-        return DataMapper::MapToScholarListDTO(Scholars::all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',$IsDeleted)->firstOrFail());
+        return DataMapper::MapToScholarListDTO2(Scholars::all()->where('NidScholar','=',$ScholarId)->where('IsDeleted','=',$IsDeleted))->firstOrFail();
     }
     public function AddScholar(Scholars $Scholar):bool
     {

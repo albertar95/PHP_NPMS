@@ -42,8 +42,8 @@ class MessageController extends Controller
     public function Messages(Request $request,string $NidUser)
     {
         $api = new NPMSController();
-        $Inbox = $api->GetAllUsersMessages($NidUser,true);
-        $SendMessage = $api->GetAllUsersSendMessages($NidUser);
+        $Inbox = $api->GetAllUsersMessages($NidUser,true,200);
+        $SendMessage = $api->GetAllUsersSendMessages($NidUser,200);
         $Recievers = $api->GetAllUserPermissionUsers();
         $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"پیام ها");
         return view('Message.Messages',compact('Inbox','SendMessage','Recievers'));
@@ -52,9 +52,10 @@ class MessageController extends Controller
     {
         $api = new NPMSController();
         $result = new JsonResults();
-        $messages = $api->GetAllUsersSendMessages($NidUser);
+        $txtLoadCount =  1;
+        $messages = $api->GetAllUsersSendMessages($NidUser,200);
         $result->HasValue = true;
-        $result->Html = view('Message._MessageTable',compact('messages'))->render();
+        $result->Html = view('Message._MessageTable',compact('messages','txtLoadCount'))->render();
         return response()->json($result);
     }
     public function SingleMessage(Request $request,string $NidMessage,int $ReadBy)

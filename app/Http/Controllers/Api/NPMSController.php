@@ -746,15 +746,15 @@ class NPMSController extends Controller
         $repo = new MessageRepository(new Messages());
         return $repo->DeleteMessage($NidMessage);
     }
-    public function GetAllUsersMessages(string $NidUser,bool $ShowAll = false)
+    public function GetAllUsersMessages(string $NidUser,bool $ShowAll = false,int $pagesize = 0)
     {
         $repo = new MessageRepository(new Messages());
-        return $repo->GetUsersMessages($NidUser,$ShowAll);
+        return $repo->GetUsersMessages($NidUser,$ShowAll,$pagesize);
     }
-    public function GetAllUsersSendMessages(string $NidUser)
+    public function GetAllUsersSendMessages(string $NidUser,int $pagesize = 100)
     {
         $repo = new MessageRepository(new Messages());
-        return $repo->GetUsersSendMessages($NidUser);
+        return $repo->GetUsersSendMessages($NidUser,$pagesize);
     }
     public function ReadMessage(string $NidMessage)
     {

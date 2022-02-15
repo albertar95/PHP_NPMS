@@ -13,9 +13,9 @@
                     </div>
                     @switch ($Typo)
                         @case (0)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapsePreImploymentItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapsePreImploymentItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapsePreImploymentItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تاریخ روگرفت</h6>
                                 </a>
@@ -52,9 +52,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseSecurityItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseSecurityItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSecurityItems">
                                     <h6 class="m-0 font-weight-bold text-primary">نامه حفاظت</h6>
                                 </a>
@@ -91,9 +91,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseThirtyItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseThirtyItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseThirtyItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تحویل فرم 30 درصد</h6>
                                 </a>
@@ -130,9 +130,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseSixtyItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseSixtyItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSixtyItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تحویل فرم 60 درصد</h6>
                                 </a>
@@ -169,9 +169,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseThesisItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseThesisItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseThesisItems">
                                     <h6 class="m-0 font-weight-bold text-primary">دفاعیه</h6>
                                 </a>
@@ -208,9 +208,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseRefItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseRefItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseRefItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین داور 1 و 2</h6>
                                 </a>
@@ -247,9 +247,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseEditorItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseEditorItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseEditorItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین ویراستار</h6>
                                 </a>
@@ -286,9 +286,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseAdvSupItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseAdvSupItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseAdvSupItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین استاد راهنما و مشاور</h6>
                                 </a>
@@ -327,9 +327,9 @@
                             </div>
                             @break
                         @case (1)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapsePreImploymentItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapsePreImploymentItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapsePreImploymentItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تاریخ روگرفت</h6>
                                 </a>
@@ -368,9 +368,9 @@
                             </div>
                             @break
                         @case (2)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseSecurityItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseSecurityItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSecurityItems">
                                     <h6 class="m-0 font-weight-bold text-primary">نامه حفاظت</h6>
                                 </a>
@@ -409,9 +409,9 @@
                             </div>
                             @break
                         @case (3)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseThirtyItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseThirtyItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseThirtyItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تحویل فرم 30 درصد</h6>
                                 </a>
@@ -450,9 +450,9 @@
                             </div>
                             @break
                         @case (4)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseSixtyItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseSixtyItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSixtyItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تحویل فرم 60 درصد</h6>
                                 </a>
@@ -491,9 +491,9 @@
                             </div>
                             @break
                         @case (5)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseThesisItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseThesisItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseThesisItems">
                                     <h6 class="m-0 font-weight-bold text-primary">دفاعیه</h6>
                                 </a>
@@ -532,9 +532,9 @@
                             </div>
                             @break
                         @case (6)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseRefItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseRefItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseRefItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین داور 1 و 2</h6>
                                 </a>
@@ -573,9 +573,9 @@
                             </div>
                             @break
                         @case (7)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseEditorItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseEditorItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseEditorItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین ویراستار</h6>
                                 </a>
@@ -614,9 +614,9 @@
                             </div>
                             @break
                         @case (8)
-                            <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                            <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
-                                <a href="#collapseAdvSupItems" class="d-block card-header py-3" data-toggle="collapse"
+                                <a href="#collapseAdvSupItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseAdvSupItems">
                                     <h6 class="m-0 font-weight-bold text-primary">تعیین استاد راهنما و مشاور</h6>
                                 </a>
@@ -663,4 +663,23 @@
 @endsection
 @section('styles')
 <title>سامانه مدیریت تحقیقات - اعلان ها</title>
+<link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
+@section('scripts')
+<script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+<script type="text/javascript">
+    $(function()
+    {
+        $("#PreImploymentdataTable").dataTable();
+        $("#SecuritydataTable").dataTable();
+        $("#ThirtydataTable").dataTable();
+        $("#SixtydataTable").dataTable();
+        $("#ThesisdataTable").dataTable();
+        $("#RefdataTable").dataTable();
+        $("#EditordataTable").dataTable();
+        $("#AdvSupdataTable").dataTable();
+    });
+</script>
 @endsection

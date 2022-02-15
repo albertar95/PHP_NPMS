@@ -18,14 +18,14 @@ class Scholars extends Model
     // protected $hidden = [];
     public function projects()
     {
-        return $this->hasMany(Projects::class);
+        return $this->hasMany(Projects::class,'ScholarId','NidScholar');
     }
     public function major()
     {
-        return $this->belongsTo(Majors::class);
+        return $this->belongsTo(Majors::class,'MajorId','NidMajor');
     }
     public function orientation()
     {
-        return $this->belongsTo(Oreintations::class);
+        return $this->belongsTo(Oreintations::class,'OreintationId','NidOreintation');
     }
 }

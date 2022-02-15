@@ -20,7 +20,7 @@ class MessageRepository extends BaseRepository implements IMessageRepository
     {
         parent::__construct($model);
     }
-    public function SendMessage(Messages $Message):bool
+    public function SendMessage(Messages $Message): bool
     {
         $Message->CreateDate = Carbon::now();
         $Message->IsRead = false;
@@ -30,9 +30,9 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         $Message->save();
         return true;
     }
-    public function DeleteMessage(string $NidMessage):bool
+    public function DeleteMessage(string $NidMessage): bool
     {
-        Messages::where('NidMessage',$NidMessage)->update(
+        Messages::where('NidMessage', $NidMessage)->update(
             [
                 'IsDeleted' => true,
                 'DeleteDate' => Carbon::now()
@@ -44,40 +44,50 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         // $tmpMessage->save();
         return true;
     }
-    public function GetUsersMessages(string $NidUser, bool $ShowAll = false) :Collection
+    public function GetUsersMessages(string $NidUser, bool $ShowAll = false,int $pagesize = 0): Collection
     {
         $result = new Collection();
-        if(!$ShowAll)
+        if($pagesize != 0)
         {
-            $tmpMessage = $this->model->all()->where('RecieverId','=',$NidUser)->where('IsDeleted','=',false)->where('IsRead','=',$ShowAll);
-            foreach ($tmpMessage as $msg)
-            {
-                $result->push(DataMapper::MapToMessageDTO($msg));
+            if (!$ShowAll) {
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll)->take($pagesize);
+                foreach ($tmpMessage as $msg) {
+                    $result->push(DataMapper::MapToMessageDTO($msg));
+                }
+            } else {
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->take($pagesize);
+                foreach ($tmpMessage as $msg) {
+                    $result->push(DataMapper::MapToMessageDTO($msg));
+                }
             }
-        }
-        else
+        }else
         {
-            $tmpMessage = $this->model->all()->where('RecieverId','=',$NidUser)->where('IsDeleted','=',false);
-            foreach ($tmpMessage as $msg)
-            {
-                $result->push(DataMapper::MapToMessageDTO($msg));
+            if (!$ShowAll) {
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll);
+                foreach ($tmpMessage as $msg) {
+                    $result->push(DataMapper::MapToMessageDTO($msg));
+                }
+            } else {
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false);
+                foreach ($tmpMessage as $msg) {
+                    $result->push(DataMapper::MapToMessageDTO($msg));
+                }
             }
         }
         return $result;
     }
-    public function GetUsersSendMessages(string $NidUser):Collection
+    public function GetUsersSendMessages(string $NidUser,int $pagesize = 100): Collection
     {
         $result = new Collection();
-        $tmpMessage = $this->model->all()->where('SenderId','=',$NidUser)->where('IsDeleted','=',false);
-        foreach ($tmpMessage as $msg)
-        {
+        $tmpMessage = $this->model->all()->where('SenderId', '=', $NidUser)->where('IsDeleted', '=', false)->take($pagesize);
+        foreach ($tmpMessage as $msg) {
             $result->push(DataMapper::MapToMessageDTO($msg));
         }
         return $result;
     }
-    public function ReadMessage(string $NidMessage,bool $ReadStatus = true):bool
+    public function ReadMessage(string $NidMessage, bool $ReadStatus = true): bool
     {
-        Messages::where('NidMessage',$NidMessage)->update(
+        Messages::where('NidMessage', $NidMessage)->update(
             [
                 'IsRead' => $ReadStatus,
                 'ReadDate' => Carbon::now()
@@ -90,34 +100,36 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         // $tmpMessage->save();
         return true;
     }
-    public function RecieveMessage(string $NidMessage, bool $RecieveStatus = true):bool
+    public function RecieveMessage(string $NidMessage, bool $RecieveStatus = true): bool
     {
-        Messages::where('NidMessage',$NidMessage)->update(
+        Messages::where('NidMessage', $NidMessage)->update(
             [
                 'IsRecieved' => $RecieveStatus
             ]
         );
-        $tmpMessage = $this->model->all()->where('NidMessage','=',$NidMessage)->firstOrFail();
+        $tmpMessage = $this->model->all()->where('NidMessage', '=', $NidMessage)->firstOrFail();
         $tmpMessage->IsRecieved = $RecieveStatus;
         $tmpMessage->save();
         return true;
     }
-    public function RecieveMessageNeeded(string $NidUser) :bool
+    public function RecieveMessageNeeded(string $NidUser): bool
     {
-        return $this->model->all()->where('RecieverId','=',$NidUser)->where('IsRecieved','=',false)->exists();
+        if ($this->model->all()->where('RecieverId', '=', $NidUser)->where('IsRecieved', '=', false)->count() > 0)
+            return true;
+        else
+            return false;
     }
-    public function GetMessageDTOById(string $NidMessage):messageDTO
+    public function GetMessageDTOById(string $NidMessage): messageDTO
     {
-        return DataMapper::MapToMessageDTO($this->model->all()->where('NidMessage','=',$NidMessage)->firstOrFail());
+        return DataMapper::MapToMessageDTO($this->model->all()->where('NidMessage', '=', $NidMessage)->firstOrFail());
     }
     public function GetMessageHirarchyById(string $NidMessage)
     {
         $result = new Collection();
         $tmpHirarchy = $this->GetHirarchyById($NidMessage);
-        foreach ($tmpHirarchy as $hir)
-        {
-            if($this->model->all()->where('NidMessage','=',$hir)->count() > 0)
-            $result->push(DataMapper::MapToMessageDTO($this->model->all()->where('NidMessage','=',$hir)->firstOrFail()));
+        foreach ($tmpHirarchy as $hir) {
+            if ($this->model->all()->where('NidMessage', '=', $hir)->count() > 0)
+                $result->push(DataMapper::MapToMessageDTO($this->model->all()->where('NidMessage', '=', $hir)->firstOrFail()));
         }
         return $result;
         // return $tmpHirarchy;
@@ -129,47 +141,41 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         $RelateFlag = false;
         // $relateSource = Messages::all()->groupBy(['NidMessage','RelatedId']);
         $relateSource = collect(DB::select('select NidMessage,RelatedId from messages group by NidMessage,RelatedId'));
-    FindMasterId:
-    if($relateSource->where('NidMessage','=',$MasterId)->count() > 0)
-    {
-        if($relateSource->where('NidMessage','=',$MasterId)->firstOrFail()->RelatedId == null)
-        {
-            $RelateFlag = true;
+        FindMasterId:
+        if ($relateSource->where('NidMessage', '=', $MasterId)->count() > 0) {
+            if ($relateSource->where('NidMessage', '=', $MasterId)->firstOrFail()->RelatedId == null) {
+                $RelateFlag = true;
+            }
         }
-    }
-        if (!$RelateFlag)
-        {
-            if($relateSource->where('NidMessage','=',$MasterId)->count() > 0)
-            {
-                $MasterId = $relateSource->where('NidMessage','=',$MasterId)->firstOrFail()->RelatedId;
+        if (!$RelateFlag) {
+            if ($relateSource->where('NidMessage', '=', $MasterId)->count() > 0) {
+                $MasterId = $relateSource->where('NidMessage', '=', $MasterId)->firstOrFail()->RelatedId;
                 goto FindMasterId;
             }
         }
         // return $relateSource;
-        return $this->ProbeMessageById($MasterId,$relateSource,new Collection());
+        return $this->ProbeMessageById($MasterId, $relateSource, new Collection());
     }
-    private function FindMasterId(Collection $Hirarchy,string $masterid)
+    private function FindMasterId(Collection $Hirarchy, string $masterid)
     {
         $RelateFlag = false;
-        if($Hirarchy->where('NidMessage','=',$masterid)->count() > 0)
-        {
-            if($Hirarchy->where('NidMessage','=',$masterid)->firstOrFail()->RelatedId == null)
-            $RelateFlag = true;
-            if(!$RelateFlag)
-            {
-                $this->FindMasterId($Hirarchy,$Hirarchy->where('NidMessage','=',$masterid)->firstOrFail()->RelatedId ?? "");
+        if ($Hirarchy->where('NidMessage', '=', $masterid)->count() > 0) {
+            if ($Hirarchy->where('NidMessage', '=', $masterid)->firstOrFail()->RelatedId == null)
+                $RelateFlag = true;
+            if (!$RelateFlag) {
+                $this->FindMasterId($Hirarchy, $Hirarchy->where('NidMessage', '=', $masterid)->firstOrFail()->RelatedId ?? "");
             }
-            return $this->ProbeMessageById($masterid,$Hirarchy,new Collection());
-        }else{
+            return $this->ProbeMessageById($masterid, $Hirarchy, new Collection());
+        } else {
             return new Collection();
         }
     }
-    private function ProbeMessageById(string $NidMaster,Collection $RelateSource,Collection $result):Collection
+    private function ProbeMessageById(string $NidMaster, Collection $RelateSource, Collection $result): Collection
     {
         $result->push($NidMaster);
-        $Messages = $RelateSource->where('RelatedId','=',$NidMaster);
+        $Messages = $RelateSource->where('RelatedId', '=', $NidMaster);
         foreach ($Messages as $key => $childs) {
-            $this->ProbeMessageById($childs->NidMessage,$Messages,$result);
+            $this->ProbeMessageById($childs->NidMessage, $Messages, $result);
         }
         return $result;
     }
@@ -177,9 +183,8 @@ class MessageRepository extends BaseRepository implements IMessageRepository
 
 class MessageRepositoryFactory
 {
-    public static function GetMessageRepositoryObj():IMessageRepository
+    public static function GetMessageRepositoryObj(): IMessageRepository
     {
         return new MessageRepository(new Messages());
     }
-
 }

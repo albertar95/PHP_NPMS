@@ -11,9 +11,9 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">پیام ها</h1>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseSendMessageItems" class="d-block card-header py-3 collapsed"
+                            <a href="#collapseSendMessageItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
                                 data-toggle="collapse" role="button" aria-expanded="false"
                                 aria-controls="collapseSendMessageItems">
                                 <h6 class="m-0 font-weight-bold text-primary">ارسال پیام</h6>
@@ -42,12 +42,15 @@
                                             <div class="form-group row">
                                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                                     <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                        name="RecieverId" id="RecieverId" style="padding:0 .75rem;" placeholder="انتخاب دریافت کننده">
+                                                        name="RecieverId" id="RecieverId" style="padding:0 .75rem;"
+                                                        placeholder="انتخاب دریافت کننده">
                                                         <option value="0" selected>انتخاب دریافت کننده</option>
                                                         @foreach ($Recievers->Where('NidUser', '!=', auth()->user()->NidUser)->sortBy('LastName') as $rsc)
-                                                            <option value="{{ $rsc->NidUser }}" data-tokens="{{ $rsc->Username }}">
+                                                            <option value="{{ $rsc->NidUser }}"
+                                                                data-tokens="{{ $rsc->Username }}">
                                                                 <i style="direction: rtl;text-align: right;">{{ $rsc->Username }}
-                                                                    ({{ $rsc->FirstName }} {{ $rsc->LastName }})</i>
+                                                                    ({{ $rsc->FirstName }} {{ $rsc->LastName }})
+                                                                </i>
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -89,15 +92,16 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseMessagesItems" class="d-block card-header py-3" data-toggle="collapse"
+                            <a href="#collapseMessagesItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                 role="button" aria-expanded="true" aria-controls="collapseMessagesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">پیام های دریافتی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
                             <div class="collapse show" id="collapseMessagesItems" style="padding:.75rem;">
                                 <div class="table-responsive" dir="ltr" id="MessagesTableWrapper">
+                                    <input type="number" value="1" id="LoadCount2" hidden>
                                     <table class="table table-bordered" id="MessagesdataTable"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>
@@ -151,17 +155,19 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <a rel="nofollow" href="#" id="btnMorePage2" style="font-size: 17px;text-align: right;">&plus; نمایش پیام های بیشتر</a>
                             </div>
                         </div>
-                        <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+                        <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseSendMessagesItems" class="d-block card-header py-3" data-toggle="collapse"
+                            <a href="#collapseSendMessagesItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                 role="button" aria-expanded="true" aria-controls="collapseSendMessagesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">پیام های ارسالی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
                             <div class="collapse show" id="collapseSendMessagesItems" style="padding:.75rem;">
                                 <div class="table-responsive" dir="ltr" id="SendMessagesTableWrapper">
+                                    <input type="number" value="1" id="LoadCount" hidden>
                                     <table class="table table-bordered" id="SendMessagesdataTable"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>
@@ -207,6 +213,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <a rel="nofollow" href="#" id="btnMorePage" style="font-size: 17px;text-align: right;">&plus; نمایش پیام های بیشتر</a>
                             </div>
                         </div>
                     </div>
@@ -214,56 +221,97 @@
             </div>
         </div>
     </div>
-    @section('styles')
+@section('styles')
     <title>سامانه مدیریت تحقیقات - پیام ها</title>
-    @endsection
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
 @section('scripts')
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         var ValiditiyMessage = "";
         $(function() {
+            $("#SendMessagesdataTable").dataTable();
+            $("#MessagesdataTable").dataTable();
             $('#RecieverId').selectize({
                 sortField: 'value'
             });
-            $("#btnSendMessage").click(function(e) {
+            $("#btnMorePage").click(function(e) {
                 e.preventDefault();
-                if(CheckInputValidity())
-                {
-                    $.ajax({
-                    url: '/submitsendmessage',
-                    type: 'post',
+                $.ajax({
+                    url: '/pagination/3/' + $("#LoadCount").val(),
+                    type: 'get',
                     datatype: 'json',
-                    data: $("#SendMessageForm").serialize(),
                     success: function(result) {
-                        if (!result.HasValue) {
-                            $("#ErrorMessage").text(result.Message)
-                            $("#errorAlert").removeAttr('hidden')
-                            window.setTimeout(function() {
-                                $("#errorAlert").attr('hidden', 'hidden');
-                            }, 5000);
+                        if (result.HasValue == true) {
+                            $("#SendMessagesTableWrapper").html(result.Html);
+                            $("#SendMessagesdataTable").dataTable();
                         } else {
-                            $("#SuccessMessage").text(result.Message)
-                            $("#SuccessAlert").removeAttr('hidden')
-                            window.setTimeout(function() {
-                                $("#SuccessAlert").attr('hidden', 'hidden');
-                            }, 5000);
-                            $('#SendMessageForm').each(function() {
-                                this.reset();
-                            });
-                            $.ajax({
-                                url: '/getsendmessages/' + $("#SenderId").val(),
-                                type: 'get',
-                                datatype: 'json',
-                                success: function(result) {
-                                    if (result.HasValue)
-                                        $("#collapseSendMessagesItems").html(result
-                                            .Html);
-                                },
-                                error: function() {}
-                            });
+                            $("#btnMorePage").attr('hidden', 'hidden');
                         }
                     },
-                    error: function(response) {
-                        var message = "<ul>";
+                    error: function() {}
+                });
+            });
+            $("#btnMorePage2").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/pagination/4/' + $("#LoadCount2").val(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue == true) {
+                            $("#MessagesTableWrapper").html(result.Html);
+                            $("#MessagesdataTable").dataTable();
+                        } else {
+                            $("#btnMorePage2").attr('hidden', 'hidden');
+                        }
+                    },
+                    error: function() {}
+                });
+            });
+            $("#btnSendMessage").click(function(e) {
+                e.preventDefault();
+                if (CheckInputValidity()) {
+                    $.ajax({
+                        url: '/submitsendmessage',
+                        type: 'post',
+                        datatype: 'json',
+                        data: $("#SendMessageForm").serialize(),
+                        success: function(result) {
+                            if (!result.HasValue) {
+                                $("#ErrorMessage").text(result.Message)
+                                $("#errorAlert").removeAttr('hidden')
+                                window.setTimeout(function() {
+                                    $("#errorAlert").attr('hidden', 'hidden');
+                                }, 5000);
+                            } else {
+                                $("#SuccessMessage").text(result.Message)
+                                $("#SuccessAlert").removeAttr('hidden')
+                                window.setTimeout(function() {
+                                    $("#SuccessAlert").attr('hidden', 'hidden');
+                                }, 5000);
+                                $('#SendMessageForm').each(function() {
+                                    this.reset();
+                                });
+                                $.ajax({
+                                    url: '/getsendmessages/' + $("#SenderId").val(),
+                                    type: 'get',
+                                    datatype: 'json',
+                                    success: function(result) {
+                                        if (result.HasValue)
+                                            $("#SendMessagesTableWrapper").html(
+                                                result
+                                                .Html);
+                                                $("#SendMessagesdataTable").dataTable();
+                                    },
+                                    error: function() {}
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            var message = "<ul>";
                             jQuery.each(response.responseJSON.errors, function(i, val) {
                                 message += "<li>";
                                 message += val;
@@ -276,10 +324,9 @@
                             window.setTimeout(function() {
                                 $("#ErrorAlert").attr('hidden', 'hidden');
                             }, 5000);
-                    }
-                });
-                }else
-                {
+                        }
+                    });
+                } else {
                     $("#ErrorMessage").html(ValiditiyMessage)
                     $("#ErrorAlert").removeAttr('hidden')
                     window.setTimeout(function() {

@@ -27,35 +27,15 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     {
         parent::__construct($model);
     }
-    public function GetProjectInitials(int $pagesize = 100):Collection
+    public function GetProjectInitials(int $pagesize = 100,int $skip = 0)
     {
-        $result = new Collection();
         if($pagesize != 0)
         {
-            $tmpProject = $this->model->all()->take($pagesize);
-            foreach ($tmpProject as $prj)
-            {
-                $tmpprojectinitial = DataMapper::MapToProjectInitialDTO($prj);
-                $tmpscholar = Scholars::all()->where('NidScholar','=',$tmpprojectinitial->ScholarId)->firstOrFail();
-                $tmpprojectinitial->ScholarName = $tmpscholar->FirstName.' '.$tmpscholar->LastName;
-                $tmpprojectinitial->UnitName = $this->GetUnitById($tmpprojectinitial->UnitId)->Title;
-                $tmpprojectinitial->GroupName = $this->GetUnitGroupById($tmpprojectinitial->GroupId)->Title;
-                $result->push($tmpprojectinitial);
-            }
+            return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->get()->skip($skip)->take($pagesize));
         }else
         {
-            $tmpProject = $this->model->all();
-            foreach ($tmpProject as $prj)
-            {
-                $tmpprojectinitial = DataMapper::MapToProjectInitialDTO($prj);
-                $tmpscholar = Scholars::all()->where('NidScholar','=',$tmpprojectinitial->ScholarId)->firstOrFail();
-                $tmpprojectinitial->ScholarName = $tmpscholar->FirstName.' '.$tmpscholar->LastName;
-                $tmpprojectinitial->UnitName = $this->GetUnitById($tmpprojectinitial->UnitId)->Title;
-                $tmpprojectinitial->GroupName = $this->GetUnitGroupById($tmpprojectinitial->GroupId)->Title;
-                $result->push($tmpprojectinitial);
-            }
+            return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->get()->skip($skip));
         }
-        return $result;
     }
     public function AddProjectInitial(projectInitialDTO $projectInitial):bool
     {
@@ -130,26 +110,15 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     }
     public function GetProjectScholars(int $pagesize = 100):Collection
     {
-        $result = new Collection();
-        if($pagesize == 0)
+        if ($pagesize != 0)
         {
-            // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false);
-            $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',false);
-            foreach ($tmpUnitGroups as $sch)
-            {
-                $result->push(DataMapper::MapToScholarListDTO($sch));
-            }
+            // $tmpScholars = Scholars::all()->where('IsDeleted','=',0)->take($Pagesize);
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get()->take($pagesize));
         }
         else
         {
-            // $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',null)->orWhere('IsDeleted','=',false)->take($pagesize);
-            $tmpUnitGroups = Scholars::all()->where('IsDeleted','=',false)->take($pagesize);
-            foreach ($tmpUnitGroups as $sch)
-            {
-                $result->push(DataMapper::MapToScholarListDTO($sch));
-            }
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get());
         }
-        return $result;
     }
     public function GetProjectById(string $NidProject):Projects
     {

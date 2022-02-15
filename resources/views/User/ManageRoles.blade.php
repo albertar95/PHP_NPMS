@@ -154,10 +154,15 @@
     </div>
 @section('styles')
 <title>سامانه مدیریت تحقیقات - مدیریت نقش ها</title>
+<link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 @section('scripts')
+<script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+            $("#RoledataTable").dataTable();
             $("#btnAddRole").click(function(e) {
                 e.preventDefault();
                 $.ajaxSetup({
@@ -173,6 +178,7 @@
                     success: function(result) {
                         if (result.HasValue) {
                             $("#RoleTableWrapper").html(result.Html);
+                            $("#RoledataTable").dataTable();
                             $("#RolesForm").each(function() {
                                 this.reset();
                             });
@@ -246,6 +252,7 @@
                     $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue) {
                         $("#RoleTableWrapper").html(result.Html);
+                        $("#RoledataTable").dataTable();
                         $("#RoleSuccessMessage").text(result.Message);
                         $("#RoleSuccessAlert").removeAttr('hidden');
                         window.setTimeout(function() {
