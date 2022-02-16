@@ -47,7 +47,7 @@ class LogExecptions extends Exception
             $newlog->ImportanceLevel = 1;
             $newlog->ConfidentialLevel = 1;
             $newlog->save();
-            return Redirect::back()->with('error', 'Something Went Wrong.');
+            return view('errors.500');
         }
     }
 }

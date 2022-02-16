@@ -19,8 +19,7 @@
 
 <body class="bg-gradient-primary"
     style="background-color:#4e73df;background-image:linear-gradient(180deg,#4e73df 10%,#224abe 100%);"
-    {{-- style="background:url({{ URL('Content/img/bg.jpg') }});background-size:cover;background-repeat:no-repeat;" --}}
-    >
+    {{-- style="background:url({{ URL('Content/img/bg.jpg') }});background-size:cover;background-repeat:no-repeat;" --}}>
     <div class="container">
         <div class="d-flex justify-content-center"
             style="position: absolute;top: 50%;left: 50%;margin-top: -50px;margin-left: -50px;" id="loadingTime" hidden>
@@ -38,14 +37,16 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="row" style="height: 10rem;background:url({{ URL('Content/img/Logo/nepajalogo.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
+                        <div class="row"
+                            style="height: 10rem;background:url({{ URL('Content/img/Logo/nepajalogo.png') }});background-size:contain;background-position:center;background-repeat:no-repeat;">
                         </div>
                         <div class="row">
                             <div class="col-lg-2">
                             </div>
                             <div class="col-lg-8">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">سامانه مدیریت تحقیقات</h1>
+                                    <h1 class="h4 text-gray-900 mb-4" style="text-align:center;">سامانه مدیریت تحقیقات
+                                    </h1>
                                 </div>
                             </div>
                             <div class="col-lg-2">
