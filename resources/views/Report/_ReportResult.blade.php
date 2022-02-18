@@ -66,10 +66,10 @@
                             <td>{{ $sch->GradeTitle ?? '' }}</td>
                         @endif
                         @if ($OutputKey->contains('MajorId'))
-                            <td>{{ $sch->Major->Title }}</td>
+                            <td>{{ $sch->MajorTitle }}</td>
                         @endif
                         @if ($OutputKey->contains('OreintationId'))
-                            <td>{{ $sch->Oreintation->Title }}</td>
+                            <td>{{ $sch->OreintationTitle }}</td>
                         @endif
                         @if ($OutputKey->contains('college'))
                             <td>{{ $sch->CollegeTitle ?? '' }}</td>
@@ -353,7 +353,7 @@
                             </td>
                         @endif
                         @if ($OutputKey->contains('Username'))
-                            <td>{{ $usr->Username ?? '' }}</td>
+                            <td>{{ $usr->UserName ?? '' }}</td>
                         @endif
                         @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
                             @if ($OutputKey->contains('FirstName') && $OutputKey->contains('LastName'))
@@ -426,6 +426,7 @@
             پرینت
         </span>
     </button>
+    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2" hidden>لطفا منتظر بمانید</p>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

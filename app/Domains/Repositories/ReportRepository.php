@@ -94,21 +94,21 @@ class ReportRepository extends BaseRepository implements IReportRepository
     }
     public function PersianDateToGeorgian(string $Datee)
     {
-        return Verta::getGregorian(intval(Casts::PersianToEnglishDigits(substr($Datee,0,8))),intval(Casts::PersianToEnglishDigits(substr(substr($Datee,0,13),-4))),intval(Casts::PersianToEnglishDigits(substr($Datee,-4))));
+        return Verta::getGregorian(intval(Casts::PersianToEnglishDigits(substr($Datee, 0, 8))), intval(Casts::PersianToEnglishDigits(substr(substr($Datee, 0, 13), -4))), intval(Casts::PersianToEnglishDigits(substr($Datee, -4))));
     }
     private function QueryBuilder(string $NidReport, array $paramsKey, array $paramsValue, Reports $CurrentReport)
     {
         $query = "select ";
-        $query = Str::of($query)->append('* ');
+        // $query = Str::of($query)->append('* ');
         switch ($CurrentReport->ContextId) {
             case 1: //scholar
-                $query = Str::of($query)->append('from scholars ');
+                $query = Str::of($query)->append('NidScholar from scholars ');
                 break;
             case 2: //project
-                $query = Str::of($query)->append('from projects ');
+                $query = Str::of($query)->append('NidProject from projects ');
                 break;
             case 4: //user
-                $query = Str::of($query)->append('from user ');
+                $query = Str::of($query)->append('NidUser from user ');
                 break;
         }
         $query = Str::of($query)->append('where ');
@@ -126,12 +126,11 @@ class ReportRepository extends BaseRepository implements IReportRepository
                     $query = Str::of($query)->append(',10)');
                     $query = Str::of($query)->append(' = ');
                     $query = Str::of($query)->append("'");
-                    $tmpdateConvert = $this->PersianDateToGeorgian($paramsValue[$i])[0].'-'.sprintf("%02d",$this->PersianDateToGeorgian($paramsValue[$i])[1]).'-'.sprintf("%02d",$this->PersianDateToGeorgian($paramsValue[$i])[2]);
+                    $tmpdateConvert = $this->PersianDateToGeorgian($paramsValue[$i])[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($paramsValue[$i])[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($paramsValue[$i])[2]);
                     $query = Str::of($query)->append($tmpdateConvert);
                     $query = Str::of($query)->append("'");
                     $tmpConstaintAdd = true;
-                }else
-                {
+                } else {
                     if ($paramsKey[$i] == "PersianCreateDate") {
                         if ($tmpConstaintAdd) {
                             $query = Str::of($query)->append(' and ');
@@ -142,13 +141,12 @@ class ReportRepository extends BaseRepository implements IReportRepository
                         $query = Str::of($query)->append(',10)');
                         $query = Str::of($query)->append(' = ');
                         $query = Str::of($query)->append("N'");
-                        $query = Str::of($query)->append(str_replace('/','-',Casts::EnglishToPersianDigits($paramsValue[$i])));
+                        $query = Str::of($query)->append(str_replace('/', '-', Casts::EnglishToPersianDigits($paramsValue[$i])));
                         $query = Str::of($query)->append("'");
                         $tmpConstaintAdd = true;
                     } else {
                         if (!(in_array($paramsKey[$i], $PersianDateFileds))) {
-                            if ($paramsKey[$i] == "Referee")
-                            {
+                            if ($paramsKey[$i] == "Referee") {
                                 if ($tmpConstaintAdd) {
                                     $query = Str::of($query)->append(' and ');
                                     $tmpConstaintAdd = false;
@@ -167,8 +165,7 @@ class ReportRepository extends BaseRepository implements IReportRepository
                                 $query = Str::of($query)->append("'");
                                 $query = Str::of($query)->append(')');
                                 $tmpConstaintAdd = true;
-                            }else
-                            {
+                            } else {
                                 if ($tmpConstaintAdd) {
                                     $query = Str::of($query)->append(' and ');
                                     $tmpConstaintAdd = false;
@@ -194,10 +191,8 @@ class ReportRepository extends BaseRepository implements IReportRepository
                         }
                     }
                 }
-            }else
-            {
-                if($paramsValue[$i] == "0")
-                {
+            } else {
+                if ($paramsValue[$i] == "0") {
                     if ($tmpConstaintAdd) {
                         $query = Str::of($query)->append(' and ');
                         $tmpConstaintAdd = false;
@@ -211,9 +206,37 @@ class ReportRepository extends BaseRepository implements IReportRepository
                 }
             }
         }
+        switch ($CurrentReport->ContextId) {
+            case 1: //scholar
+                $query = Str::of($query)->append(' group by NidScholar');
+                break;
+            case 2: //project
+                $query = Str::of($query)->append(' group by NidProject');
+                break;
+            case 4: //user
+                $query = Str::of($query)->append(' group by NidUser');
+                break;
+        }
         return $query;
 
         // return "select * from scholars";
+    }
+    private function ResultBuilder(int $EntityId, string $whereStatement)
+    {
+        switch ($EntityId) {
+            case 1:
+                return collect(DB::select("select FirstName,LastName,NationalCode,BirthDate,FatherName,Mobile,t2.SettingTitle as GradeTitle,t3.SettingTitle as CollegeTitle,t4.SettingTitle as CollaborationTypeTitle,t5.SettingTitle as MillitaryStatusTitle,t6.Title as MajorTitle,t7.Title as OreintationTitle from scholars t1 join settings t2 on t1.GradeId = t2.SettingValue and t2.SettingKey = 'GradeId' join settings t3 on t1.college = t3.SettingValue and t3.SettingKey = 'College' join settings t4 on t1.CollaborationType = t4.SettingValue and t4.SettingKey = 'CollaborationType' join settings t5 on t1.MillitaryStatus = t5.SettingValue and t5.SettingKey = 'MillitaryStatus' join majors t6 on t1.MajorId = t6.NidMajor join oreintations t7 on t1.OreintationId = t7.NidOreintation where NidScholar in " . '( ' . $whereStatement . ' )'));
+                break;
+            case 2:
+                return collect(DB::select("select ProjectNumber,Subject,PersianCreateDate,Supervisor,Advisor,Referee1,Referee2,ProjectStatus,TenPercentLetterDate,PreImploymentLetterDate,ImploymentDate,SecurityLetterDate,ThirtyPercentLetterDate,SixtyPercentLetterDate,ATFLetterDate,ThesisDefenceDate,ThesisDefenceLetterDate,ReducePeriod,SupervisorMobile,AdvisorMobile,Editor,TitleApproved,HasBookPublish,FinalApprove,t1.IsConfident,concat(t2.FirstName,' ',t2.LastName) as ScholarTitle,t3.Title as UnitTitle,t4.Title as GroupTitle,concat(t5.FirstName,' ',t5.LastName) as UserTitle from projects t1 join scholars t2 on t1.ScholarId = t2.NidScholar join units t3 on t1.UnitId = t3.NidUnit join unit_groups t4 on t1.GroupId = t4.NidGroup join user t5 on t1.UserId = t5.NidUser where NidProject in ".'( '.$whereStatement.' )'));
+                break;
+            case 4:
+                return collect(DB::select("select UserName,FirstName,LastName,ProfilePicture,IsLockedOut,IsDisabled,LastLoginDate,IncorrectPasswordCount,t2.Title as RoleTitle FROM user t1 JOIN roles t2 on t1.RoleId = t2.NidRole where NidUser in ".'( '.$whereStatement.' )'));
+                break;
+            default:
+                # code...
+                break;
+        }
     }
     private function ExecuteReport(int $type, string $query, Reports $CurrentReport)
     {
@@ -226,37 +249,13 @@ class ReportRepository extends BaseRepository implements IReportRepository
             case 1: //statistics
                 switch ($CurrentReport->ContextId) {
                     case 1:
-                        $schs = new Collection(); //ScholarDetailDTO
-                        $sr = new ScholarRepository(new Scholars());
-                        $Nidschs = DB::select($query); // .SqlQuery(query).Select(q => q.NidScholar).ToList();
-                        foreach ($Nidschs as $sch) {
-                            $detail = $sr->GetScholarDetail($sch->NidScholar);
-                            if (!is_null($detail))
-                                $schs->push($detail);
-                        }
-                        $result->Scholars = $schs;
+                        $result->Scholars = $this->ResultBuilder(1, $query);
                         break;
                     case 2:
-                        $prj = new Collection(); //ScholarDetailDTO
-                        $sr = new ProjectRepository(new Projects());
-                        $Nidprj = DB::select($query); // .SqlQuery(query).Select(q => q.NidScholar).ToList();
-                        foreach ($Nidprj as $pj) {
-                            $detail = $sr->GetProjectDetailDTOById($pj->NidProject);
-                            if (!is_null($detail))
-                                $prj->push($detail);
-                        }
-                        $result->Projects = $prj;
+                        $result->Projects = $this->ResultBuilder(2, $query);
                         break;
                     case 4:
-                        $usrs = new Collection(); //ScholarDetailDTO
-                        $sr = new UserRepository(new User());
-                        $NidUsrs = DB::select($query); // .SqlQuery(query).Select(q => q.NidScholar).ToList();
-                        foreach ($NidUsrs as $usr) {
-                            $detail = $sr->GetUserDTOById($usr->NidUser);
-                            if (!is_null($detail))
-                                $usrs->push($detail);
-                        }
-                        $result->Users = $usrs;
+                        $result->Users = $this->ResultBuilder(4, $query);
                         break;
                 }
                 break;

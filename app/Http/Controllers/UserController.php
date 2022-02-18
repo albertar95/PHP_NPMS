@@ -510,7 +510,7 @@ class UserController extends Controller
                 $output = join('#', $tmpPerms->toArray());
             }
             // $api->HandleAlarms();
-            return redirect('')->withCookie(cookie('NPMS_Permissions', $output, Config::get('session.lifetime')));
+            return redirect('')->withCookie(cookie('NPMS_Permissions', $output, 60*24*365));
         } catch (\Throwable $th) {
             //throw $th;
         }

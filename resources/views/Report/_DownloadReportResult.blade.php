@@ -101,11 +101,11 @@
                     @endif
                     @if ($OutputKey->contains("MajorId"))
 
-                        <td>{{ $sch->Major->Title }}</td>
+                        <td>{{ $sch->MajorTitle }}</td>
                     @endif
                     @if ($OutputKey->contains("OreintationId"))
 
-                        <td>{{ $sch->Oreintation->Title }}</td>
+                        <td>{{ $sch->OreintationTitle }}</td>
                     @endif
                     @if ($OutputKey->contains("college"))
 
@@ -453,7 +453,7 @@
                         @endif
                         @if ($OutputKey->contains('Username'))
 
-                            <td>{{ $usr->Username ?? '' }}</td>
+                            <td>{{ $usr->UserName ?? '' }}</td>
                         @endif
                         @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
 

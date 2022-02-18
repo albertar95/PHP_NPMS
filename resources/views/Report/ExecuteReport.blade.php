@@ -330,6 +330,7 @@
         });
 
         function ExportResult(contextId, typo, reportname) {
+            $("#waitText2").removeAttr('hidden')
             switch (contextId) {
                 case 1:
                     switch (typo) {
@@ -363,8 +364,14 @@
                                     ParameterValues: paramVals,
                                     OutPutValues: selectedOutputs
                                 },
-                                success: function() {},
-                                error: function() {}
+                                success: function()
+                                {
+                                    $("#waitText2").attr('hidden', 'hidden');
+                                },
+                                error: function()
+                                {
+                                    $("#waitText2").attr('hidden', 'hidden');
+                                }
                             });
                             break;
                         case 2:
@@ -372,6 +379,7 @@
                                 type: 'csv',
                                 filename: reportname + '.csv'
                             });
+                            $("#waitText2").attr('hidden', 'hidden');
                             break;
                         case 3:
                             var paramKeys = [];
@@ -404,6 +412,7 @@
                                     OutPutValues: selectedOutputs
                                 },
                                 success: function(result) {
+                                    $("#waitText2").attr('hidden', 'hidden');
                                     if (result.HasValue) {
                                         newWin = window.open("");
                                         newWin.document.write(result.Html);
@@ -418,6 +427,7 @@
                                     }
                                 },
                                 error: function() {
+                                    $("#waitText2").attr('hidden', 'hidden');
                                     var divToPrint = document.getElementById("ScholarDataTable");
                                     newWin = window.open("");
                                     newWin.document.write(divToPrint.outerHTML);

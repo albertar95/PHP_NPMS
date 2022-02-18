@@ -159,10 +159,13 @@ class SearchController extends Controller
             $BaseInfo = $response[3];
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
-            try {
-                ini_set("pcre.backtrack_limit", "100000000");
-            } catch (\Throwable $th) {
-                //throw $th;
+            if(($Scholars->count() + $Projects->count() + $BaseInfo->count() + $Users->count()) > 2500)
+            {
+                try {
+                    ini_set("pcre.backtrack_limit", "100000000");
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
             }
             $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'));
             $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");

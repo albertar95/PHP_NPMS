@@ -318,6 +318,14 @@ class ReportController extends Controller
             $ReportName = $reportresult->ReportName;
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            if(($Scholars->count() + $Projects->count() + $Users->count()) > 2500)
+            {
+                try {
+                    ini_set("pcre.backtrack_limit", "100000000");
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            }
             $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
             $api->AddLog(auth()->user(), $report->ip(), 29, 0, 3, 2, $ReportName);
             return $pdf->stream($ReportName . '.pdf');
@@ -339,7 +347,7 @@ class ReportController extends Controller
             $ReportName = $reportresult->ReportName;
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
-            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
+            // $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
             $result->Html = view('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'))->render();
             $result->HasValue = true;
             $api->AddLog(auth()->user(), $report->ip(), 30, 0, 3, 2, $ReportName);
@@ -357,6 +365,14 @@ class ReportController extends Controller
             $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            if($logs->count() > 2500)
+            {
+                try {
+                    ini_set("pcre.backtrack_limit", "100000000");
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            }
             $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime'));
             $api->AddLog(auth()->user(), $report->ip(), 31, 0, 3, 2, '');
             return $pdf->stream('userActivityLog.pdf');

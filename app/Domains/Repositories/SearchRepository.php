@@ -124,21 +124,27 @@ class SearchRepository implements ISearchRepository
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE t4.FirstName LIKE '%" . $searchText . "%'" . "UNION ALL select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE t4.LastName LIKE '%" . $searchText . "%'");
                             break;
                         case 6:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ImploymentDate LIKE '%" . $searchText . "%'");
                             break;
                         case 7:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE TenPercentLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         case 8:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE PreImploymentLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         case 9:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ThirtyPercentLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         case 10:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE SixtyPercentLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         case 11:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE SecurityLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         case 12:
@@ -154,6 +160,7 @@ class SearchRepository implements ISearchRepository
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE Referee2 LIKE '%" . $searchText . "%'");
                             break;
                         case 16:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ThesisDefenceLetterDate LIKE '%" . $searchText . "%'");
                             break;
                         default:
@@ -248,21 +255,27 @@ class SearchRepository implements ISearchRepository
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE t4.FirstName = '" . $searchText . "'" . "UNION ALL select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE t4.LastName = '" . $searchText . "'");
                             break;
                         case 6:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ImploymentDate = '" . $searchText . "'");
                             break;
                         case 7:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE TenPercentLetterDate = '" . $searchText . "'");
                             break;
                         case 8:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE PreImploymentLetterDate = '" . $searchText . "'");
                             break;
                         case 9:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ThirtyPercentLetterDate = '" . $searchText . "'");
                             break;
                         case 10:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE SixtyPercentLetterDate = '" . $searchText . "'");
                             break;
                         case 11:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE SecurityLetterDate = '" . $searchText . "'");
                             break;
                         case 12:
@@ -278,6 +291,7 @@ class SearchRepository implements ISearchRepository
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE Referee2 = '" . $searchText . "'");
                             break;
                         case 16:
+                            $searchText = Casts::EnglishToPersianDigits($searchText);
                             return DB::select("select NidProject,ProjectNumber,Subject,ProjectStatus,t2.Title as UnitName,t3.Title as GroupName,concat(t4.FirstName,' ',t4.LastName) as ScholarName FROM projects t1 join units t2 on t1.UnitId = t2.NidUnit join unit_groups t3 on t1.GroupId = t3.NidGroup join scholars t4 on t1.ScholarId = t4.NidScholar WHERE ThesisDefenceLetterDate = '" . $searchText . "'");
                             break;
                         default:
