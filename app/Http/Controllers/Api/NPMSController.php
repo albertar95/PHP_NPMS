@@ -39,461 +39,695 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+
 class NPMSController extends Controller
 {
     //scholar section
     public function AddScholar(Request $scholar)
     {
-        $scholar->NidScholar = Str::uuid();
-        $scholar = DataMapper::MapToScholar($scholar);
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->AddScholar($scholar);
+        try {
+            $scholar->NidScholar = Str::uuid();
+            $scholar = DataMapper::MapToScholar($scholar);
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->AddScholar($scholar);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetCollaborationTypes(bool $IncludeDeleted = false)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetCollaborationTypes(0,$IncludeDeleted);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetCollaborationTypes(0, $IncludeDeleted);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetColleges(bool $IncludeDeleted = false)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetColleges(0,$IncludeDeleted);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetColleges(0, $IncludeDeleted);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetGrades(bool $IncludeDeleted = false)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetGrades(0,$IncludeDeleted);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetGrades(0, $IncludeDeleted);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetMillitaryStatuses(bool $IncludeDeleted = false)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetMillitaryStatuses(0,$IncludeDeleted);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetMillitaryStatuses(0, $IncludeDeleted);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetMajors()
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetMajors(0);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetMajors(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetOrientations()
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetOreintations(0);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetOreintations(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetScholar(string $ScholarId)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholarById($ScholarId);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarById($ScholarId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetScholarDTO(string $ScholarId)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholarDTOById($ScholarId);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarDTOById($ScholarId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetOreintationsByMajorId(string $MajorId)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetOreintationByMajorId($MajorId);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetOreintationByMajorId($MajorId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllScholars(int $Pagesize = 10)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholars($Pagesize);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholars($Pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllScholarLists(int $Pagesize = 10)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholarList($Pagesize);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarList($Pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllScholarDetails(string $ScholarId)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholarDetail($ScholarId);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarDetail($ScholarId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function UpdateScholar(Request $scholar)
     {
-        $repo = new ScholarRepository(new Scholars());
-        $scholar = DataMapper::MapToScholar($scholar);
-        $repo->UpdateScholar($scholar);
-        return response()->json(['FirstName'=>$scholar->FirstName,'LastName'=>$scholar->LastName]);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            $scholar = DataMapper::MapToScholar($scholar);
+            $repo->UpdateScholar($scholar);
+            return response()->json(['FirstName' => $scholar->FirstName, 'LastName' => $scholar->LastName]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function DeleteScholar(string $NidScholar)
     {
-        $repo = new ScholarRepository(new Scholars());
-        $ProjectCount = $repo->CheckProjectsOfScholar($NidScholar);
-        if ($ProjectCount == 0)
-        {
-            $tmpresult = $repo->DeleteScholar($NidScholar);
-            if ($tmpresult)
-            return response()->json(['Message'=>'-1','Html'=>'']);//scholar name to add
-            else
-            return response()->json(['Message'=>'0','Html'=>'']);//scholar name to add
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            $ProjectCount = $repo->CheckProjectsOfScholar($NidScholar);
+            if ($ProjectCount == 0) {
+                $tmpresult = $repo->DeleteScholar($NidScholar);
+                if ($tmpresult)
+                    return response()->json(['Message' => '-1', 'Html' => '']); //scholar name to add
+                else
+                    return response()->json(['Message' => '0', 'Html' => '']); //scholar name to add
+            } else
+                return response()->json(['Message' => $ProjectCount, 'Html' => '']); //scholar name to add
+        } catch (\Throwable $th) {
+            return null;
         }
-        else
-        return response()->json(['Message'=>$ProjectCount,'Html'=>'']);//scholar name to add
     }
-    public function GetScholarList(string $ScholarId,bool $IsDeleted = false)
+    public function GetScholarList(string $ScholarId, bool $IsDeleted = false)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetScholarListById($ScholarId,$IsDeleted);
-        // return $ScholarId;
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarListById($ScholarId, $IsDeleted);
+            // return $ScholarId;
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     //user section
     public function AddUser(Request $User)
     {
-        $User->CreateDate = Carbon::now();
-        $User->NidUser = Str::uuid();
-        $User->IsLockedOut = boolval(false);
-        $User->IsDisabled = boolval(false);
-        $User->Force_logout = 0;
-        $User->IncorrectPasswordCount = 0;
-        $repo = new UserRepository(new User());
-        $User = DataMapper::MapToUser($User);
-        $repo->AddUser($User);
-        return $User;
+        try {
+            $User->CreateDate = Carbon::now();
+            $User->NidUser = Str::uuid();
+            $User->IsLockedOut = boolval(false);
+            $User->IsDisabled = boolval(false);
+            $User->Force_logout = 0;
+            $User->IncorrectPasswordCount = 0;
+            $repo = new UserRepository(new User());
+            $User = DataMapper::MapToUser($User);
+            $repo->AddUser($User);
+            return $User;
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetUserDTOById(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserDTOById($UserId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserDTOById($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetUserById(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserById($UserId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserById($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllUsers()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserDTOs(0);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserDTOs(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllOnlineUsers()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserDTOs(0);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserDTOs(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function DisableUserById(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->DisableUser($UserId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->DisableUser($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function LogoutUserById(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->LogoutUser($UserId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->LogoutUser($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function UpdateUser(Request $User)
     {
-        $repo = new UserRepository(new User());
-        $User = DataMapper::MapToUser($User);
-        return $repo->UpdateUser($User);
+        try {
+            $repo = new UserRepository(new User());
+            $User = DataMapper::MapToUser($User);
+            return $repo->UpdateUser($User);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetCustomUsers(int $SourceId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetFilteredUserDTOs($SourceId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetFilteredUserDTOs($SourceId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
-    public function ResetPassword(string $NidUser,string $NewPassword)
+    public function ResetPassword(string $NidUser, string $NewPassword)
     {
-        $repo = new UserRepository(new User());
-        $NewPass = $repo->ChangeUserPassword($NidUser, $NewPassword);
-        if (!is_null($NewPass))
-        return response()->json(['Message'=>$NewPass,'HasValue'=>true]);
+        try {
+            $repo = new UserRepository(new User());
+            $NewPass = $repo->ChangeUserPassword($NidUser, $NewPassword);
+            if (!is_null($NewPass))
+                return response()->json(['Message' => $NewPass, 'HasValue' => true]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
-    public function CheckPrePassword(string $NidUser,string $NewPassword)
+    public function CheckPrePassword(string $NidUser, string $NewPassword)
     {
-        $repo = new UserRepository(new User());
-        return $repo->CheckPreviousPassword($NidUser,$NewPassword);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->CheckPreviousPassword($NidUser, $NewPassword);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function CheckPasswordsPolicy(string $NewPassword)
     {
-        $repo = new UserRepository(new User());
-        return $repo->CheckPasswordPolicy($NewPassword);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->CheckPasswordPolicy($NewPassword);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function LoginThisUser(string $Username, string $Password)
     {
-        $repo = new UserRepository(new User());
-        return $repo->LoginUser($Username,$Password);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->LoginUser($Username, $Password);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetThisUserByUsername(string $Username)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserByUsername($Username);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserByUsername($Username);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllUserPermissionUsers()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserPermissionUsers(0);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserPermissionUsers(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetUserInPermissionById(string $NidUser)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserInPermissionById($NidUser);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserInPermissionById($NidUser);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllResources()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetResources(0);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetResources(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllUserPermissions(string $NidUser)
     {
-        $repo = new UserRepository(new User());
-        $repo2 = new AlarmRepository(new Alarms());
-        try
-        {
-            $repo2->HandleAlarmsJob();
+        try {
+            $repo = new UserRepository(new User());
+            $repo2 = new AlarmRepository(new Alarms());
+            try {
+                $repo2->HandleAlarmsJob();
+            } catch (\Exception) {
+            }
+            return $repo->GetUserPermissions($NidUser);
+        } catch (\Throwable $th) {
+            return null;
         }
-        catch (\Exception)
-        {
-        }
-        return $repo->GetUserPermissions($NidUser);
     }
     public function HandleAlarms()
     {
-        $repo2 = new AlarmRepository(new Alarms());
-        $repo2->HandleAlarmsJob();
-        try
-        {
-        }
-        catch (\Exception)
-        {
+        try {
+            $repo2 = new AlarmRepository(new Alarms());
+            $repo2->HandleAlarmsJob();
+        } catch (\Exception) {
         }
     }
-    public static function AddLog(User $user,string $ip,int $action,int $status,int $importance,int $confident,string $description = "")
+    public static function AddLog(User $user, string $ip, int $action, int $status, int $importance, int $confident, string $description = "")
     {
-        $newlog = new Logs();
-        $repo = new LogRepository();
-        $newlog->NidLog = Str::uuid();
-        $newlog->UserId = $user->NidUser;
-        $newlog->Username = $user->UserName;
-        $newlog->LogDate = Carbon::now()->toDateString();
-        $newlog->IP = $ip;
-        $newlog->LogTime = Carbon::now()->toTimeString();
-        $newlog->ActionId = $action;
-        $newlog->Description = $description;
-        $newlog->LogStatus = $status;
-        $newlog->ImportanceLevel = $importance;
-        $newlog->ConfidentialLevel = $confident;
-        return $repo->AddLog($newlog);
-        // return $newlog;
+        try {
+            $newlog = new Logs();
+            $repo = new LogRepository();
+            $newlog->NidLog = Str::uuid();
+            $newlog->UserId = $user->NidUser;
+            $newlog->Username = $user->UserName;
+            $newlog->LogDate = Carbon::now()->toDateString();
+            $newlog->IP = $ip;
+            $newlog->LogTime = Carbon::now()->toTimeString();
+            $newlog->ActionId = $action;
+            $newlog->Description = $description;
+            $newlog->LogStatus = $status;
+            $newlog->ImportanceLevel = $importance;
+            $newlog->ConfidentialLevel = $confident;
+            return $repo->AddLog($newlog);
+            // return $newlog;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public static function GetLogActionTypes(int $pagesize = 10)
     {
-        $repo = new LogRepository();
-        return $repo->GetAllLogActionType($pagesize);
-        // return $newlog;
+        try {
+            $repo = new LogRepository();
+            return $repo->GetAllLogActionType($pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
-    public static function GetUserLogReport(string $FromDate,string $ToDate,int $LogActionId = 0,string $UserName = "")
+    public static function GetUserLogReport(string $FromDate, string $ToDate, int $LogActionId = 0, string $UserName = "")
     {
-        $repo = new LogRepository();
-        return $repo->UserLogReport($FromDate,$ToDate,$LogActionId,$UserName);
-        // return $newlog;
+        try {
+            $repo = new LogRepository();
+            return $repo->UserLogReport($FromDate, $ToDate, $LogActionId, $UserName);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public static function GetCurrentUserLogReport(string $NidUser)
     {
-        $repo = new LogRepository();
-        return $repo->CurrentUserLogReport($NidUser);
-        // return $newlog;
+        try {
+            $repo = new LogRepository();
+            return $repo->CurrentUserLogReport($NidUser);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public static function GetCurrentUserLoginReport(string $NidUser)
     {
-        $repo = new LogRepository();
-        return $repo->CurrentUserLoginReport($NidUser);
-        // return $newlog;
-    }
-    public function UpdateUserUserPermissions(string $NidUser,array $Resources)
-    {
-        $resourceGuids = new Collection();
-        if(!is_null($Resources))
-        {
-            foreach ($Resources as $ids)
-            {
-                $resourceGuids->push($ids);
-            }
+        try {
+            $repo = new LogRepository();
+            return $repo->CurrentUserLoginReport($NidUser);
+        } catch (\Throwable $th) {
+            return null;
         }
-        $repo = new UserRepository(new User());
-        return $repo->UpdateUserUserPermission($NidUser, $Resources);
+    }
+    public function UpdateUserUserPermissions(string $NidUser, array $Resources)
+    {
+        try {
+            $resourceGuids = new Collection();
+            if (!is_null($Resources)) {
+                foreach ($Resources as $ids) {
+                    $resourceGuids->push($ids);
+                }
+            }
+            $repo = new UserRepository(new User());
+            return $repo->UpdateUserUserPermission($NidUser, $Resources);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function IndexBriefReport()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetIndexBriefReport();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetIndexBriefReport();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function IndexChartReport()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetIndexChartReport();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetIndexChartReport();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function UpdatePolicy(Request $policy)
     {
-        $policies = [
-            "PasswordDificulty" => $policy->PasswordDificulty,
-            "FullLockoutUser" => $policy->FullLockoutUser,
-            "PasswordLength" => $policy->PasswordLength,
-            "ChangePasswordDuration" => $policy->ChangePasswordDuration,
-            "LastPasswordCount" => $policy->LastPasswordCount,
-            "IncorrectAttemptCount" => $policy->IncorrectAttemptCount,
-            "LockoutDuration" => $policy->LockoutDuration
-                    ];
-                    $repo = new UserRepository(new User());
-                    return $repo->UpdateUserPasswordPolicy($policies);
-                    // return $policies;
+        try {
+            $policies = [
+                "PasswordDificulty" => $policy->PasswordDificulty,
+                "FullLockoutUser" => $policy->FullLockoutUser,
+                "PasswordLength" => $policy->PasswordLength,
+                "ChangePasswordDuration" => $policy->ChangePasswordDuration,
+                "LastPasswordCount" => $policy->LastPasswordCount,
+                "IncorrectAttemptCount" => $policy->IncorrectAttemptCount,
+                "LockoutDuration" => $policy->LockoutDuration
+            ];
+            $repo = new UserRepository(new User());
+            return $repo->UpdateUserPasswordPolicy($policies);
+            // return $policies;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetPolicies()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserPasswordPolicy();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserPasswordPolicy();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function UpdateSessionsSettings(string $value)
     {
-                    $repo = new UserRepository(new User());
-                    return $repo->UpdateSessionSetting($value);
-                    // return $policies;
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->UpdateSessionSetting($value);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetSessionsSettings()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetSessionSettings();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetSessionSettings();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function AddRole(Request $role)
     {
-        $repo = new UserRepository(new User());
-        $newrole = new Roles();
-        $newrole->NidRole = Str::uuid();
-        $newrole->Title = $role->Title;
-        $newrole->IsAdmin = boolval($role->IsAdmin);
-        $newrole->CreateDate = Carbon::now();
-        return $repo->AddRole($newrole);
+        try {
+            $repo = new UserRepository(new User());
+            $newrole = new Roles();
+            $newrole->NidRole = Str::uuid();
+            $newrole->Title = $role->Title;
+            $newrole->IsAdmin = boolval($role->IsAdmin);
+            $newrole->CreateDate = Carbon::now();
+            return $repo->AddRole($newrole);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateRole(Request $role)
     {
-        $repo = new UserRepository(new User());
-        $newrole = new Roles();
-        $newrole->NidRole = $role->NidRole;
-        $newrole->Title = $role->Title;
-        $newrole->IsAdmin = boolval($role->IsAdmin);
-        $newrole->CreateDate = $role->CreateDate;
-        return $repo->UpdateRole($newrole);
+        try {
+            $repo = new UserRepository(new User());
+            $newrole = new Roles();
+            $newrole->NidRole = $role->NidRole;
+            $newrole->Title = $role->Title;
+            $newrole->IsAdmin = boolval($role->IsAdmin);
+            $newrole->CreateDate = $role->CreateDate;
+            return $repo->UpdateRole($newrole);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetAllRoles()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetRoles();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetRoles();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function AddRolePermission(Request $rolepermission)
     {
-        $repo = new UserRepository(new User());
-        $newroleperm = new RolePermissions();
-        $newroleperm->NidPermission = Str::uuid();
-        $newroleperm->RoleId = $rolepermission->RoleId;
-        $newroleperm->EntityId = $rolepermission->EntityId;
-        $newroleperm->Create = boolval($rolepermission->CreateVal);
-        $newroleperm->Edit = boolval($rolepermission->EditVal);
-        $newroleperm->Delete = boolval($rolepermission->DeleteVal);
-        $newroleperm->Detail = boolval($rolepermission->DetailVal);
-        $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
-        $newroleperm->List = boolval($rolepermission->ListVal);
-        $newroleperm->Print = boolval($rolepermission->PrintVal);
-        return $repo->AddRolePermission($newroleperm);
+        try {
+            $repo = new UserRepository(new User());
+            $newroleperm = new RolePermissions();
+            $newroleperm->NidPermission = Str::uuid();
+            $newroleperm->RoleId = $rolepermission->RoleId;
+            $newroleperm->EntityId = $rolepermission->EntityId;
+            $newroleperm->Create = boolval($rolepermission->CreateVal);
+            $newroleperm->Edit = boolval($rolepermission->EditVal);
+            $newroleperm->Delete = boolval($rolepermission->DeleteVal);
+            $newroleperm->Detail = boolval($rolepermission->DetailVal);
+            $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
+            $newroleperm->List = boolval($rolepermission->ListVal);
+            $newroleperm->Print = boolval($rolepermission->PrintVal);
+            return $repo->AddRolePermission($newroleperm);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function AddUserPermission(Request $userpermission)
     {
-        $repo = new UserRepository(new User());
-        $newuserperm = new UserPermissions();
-        $newuserperm->NidPermission = Str::uuid();
-        $newuserperm->UserId = $userpermission->UserId;
-        $newuserperm->ResourceId = $userpermission->ResourceId;
-        $newuserperm->EntityId = $userpermission->EntityId;
-        $newuserperm->Create = boolval($userpermission->CreateVal);
-        $newuserperm->Edit = boolval($userpermission->EditVal);
-        $newuserperm->Delete = boolval($userpermission->DeleteVal);
-        $newuserperm->Detail = boolval($userpermission->DetailVal);
-        $newuserperm->Confident = boolval($userpermission->ConfidentVal);
-        $newuserperm->List = boolval($userpermission->ListVal);
-        $newuserperm->Print = boolval($userpermission->PrintVal);
-        return $repo->AddUserPermission($newuserperm);
+        try {
+            $repo = new UserRepository(new User());
+            $newuserperm = new UserPermissions();
+            $newuserperm->NidPermission = Str::uuid();
+            $newuserperm->UserId = $userpermission->UserId;
+            $newuserperm->ResourceId = $userpermission->ResourceId;
+            $newuserperm->EntityId = $userpermission->EntityId;
+            $newuserperm->Create = boolval($userpermission->CreateVal);
+            $newuserperm->Edit = boolval($userpermission->EditVal);
+            $newuserperm->Delete = boolval($userpermission->DeleteVal);
+            $newuserperm->Detail = boolval($userpermission->DetailVal);
+            $newuserperm->Confident = boolval($userpermission->ConfidentVal);
+            $newuserperm->List = boolval($userpermission->ListVal);
+            $newuserperm->Print = boolval($userpermission->PrintVal);
+            return $repo->AddUserPermission($newuserperm);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateRolePermission(Request $rolepermission)
     {
-        $repo = new UserRepository(new User());
-        $newroleperm = new RolePermissions();
-        $newroleperm->NidPermission = $rolepermission->NidPermission;
-        $newroleperm->RoleId = $rolepermission->RoleId;
-        $newroleperm->EntityId = $rolepermission->EntityId;
-        $newroleperm->Create = boolval($rolepermission->CreateVal);
-        $newroleperm->Edit = boolval($rolepermission->EditVal);
-        $newroleperm->Delete = boolval($rolepermission->DeleteVal);
-        $newroleperm->Detail = boolval($rolepermission->DetailVal);
-        $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
-        $newroleperm->List = boolval($rolepermission->ListVal);
-        $newroleperm->Print = boolval($rolepermission->PrintVal);
-        return $repo->UpdateRolePermission($newroleperm);
+        try {
+            $repo = new UserRepository(new User());
+            $newroleperm = new RolePermissions();
+            $newroleperm->NidPermission = $rolepermission->NidPermission;
+            $newroleperm->RoleId = $rolepermission->RoleId;
+            $newroleperm->EntityId = $rolepermission->EntityId;
+            $newroleperm->Create = boolval($rolepermission->CreateVal);
+            $newroleperm->Edit = boolval($rolepermission->EditVal);
+            $newroleperm->Delete = boolval($rolepermission->DeleteVal);
+            $newroleperm->Detail = boolval($rolepermission->DetailVal);
+            $newroleperm->Confident = boolval($rolepermission->ConfidentVal);
+            $newroleperm->List = boolval($rolepermission->ListVal);
+            $newroleperm->Print = boolval($rolepermission->PrintVal);
+            return $repo->UpdateRolePermission($newroleperm);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function DeleteRolePermission(string $NidPermission)
     {
-        $repo = new UserRepository(new User());
-        return $repo->DeleteRolePermission($NidPermission);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->DeleteRolePermission($NidPermission);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function DeleteUserPermission(string $NidPermission)
     {
-        $repo = new UserRepository(new User());
-        return $repo->DeleteUserPermission($NidPermission);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->DeleteUserPermission($NidPermission);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetAllRolePermissions()
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetRolesPermission();
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetRolesPermission();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllRolePermissionDTOs()
     {
-        $repo = new UserRepository(new User());
-        $perms = $repo->GetRolesPermission();
-        $res = new Collection();
-        foreach ($perms as $pr) {
-            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        try {
+            $repo = new UserRepository(new User());
+            $perms = $repo->GetRolesPermission();
+            $res = new Collection();
+            foreach ($perms as $pr) {
+                $res->push(DataMapper::MapToRolePermissionDTO($pr));
+            }
+            return $res;
+        } catch (\Throwable $th) {
+            return null;
         }
-        return $res;
     }
     public function GetAllRolePermissionDTOsByRoleId(string $RoleId)
     {
-        $repo = new UserRepository(new User());
-        $perms = $repo->GetRolesPermissionByRoleId($RoleId);
-        $res = new Collection();
-        foreach ($perms as $pr) {
-            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        try {
+            $repo = new UserRepository(new User());
+            $perms = $repo->GetRolesPermissionByRoleId($RoleId);
+            $res = new Collection();
+            foreach ($perms as $pr) {
+                $res->push(DataMapper::MapToRolePermissionDTO($pr));
+            }
+            return $res;
+        } catch (\Throwable $th) {
+            return null;
         }
-        return $res;
     }
     public function GetAllUserPermissionDTOsByUserId(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetUserPermissions($UserId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetUserPermissions($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllRoleUsers(string $RoleId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetRoleUsersById($RoleId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetRoleUsersById($RoleId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     public function GetRolePermissionsByUser(string $UserId)
     {
-        $repo = new UserRepository(new User());
-        $perms = $repo->GetRolesPermissionByUserId($UserId);
-        $res = new Collection();
-        foreach ($perms as $pr) {
-            $res->push(DataMapper::MapToRolePermissionDTO($pr));
+        try {
+            $repo = new UserRepository(new User());
+            $perms = $repo->GetRolesPermissionByUserId($UserId);
+            $res = new Collection();
+            foreach ($perms as $pr) {
+                $res->push(DataMapper::MapToRolePermissionDTO($pr));
+            }
+            return $res;
+        } catch (\Throwable $th) {
+            return null;
         }
-        return $res;
     }
     public function GetRolePermissionsById(string $PermissionId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetRolesPermissionById($PermissionId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetRolesPermissionById($PermissionId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetRoleById(string $RoleId)
     {
-        $repo = new UserRepository(new User());
-        return $repo->GetRoleById($RoleId);
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetRoleById($RoleId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     //Project section
     public function GetAllProjectInitials(int $pagesize = 0)
@@ -501,341 +735,532 @@ class NPMSController extends Controller
         $repo = new ProjectRepository(new Projects());
         return $repo->GetProjectInitials($pagesize);
     }
-    public function AddProjectInitial(Request $ProjectInitial,string $NidUser)
+    public function AddProjectInitial(Request $ProjectInitial, string $NidUser)
     {
-        $ProjectInitial->CreateDate = Carbon::now();
-        $repo = new ProjectRepository(new Projects());
-        $repo2 = new AlarmRepository(new Alarms());
-        $ProjectInitial->PersianCreateDate = new Verta($ProjectInitial->CreateDate);
-        $ProjectInitial->NidProject = Str::uuid();
-        $ProjectInitial->ProjectNumber = $repo->GenerateProjectNumber();
-        $ProjectInitial->ProjectStatus = 0;
-        $ProjectInitial->UserId = $NidUser;
-        $ProjectInitial = DataMapper::MapToProjectInitialDTOFromRequest($ProjectInitial);
-        if ($repo->AddProjectInitial($ProjectInitial))
-        {
-            return $repo2->HandleAlarmsByProjectId($ProjectInitial->NidProject);
+        try {
+            $ProjectInitial->CreateDate = Carbon::now();
+            $repo = new ProjectRepository(new Projects());
+            $repo2 = new AlarmRepository(new Alarms());
+            $ProjectInitial->PersianCreateDate = new Verta($ProjectInitial->CreateDate);
+            $ProjectInitial->NidProject = Str::uuid();
+            $ProjectInitial->ProjectNumber = $repo->GenerateProjectNumber();
+            $ProjectInitial->ProjectStatus = 0;
+            $ProjectInitial->UserId = $NidUser;
+            $ProjectInitial = DataMapper::MapToProjectInitialDTOFromRequest($ProjectInitial);
+            if ($repo->AddProjectInitial($ProjectInitial)) {
+                return $repo2->HandleAlarmsByProjectId($ProjectInitial->NidProject);
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
     }
     public function ProjectProgress(Request $project)
     {
-        $repo = new ProjectRepository(new Projects());
-        $repo2 = new AlarmRepository(new Alarms());
-        $project = DataMapper::MapToProject($project);
-        $project->ProjectStatus = $repo->ProjectStatusCalc($project);
-        $res = $repo->UpdateProject($project);
-        $repo2->HandleAlarmsByProjectId($project->NidProject);
-        return $res;
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $repo2 = new AlarmRepository(new Alarms());
+            $project = DataMapper::MapToProject($project);
+            $project->ProjectStatus = $repo->ProjectStatusCalc($project);
+            $res = $repo->UpdateProject($project);
+            $repo2->HandleAlarmsByProjectId($project->NidProject);
+            return $res;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function DeleteProject(string $NidProject)
     {
-        $repo = new ProjectRepository(new Projects());
-        $repo2 = new AlarmRepository(new Alarms());
-        $repo2->RemoveProjectAlarms($NidProject);
-        return $repo->DeleteProject($repo->GetProjectById($NidProject));
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $repo2 = new AlarmRepository(new Alarms());
+            $repo2->RemoveProjectAlarms($NidProject);
+            return $repo->DeleteProject($repo->GetProjectById($NidProject));
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetProjectDTOById(string $NidProject)
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectDTOById($NidProject);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectDTOById($NidProject);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetProjectDetailDTOById(string $NidProject)
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectDetailDTOById($NidProject);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectDetailDTOById($NidProject);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllUnits()
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetUnits(0);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetUnits(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllUnitGroups()
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetUnitGroups(0);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetUnitGroups(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllProjectScholars()
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectScholars(0);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectScholars(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function AddProject(Request $Project)
     {
-        $repo = new ProjectRepository(new Projects());
-        $repo2 = new AlarmRepository(new Alarms());
-        $Project->CreateDate = Carbon::now();
-        // $tmpPersian = new Verta($Project->CreateDate);
-        $Project->PersianCreateDate = strval(verta($Project->CreateDate));
-        $Project->NidProject = Str::uuid();
-        $Project->ProjectNumber = $repo->GenerateProjectNumber();
-        $Project->ProjectStatus = 0;
-        $Project = DataMapper::MapToProject($Project);
-        $repo->AddProject($Project);
-        $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
-        return $repo->UpdateProject($Project);
-        return $repo2->HandleAlarmsByProjectId($Project->NidProject);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $repo2 = new AlarmRepository(new Alarms());
+            $Project->CreateDate = Carbon::now();
+            // $tmpPersian = new Verta($Project->CreateDate);
+            $Project->PersianCreateDate = strval(verta($Project->CreateDate));
+            $Project->NidProject = Str::uuid();
+            $Project->ProjectNumber = $repo->GenerateProjectNumber();
+            $Project->ProjectStatus = 0;
+            $Project = DataMapper::MapToProject($Project);
+            $repo->AddProject($Project);
+            $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
+            $repo->UpdateProject($Project);
+            return $repo2->HandleAlarmsByProjectId($Project->NidProject);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetProjectById(string $NidProject)
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectById($NidProject);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectById($NidProject);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     //base info section
     public function AddUnit(Request $unit)
     {
-        $repo = new ProjectRepository(new Projects());
-        $unit->NidUnit = Str::uuid();
-        $unit = DataMapper::MapToUnit($unit);
-        return $repo->AddUnit($unit);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $unit->NidUnit = Str::uuid();
+            $unit = DataMapper::MapToUnit($unit);
+            return $repo->AddUnit($unit);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateUnit(Request $unit)
     {
-        $repo = new ProjectRepository(new Projects());
-        $unit = DataMapper::MapToUnit($unit);
-        return $repo->UpdateUnit($unit);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $unit = DataMapper::MapToUnit($unit);
+            return $repo->UpdateUnit($unit);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function AddUnitGroup(Request $unitGroup)
     {
-        $repo = new ProjectRepository(new Projects());
-        $unitGroup->NidGroup = Str::uuid();
-        $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
-        return $repo->AddUnitGroup($unitGroup);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $unitGroup->NidGroup = Str::uuid();
+            $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
+            return $repo->AddUnitGroup($unitGroup);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateUnitGroup(Request $unitGroup)
     {
-        $repo = new ProjectRepository(new Projects());
-        $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
-        return $repo->UpdateUnitGroup($unitGroup);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $unitGroup = DataMapper::MapToUnitGroup($unitGroup);
+            return $repo->UpdateUnitGroup($unitGroup);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function AddMajor(Request $major)
     {
-        $repo = new ProjectRepository(new Projects());
-        $major->NidMajor = Str::uuid();
-        $major = DataMapper::MapToMajor($major);
-        return $repo->AddMajor($major);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $major->NidMajor = Str::uuid();
+            $major = DataMapper::MapToMajor($major);
+            return $repo->AddMajor($major);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateMajor(Request $major)
     {
-        $repo = new ProjectRepository(new Projects());
-        $major = DataMapper::MapToMajor($major);
-        return $repo->UpdateMajor($major);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $major = DataMapper::MapToMajor($major);
+            return $repo->UpdateMajor($major);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function AddOreintation(Request $oreintation)
     {
-        $repo = new ProjectRepository(new Projects());
-        $oreintation->NidOreintation = Str::uuid();
-        $oreintation = DataMapper::MapToOreintation($oreintation);
-        return $repo->AddOreintation($oreintation);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $oreintation->NidOreintation = Str::uuid();
+            $oreintation = DataMapper::MapToOreintation($oreintation);
+            return $repo->AddOreintation($oreintation);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateOreintation(Request $oreintation)
     {
-        $repo = new ProjectRepository(new Projects());
-        $oreintation = DataMapper::MapToOreintation($oreintation);
-        return $repo->UpdateOreintation($oreintation);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $oreintation = DataMapper::MapToOreintation($oreintation);
+            return $repo->UpdateOreintation($oreintation);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function AddSetting(Request $setting)
     {
-        $repo = new ProjectRepository(new Projects());
-        $setting->NidSetting = Str::uuid();
-        $setting->IsDeleted = boolval(false);
-        $setting = DataMapper::MapToSetting($setting);
-        return $repo->AddSetting($setting);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $setting->NidSetting = Str::uuid();
+            $setting->IsDeleted = boolval(false);
+            $setting = DataMapper::MapToSetting($setting);
+            return $repo->AddSetting($setting);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function UpdateSetting(Request $setting)
     {
-        $repo = new ProjectRepository(new Projects());
-        $setting = DataMapper::MapToSetting($setting);
-        return $repo->UpdateSetting($setting);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $setting = DataMapper::MapToSetting($setting);
+            return $repo->UpdateSetting($setting);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function DeleteUnit(string $NidUnit)
     {
-        $repo = new ProjectRepository(new Projects());
-        if(!$repo->CheckForUnitGroupExist($NidUnit))
-        {
-            $repo->DeleteUnit($repo->GetUnitById($NidUnit));
-            return response()->json(['Message'=>'2']);
-        }else
-        {
-            return response()->json(['Message'=>'1']);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            if (!$repo->CheckForUnitGroupExist($NidUnit)) {
+                $repo->DeleteUnit($repo->GetUnitById($NidUnit));
+                return response()->json(['Message' => '2']);
+            } else {
+                return response()->json(['Message' => '1']);
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
     }
     public function DeleteRole(string $NidRole)
     {
-        $repo = new UserRepository(new User());
-        if(!$repo->CheckForUserExist($NidRole))
-        {
-            $repo->DeleteRole($NidRole);
-            return response()->json(['Message'=>'2']);
-        }else
-        {
-            return response()->json(['Message'=>'1']);
+        try {
+            $repo = new UserRepository(new User());
+            if (!$repo->CheckForUserExist($NidRole)) {
+                $repo->DeleteRole($NidRole);
+                return response()->json(['Message' => '2']);
+            } else {
+                return response()->json(['Message' => '1']);
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
     }
     public function DeleteUnitGroup(string $NidUnitGroup)
     {
-        $repo = new ProjectRepository(new Projects());
-        return response()->json(['HasValue'=>$repo->DeleteUnitGroup($repo->GetUnitGroupById($NidUnitGroup))]);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return response()->json(['HasValue' => $repo->DeleteUnitGroup($repo->GetUnitGroupById($NidUnitGroup))]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function DeleteMajor(string $NidMajor)
     {
-        $repo = new ProjectRepository(new Projects());
-        if(!$repo->CheckForOreintationExist($NidMajor))
-        {
-            $repo->DeleteMajor($repo->GetMajorById($NidMajor));
-            return response()->json(['Message'=>'2']);
-        }else
-        {
-            return response()->json(['Message'=>'1']);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            if (!$repo->CheckForOreintationExist($NidMajor)) {
+                $repo->DeleteMajor($repo->GetMajorById($NidMajor));
+                return response()->json(['Message' => '2']);
+            } else {
+                return response()->json(['Message' => '1']);
+            }
+        } catch (\Throwable $th) {
+            return null;
         }
     }
     public function DeleteOreintation(string $NidOreintation)
     {
-        $repo = new ProjectRepository(new Projects());
-        return response()->json(['HasValue'=>$repo->DeleteOreintation($repo->GetOreintationById($NidOreintation))]);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return response()->json(['HasValue' => $repo->DeleteOreintation($repo->GetOreintationById($NidOreintation))]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function DeleteSetting(string $NidSetting)
     {
-        $repo = new ProjectRepository(new Projects());
-        $tmpSetting = $repo->GetSettingById($NidSetting);
-        $tmpSetting->IsDeleted = boolval(true);
-        return response()->json(['HasValue'=>$repo->UpdateSetting($tmpSetting)]);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            $tmpSetting = $repo->GetSettingById($NidSetting);
+            $tmpSetting->IsDeleted = boolval(true);
+            return response()->json(['HasValue' => $repo->UpdateSetting($tmpSetting)]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GenerateSettingValue(int $index)
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GenerateSettingId($index);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GenerateSettingId($index);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     //search section
     public function AdvancedSearch(string $FsearchText, int $FSectionId = 0, int $FById = 0, int $FSimilar = 1)
     {
         $repo = new SearchRepository();
-        return $repo->AdvancedSearchProcess($FsearchText,$FSectionId,$FSimilar,$FById);
+        return $repo->AdvancedSearchProcess($FsearchText, $FSectionId, $FSimilar, $FById);
+        try {
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function ComplexSearch(string $searchText, int $ById = 0, bool $Similar = true)
     {
-        $repo = new SearchRepository();
-        return $repo->ComplexSearch($searchText,$Similar,$ById);
+        try {
+            $repo = new SearchRepository();
+            return $repo->ComplexSearch($searchText, $Similar, $ById);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 
     //alarm section
     public function GetFirstPageAlarms()
     {
-        $repo = new AlarmRepository(new Alarms());
-        return $repo->GetFirstLevelAlarms();
+        try {
+            $repo = new AlarmRepository(new Alarms());
+            return $repo->GetFirstLevelAlarms();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetUsersFirstPageAlarms(string $UserId)
     {
-        $repo = new AlarmRepository(new Alarms());
-        return $repo->GetUsersFirstLevelAlarms($UserId);
+        try {
+            $repo = new AlarmRepository(new Alarms());
+            return $repo->GetUsersFirstLevelAlarms($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetAllAlarms(int $pagesize = 100)
     {
-        $repo = new AlarmRepository(new Alarms());
-        return $repo->GetAllAlarms($pagesize);
+        try {
+            $repo = new AlarmRepository(new Alarms());
+            return $repo->GetAllAlarms($pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetUsersAlarms(string $UserId)
     {
-        $repo = new AlarmRepository(new Alarms());
-        return $repo->GetAlarmsByCreator($UserId);
+        try {
+            $repo = new AlarmRepository(new Alarms());
+            return $repo->GetAlarmsByCreator($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     //message section
     public function DeleteMessage(string $NidMessage)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->DeleteMessage($NidMessage);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->DeleteMessage($NidMessage);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
-    public function GetAllUsersMessages(string $NidUser,bool $ShowAll = false,int $pagesize = 0)
+    public function GetAllUsersMessages(string $NidUser, bool $ShowAll = false, int $pagesize = 0)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->GetUsersMessages($NidUser,$ShowAll,$pagesize);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->GetUsersMessages($NidUser, $ShowAll, $pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
-    public function GetAllUsersSendMessages(string $NidUser,int $pagesize = 100)
+    public function GetAllUsersSendMessages(string $NidUser, int $pagesize = 100)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->GetUsersSendMessages($NidUser,$pagesize);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->GetUsersSendMessages($NidUser, $pagesize);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function ReadMessage(string $NidMessage)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->ReadMessage($NidMessage);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->ReadMessage($NidMessage);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function RecieveMessage(string $NidMessage)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->RecieveMessage($NidMessage);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->RecieveMessage($NidMessage);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function RecieveMessageNeeded(string $NidUser)
     {
-        $repo = new MessageRepository(new Messages());
-        return response()->json(['HasValue'=>$repo->RecieveMessageNeeded($NidUser)]);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return response()->json(['HasValue' => $repo->RecieveMessageNeeded($NidUser)]);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetMessageDTOById(string $NidMessage)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->GetMessageDTOById($NidMessage);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->GetMessageDTOById($NidMessage);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetMessageHirarchyById(string $NidMessage)
     {
-        $repo = new MessageRepository(new Messages());
-        return $repo->GetMessageHirarchyById($NidMessage);
+        try {
+            $repo = new MessageRepository(new Messages());
+            return $repo->GetMessageHirarchyById($NidMessage);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function SendMessage(Request $Message)
     {
-        $repo = new MessageRepository(new Messages());
-        $Message = DataMapper::MapToMessage($Message);
-        return $repo->SendMessage($Message);
+        try {
+            $repo = new MessageRepository(new Messages());
+            $Message = DataMapper::MapToMessage($Message);
+            return $repo->SendMessage($Message);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     //report section
-    public function GetStatisticsReport(string $NidReport,array $paramsKey,array $paramsValue)
+    public function GetStatisticsReport(string $NidReport, array $paramsKey, array $paramsValue)
     {
-        $repo = new ReportRepository(new Reports());
-        // $reportraw = DataMapper::MapToReportRawData($reportraw);
-        return $repo->StatisticsReport($NidReport,$paramsKey,$paramsValue);
+        try {
+            $repo = new ReportRepository(new Reports());
+            // $reportraw = DataMapper::MapToReportRawData($reportraw);
+            return $repo->StatisticsReport($NidReport, $paramsKey, $paramsValue);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function AddReport(Reports $report)
     {
-        $repo = new ReportRepository(new Reports());
-        // $report = DataMapper::MapToReport($report);
-        return $repo->AddReport($report);
-    }
-    public function AddReportParameters(SupportCollection $Params)//ReportParameter
-    {
-        $repo = new ReportRepository(new Reports());
-        $pars = new Collection();
-        foreach($Params as $param)
-        {
-            $pars->push(DataMapper::MapToReportParameter($param));
+        try {
+            $repo = new ReportRepository(new Reports());
+            // $report = DataMapper::MapToReport($report);
+            return $repo->AddReport($report);
+        } catch (\Throwable $th) {
+            return false;
         }
-        return $repo->AddReportParameterList($pars);
+    }
+    public function AddReportParameters(SupportCollection $Params) //ReportParameter
+    {
+        try {
+            $repo = new ReportRepository(new Reports());
+            $pars = new Collection();
+            foreach ($Params as $param) {
+                $pars->push(DataMapper::MapToReportParameter($param));
+            }
+            return $repo->AddReportParameterList($pars);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
     public function GetReportById(string $NidReport)
     {
-        $repo = new ReportRepository(new Reports());
-        return $repo->GetReport($NidReport);
+        try {
+            $repo = new ReportRepository(new Reports());
+            return $repo->GetReport($NidReport);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetStatisticsReports()
     {
-        $repo = new ReportRepository(new Reports());
-        return $repo->GetStatisticsReports();
+        try {
+            $repo = new ReportRepository(new Reports());
+            return $repo->GetStatisticsReports();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetReportsInput(string $NidReport)
     {
-        $repo = new ReportRepository(new Reports());
-        return $repo->GetReportsInput($NidReport);
+        try {
+            $repo = new ReportRepository(new Reports());
+            return $repo->GetReportsInput($NidReport);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function GetReportsOutput(string $NidReport)
     {
-        $repo = new ReportRepository(new Reports());
-        return $repo->GetReportsOutput($NidReport);
+        try {
+            $repo = new ReportRepository(new Reports());
+            return $repo->GetReportsOutput($NidReport);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function DeleteReport(string $NidReport)
     {
-        $repo = new ReportRepository(new Reports());
-        if($repo->DeleteReportParametersByNidReport($NidReport))
-        {
-            return $repo->DeleteReport($NidReport);
+        try {
+            $repo = new ReportRepository(new Reports());
+            if ($repo->DeleteReportParametersByNidReport($NidReport)) {
+                return $repo->DeleteReport($NidReport);
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 }

@@ -16,12 +16,13 @@
             پرینت
         </span>
     </button>
+    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2" hidden>لطفا منتظر بمانید</p>
 </div>
 @if (in_array('2', $sharedData['UserAccessedEntities']))
-    <h3>طرح ها</h3>
+    <h3 style="text-align: right;">طرح ها</h3>
     @if ($Projects->count() > 0)
         <div class="table-responsive" dir="ltr">
-            <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
+            <table class="table table-bordered" id="projectdataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
                     <tr>
@@ -63,14 +64,14 @@
             </table>
         </div>
     @else
-        <p>موردی یافت نشد</p>
+        <p style="text-align: right;">موردی یافت نشد</p>
     @endforelse
 @endif
 @if (in_array('1', $sharedData['UserAccessedEntities']))
-    <h3>محققان</h3>
+    <h3 style="text-align: right;">محققان</h3>
     @if ($Scholars->count() > 0)
         <div class="table-responsive" dir="ltr">
-            <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
+            <table class="table table-bordered" id="scholardataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
                     <tr>
@@ -107,14 +108,14 @@
             </table>
         </div>
     @else
-        <p>موردی یافت نشد</p>
+        <p style="text-align: right;">موردی یافت نشد</p>
     @endforelse
 @endif
 @if (in_array('3', $sharedData['UserAccessedEntities']))
-    <h3>کاربران</h3>
+    <h3 style="text-align: right;">کاربران</h3>
     @if ($Users->count() > 0)
         <div class="table-responsive" dir="ltr" id="tableWrapper">
-            <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
+            <table class="table table-bordered" id="userdataTable" style="width:100%;direction:rtl;text-align:center;"
                 cellspacing="0">
                 <thead>
                     <tr>
@@ -144,7 +145,7 @@
                                 @endif
                             </td>
                             <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
-                            <td>{{ $usr->Username }}</td>
+                            <td>{{ $usr->UserName }}</td>
                             @if (!$usr->IsAdmin)
                                 <td>کاربر عادی</td>
                             @else
@@ -160,11 +161,11 @@
             </table>
         </div>
     @else
-        <p>موردی یافت نشد</p>
+        <p style="text-align: right;">موردی یافت نشد</p>
     @endforelse
 @endif
 @if (in_array('6', $sharedData['UserAccessedEntities']))
-    <h3>اطلاعات پایه</h3>
+    <h3 style="text-align: right;">اطلاعات پایه</h3>
 
     @if ($BaseInfo->count() > 0)
         <div class="table-responsive" dir="ltr" id="BaseInfoTableWrapper">
@@ -209,6 +210,6 @@
             </table>
         </div>
     @else
-        <p>موردی یافت نشد</p>
+        <p style="text-align: right;">موردی یافت نشد</p>
     @endforelse
 @endif

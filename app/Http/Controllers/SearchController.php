@@ -127,20 +127,21 @@ class SearchController extends Controller
     }
     public function SubmitAdvanceSearch(Request $request,string $SearchInputs)
     {
+        $api = new NPMSController();
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $inps = explode(',',$SearchInputs);
+        $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
+        $Projects = $response[1];
+        $Scholars = $response[0];
+        $Users = $response[2];
+        $BaseInfo = $response[3];
+        $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
+        $api->AddLog(auth()->user(),$request->ip(),33,0,3,1,"");
+        return response()->json($result);
+        // dd($response);
         try {
-            $api = new NPMSController();
-            $result = new JsonResults();
-            $result->HasValue = true;
-            $inps = explode(',',$SearchInputs);
-            $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
-            $Projects = $response[1];
-            $Scholars = $response[0];
-            $Users = $response[2];
-            $BaseInfo = $response[3];
-            $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
-            $api->AddLog(auth()->user(),$request->ip(),33,0,3,1,"");
-            return response()->json($result);
-            // return $response[2];
+
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -158,6 +159,11 @@ class SearchController extends Controller
             $BaseInfo = $response[3];
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
+            try {
+                ini_set("pcre.backtrack_limit", "100000000");
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'));
             $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");
             return $pdf->stream('AdvancedSearchResult.pdf');

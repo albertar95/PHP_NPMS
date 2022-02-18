@@ -103,7 +103,7 @@
                     @foreach ($Users as $usr)
                         <tr>
                             <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
-                            <td>{{ $usr->Username }}</td>
+                            <td>{{ $usr->UserName }}</td>
                             @if (!$usr->IsAdmin)
                                 <td>کاربر عادی</td>
                             @else

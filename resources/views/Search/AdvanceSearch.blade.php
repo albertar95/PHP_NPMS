@@ -1,23 +1,6 @@
 @extends('Layouts.app')
 
 @section('Content')
-
-
-    {{-- @{
-    ViewBag.Title = "جستجو پیشرفته";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    NPMS_WebUI.ViewModels.SharedLayoutViewModel slvm = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(DataAccessLibrary.Helpers.Encryption.Decrypt(User.Identity.Name).Split(','), 0);
-    if (HttpContext.Current.Request.Cookies.AllKeys.Contains("NPMS_Permissions"))
-    {
-        var ticket = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies["NPMS_Permissions"].Value);
-        slvm.UserPermissions = new NPMS_WebUI.ViewModels.SharedLayoutViewModel(new string[] { ticket.UserData }, 1).UserPermissions;
-    }
-    else
-    {
-        slvm.UserPermissions = new List<Guid>();
-    }
-} --}}
-
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
@@ -113,9 +96,9 @@
             </div>
         </div>
     </div>
-    <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+    <div class="card shadow" style="margin-bottom:1rem;">
         <!-- Card Header - Accordion -->
-        <a href="#collapseSearchResultItems" class="d-block card-header py-3" data-toggle="collapse" role="button"
+        <a href="#collapseSearchResultItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse" role="button"
             aria-expanded="true" aria-controls="collapseSearchResultItems">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:center;">نتیجه جستجو</h6>
         </a>
@@ -127,11 +110,15 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/PersianDate/css/persian-datepicker.min.css') }}" rel="stylesheet" />
+    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <title>سامانه مدیریت تحقیقات - جستجو پیشرفته</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-date.min.js') }}"></script>
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $("#Subject").focus();
@@ -280,6 +267,10 @@
                     $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue)
                         $("#Resultwrapper").html(result.Html);
+                        $("#projectdataTable").dataTable();
+                        $("#scholardataTable").dataTable();
+                        $("#userdataTable").dataTable();
+                        $("#BaseInfodataTable").dataTable();
                 },
                 error: function()
                 {
@@ -290,6 +281,7 @@
         }
 
         function ExportResult(typo) {
+            $("#waitText2").removeAttr('hidden')
             switch (typo) {
                 case 1:
                     var stext = '';
@@ -318,11 +310,18 @@
                             SearchBy: document.getElementById("SearchBy").value,
                             Similar: $("#cbSimilar").val()
                         },
-                        success: function() {},
-                        error: function() {}
+                        success: function()
+                        {
+                            $("#waitText2").attr('hidden', 'hidden');
+                        },
+                        error: function()
+                        {
+                            $("#waitText2").attr('hidden', 'hidden');
+                        }
                     });
                     break;
                 case 2:
+                $("#waitText2").attr('hidden', 'hidden');
                     // $("#ScholarDataTable").tableHTMLExport({
                     //     type: 'csv',
                     //     filename: searchResult + '.csv'
@@ -356,6 +355,7 @@
                             Similar: $("#cbSimilar").val()
                         },
                         success: function(result) {
+                            $("#waitText2").attr('hidden', 'hidden');
                             if (result.HasValue) {
                                 newWin = window.open("");
                                 newWin.document.write(result.Html);
@@ -370,6 +370,7 @@
                             }
                         },
                         error: function() {
+                            $("#waitText2").attr('hidden', 'hidden');
                             var divToPrint = document.getElementById("Resultwrapper");
                             newWin = window.open("");
                             newWin.document.write(divToPrint.outerHTML);
