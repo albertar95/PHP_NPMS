@@ -119,7 +119,17 @@
                     @endif
                 @endif
             </div>
-            <a rel="nofollow" href="#" id="btnMorePage" style="font-size: 17px;text-align: right;">&plus; نمایش محقق های بیشتر</a>
+            <a rel="nofollow" href="#" id="btnMorePage" style="font-size: 17px;text-align: right;">&plus; نمایش محقق های
+                بیشتر</a>
+            @if (in_array('1', $sharedData['UserAccessedEntities']))
+                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[6] == 1)
+                    <input type="text" id="txtincludeConfident" value="1" hidden>
+                @else
+                    <input type="text" id="txtincludeConfident" value="0" hidden>
+                @endforelse
+            @else
+                <input type="text" id="txtincludeConfident" value="0" hidden>
+            @endforelse
         </div>
     </div>
     <div class="modal" id="ScholarModal" tabindex="-1" role="dialog" aria-labelledby="ScholarModalLabel"
@@ -147,7 +157,8 @@
                         <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
                             data-dismiss="modal" id="btnCancel" hidden>خیر</button>
                     </div>
-                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;margin: 0 auto;" hidden id="waitText">لطفا
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;margin: 0 auto;"
+                        hidden id="waitText">لطفا
                         منتظر بمانید</p>
                 </div>
             </div>
@@ -167,7 +178,7 @@
             $("#btnMorePage").click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/pagination/2/' + $("#LoadCount").val(),
+                    url: '/pagination/2/' + $("#LoadCount").val() + '/' + $("#txtincludeConfident").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

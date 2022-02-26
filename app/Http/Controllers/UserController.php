@@ -14,13 +14,14 @@ use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode']]);
+        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode','HashPassword','SubmitHashPassword']]);
         $this->middleware('XSS');
     }
     private function CheckAuthority(bool $checkSub, int $sub, string $cookie, int $entity = 3)
@@ -87,7 +88,7 @@ class UserController extends Controller
             $api = new NPMSController();
             $briefs = $api->IndexBriefReport();
             $charts = $api->IndexChartReport();
-            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser);
+            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser,false,5);
             $chartarrays = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             foreach ($charts as $key => $value) {
                 $chartarrays[$key - 1] = $value;
@@ -201,6 +202,17 @@ class UserController extends Controller
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
+    }
+    public function HashPassword()
+    {
+        return view('User.HashPassword');
+    }
+    public function SubmitHashPassword(Request $request)
+    {
+        $result = new JsonResults();
+        $result->HasValue = true;
+        $result->Message = Crypt::encryptString($request->Password);
+        return response()->json($result);
     }
     public function EditUser(string $NidUser, Request $request)
     {
@@ -497,13 +509,13 @@ class UserController extends Controller
             $userRole = $api->GetAllRoles()->where('NidRole', '=', auth()->user()->RoleId)->firstOrFail()->IsAdmin;
             $tmpPerms = new Collection();
             if ($userRole) {
-                $tmpPerms->push('0,1,1,1,1,1,1');
+                $tmpPerms->push('0,1,1,1,1,1,1,1');
             }
             foreach ($perms as $perm) {
-                $tmpPerms->push($perm->EntityId . ',' . $perm->Create . ',' . $perm->Edit . ',' . $perm->Delete . ',' . $perm->Detail . ',' . $perm->List . ',' . $perm->Print);
+                $tmpPerms->push($perm->EntityId . ',' . $perm->Create . ',' . $perm->Edit . ',' . $perm->Delete . ',' . $perm->Detail . ',' . $perm->List . ',' . $perm->Print. ',' . $perm->Confident);
             }
             foreach ($perms2 as $perm2) {
-                $tmpPerms->push($perm2->EntityId . ',' . $perm2->Create . ',' . $perm2->Edit . ',' . $perm2->Delete . ',' . $perm2->Detail . ',' . $perm2->List . ',' . $perm2->Print);
+                $tmpPerms->push($perm2->EntityId . ',' . $perm2->Create . ',' . $perm2->Edit . ',' . $perm2->Delete . ',' . $perm2->Detail . ',' . $perm2->List . ',' . $perm2->Print. ',' . $perm->Confident);
             }
             $output = "";
             if ($tmpPerms->count() > 0) {

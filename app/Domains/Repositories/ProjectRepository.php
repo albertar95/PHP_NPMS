@@ -27,14 +27,20 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     {
         parent::__construct($model);
     }
-    public function GetProjectInitials(int $pagesize = 100,int $skip = 0)
+    public function GetProjectInitials(int $pagesize = 100,int $skip = 0,bool $includeConfident = true)
     {
         if($pagesize != 0)
         {
+            if($includeConfident)
             return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->get()->skip($skip)->take($pagesize));
+            else
+            return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->where('IsConfident','=',0)->get()->skip($skip)->take($pagesize));
         }else
         {
+            if($includeConfident)
             return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->get()->skip($skip));
+            else
+            return DataMapper::MapToProjectInitialDTO2(Projects::with('scholar','unit','unitGroup')->where('IsConfident','=',0)->get()->skip($skip));
         }
     }
     public function AddProjectInitial(projectInitialDTO $projectInitial):bool

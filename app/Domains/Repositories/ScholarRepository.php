@@ -175,16 +175,21 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
         }
         return $result;
     }
-    public function GetScholarList(int $Pagesize = 10) :Collection
+    public function GetScholarList(int $Pagesize = 10,bool $includeConfident = true) :Collection
     {
         if ($Pagesize != 0)
         {
-            // $tmpScholars = Scholars::all()->where('IsDeleted','=',0)->take($Pagesize);
+            if($includeConfident)
             return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get()->take($Pagesize));
+            else
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->where('IsConfident','=',0)->get()->take($Pagesize));
         }
         else
         {
+            if($includeConfident)
             return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get());
+            else
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->where('IsConfident','=',0)->get());
         }
     }
     public function GetScholarDetail(string $ScholarId):scholarDetailDTO

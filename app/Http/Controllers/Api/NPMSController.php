@@ -144,11 +144,11 @@ class NPMSController extends Controller
             return null;
         }
     }
-    public function GetAllScholarLists(int $Pagesize = 10)
+    public function GetAllScholarLists(int $Pagesize = 10,bool $includeConfident = true)
     {
         try {
             $repo = new ScholarRepository(new Scholars());
-            return $repo->GetScholarList($Pagesize);
+            return $repo->GetScholarList($Pagesize,$includeConfident);
         } catch (\Throwable $th) {
             return null;
         }
@@ -730,10 +730,10 @@ class NPMSController extends Controller
         }
     }
     //Project section
-    public function GetAllProjectInitials(int $pagesize = 0)
+    public function GetAllProjectInitials(int $pagesize = 0,bool $includeConfident = true,int $toskip = 0)
     {
         $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectInitials($pagesize);
+        return $repo->GetProjectInitials($pagesize,$toskip,$includeConfident);
     }
     public function AddProjectInitial(Request $ProjectInitial, string $NidUser)
     {

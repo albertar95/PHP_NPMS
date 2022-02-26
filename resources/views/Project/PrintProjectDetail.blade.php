@@ -14,6 +14,23 @@
 </head>
 
 <body>
+    <div id="Reportheader" style="display: flex;margin-bottom: 5px;">
+        <div style="border: grey 1px solid;width: 20%;text-align: right;padding: 3px;">
+            {{ auth()->user()->UserName }} : کاربر <br />
+            تاریخ گزارش : {{ $ReportDate }}<br />
+            زمان گزارش : {{ $ReportTime }}<br />
+            @if($ConfidentLevel == 0)
+            طبقه بندی : عادی
+            @else
+            طبقه بندی : محرمانه
+            @endforelse
+        </div>
+        <div style="text-align: center;margin: 0 auto;width: 60%;">
+            <h1>جزییات طرح</h1>
+        </div>
+        <div style="width: 20%;"></div>
+    </div>
+    <div style="border: cornflowerblue 2px solid;margin-bottom: 25px;"></div>
     <table class="table table-bordered" border="1" id="ScholarDataTable"
         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
         <thead>

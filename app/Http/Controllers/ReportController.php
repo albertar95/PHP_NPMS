@@ -318,6 +318,7 @@ class ReportController extends Controller
             $ReportName = $reportresult->ReportName;
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            $ConfidentLevel = 0;
             if(($Scholars->count() + $Projects->count() + $Users->count()) > 2500)
             {
                 try {
@@ -326,7 +327,7 @@ class ReportController extends Controller
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
+            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime','ConfidentLevel'));
             $api->AddLog(auth()->user(), $report->ip(), 29, 0, 3, 2, $ReportName);
             return $pdf->stream($ReportName . '.pdf');
             // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
@@ -347,8 +348,9 @@ class ReportController extends Controller
             $ReportName = $reportresult->ReportName;
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            $ConfidentLevel = 0;
             // $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
-            $result->Html = view('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'))->render();
+            $result->Html = view('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime','ConfidentLevel'))->render();
             $result->HasValue = true;
             $api->AddLog(auth()->user(), $report->ip(), 30, 0, 3, 2, $ReportName);
             return response()->json($result);
@@ -365,6 +367,7 @@ class ReportController extends Controller
             $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            $ConfidentLevel = 0;
             if($logs->count() > 2500)
             {
                 try {
@@ -373,7 +376,7 @@ class ReportController extends Controller
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime'));
+            $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime','ConfidentLevel'));
             $api->AddLog(auth()->user(), $report->ip(), 31, 0, 3, 2, '');
             return $pdf->stream('userActivityLog.pdf');
         } catch (\Exception $e) {
@@ -388,8 +391,9 @@ class ReportController extends Controller
             $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+            $ConfidentLevel = 0;
             $result->HasValue = true;
-            $result->Html = view('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime'))->render();
+            $result->Html = view('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime','ConfidentLevel'))->render();
             $api->AddLog(auth()->user(), $report->ip(), 32, 0, 3, 2, '');
             return response()->json($result);
         } catch (\Exception $e) {

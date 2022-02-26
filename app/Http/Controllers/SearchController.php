@@ -159,6 +159,7 @@ class SearchController extends Controller
             $BaseInfo = $response[3];
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
+            $ConfidentLevel = 0;
             if(($Scholars->count() + $Projects->count() + $BaseInfo->count() + $Users->count()) > 2500)
             {
                 try {
@@ -167,7 +168,7 @@ class SearchController extends Controller
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'));
+            $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel'));
             $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");
             return $pdf->stream('AdvancedSearchResult.pdf');
         } catch (\Exception $e) {
@@ -187,8 +188,9 @@ class SearchController extends Controller
             $BaseInfo = $response[3];
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
+            $ConfidentLevel = 0;
             $result->HasValue = true;
-            $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime'))->render();
+            $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel'))->render();
             $api->AddLog(auth()->user(),$SearchInputs->ip(),35,0,3,1,"");
             return response()->json($result);
         } catch (\Exception $e) {

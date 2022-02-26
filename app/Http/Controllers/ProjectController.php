@@ -8,7 +8,9 @@ use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\TitleRequest;
 use App\Models\Projects;
 use App\Models\Scholars;
+use Carbon\Carbon;
 use Dotenv\Util\Str;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use resources\ViewModels\ManageBaseInfoViewModel;
@@ -55,7 +57,13 @@ class ProjectController extends Controller
         try {
             if ($this->CheckAuthority(true, 4, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
-                $Projects = $api->GetAllProjectInitials(200);
+                if ($this->CheckAuthority(true, 6, $request->cookie('NPMS_Permissions')))
+                {
+                    $Projects = $api->GetAllProjectInitials(200);
+                }else
+                {
+                    $Projects = $api->GetAllProjectInitials(200,false);
+                }
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "مدیریت طرح ها");
                 return view('Project.Projects', compact('Projects'));
             } else {
@@ -65,7 +73,7 @@ class ProjectController extends Controller
             throw new \App\Exceptions\LogExecptions($e);
         }
     }
-    public function Pagination(int $TypeId, int $LoadCount)
+    public function Pagination(int $TypeId, int $LoadCount,bool $includeConfident = true)
     {
         try {
             $api = new NPMSController();
@@ -73,7 +81,7 @@ class ProjectController extends Controller
             $txtLoadCount = $LoadCount + 1;
             switch ($TypeId) {
                 case 1:
-                    $Projects = $api->GetAllProjectInitials(200 * ($LoadCount + 1));
+                    $Projects = $api->GetAllProjectInitials(200 * ($LoadCount + 1),$includeConfident);
                     if ($Projects->count() / 200 < $LoadCount)
                         $result->HasValue = false;
                     else {
@@ -82,7 +90,7 @@ class ProjectController extends Controller
                     }
                     break;
                 case 2:
-                    $Scholar = $api->GetAllScholarLists(200 * ($LoadCount + 1));
+                    $Scholar = $api->GetAllScholarLists(200 * ($LoadCount + 1),$includeConfident);
                     if ($Scholar->count() / 200 < $LoadCount)
                         $result->HasValue = false;
                     else {
@@ -160,6 +168,13 @@ class ProjectController extends Controller
             if ($this->CheckAuthority(true, 3, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
                 $Project = $api->GetProjectDetailDTOById($NidProject);
+                if($Project->IsConfident)
+                {
+                    if (!$this->CheckAuthority(true, 6, $request->cookie('NPMS_Permissions')))
+                    {
+                        return view('errors.401');
+                    }
+                }
                 $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, sprintf("جزییات طرح %s", $Project->Subject));
                 return view('Project.ProjectDetail', compact('Project', 'Scholar'));
@@ -178,8 +193,11 @@ class ProjectController extends Controller
                 $api = new NPMSController();
                 $Project = $api->GetProjectDetailDTOById($NidProject);
                 $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
+                $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
+                $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+                $ConfidentLevel = $Project->IsConfident;
                 $api->AddLog(auth()->user(), $request->ip(), 40, 0, 2, 1, sprintf("جزییات طرح %s", $Project->Subject));
-                $result->Html = view('Project.PrintProjectDetail', compact('Project', 'Scholar'))->render();
+                $result->Html = view('Project.PrintProjectDetail', compact('Project', 'Scholar','ReportDate','ReportTime','ConfidentLevel'))->render();
                 $result->HasValue = true;
                 return response()->json($result);
             } else {
@@ -195,10 +213,17 @@ class ProjectController extends Controller
         try {
             if ($this->CheckAuthority(true, 1, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
+                $Project = $api->GetProjectDTOById($NidProject);
+                if($Project->IsConfident)
+                {
+                    if (!$this->CheckAuthority(true, 6, $request->cookie('NPMS_Permissions')))
+                    {
+                        return view('errors.401');
+                    }
+                }
                 $Scholars = $api->GetAllProjectScholars();
                 $UnitGroups = $api->GetAllUnitGroups();
                 $Units = $api->GetAllUnits();
-                $Project = $api->GetProjectDTOById($NidProject);
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, "پیشرفت طرح");
                 return view('Project.ProjectProgress', compact('Scholars', 'UnitGroups', 'Units', 'Project'));
             } else {

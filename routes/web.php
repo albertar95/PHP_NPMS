@@ -26,7 +26,7 @@ use Symfony\Component\Mime\MessageConverter;
 //     return view('General.Index');
 // })->middleware('auth')->name('index');
 Route::get("/",[UserController::class,"Index"])->name('index');
-Route::get("pagination/{TypeId}/{LoadCount}",[ProjectController::class,"Pagination"])->name('project.Pagination');
+Route::get("pagination/{TypeId}/{LoadCount}/{includeConfident?}",[ProjectController::class,"Pagination"])->name('project.Pagination');
 
 
 //alarm routes
@@ -122,6 +122,8 @@ Route::get("userpermissiondetail/{NidUser}",[UserController::class,"UserPermissi
 Route::get("managepermission/{NidUser}",[UserController::class,"ManagePermission"])->name('user.ManagePermission');
 Route::get("edituserpermission",[UserController::class,"EditUserPermission"])->name('user.EditUserPermission');
 Route::get("login",[UserController::class,"Login"])->name('login');
+Route::get("hashpassword",[UserController::class,"HashPassword"])->name('hashpassword');
+Route::post("submithashpassword",[UserController::class,"SubmitHashPassword"])->name('submithashpassword');
 Route::get("loadingpage",[UserController::class,"LoadingPage"])->name('user.LoadingPage');
 Route::post("submitlogin",[UserController::class,"SubmitLogin"])->name('user.SubmitLogin');
 Route::get("setlogindata/{Niduser}",[UserController::class,"SetLoginData"])->name('user.SetLoginData');

@@ -24,7 +24,7 @@ class ScholarController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
-    private function CheckAuthority(bool $checkSub,int $sub,string $cookie,int $entity = 3)
+    private function CheckAuthority(bool $checkSub,int $sub,string $cookie,int $entity = 1)
     {
         try {
             $row = explode('#',$cookie);
@@ -125,7 +125,13 @@ class ScholarController extends Controller
             if ($this->CheckAuthority(true,4,$request->cookie('NPMS_Permissions')))
             {
                 $api = new NPMSController();
-                $Scholar = $api->GetAllScholarLists(200);
+                if ($this->CheckAuthority(true,6,$request->cookie('NPMS_Permissions')))
+                {
+                    $Scholar = $api->GetAllScholarLists(200);
+                }else
+                {
+                    $Scholar = $api->GetAllScholarLists(200,false);
+                }
                 $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"مدیریت محققان");
                 return view('Scholar.Scholars',compact('Scholar'));
             }else
@@ -145,7 +151,18 @@ class ScholarController extends Controller
                 $result = new JsonResults();
                 $result->HasValue = true;
                 $Scholar = $api->GetAllScholarDetails($NidScholar);
-                $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
+                if($Scholar->IsConfident)
+                {
+                    if ($this->CheckAuthority(true,6,$request->cookie('NPMS_Permissions')))
+                    {
+                        $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
+                    }else
+                    {
+                        $result->Html = "";
+                    }
+                }else{
+                    $result->Html = view('Scholar._ScholarDetail',compact('Scholar'))->render();
+                }
                 $api->AddLog(auth()->user(),$request->ip(),1,0,2,1,sprintf("جزییات محقق.نام محقق : %s",$Scholar->FirstName.' '.$Scholar->LastName));
                 return response()->json($result);
             }else
@@ -162,12 +179,19 @@ class ScholarController extends Controller
             if ($this->CheckAuthority(true,1,$request->cookie('NPMS_Permissions')))
             {
                 $api = new NPMSController();
+                $Scholar = $api->GetScholarDTO($NidScholar);
+                if($Scholar->IsConfident)
+                {
+                    if (!$this->CheckAuthority(true,6,$request->cookie('NPMS_Permissions')))
+                    {
+                        return view('errors.401');
+                    }
+                }
                 $Majors = $api->GetMajors();
                 $CollaborationTypes = $api->GetCollaborationTypes();
                 $Grades = $api->GetGrades();
                 $MillitaryStatuses = $api->GetMillitaryStatuses();
                 $Colleges = $api->GetColleges();
-                $Scholar = $api->GetScholarDTO($NidScholar);
                 if(!is_null($Scholar))
                 {
                     $Oreintations = $api->GetOreintationsByMajorId($Scholar->MajorId);

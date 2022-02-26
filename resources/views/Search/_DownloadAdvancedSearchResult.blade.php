@@ -19,7 +19,12 @@
         <div style="border: grey 1px solid;width: 20%;text-align: right;padding: 3px;">
             {{ auth()->user()->UserName }} : کاربر <br />
             تاریخ گزارش : {{ $ReportDate }}<br />
-            زمان گزارش : {{ $ReportTime }}
+            زمان گزارش : {{ $ReportTime }}<br />
+            @if($ConfidentLevel == 0)
+            طبقه بندی : عادی
+            @else
+            طبقه بندی : محرمانه
+            @endforelse
         </div>
         <div style="text-align: center;margin: 0 auto;width: 60%;">
             <h1>نتیجه جستجو</h1>

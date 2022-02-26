@@ -50,12 +50,12 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         if($pagesize != 0)
         {
             if (!$ShowAll) {
-                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll)->take($pagesize);
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll)->sortByDesc('CreateDate')->take($pagesize);
                 foreach ($tmpMessage as $msg) {
                     $result->push(DataMapper::MapToMessageDTO($msg));
                 }
             } else {
-                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->take($pagesize);
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->sortByDesc('CreateDate')->take($pagesize);
                 foreach ($tmpMessage as $msg) {
                     $result->push(DataMapper::MapToMessageDTO($msg));
                 }
@@ -63,12 +63,12 @@ class MessageRepository extends BaseRepository implements IMessageRepository
         }else
         {
             if (!$ShowAll) {
-                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll);
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->where('IsRead', '=', $ShowAll)->sortByDesc('CreateDate');
                 foreach ($tmpMessage as $msg) {
                     $result->push(DataMapper::MapToMessageDTO($msg));
                 }
             } else {
-                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false);
+                $tmpMessage = $this->model->all()->where('RecieverId', '=', $NidUser)->where('IsDeleted', '=', false)->sortByDesc('CreateDate');
                 foreach ($tmpMessage as $msg) {
                     $result->push(DataMapper::MapToMessageDTO($msg));
                 }
