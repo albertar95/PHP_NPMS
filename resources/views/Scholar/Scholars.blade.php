@@ -178,7 +178,7 @@
             $("#btnMorePage").click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/pagination/2/' + $("#LoadCount").val() + '/' + $("#txtincludeConfident").val(),
+                    url: '{{URL::to('/')}}' + '/pagination/2/' + $("#LoadCount").val() + '/' + $("#txtincludeConfident").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -202,7 +202,7 @@
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
                 $.ajax({
-                    url: '/scholardetail/' + NidScholar,
+                    url: '{{URL::to('/')}}' + '/scholardetail/' + NidScholar,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -222,7 +222,7 @@
                 $("#btnOk").attr('onclick', 'DeleteScholar(' + "'" + NidScholar + "'" + ')');
             }
             $.ajax({
-                url: '/scholardetail/' + NidScholar,
+                url: '{{URL::to('/')}}' + '/scholardetail/' + NidScholar,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -238,7 +238,7 @@
         function DeleteScholar(NidScholar) {
             $("#waitText").removeAttr('hidden');
             $.ajax({
-                url: '/deletescholar/' + NidScholar, //'@Url.Action("DeleteScholar","Home")',
+                url: '{{URL::to('/')}}' + '/deletescholar/' + NidScholar, //'@Url.Action("DeleteScholar","Home")',
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {

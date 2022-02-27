@@ -90,7 +90,7 @@
                                 @endif
                                 @if(in_array('3',$sharedData['UserAccessedEntities']))
                                     @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[1] == 1)
-                                    <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;" >
+                                    <a href="{{ sprintf("%s/%s",URL::to('/edituser'),$usr->NidUser) }}" class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;" >
                                         <span class="icon text-white-50">
                                             <i class="fas fa-pencil-alt"></i>
                                         </span>
@@ -172,7 +172,7 @@
                 $("#btnOk").attr('onclick', 'DisableUser(' + "'" + NidUser + "'" + ')');
             }
             $.ajax({
-                url: '/userdetail/' + NidUser,
+                url: '{{URL::to('/')}}' + '/userdetail/' + NidUser,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -187,7 +187,7 @@
 
         function DisableUser(NidUser) {
             $.ajax({
-                url: '/disableuser/' + NidUser,
+                url: '{{URL::to('/')}}' + '/disableuser/' + NidUser,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -209,7 +209,7 @@
 
         function ChangeTableSource(sourceId) {
             $.ajax({
-                url: '/usersourcechange/' + sourceId,
+                url: '{{URL::to('/')}}' + '/usersourcechange/' + sourceId,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {

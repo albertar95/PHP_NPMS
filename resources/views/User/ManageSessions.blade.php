@@ -169,7 +169,7 @@
 
         function LogoutUser(NidUser) {
             $.ajax({
-                url: '/logoutuser/' + NidUser,
+                url: '{{URL::to('/')}}' + '/logoutuser/' + NidUser,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {

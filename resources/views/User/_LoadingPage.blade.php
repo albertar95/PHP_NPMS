@@ -25,7 +25,7 @@
         $(function () {
             $.ajax(
                 {
-                    url: '/setlogindata',
+                    url: '{{URL::to('/')}}' + '/setlogindata',
                     type: 'get',
                     datatype: 'json',
                     data: { Niduser: $("#userid").val() },

@@ -128,7 +128,7 @@
                                             </td>
                                             <td>
                                                 <a class="btn btn-secondary"
-                                                    href="/singlemessage/{{ $msg->NidMessage }}/1">مشاهده
+                                                    href="{{ sprintf("%s/%s/1",URL::to('/singlemessage'),$msg->NidMessage) }}">مشاهده
                                                 </a>
                                             </td>
                                         </tr>
@@ -139,7 +139,7 @@
                     </table>
                     @if (in_array('5', $sharedData['UserAccessedEntities']))
                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
-                            <a target="_blank" rel="nofollow" href="/messages/{{ auth()->user()->NidUser }}">مشاهده تمامی
+                            <a target="_blank" rel="nofollow" href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}">مشاهده تمامی
                                 پیام ها &larr;</a>
                         @endif
                     @endif
@@ -179,7 +179,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه نامه روگرفتشان دریافت نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/1">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/1')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -189,7 +189,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه نامه حفاظت شان دریافت نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/2">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/2')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -199,7 +199,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه فرم 30 درصدشان دریافت نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/3">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/3')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -209,7 +209,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه فرم 60 درصدشان دریافت نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/4">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/4')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -219,7 +219,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه دفاعیه شان برگزار نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/5">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/5')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -229,7 +229,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه داور 1 و 2 شان مشخص نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/6">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/6')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -239,7 +239,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه ویراستارشان مشخص نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/7">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/7')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -249,7 +249,7 @@
                                                     class="font-weight-bold">{{ sprintf('%d پروژه استاد راهنما و مشاورشان مشخص نشده است', $alm->Description) }}</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="/alarms/8">مشاهده
+                                                <a class="btn btn-secondary" href="{{URL::to('/alarms/8')}}">مشاهده
                                                 </a>
                                             </td>
                                         @break
@@ -258,7 +258,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <a target="_blank" rel="nofollow" href="/alarms/0">مشاهده تمامی اعلان ها &larr;</a>
+                    <a target="_blank" rel="nofollow" href="{{URL::to('/alarms/0')}}">مشاهده تمامی اعلان ها &larr;</a>
                 </div>
             </div>
         </div>

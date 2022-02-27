@@ -180,7 +180,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/searchsectionchange',
+                        url: '{{URL::to('/')}}' + '/searchsectionchange',
                         type: 'get',
                         datatype: 'json',
                         data: {
@@ -212,7 +212,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/searchsectionchange',
+                    url: '{{URL::to('/')}}' + '/searchsectionchange',
                     type: 'get',
                     datatype: 'json',
                     data: {
@@ -260,7 +260,7 @@
                 }
             });
             $.ajax({
-                url: '/submitadvancesearch/' + SearchInp,
+                url: '{{URL::to('/')}}' + '/submitadvancesearch/' + SearchInp,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -301,7 +301,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/downloadadvancesearchresult',
+                        url: '{{URL::to('/')}}' + '/downloadadvancesearchresult',
                         type: 'post',
                         datatype: 'json',
                         data: {
@@ -345,7 +345,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/printadvancesearchresult',
+                        url: '{{URL::to('/')}}' + '/printadvancesearchresult',
                         type: 'post',
                         datatype: 'json',
                         data: {

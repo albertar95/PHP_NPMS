@@ -147,7 +147,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/submituserlogreport',
+                        url: '{{URL::to('/')}}' + '/submituserlogreport',
                         type: 'post',
                         datatype: 'json',
                         data: {
@@ -192,7 +192,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '/downloaduserlogreport',
+                                url: '{{URL::to('/')}}' + '/downloaduserlogreport',
                                 type: 'post',
                                 datatype: 'json',
                                 data: {
@@ -218,7 +218,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '/printuserlogreport',
+                                url: '{{URL::to('/')}}' + '/printuserlogreport',
                                 type: 'post',
                                 datatype: 'json',
                                 data: {

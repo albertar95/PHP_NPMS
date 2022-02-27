@@ -56,7 +56,7 @@
                             <td class="priority-2">{{ $prj->GroupName }}</td>
                             <td class="priority-3">% {{ $prj->ProjectStatus }}</td>
                             <td>
-                                <a href="/projectdetail/{{ $prj->NidProject }}" class="btn btn-secondary">جزییات</a>
+                                <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prj->NidProject) }}" class="btn btn-secondary">جزییات</a>
                             </td>
                         </tr>
                     @endforeach

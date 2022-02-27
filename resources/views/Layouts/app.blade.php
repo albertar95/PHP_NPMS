@@ -162,11 +162,11 @@
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[0] == 1)
-                                <a class="collapse-item" href="/sendmessage"
+                                <a class="collapse-item" href="{{URL::to('/sendmessage')}}"
                                     style="text-align:right;">ارسال پیام</a>
                             @endif
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
-                                <a class="collapse-item" href="/messages/{{ auth()->user()->NidUser }}"
+                                <a class="collapse-item" href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}"
                                     style="text-align:right;">صندوق پیام</a>
                             @endif
                         </div>
@@ -276,7 +276,7 @@
                                 <h6 class="dropdown-header" style="text-align:center;">
                                     اعلان ها
                                 </h6>
-                                <a class="dropdown-item text-center small text-gray-500" href="/alarms/0">نمایش تمامی
+                                <a class="dropdown-item text-center small text-gray-500" href="{{URL::to('/alarms/0')}}">نمایش تمامی
                                     اعلان ها</a>
                             </div>
                         </li>
@@ -297,7 +297,7 @@
                                 @if (in_array('5', $sharedData['UserAccessedEntities']))
                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
                                         <a class="dropdown-item text-center small text-gray-500"
-                                            href="/messages/{{ auth()->user()->NidUser }}">نمایش تمامی پیام ها</a>
+                                            href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}">نمایش تمامی پیام ها</a>
                                     @endif
                                 @endif
                             </div>
@@ -333,7 +333,7 @@
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     تنظیمات
                                 </a> --}}
-                                <a class="dropdown-item" href="/profileuseractivityreport/{{ auth()->user()->NidUser }}" style="text-align:right;">
+                                <a class="dropdown-item" href="{{ sprintf("%s/%s",URL::to('/profileuseractivityreport'),auth()->user()->NidUser) }}" style="text-align:right;">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     گزارش کاربری
                                 </a>
@@ -456,15 +456,11 @@
     @yield('scripts')
     <script type="text/javascript">
         $(function() {
-            // $('select').selectize({
-            //     sortField: 'value'
-            // });
-            // $('select[name="dataTable_length"]')[0].selectize.disable();
             GetUsersAlarms();
             GetUsersMessages();
             setInterval(function() {
                 $.ajax({
-                    url: '/getrecievemessageneeded/' + $("#txtUserId").text(),
+                    url: '{{URL::to('/')}}' + '/getrecievemessageneeded/' + $("#txtUserId").text(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -508,7 +504,7 @@
                         formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
                         formData.append('fileType', typo);
                         $.ajax({
-                            url: '/uploadthisfile',
+                            url: '{{URL::to('/')}}' + '/uploadthisfile',
                             type: 'post',
                             datatype: 'json',
                             data: formData,
@@ -599,7 +595,7 @@
                 }
             });
             $.ajax({
-                url: '/complexsearch/' + textVal,
+                url: '{{URL::to('/')}}' + '/complexsearch/' + textVal,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -626,7 +622,7 @@
 
         function CheckForMessages() {
             $.ajax({
-                url: '/getrecievemessageneeded/' + $("#txtUserId").text(),
+                url: '{{URL::to('/')}}' + '/getrecievemessageneeded/' + $("#txtUserId").text(),
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -639,7 +635,7 @@
 
         function GetUsersMessages() {
             $.ajax({
-                url: '/getmessages/' + $("#txtUserId").text(),
+                url: '{{URL::to('/')}}' + '/getmessages/' + $("#txtUserId").text(),
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -659,7 +655,7 @@
                 }
             });
             $.ajax({
-                url: '/getalarms/',
+                url: '{{URL::to('/')}}' + '/getalarms/',
                 type: 'get',
                 datatype: 'json',
                 data: {},
@@ -681,7 +677,7 @@
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
                 $.ajax({
-                    url: '/scholardetail/' + Nid,
+                    url: '{{URL::to('/')}}' + '/scholardetail/' + Nid,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -699,7 +695,7 @@
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
                 $.ajax({
-                    url: '/userdetail/' + Nid,
+                    url: '{{URL::to('/')}}' + '/userdetail/' + Nid,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

@@ -133,7 +133,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitlogin',
+                    url: '{{URL::to('/')}}' + '/submitlogin',
                     type: 'post',
                     datatype: 'json',
                     data: {
@@ -146,27 +146,10 @@
                             $("#spinnerDiv").removeAttr('hidden');
                             $("#waitText").removeAttr('hidden');
                             $("#FormWrapper").attr('hidden', 'hidden');
-                            window.location.href = '/setlogindata/' + result.Message;
-                            // $.ajaxSetup({
-                            // headers: {
-                            // 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            // }
-                            // });
-                            // $.ajax({
-                            //     url: 'setlogindata',
-                            //     type: 'post',
-                            //     datatype: 'json',
-                            //     data: { Niduser: result.Message },
-                            //     success: function (result) {
-                            //         if (result.HasValue) {
-                            //             window.location.href = '/';
-                            //         }
-                            //     },
-                            //     error: function () { }
-                            // });
+                            window.location.href = '{{URL::to('/')}}' + '/setlogindata/' + result.Message;
                         } else {
                             if (result.AltProp == "5") {
-                                window.location.href = '/changepassword/' + result.Message;
+                                window.location.href = '{{URL::to('/')}}' + '/changepassword/' + result.Message;
                             } else {
                                 $("#ErrorMessage").text(result.Message);
                                 $("#errorAlert").removeAttr('hidden');

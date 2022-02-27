@@ -294,7 +294,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/submitstatisticsreport',
+                        url: '{{URL::to('/')}}' + '/submitstatisticsreport',
                         type: 'post',
                         datatype: 'json',
                         data: {
@@ -355,7 +355,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '/downloadstatisticsreport',
+                                url: '{{URL::to('/')}}' + '/downloadstatisticsreport',
                                 type: 'post',
                                 datatype: 'json',
                                 data: {
@@ -402,7 +402,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '/printstatisticsreport',
+                                url: '{{URL::to('/')}}' + '/printstatisticsreport',
                                 type: 'post',
                                 datatype: 'json',
                                 data: {

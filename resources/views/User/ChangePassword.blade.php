@@ -125,7 +125,7 @@
                 }
             });
             $.ajax({
-                url: '/getpasswordpolicy',
+                url: '{{URL::to('/')}}' + '/getpasswordpolicy',
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -163,7 +163,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/getuserspasscode/' + $("#txtUserId").val() + '/' + $("#txtOldPassword").val(),
+                    url: '{{URL::to('/')}}' + '/getuserspasscode/' + $("#txtUserId").val() + '/' + $("#txtOldPassword").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -174,7 +174,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '/submitchangepassword/' + $("#txtUserId").val() + '/' + $(
+                                url: '{{URL::to('/')}}' + '/submitchangepassword/' + $("#txtUserId").val() + '/' + $(
                                     "#txtNewPassword").val(),
                                 type: 'post',
                                 datatype: 'json',
@@ -186,7 +186,7 @@
                                             $("#successAlert").attr('hidden', 'hidden')
                                         }, 2000);
                                         window.setTimeout(function() {
-                                            window.location.href = '/login';
+                                            window.location.href = '{{URL::to('/')}}' + '/login';
                                         }, 3000);
                                     } else {
                                         if (result.AltProp == "1") {

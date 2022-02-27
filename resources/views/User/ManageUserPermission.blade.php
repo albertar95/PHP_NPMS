@@ -29,12 +29,12 @@
                 @if (in_array('0', $sharedData['UserAccessedEntities']))
                 <div class="col-sm-3">
                     <a class="btn btn-outline-success btn-block"
-                        href="\adduserpermission\{{ $UserId }}">ایجاد دسترسی</a>
+                        href="{{ sprintf("%s/%s",URL::to('/adduserpermission'),$UserId) }}">ایجاد دسترسی</a>
                 </div>
                 <div class="col-sm-6"></div>
                 <div class="col-sm-3">
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
-                        href="/managerolesuser/{{ $RoleId }}">&larr; بازگشت</a>
+                        href="{{ sprintf("%s/%s",URL::to('/managerolesuser'),$RoleId) }}">&larr; بازگشت</a>
                 </div>
                 @endif
             </div>
@@ -190,7 +190,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/deleteuserpermission/' + NidPerm,
+                    url: '{{URL::to('/')}}' + '/deleteuserpermission/' + NidPerm,
                     type: 'post',
                     datatype: 'json',
                     success: function(result) {

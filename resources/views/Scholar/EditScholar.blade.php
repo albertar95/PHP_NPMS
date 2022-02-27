@@ -357,7 +357,7 @@
             $("#MajorSlt").on('change', function() {
                 $("#OrentationSlt").html('')
                 $.ajax({
-                    url: '/majorselectchanged/' + this.value,
+                    url: '{{URL::to('/')}}' + '/majorselectchanged/' + this.value,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

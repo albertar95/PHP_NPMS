@@ -6,7 +6,7 @@
                     <p class="SearchContent1">طرح</p>
                 </div>
                 <div class="col-lg-10">
-                    <a href="/projectdetail/{{ $prj->NidProject }}">{{ $prj->Subject }}</a>
+                    <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prj->NidProject) }}">{{ $prj->Subject }}</a>
                 </div>
             </div>
         @endforeach

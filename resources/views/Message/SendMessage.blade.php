@@ -105,7 +105,7 @@
                 if(CheckInputValidity())
                 {
                     $.ajax({
-                    url: '/submitsendmessage',
+                    url: '{{URL::to('/')}}' + '/submitsendmessage',
                     type: 'post',
                     datatype: 'json',
                     data: $("#SendMessageForm").serialize(),
@@ -126,7 +126,7 @@
                                 this.reset();
                             });
                             window.setTimeout(function() {
-                                window.location.href = '/messages/' + $("#SenderId").val();
+                                window.location.href = '{{URL::to('/')}}' + '/messages/' + $("#SenderId").val();
                             }, 3000);
                         }
                     },

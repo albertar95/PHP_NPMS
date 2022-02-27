@@ -96,14 +96,14 @@
                                                                 <span class="text">ویرایش</span>
                                                             </button>
                                                         @endif
-                                                        <a href="/managerolepermissions/{{ $role->NidRole }}" style="margin: 2px;"
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/managerolepermissions'),$role->NidRole) }}" style="margin: 2px;"
                                                             class="btn btn-info btn-icon-split">
                                                             <span class="icon text-white-50">
                                                                 <i class="fas fa-door-open"></i>
                                                             </span>
                                                             <span class="text">اعمال دسترسی</span>
                                                         </a>
-                                                        <a href="/managerolesuser/{{ $role->NidRole }}" style="margin: 2px;"
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/managerolesuser'),$role->NidRole) }}" style="margin: 2px;"
                                                             class="btn btn-secondary btn-icon-split">
                                                             <span class="icon text-white-50">
                                                                 <i class="fas fa-user"></i>
@@ -171,7 +171,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitroleform',
+                    url: '{{URL::to('/')}}' + '/submitroleform',
                     type: 'post',
                     datatype: 'json',
                     data: $("#RolesForm").serialize(),
@@ -245,7 +245,7 @@
                 }
             });
             $.ajax({
-                url: '/submitdeleterole/' + CurrentDeleteNid,
+                url: '{{URL::to('/')}}' + '/submitdeleterole/' + CurrentDeleteNid,
                 type: 'post',
                 datatype: 'json',
                 success: function(result) {

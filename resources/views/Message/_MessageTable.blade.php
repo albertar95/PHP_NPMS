@@ -32,7 +32,7 @@ style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                     <td>
                         @if (in_array('5', $sharedData['UserAccessedEntities']))
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[3] == 1)
-                                <a href="/singlemessage/{{ $msg->NidMessage }}/0"
+                                <a href="{{ sprintf("%s/%s/0",URL::to('/singlemessage'),$msg->NidMessage) }}"
                                     class="btn btn-secondary">جزییات
                                     پیام</a>
                             @endif

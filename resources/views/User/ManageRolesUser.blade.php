@@ -26,7 +26,7 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-3">
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
-                        href="/manageroles">&larr; بازگشت</a>
+                        href="{{ URL::to('/manageroles') }}">&larr; بازگشت</a>
                 </div>
                 @endif
             </div>
@@ -52,7 +52,7 @@
                                 <td>{{ $user->FirstName }} {{ $user->LastName }}</td>
                                 <td>{{ $user->Username }}</td>
                                 <td>
-                                    <a href="/manageuserpermission/{{ $user->NidUser }}" class="btn btn-info btn-icon-split">
+                                    <a href="{{ sprintf("%s/%s",URL::to('/manageuserpermission'),$user->NidUser) }}" class="btn btn-info btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-door-open"></i>
                                         </span>

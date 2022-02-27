@@ -95,7 +95,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submithashpassword',
+                    url: '{{URL::to('/')}}' + '/submithashpassword',
                     type: 'post',
                     datatype: 'json',
                     data: {

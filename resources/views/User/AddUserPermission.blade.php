@@ -11,7 +11,7 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-3">
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
-                        href="/manageuserpermission/{{ $User->NidUser }}">&larr; بازگشت</a>
+                        href="{{ sprintf("%s/%s",URL::to('/manageuserpermission'),$User->NidUser) }}">&larr; بازگشت</a>
                 </div>
                 @endif
             </div>
@@ -188,46 +188,6 @@
                     $("#PrintVal").val(0);
                 }
             });
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-            // $("#btnSubmit").click(function(e) {
-            //     e.preventDefault();
-            //     $.ajax({
-            //         url: '/submitaddrolepermission',
-            //         type: 'post',
-            //         datatype: 'json',
-            //         data: serialized,
-            //         success: function(result) {
-            //             if (result.HasValue) {
-            //                 $("#SuccessMessage").text('دسترسی با موفقیت ایجاد گردید');
-            //                 $("#successAlert").removeAttr('hidden');
-            //                 $('#AddUserForm').each(function() {
-            //                     this.reset();
-            //                 });
-            //                 window.setTimeout(function() {
-            //                     $("#successAlert").attr('hidden', 'hidden');
-            //                 }, 5000);
-            //             } else {
-            //                 $("#ErrorMessage").text(
-            //                     'خطا در انجام عملیات.لطفا مجددا امتحان کنید')
-            //                 $("#errorAlert").removeAttr('hidden')
-            //                 window.setTimeout(function() {
-            //                     $("#errorAlert").attr('hidden', 'hidden');
-            //                 }, 5000);
-            //             }
-            //         },
-            //         error: function() {
-            //             $("#ErrorMessage").text('خطا در انجام عملیات.لطفا مجددا امتحان کنید')
-            //             $("#errorAlert").removeAttr('hidden')
-            //             window.setTimeout(function() {
-            //                 $("#errorAlert").attr('hidden', 'hidden');
-            //             }, 5000);
-            //         }
-            //     });
-            // });
         });
     </script>
 @endsection

@@ -507,7 +507,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '/submitaddproject',
+                        url: '{{URL::to('/')}}' + '/submitaddproject',
                         type: 'post',
                         datatype: 'json',
                         data: $("#AddProjectForm").serialize(),
@@ -522,7 +522,7 @@
                                 $("#SuccessMessage").text("طرح با موفقیت ایجاد گردید")
                                 $("#successAlert").removeAttr('hidden')
                                 window.setTimeout(function() {
-                                    window.location.href = '/projects';
+                                    window.location.href = '{{URL::to('/')}}' + '/projects';
                                 }, 3000);
                             }
                         },
@@ -550,27 +550,6 @@
                     }, 5000);
                     ValiditiyMessage = "";
                 }
-            });
-            $("#MajorSlt").on('change', function() {
-                $("#OrentationSlt").html('')
-                $.ajax({
-                    url: '@NPMS_WebUI.Controllers.HomeController.ApiBaseAddress' +
-                        'scholar/GetOreintationsByMajorId?MajorId=' + this.value,
-                    type: 'get',
-                    datatype: 'json',
-                    success: function(result) {
-                        var newValue = "<option value='0' disabled selected>گرایش</option> "
-                        $.each(result, function(i, item) {
-                            newValue += "<option value='" + item.NidOreintation + "'>" +
-                                item.Title + "</option> "
-                        });
-                        $("#OrentationSlt").html(newValue)
-                    },
-                    error: function() {
-                        $("#OrentationSlt").html(
-                            '<option value="0" disabled selected>گرایش</option> ')
-                    }
-                });
             });
         });
 

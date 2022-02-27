@@ -42,7 +42,7 @@
                         <td>
                             @if (in_array('2', $sharedData['UserAccessedEntities']))
                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[1] == 1)
-                                    <a href="/projectprogress/{{ $prj->NidProject }}"
+                                    <a href="{{ sprintf("%s/%s",URL::to('/projectprogress'),$prj->NidProject) }}"
                                         style="margin: 2px;width: 110px;"
                                         class="btn btn-warning btn-icon-split">
                                         <span class="icon text-white-50">
@@ -66,7 +66,7 @@
                             @endif
                             @if (in_array('2', $sharedData['UserAccessedEntities']))
                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[3] == 1)
-                                    <a href="/projectdetail/{{ $prj->NidProject }}"
+                                    <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prj->NidProject) }}"
                                         style="margin: 2px;width: 110px;"
                                         class="btn btn-info btn-icon-split">
                                         <span class="icon text-white-50">

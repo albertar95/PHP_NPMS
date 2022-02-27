@@ -57,7 +57,7 @@
                     @endif
                     @if (in_array('3', $sharedData['UserAccessedEntities']))
                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[1] == 1)
-                            <a href="edituser/{{ $usr->NidUser }}" class="btn btn-warning btn-icon-split"
+                            <a href="{{ sprintf("%s/%s",URL::to('/edituser'),$usr->NidUser) }}" class="btn btn-warning btn-icon-split"
                                 style="margin: 2px;width: 110px;">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-pencil-alt"></i>

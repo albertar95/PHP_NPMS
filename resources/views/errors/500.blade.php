@@ -52,7 +52,7 @@
                                         <p class="lead text-gray-800 mb-5">خطا در سرور</p>
                                         <p class="text-gray-500 mb-0" style="text-align: center;">خطایی در سرور رخ داده است.لطفا با پشتیبانی تماس بگیرید
                                         </p>
-                                        <a href="/">&larr; بازگشت به صفحه اصلی</a>
+                                        <a href="{{URL::to('/')}}">&larr; بازگشت به صفحه اصلی</a>
                                     </div>
                                 </div>
                             </div>

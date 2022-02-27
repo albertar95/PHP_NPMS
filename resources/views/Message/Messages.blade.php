@@ -138,7 +138,7 @@
                                                             <td>
                                                                 @if (in_array('5', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[3] == 1)
-                                                                        <a href="/singlemessage/{{ $msg->NidMessage }}/1"
+                                                                        <a href="{{ sprintf("%s/%s/1",URL::to('/singlemessage'),$msg->NidMessage) }}"
                                                                             class="btn btn-info btn-icon-split">
                                                                             <span class="icon text-white-50">
                                                                                 <i class="fas fa-envelope"></i>
@@ -200,7 +200,7 @@
                                                         style=" max-width: 120px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                                                         {{ $msg->MessageContent }}</td>
                                                     <td>
-                                                        <a href="/singlemessage/{{ $msg->NidMessage }}/0"
+                                                        <a href="{{ sprintf("%s/%s/0",URL::to('/singlemessage'),$msg->NidMessage) }}"
                                                             class="btn btn-secondary btn-icon-split">
                                                             <span class="icon text-white-50">
                                                                 <i class="fas fa-envelope"></i>
@@ -240,7 +240,7 @@
             $("#btnMorePage").click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/pagination/3/' + $("#LoadCount").val(),
+                    url: '{{URL::to('/')}}' + '/pagination/3/' + $("#LoadCount").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -257,7 +257,7 @@
             $("#btnMorePage2").click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/pagination/4/' + $("#LoadCount2").val(),
+                    url: '{{URL::to('/')}}' + '/pagination/4/' + $("#LoadCount2").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -275,7 +275,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '/submitsendmessage',
+                        url: '{{URL::to('/')}}' + '/submitsendmessage',
                         type: 'post',
                         datatype: 'json',
                         data: $("#SendMessageForm").serialize(),
@@ -296,7 +296,7 @@
                                     this.reset();
                                 });
                                 $.ajax({
-                                    url: '/getsendmessages/' + $("#SenderId").val(),
+                                    url: '{{URL::to('/')}}' + '/getsendmessages/' + $("#SenderId").val(),
                                     type: 'get',
                                     datatype: 'json',
                                     success: function(result) {

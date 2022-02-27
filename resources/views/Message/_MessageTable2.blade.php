@@ -35,7 +35,7 @@
                         <td>
                             @if (in_array('5', $sharedData['UserAccessedEntities']))
                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[3] == 1)
-                                    <a href="/singlemessage/{{ $msg->NidMessage }}/1"
+                                    <a href="{{ sprintf("%s/%s/1",URL::to('/singlemessage'),$msg->NidMessage) }}"
                                         class="btn btn-info btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-envelope"></i>

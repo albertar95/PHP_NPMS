@@ -286,7 +286,7 @@
                     //     }
                     // }
                     $.ajax({
-                        url: '/submitaddscholar',
+                        url: '{{URL::to('/')}}' + '/submitaddscholar',
                         type: 'post',
                         datatype: 'json',
                         data: $("#AddScholarForm").serialize(),
@@ -303,7 +303,7 @@
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
                             window.setTimeout(function() {
-                                window.location.href = '/scholars';
+                                window.location.href = '{{URL::to('/')}}' + '/scholars';
                             }, 3000);
                         },
                         error: function(response) {
@@ -336,7 +336,7 @@
             $("#MajorSlt").on('change', function() {
                 $("#OrentationSlt").html('')
                 $.ajax({
-                    url: '/majorselectchanged/' + this.value,
+                    url: '{{URL::to('/')}}' + '/majorselectchanged/' + this.value,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -412,54 +412,6 @@
             ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
             return isValid;
         }
-        // function UploadFile() {
-        //     AdvanceInProgressBar(0);
-        //     $("#UploadMessage").attr('hidden','hidden');
-        //     $("#UploadModal").modal('show');
-        //     AdvanceInProgressBar(10);
-        //     $.ajaxSetup({
-        //     headers: {
-        //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        //     });
-        //     var formData = new FormData();
-        //     formData.append('profile', document.getElementById("ProfilePictureUpload").files[0]);
-        //     formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
-        //     $.ajax(
-        //         {
-        //             url: '/uploadthisfile',
-        //             type: 'post',
-        //             datatype: 'json',
-        //             data: formData,
-        //             contentType: false,
-        //             processData: false,
-        //             success: function (result) {
-        //                 if (result.HasValue)
-        //                 {
-        //                     window.setTimeout(function () { AdvanceInProgressBar(100); }, 1000);
-        //                     $("#ProfilePicture").val(result.Message);
-        //                     window.setTimeout(function () {
-        //                         $("#uploadedImage").attr('src', '/storage/images/' + result.Message);
-        //                         $("#uploadedframe").removeAttr('hidden');
-        //                         $("#uploadedImage").removeAttr('hidden');
-        //                     }, 3000);
-        //                 } else
-        //                 {
-        //                     window.setTimeout(function () {
-        //                         $("#UploadMessage").removeAttr('hidden');
-        //                         $("#UploadMessage").text('خطا در بارگذاری.حجم فایل بیشتر از یک مگابایت می باشد');
-        //                     }, 3000);
-        //                 }
-        //             },
-        //             error: function ()
-        //             {
-        //                 window.setTimeout(function () {
-        //                     $("#UploadMessage").removeAttr('hidden');
-        //                     $("#UploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');},3000);
-        //             }
-        //         });
-        //     window.setTimeout(function () { $("#UploadModal").modal('hide'); }, 3000);
-        // }
     </script>
 @endsection
 

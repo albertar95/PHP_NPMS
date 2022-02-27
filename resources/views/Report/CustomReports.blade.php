@@ -75,7 +75,7 @@
                             <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                 @if (in_array('4', $sharedData['UserAccessedEntities']))
                                 @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[4] == 1)
-                                    <a href="/statisticreports" class="btn btn-outline-secondary btn-user btn-block">
+                                    <a href="{{ URL::to('/statisticreports') }}" class="btn btn-outline-secondary btn-user btn-block">
                                         گزارشات
                                     </a>
                                 @endif
@@ -123,7 +123,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/customreportcontextchanged/' + $("#sltContext").val(),
+                    url: '{{URL::to('/')}}' + '/customreportcontextchanged/' + $("#sltContext").val(),
                     type: 'post',
                     datatype: 'json',
                     success: function(result) {
@@ -169,7 +169,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/submitaddcustomreport',
+                        url: '{{URL::to('/')}}' + '/submitaddcustomreport',
                         type: 'post',
                         datatype: 'json',
                         data: {

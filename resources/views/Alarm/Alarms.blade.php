@@ -43,7 +43,7 @@
                                                         <td>{{ $key + 1 }}</td>
                                                         <td>{{ $prm->Description }}</td>
                                                         <td>
-                                                            <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                            <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -82,7 +82,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -121,7 +121,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -160,7 +160,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -199,7 +199,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -238,7 +238,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -277,7 +277,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -316,7 +316,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -357,7 +357,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -398,7 +398,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -439,7 +439,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -480,7 +480,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -521,7 +521,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -562,7 +562,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -603,7 +603,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -644,7 +644,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $prm->Description }}</td>
                                                     <td>
-                                                        <a href="/projectdetail/{{ $prm->NidMaster }}" class="btn btn-secondary">جزییات پروژه</a>
+                                                        <a href="{{ sprintf("%s/%s",URL::to('/projectdetail'),$prm->NidMaster)}}" class="btn btn-secondary">جزییات پروژه</a>
                                                     </td>
                                                 </tr>
                                             @endforeach

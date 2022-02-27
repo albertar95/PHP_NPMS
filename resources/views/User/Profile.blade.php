@@ -114,7 +114,7 @@
             <div class="collapse" style="padding:.75rem;" id="collapseSecurity">
                 <div class="card-body">
                     <div class="col-sm-6 col-lg-6" style="margin-bottom: 2rem;">
-                        <a class="btn btn-outline-primary btn-block" href="changepassword/{{ auth()->user()->NidUser }}"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
+                        <a class="btn btn-outline-primary btn-block" href="{{ sprintf("%s/%s",URL::to('/changepassword'),auth()->user()->NidUser) }} }}"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
                     </div>
                     @if (!is_null($logs))
                     <div class="text-center">

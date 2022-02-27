@@ -126,7 +126,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '/submitadduser',
+                        url: '{{URL::to('/')}}' + '/submitadduser',
                         type: 'post',
                         datatype: 'json',
                         data: $("#AddUserForm").serialize(),
@@ -144,7 +144,7 @@
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
                             window.setTimeout(function() {
-                                window.location.href = '/users';
+                                window.location.href = '{{URL::to('/')}}' + '/users';
                             }, 3000);
                         },
                         error: function(response) {

@@ -17,7 +17,7 @@
 @if (in_array('5', $sharedData['UserAccessedEntities']))
     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
         @foreach ($messages as $msg)
-            <a class="dropdown-item d-flex align-items-center" href="/singlemessage/{{ $msg->NidMessage }}/1">
+            <a class="dropdown-item d-flex align-items-center" href="{{ sprintf("%s/%s/1",URL::to('/singlemessage'),$msg->NidMessage) }}">
                 <div class="dropdown-list-image mr-3">
                     @if (!empty($msg->UserProfile))
                         <img src="{{ sprintf('/storage/images/%s', $msg->UserProfile) }}"
@@ -36,7 +36,7 @@
                 </div>
             </a>
         @endforeach
-        <a class="dropdown-item text-center small text-gray-500" href="/messages/{{ auth()->user()->NidUser }}">نمایش
+        <a class="dropdown-item text-center small text-gray-500" href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}">نمایش
             تمامی پیام ها</a>
     @endif
 @endif

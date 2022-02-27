@@ -28,12 +28,12 @@
             <div class="row" style="margin-bottom:1rem;">
                 @if (in_array('0', $sharedData['UserAccessedEntities']))
                 <div class="col-sm-3">
-                    <a class="btn btn-outline-success btn-block" href="\addrolepermission\{{ $RoleId }}">ایجاد دسترسی</a>
+                    <a class="btn btn-outline-success btn-block" href="{{ sprintf("%s/%s",URL::to('/addrolepermission'),$RoleId) }}">ایجاد دسترسی</a>
                 </div>
                 <div class="col-sm-6"></div>
                 <div class="col-sm-3">
                     <a id="btnReturn" class="btn btn-outline-info btn-block" style="direction: ltr;"
-                        href="/manageroles">&larr; بازگشت</a>
+                        href="{{ URL::to('/manageroles') }}">&larr; بازگشت</a>
                 </div>
                 @endif
             </div>
@@ -124,7 +124,7 @@
                                     <td>
                                         @if (in_array('0', $sharedData['UserAccessedEntities']))
                                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 0)->pluck('rowValue')[0])[1] == 1)
-                                                <a href="/editrolepermission/{{ $perm->NidPermission }}"
+                                                <a href="{{ sprintf("%s/%s",URL::to('/editrolepermission'),$perm->NidPermission) }}"
                                                     class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-pencil-alt"></i>
@@ -200,7 +200,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/deleterolepermission/' + NidPerm,
+                    url: '{{URL::to('/')}}' + '/deleterolepermission/' + NidPerm,
                     type: 'post',
                     datatype: 'json',
                     success: function(result) {

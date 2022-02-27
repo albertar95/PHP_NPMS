@@ -610,7 +610,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/printprojectdetail/' + $("#txtNidProject").val(),
+                    url: '{{URL::to('/')}}' + '/printprojectdetail/' + $("#txtNidProject").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

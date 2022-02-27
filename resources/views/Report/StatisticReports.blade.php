@@ -55,7 +55,7 @@
                                         @break
                                 @endswitch
                                 <td>
-                                    <a href="executereport/{{ $rpt->NidReport }}" class="btn btn-outline-success" style="margin: 2px;width: 110px;">اجرای گزارش</a>
+                                    <a href="{{ sprintf("%s/%s",URL::to('/executereport'),$rpt->NidReport) }}" class="btn btn-outline-success" style="margin: 2px;width: 110px;">اجرای گزارش</a>
                                     @if (in_array('4', $sharedData['UserAccessedEntities']))
                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 4)->pluck('rowValue')[0])[2] == 1)
                                         <button class="btn btn-outline-danger" onclick="ShowModal('{{ $rpt->NidReport }}')" style="margin: 2px;width: 110px;">حذف</button>
@@ -121,7 +121,7 @@
                 });
                 $.ajax(
                     {
-                        url: '/deletereport/' + NidReport,
+                        url: '{{URL::to('/')}}' + '/deletereport/' + NidReport,
                         type: 'post',
                         datatype: 'json',
                         success: function (result)

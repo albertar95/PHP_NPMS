@@ -52,7 +52,7 @@
                                         <p class="lead text-gray-800 mb-5">خارج از دسترس</p>
                                         <p class="text-gray-500 mb-0" style="text-align: center;">متاسفانه سرور در دسترسی نمی باشد.لطفا با پشتیبان تماس بگیرید.از شکیبایی شما ممنونیم
                                         </p>
-                                        <a href="/">&larr; بازگشت به صفحه اصلی</a>
+                                        <a href="{{URL::to('/')}}">&larr; بازگشت به صفحه اصلی</a>
                                     </div>
                                 </div>
                             </div>

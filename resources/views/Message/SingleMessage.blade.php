@@ -151,7 +151,7 @@
         $(function() {
             if ($("#ReadBy").val() == 1) {
                 $.ajax({
-                    url: '/readmessage/' + $("#NidCurrentMessage").val(),
+                    url: '{{URL::to('/')}}' + '/readmessage/' + $("#NidCurrentMessage").val(),
                     type: 'get',
                     datatype: 'json',
                     success: function() {},
@@ -162,7 +162,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '/submitsendmessage',
+                        url: '{{URL::to('/')}}' + '/submitsendmessage',
                         type: 'post',
                         datatype: 'json',
                         data: $("#SendMessageForm").serialize(),

@@ -239,7 +239,7 @@
                         }
                     });
                     $.ajax({
-                        url: '/submitchangepassword/' + $("#NidUser").val() + '/' + $("#NewPassword").val(),
+                        url: '{{URL::to('/')}}' + '/submitchangepassword/' + $("#NidUser").val() + '/' + $("#NewPassword").val(),
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {

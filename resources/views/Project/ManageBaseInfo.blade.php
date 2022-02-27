@@ -885,7 +885,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitunitform',
+                    url: '{{URL::to('/')}}' + '/submitunitform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -947,7 +947,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitunitgroupform',
+                    url: '{{URL::to('/')}}' + '/submitunitgroupform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1004,7 +1004,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitgradeform',
+                    url: '{{URL::to('/')}}' + '/submitgradeform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1053,7 +1053,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitmajorform',
+                    url: '{{URL::to('/')}}' + '/submitmajorform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1115,7 +1115,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitoreintationform',
+                    url: '{{URL::to('/')}}' + '/submitoreintationform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1173,7 +1173,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitcollegeform',
+                    url: '{{URL::to('/')}}' + '/submitcollegeform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1225,7 +1225,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitmillitform',
+                    url: '{{URL::to('/')}}' + '/submitmillitform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1277,7 +1277,7 @@
                     }
                 });
                 $.ajax({
-                    url: '/submitcollabform',
+                    url: '{{URL::to('/')}}' + '/submitcollabform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1414,7 +1414,7 @@
             switch (CurrentDeleteTypo) {
                 case 1:
                     $.ajax({
-                        url: '/submitdeleteunit/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeleteunit/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1450,7 +1450,7 @@
                     break;
                 case 2:
                     $.ajax({
-                        url: '/submitdeleteunitgroup/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeleteunitgroup/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1481,7 +1481,7 @@
                     break;
                 case 3:
                     $.ajax({
-                        url: '/submitdeletegrade/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeletegrade/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1512,7 +1512,7 @@
                     break;
                 case 4:
                     $.ajax({
-                        url: '/submitdeletemajor/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeletemajor/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1548,7 +1548,7 @@
                     break;
                 case 5:
                     $.ajax({
-                        url: '/submitdeleteoreintation/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeleteoreintation/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1579,7 +1579,7 @@
                     break;
                 case 6:
                     $.ajax({
-                        url: '/submitdeletecollege/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeletecollege/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1610,7 +1610,7 @@
                     break;
                 case 7:
                     $.ajax({
-                        url: '/submitdeletemillit/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeletemillit/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1641,7 +1641,7 @@
                     break;
                 case 8:
                     $.ajax({
-                        url: '/submitdeletecollab/' + CurrentDeleteNid,
+                        url: '{{URL::to('/')}}' + '/submitdeletecollab/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
