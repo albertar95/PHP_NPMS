@@ -168,14 +168,58 @@ class UserController extends Controller
             $result = new JsonResults();
             if (!is_null($tmpresult)) {
                 $result->HasValue = true;
-                $tmpUser = $api->DisableUserById($NidUser);
-                $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید", $tmpUser->Username);
-                $api->AddLog(auth()->user(), $request->ip(), 12, 0, 3, 1, sprintf("غیر فعال کردن کاربر موفق.نام کاربری : %s", $tmpUser->Username));
+                $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت غیرفعال گردید", $tmpresult->Username);
+                $api->AddLog(auth()->user(), $request->ip(), 12, 0, 3, 1, sprintf("غیر فعال کردن کاربر موفق.نام کاربری : %s", $tmpresult->Username));
                 return response()->json($result);
             } else {
                 $result->HasValue = false;
                 $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
-                $api->AddLog(auth()->user(), $request->ip(), 12, 1, 3, 1, "ایجاد کاربر ناموفق");
+                $api->AddLog(auth()->user(), $request->ip(), 12, 1, 3, 1, "غیر فعال کردن کاربر ناموفق");
+                return response()->json($result);
+            }
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
+    }
+    public function ActivateUser(string $NidUser, Request $request)
+    {
+        try {
+            $api = new NPMSController();
+            $tmpresult = $api->EnableUserById($NidUser);
+            $result = new JsonResults();
+            if (!is_null($tmpresult)) {
+                $result->HasValue = true;
+                $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت فعال گردید", $tmpresult->Username);
+                $api->AddLog(auth()->user(), $request->ip(), 41, 0, 3, 1, sprintf("فعال کردن کاربر موفق.نام کاربری : %s", $tmpresult->Username));
+                return response()->json($result);
+            } else {
+                $result->HasValue = false;
+                $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                $api->AddLog(auth()->user(), $request->ip(), 41, 1, 3, 1, "فعال کردن کاربر ناموفق");
+                return response()->json($result);
+            }
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
+    }
+    public function DeleteUser(string $NidUser, Request $request)
+    {
+    }
+    public function ReactivateUser(string $NidUser, Request $request)
+    {
+        try {
+            $api = new NPMSController();
+            $tmpresult = $api->ReEnableUserById($NidUser);
+            $result = new JsonResults();
+            if (!is_null($tmpresult)) {
+                $result->HasValue = true;
+                $result->Message = sprintf("کاربر با نام کاربری %s با موفقیت رفع تعلیق گردید", $tmpresult->Username);
+                $api->AddLog(auth()->user(), $request->ip(), 12, 0, 3, 1, sprintf("رفع تعلیق کاربر موفق.نام کاربری : %s", $tmpresult->Username));
+                return response()->json($result);
+            } else {
+                $result->HasValue = false;
+                $result->Message = "خطا در سرور لطفا مجددا امتحان کنید";
+                $api->AddLog(auth()->user(), $request->ip(), 12, 1, 3, 1, "رفع تعلیق کاربر ناموفق");
                 return response()->json($result);
             }
         } catch (\Exception $e) {
@@ -331,7 +375,8 @@ class UserController extends Controller
             $Users = $api->GetCustomUsers($SourceId);
             $result = new JsonResults();
             $result->HasValue = true;
-            $result->Html = view('User._UserTable', compact('Users'))->render();
+            $sourceid = $SourceId;
+            $result->Html = view('User._UserTable', compact('Users','sourceid'))->render();
             return response()->json($result);
         } catch (\Throwable $th) {
             //throw $th;
@@ -469,6 +514,13 @@ class UserController extends Controller
                 $result->Message = $loginresult['nidUser'];
                 $result->HasValue = false;
                 $result->AltProp = "5";
+            } else if ($loginresult['result'] == 6) //disabled user
+            {
+                $user = $api->GetThisUserByUsername($logindata->Username);
+                $api->AddLog($user, $logindata->ip(), 16, 1, 3, 1, "ورود ناموفق.کاربر در حالت غیرفعال می باشد");
+                $result->HasValue = false;
+                $result->AltProp = "6";
+                $result->Message = "کاربر در غیرفعال می باشد و اجازه ورود به سامانه را ندارد";
             }
             return response()->json($result);
             // return $loginresult;

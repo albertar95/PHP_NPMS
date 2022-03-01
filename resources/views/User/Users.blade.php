@@ -23,98 +23,107 @@
                 <p style="text-align:right;" id="ErrorMessage"></p>
             </div>
             <div class="row" style="margin-bottom:1rem;">
-                @if(in_array('3',$sharedData['UserAccessedEntities']))
-                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[0] == 1)
-                    <div class="col-sm-3">
-                    <a class="btn btn-outline-success btn-block" href="{{ route('user.AddUser') }}">ایجاد کاربر</a>
-                </div>
+                @if (in_array('3', $sharedData['UserAccessedEntities']))
+                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[0] == 1)
+                        <div class="col-sm-3">
+                            <a class="btn btn-outline-success btn-block" href="{{ route('user.AddUser') }}">ایجاد
+                                کاربر</a>
+                        </div>
                     @endif
                 @endif
                 <div class="col-sm-3">
-                <a id="btnDisabled" onclick="ChangeTableSource(1)" class="btn btn-outline-danger btn-block" href="#">کاربران غیرفعال</a>
+                    <a id="btnDisabled" onclick="ChangeTableSource(1)" class="btn btn-outline-danger btn-block"
+                        href="#">کاربران غیرفعال</a>
                 </div>
                 <div class="col-sm-3">
-                <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-warning btn-block" href="#">کاربران تعلیق شده</a>
+                    <a id="btnLockout" onclick="ChangeTableSource(2)" class="btn btn-outline-warning btn-block"
+                        href="#">کاربران تعلیق شده</a>
                 </div>
                 <div class="col-sm-3">
-                <a id="btnDefault" onclick="ChangeTableSource(5)" class="btn btn-outline-secondary btn-block" href="#">حالت پیش فرض</a>
+                    <a id="btnDefault" onclick="ChangeTableSource(5)" class="btn btn-outline-secondary btn-block"
+                        href="#">حالت پیش فرض</a>
                 </div>
             </div>
             <div class="table-responsive" dir="ltr" id="tableWrapper">
-            @if(in_array('3',$sharedData['UserAccessedEntities']))
-                @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[4] == 1)
-                <table class="table table-bordered" id="dataTable" style="width:100%;direction:rtl;text-align:center;"
-                    cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>تصویر</th>
-                            <th>مشخصات کاربر</th>
-                            <th>نام کاربری</th>
-                            <th>نقش</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>تصویر</th>
-                            <th>مشخصات کاربر</th>
-                            <th>نام کاربری</th>
-                            <th>نقش</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @foreach ($Users as $usr)
-                            <tr>
-                                <td>
-                                    @if (!empty($usr->ProfilePicture))
-                                        <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50" width="50" />
-                                    @else
-                                        <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
-                                    @endforelse
-                                </td>
-                                <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
-                                <td>{{ $usr->Username }}</td>
-                                <td>{{ $usr->RoleTitle }}</td>
-                                <td>
-                                @if(in_array('3',$sharedData['UserAccessedEntities']))
-                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[3] == 1)
-                                    <button class="btn btn-info btn-icon-split" style="margin: 2px;width: 110px;"
-                                    onclick="ShowModal(1,'{{ $usr->NidUser }}')">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-info-circle"></i>
-                                    </span>
-                                    <span class="text">جزییات</span>
-                                </button>
-                                    @endif
-                                @endif
-                                @if(in_array('3',$sharedData['UserAccessedEntities']))
-                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[1] == 1)
-                                    <a href="{{ sprintf("%s/%s",URL::to('/edituser'),$usr->NidUser) }}" class="btn btn-warning btn-icon-split" style="margin: 2px;width: 110px;" >
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </span>
-                                        <span class="text">ویرایش</span>
-                                    </a>
-                                    @endif
-                                @endif
-                                @if(in_array('3',$sharedData['UserAccessedEntities']))
-                                    @if(explode(',',$sharedData['UserAccessedSub']->where('entity','=',3)->pluck('rowValue')[0])[2] == 1)
-                                    <button class="btn btn-danger btn-icon-split" style="margin: 2px;width: 110px;"
-                                    onclick="ShowModal(2,'{{ $usr->NidUser }}')">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                    <span class="text">غیرفعال</span>
-                                </button>
-                                    @endif
-                                @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                @endif
+                @if (in_array('3', $sharedData['UserAccessedEntities']))
+                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
+                        <table class="table table-bordered" id="dataTable"
+                            style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>تصویر</th>
+                                    <th>مشخصات کاربر</th>
+                                    <th>نام کاربری</th>
+                                    <th>نقش</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>تصویر</th>
+                                    <th>مشخصات کاربر</th>
+                                    <th>نام کاربری</th>
+                                    <th>نقش</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach ($Users as $usr)
+                                    <tr>
+                                        <td>
+                                            @if (!empty($usr->ProfilePicture))
+                                                <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50"
+                                                    width="50" />
+                                            @else
+                                                <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
+                                            @endforelse
+                                        </td>
+                                        <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
+                                        <td>{{ $usr->Username }}</td>
+                                        <td>{{ $usr->RoleTitle }}</td>
+                                        <td>
+                                            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[3] == 1)
+                                                    <button class="btn btn-info btn-icon-split"
+                                                        style="margin: 2px;width: 110px;"
+                                                        onclick="ShowModal(1,'{{ $usr->NidUser }}')">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                        <span class="text">جزییات</span>
+                                                    </button>
+                                                @endif
+                                            @endif
+                                            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[1] == 1)
+                                                    <a href="{{ sprintf('%s/%s', URL::to('/edituser'), $usr->NidUser) }}"
+                                                        class="btn btn-warning btn-icon-split"
+                                                        style="margin: 2px;width: 110px;">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </span>
+                                                        <span class="text">ویرایش</span>
+                                                    </a>
+                                                @endif
+                                            @endif
+                                            @if (in_array('3', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[2] == 1)
+                                                    <button class="btn btn-danger btn-icon-split"
+                                                        style="margin: 2px;width: 110px;"
+                                                        onclick="ShowModal(2,'{{ $usr->NidUser }}')">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-trash"></i>
+                                                        </span>
+                                                        <span class="text">غیرفعال</span>
+                                                    </button>
+                                                @endif
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 @endif
             </div>
         </div>
@@ -131,12 +140,12 @@
                 </div>
                 <div class="modal-body" id="UserModalBody">
                 </div>
-                <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;" hidden>آیا برای غیرفعال
-                    نمودن این کاربر اطمینان دارید؟</p>
+                <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;" hidden></p>
                 <div class="modal-footer">
                     <div class="row" style="margin: 0 auto;">
-                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal" hidden>بستن</button>
-                        </div>
+                        <button class="btn btn-secondary" type="button" id="btnClose" data-dismiss="modal"
+                            hidden>بستن</button>
+                    </div>
                     <div class="col-lg-12">
                         <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;" id="btnOk"
                             hidden>بلی</button>
@@ -165,14 +174,39 @@
                 $("#DeleteQuestion").attr('hidden', 'hidden');
             } else if (typo == 2) {
                 $("#UserModalLabel").text('غیرفعال کردن کاربر');
+                $("#DeleteQuestion").text('آیا برای غیرفعال نمودن این کاربر اطمینان دارید؟');
                 $("#DeleteQuestion").removeAttr('hidden');
                 $("#btnOk").removeAttr('hidden');
                 $("#btnCancel").removeAttr('hidden');
                 $("#btnClose").attr('hidden', 'hidden');
                 $("#btnOk").attr('onclick', 'DisableUser(' + "'" + NidUser + "'" + ')');
+            } else if (typo == 3) { //activate
+                $("#UserModalLabel").text('فعال کردن کاربر');
+                $("#DeleteQuestion").text('آیا برای فعال نمودن این کاربر اطمینان دارید؟');
+                $("#DeleteQuestion").removeAttr('hidden');
+                $("#btnOk").removeAttr('hidden');
+                $("#btnCancel").removeAttr('hidden');
+                $("#btnClose").attr('hidden', 'hidden');
+                $("#btnOk").attr('onclick', 'ActivateUser(' + "'" + NidUser + "'" + ')');
+            } else if (typo == 4) { //delete
+                $("#UserModalLabel").text('حذف کاربر');
+                $("#DeleteQuestion").text('آیا برای حذف این کاربر اطمینان دارید؟');
+                $("#DeleteQuestion").removeAttr('hidden');
+                $("#btnOk").removeAttr('hidden');
+                $("#btnCancel").removeAttr('hidden');
+                $("#btnClose").attr('hidden', 'hidden');
+                $("#btnOk").attr('onclick', 'DeleteUser(' + "'" + NidUser + "'" + ')');
+            } else if (typo == 5) { //re active
+                $("#UserModalLabel").text('رفع تعلیق کاربر');
+                $("#DeleteQuestion").text('آیا برای رفع تعلیق این کاربر اطمینان دارید؟');
+                $("#DeleteQuestion").removeAttr('hidden');
+                $("#btnOk").removeAttr('hidden');
+                $("#btnCancel").removeAttr('hidden');
+                $("#btnClose").attr('hidden', 'hidden');
+                $("#btnOk").attr('onclick', 'ReActiveUser(' + "'" + NidUser + "'" + ')');
             }
             $.ajax({
-                url: '{{URL::to('/')}}' + '/userdetail/' + NidUser,
+                url: '{{ URL::to('/') }}' + '/userdetail/' + NidUser,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -187,7 +221,73 @@
 
         function DisableUser(NidUser) {
             $.ajax({
-                url: '{{URL::to('/')}}' + '/disableuser/' + NidUser,
+                url: '{{ URL::to('/') }}' + '/disableuser/' + NidUser,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue)
+                        window.location.reload()
+                    else {
+                        $("#UserModal").modal('hide');
+                        $("#ErrorMessage").text(result.Message);
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+
+                    }
+                },
+                error: function() {}
+            });
+        }
+
+        function ActivateUser(NidUser) {
+            $.ajax({
+                url: '{{ URL::to('/') }}' + '/activateuser/' + NidUser,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue)
+                        window.location.reload()
+                    else {
+                        $("#UserModal").modal('hide');
+                        $("#ErrorMessage").text(result.Message);
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+
+                    }
+                },
+                error: function() {}
+            });
+        }
+
+        function DeleteUser(NidUser) {
+            $.ajax({
+                url: '{{ URL::to('/') }}' + '/deleteuser/' + NidUser,
+                type: 'get',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue)
+                        window.location.reload()
+                    else {
+                        $("#UserModal").modal('hide');
+                        $("#ErrorMessage").text(result.Message);
+                        $("#errorAlert").removeAttr('hidden');
+                        window.setTimeout(function() {
+                            $("#errorAlert").attr('hidden', 'hidden');
+                        }, 10000);
+
+                    }
+                },
+                error: function() {}
+            });
+        }
+
+        function ReActiveUser(NidUser) {
+            $.ajax({
+                url: '{{ URL::to('/') }}' + '/reactivateuser/' + NidUser,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -209,7 +309,7 @@
 
         function ChangeTableSource(sourceId) {
             $.ajax({
-                url: '{{URL::to('/')}}' + '/usersourcechange/' + sourceId,
+                url: '{{ URL::to('/') }}' + '/usersourcechange/' + sourceId,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {

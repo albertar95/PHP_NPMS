@@ -50,11 +50,15 @@ class AppServiceProvider extends ServiceProvider
             $sharedData = array('UserAccessedEntities' => $AccessedEntities->toArray(),'UserAccessedSub' => $AccessedSub);
             view()->share('sharedData',$sharedData);
         }
-        // if ($this->app->environment() !== 'test') {
-        //     if(Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->count() > 0)
-        //     config([
-        //         'session.lifetime' => Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->firstOrFail()->SettingValue
-        //     ]);
-        //   }
+        try {
+            if ($this->app->environment() !== 'test') {
+                if(Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->count() > 0)
+                config([
+                    'session.lifetime' => Settings::all()->where('SettingTitle','=','SessionSetting')->where('SettingKey','=','SessionTimeout')->firstOrFail()->SettingValue
+                ]);
+              }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

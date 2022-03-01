@@ -26,28 +26,32 @@ class LogExecptions extends Exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception){
-        if (Auth::check())
-        {
-            $newlog = new Logs();
-            $newlog->NidLog = Str::uuid();
-            $newlog->UserId = auth()->user()->NidUser;
-            $newlog->Username = auth()->user()->UserName;
-            $newlog->LogDate = Carbon::now()->toDateString();
-            $newlog->IP = $request->ip();
-            $newlog->LogTime = Carbon::now()->toTimeString();
-            $newlog->ActionId = 100;
-            if(strpos($exception->getMessage(),':'))
+        try {
+            if (Auth::check())
             {
-                $newlog->Description = substr($exception->getMessage(),0,strpos($exception->getMessage(),':'));
-            }else
-            {
-                $newlog->Description = substr($exception->getMessage(),0,50);
+                $newlog = new Logs();
+                $newlog->NidLog = Str::uuid();
+                $newlog->UserId = auth()->user()->NidUser;
+                $newlog->Username = auth()->user()->UserName;
+                $newlog->LogDate = Carbon::now()->toDateString();
+                $newlog->IP = $request->ip();
+                $newlog->LogTime = Carbon::now()->toTimeString();
+                $newlog->ActionId = 100;
+                if(strpos($exception->getMessage(),':'))
+                {
+                    $newlog->Description = substr($exception->getMessage(),0,strpos($exception->getMessage(),':'));
+                }else
+                {
+                    $newlog->Description = substr($exception->getMessage(),0,50);
+                }
+                $newlog->LogStatus = 1;
+                $newlog->ImportanceLevel = 1;
+                $newlog->ConfidentialLevel = 1;
+                $newlog->save();
             }
-            $newlog->LogStatus = 1;
-            $newlog->ImportanceLevel = 1;
-            $newlog->ConfidentialLevel = 1;
-            $newlog->save();
-            return view('errors.500');
+        } catch (\Throwable $th) {
+            //throw $th;
         }
+        return view('errors.500');
     }
 }

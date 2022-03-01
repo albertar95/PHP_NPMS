@@ -714,6 +714,31 @@ class DataMapper
             return null;
         }
     }
+    public static function MapToLogDTO2(Collection $logs)
+    {
+        try {
+            $results = new Collection();
+            foreach ($logs as $log) {
+                $result = new LogDTO();
+                $result->NidLog = $log->NidLog;
+                $result->UserId = $log->UserId;
+                $result->Username = $log->Username;
+                $result->LogDate = $log->LogDate;
+                $result->IP = $log->IP;
+                $result->LogTime = $log->LogTime;
+                $result->ActionId = $log->ActionId;
+                $result->ActionName = $log->actionTypes->Title;
+                $result->Description = $log->Description;
+                $result->LogStatus = $log->LogStatus;
+                $result->ImportanceLevel = $log->ImportanceLevel;
+                $result->ConfidentialLevel = $log->ConfidentialLevel;
+                $results->push($result);
+            }
+            return $results;
+        } catch (\Exception) {
+            return null;
+        }
+    }
     public static function MapToReport(Request $report)
     {
         try {

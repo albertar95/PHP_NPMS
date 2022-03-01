@@ -9,6 +9,7 @@ use App\Models\Logs;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class LogRepository implements ILogRepository{
 
@@ -22,40 +23,39 @@ class LogRepository implements ILogRepository{
     }
     public function UserLogReport(string $FromDate,string $ToDate,int $LogActionId,string $UserName = "")
     {
-        $result = new Collection();
+        // $result = new Collection();
         if($LogActionId == 0)
         {
             if(empty($UserName))
             {
-                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate]);
+                // $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate]);
+                return collect(DB::select("select LogDate,LogTime,Username,Description,IP,ImportanceLevel,t2.Title as ActionName from logs t1 join log_action_types t2 on t1.ActionId = t2.NidAction where LogDate BETWEEN '".$FromDate."' and '".$ToDate."'"));
             }else
             {
-                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('Username','=',$UserName);
+                // $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('Username','=',$UserName);
+                return collect(DB::select("select LogDate,LogTime,Username,Description,IP,ImportanceLevel,t2.Title as ActionName from logs t1 join log_action_types t2 on t1.ActionId = t2.NidAction where LogDate BETWEEN '".$FromDate."' and '".$ToDate."' and Username = '".$UserName."'"));
             }
         }else
         {
             if(empty($UserName))
             {
-                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId);
+                // $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId);
+                return collect(DB::select("select LogDate,LogTime,Username,Description,IP,ImportanceLevel,t2.Title as ActionName from logs t1 join log_action_types t2 on t1.ActionId = t2.NidAction where LogDate BETWEEN '".$FromDate."' and '".$ToDate."' and ActionId = ".$LogActionId));
             }else
             {
-                $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId)->where('Username','=',$UserName);
+                // $result = Logs::all()->whereBetween('LogDate',[$FromDate,$ToDate])->where('ActionId','=',$LogActionId)->where('Username','=',$UserName);
+                return collect(DB::select("select LogDate,LogTime,Username,Description,IP,ImportanceLevel,t2.Title as ActionName from logs t1 join log_action_types t2 on t1.ActionId = t2.NidAction where LogDate BETWEEN '".$FromDate."' and '".$ToDate."' and Username = '".$UserName."' and ActionId = ".$LogActionId));
             }
         }
-        $resultDto = new Collection();
-        foreach ($result as $lg) {
-            $resultDto->push(DataMapper::MapToLogDTO($lg));
-        }
-        return $resultDto;
+        // $resultDto = new Collection();
+        // foreach ($result as $lg) {
+        //     $resultDto->push(DataMapper::MapToLogDTO($lg));
+        // }
+        // return $resultDto;
     }
-    public function CurrentUserLogReport(string $NidUser)
+    public function CurrentUserLogReport(string $NidUser,int $pagesize = 200)
     {
-        $result = Logs::all()->where('UserId','=',$NidUser)->sortByDesc('LogTime')->sortByDesc('LogDate')->take(500);
-        $resultDto = new Collection();
-        foreach ($result as $lg) {
-            $resultDto->push(DataMapper::MapToLogDTO($lg));
-        }
-        return $resultDto;
+        return DataMapper::MapToLogDTO2(Logs::with('actionTypes')->where('UserId','=',$NidUser)->get()->sortByDesc('LogTime')->sortByDesc('LogDate')->take($pagesize));
     }
     public function CurrentUserLoginReport(string $NidUser)
     {

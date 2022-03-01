@@ -89,6 +89,33 @@ class UserRepository extends BaseRepository implements IUserRepository
         } else
             return null;
     }
+    public function EnableUser(string $NidUser)
+    {
+        $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
+        if (!is_null($tmpUser)) {
+            User::where('NidUser', $NidUser)->update(
+                [
+                    'IsDisabled' => boolval(false)
+                ]
+            );
+            return $tmpUser;
+        } else
+            return null;
+    }
+    public function ReEnableUser(string $NidUser)
+    {
+        $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
+        if (!is_null($tmpUser)) {
+            User::where('NidUser', $NidUser)->update(
+                [
+                    'IsLockedOut' => boolval(false),
+                    'LockoutDeadLine' => NULL
+                ]
+            );
+            return $tmpUser;
+        } else
+            return null;
+    }
     public function LogoutUser(string $NidUser)
     {
         $tmpUser = $this->model->all()->where('NidUser', '=', $NidUser)->firstOrFail();
@@ -249,40 +276,44 @@ class UserRepository extends BaseRepository implements IUserRepository
             $changePassDuration = Settings::all()->where('SettingKey', '=', 'ChangePasswordDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
         $dateNow = Carbon::now();
         if (!is_null($tmpUser)) {
-            if ($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine)) {
-                $resultFlag = 4;
+            if ($tmpUser->IsDisabled) {
+                $resultFlag = 6;
             } else {
-                if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > $changePassDuration)
-                    $resultFlag = 5;
-                else {
-                    if (Hash::check($Password, $tmpUser->Password)) {
-                        $tmpUser->IsLockedOut = 0;
-                        $tmpUser->LastLoginDate = Carbon::now();
-                        $tmpUser->IncorrectPasswordCount = 0;
-                        $this->UpdateUser($tmpUser);
-                        $resultFlag = 1;
-                    } else {
-                        $incorrectPassAttempt = 20;
-                        $lockoutDuration = 5;
-                        $fullLockout = 0;
-                        if (Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                            $incorrectPassAttempt = Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                        if (Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                            $lockoutDuration = Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                        if (Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                            $fullLockout = Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                        $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
-                        if ($tmpUser->IncorrectPasswordCount >= $incorrectPassAttempt) {
-                            $tmpUser->IsLockedOut = 1;
-                            if (!$fullLockout) {
-                                $tmpUser->LockoutDeadLine = $dateNow->addMinutes($lockoutDuration);
-                            } else {
-                                $tmpUser->LockoutDeadLine = $dateNow->addDays(365);
-                            }
+                if ($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine)) {
+                    $resultFlag = 4;
+                } else {
+                    if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > $changePassDuration)
+                        $resultFlag = 5;
+                    else {
+                        if (Hash::check($Password, $tmpUser->Password)) {
+                            $tmpUser->IsLockedOut = 0;
+                            $tmpUser->LastLoginDate = Carbon::now();
                             $tmpUser->IncorrectPasswordCount = 0;
+                            $this->UpdateUser($tmpUser);
+                            $resultFlag = 1;
+                        } else {
+                            $incorrectPassAttempt = 20;
+                            $lockoutDuration = 5;
+                            $fullLockout = 0;
+                            if (Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                                $incorrectPassAttempt = Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                            if (Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                                $lockoutDuration = Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                            if (Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                                $fullLockout = Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                            $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
+                            if ($tmpUser->IncorrectPasswordCount >= $incorrectPassAttempt) {
+                                $tmpUser->IsLockedOut = 1;
+                                if (!$fullLockout) {
+                                    $tmpUser->LockoutDeadLine = $dateNow->addMinutes($lockoutDuration);
+                                } else {
+                                    $tmpUser->LockoutDeadLine = $dateNow->addDays(365);
+                                }
+                                $tmpUser->IncorrectPasswordCount = 0;
+                            }
+                            $this->UpdateUser($tmpUser);
+                            $resultFlag = 2;
                         }
-                        $this->UpdateUser($tmpUser);
-                        $resultFlag = 2;
                     }
                 }
             }

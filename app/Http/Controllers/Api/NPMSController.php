@@ -264,6 +264,24 @@ class NPMSController extends Controller
             return null;
         }
     }
+    public function EnableUserById(string $UserId)
+    {
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->EnableUser($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public function ReEnableUserById(string $UserId)
+    {
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->ReEnableUser($UserId);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
     public function LogoutUserById(string $UserId)
     {
         try {
@@ -428,11 +446,11 @@ class NPMSController extends Controller
             return null;
         }
     }
-    public static function GetCurrentUserLogReport(string $NidUser)
+    public static function GetCurrentUserLogReport(string $NidUser,int $pagesize = 200)
     {
         try {
             $repo = new LogRepository();
-            return $repo->CurrentUserLogReport($NidUser);
+            return $repo->CurrentUserLogReport($NidUser,$pagesize);
         } catch (\Throwable $th) {
             return null;
         }

@@ -5,14 +5,15 @@
         <div class="col-xl-12 col-md-12 mb-12">
             <div class="card shadow border-left-primary" style="margin-bottom:1rem;">
                 <!-- Card Header - Accordion -->
-                <a href="#collapseUserLog" class="d-block card-header py-3" style="text-align: right;" data-toggle="collapse" role="button"
-                    aria-expanded="true" aria-controls="collapseUserLog">
+                <a href="#collapseUserLog" class="d-block card-header py-3" style="text-align: right;" data-toggle="collapse"
+                    role="button" aria-expanded="true" aria-controls="collapseUserLog">
                     <h6 class="m-0 font-weight-bold text-primary">گزارش کاربری</h6>
                 </a>
                 <div class="collapse show" id="collapseUserLog">
                     <div class="card-body">
                         @if (!is_null($logs))
-                            <div class="table-responsive" dir="ltr">
+                            <div class="table-responsive" dir="ltr" id="TableContainer">
+                                <input type="number" value="1" id="LoadCount" hidden>
                                 <table class="table table-bordered" id="userlogdataTable"
                                     style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                     <thead>
@@ -41,6 +42,9 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <a rel="nofollow" href="#" id="btnMorePage" style="font-size: 17px;text-align: right;">&plus;
+                                نمایش گزارش های
+                                بیشتر</a>
                         @endif
                     </div>
                 </div>
@@ -57,12 +61,37 @@
     <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
-    $(function()
-    {
-        $('#userlogdataTable').DataTable( {
-                    "order": [[ 0, "desc" ],[ 1, "desc" ]],
-                } );
-    });
+        $(function() {
+            $('#userlogdataTable').DataTable({
+                "order": [
+                    [0, "desc"],
+                    [1, "desc"]
+                ],
+            });
+
+            $("#btnMorePage").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ URL::to('/') }}' + '/pagination/5/' + $("#LoadCount").val(),
+                    type: 'get',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue == true) {
+                            $("#TableContainer").html(result.Html);
+                            $('#userlogdataTable').DataTable({
+                                "order": [
+                                    [0, "desc"],
+                                    [1, "desc"]
+                                ],
+                            });
+                        } else {
+                            $("#btnMorePage").attr('hidden', 'hidden');
+                        }
+                    },
+                    error: function() {}
+                });
+            });
+        });
     </script>
 @endsection
 @endsection

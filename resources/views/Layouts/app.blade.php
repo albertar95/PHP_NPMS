@@ -70,12 +70,6 @@
                                 <a class="collapse-item" href="{{ route('project.Projects') }}"
                                     style="text-align:right;">مدیریت طرح ها</a>
                             @endif
-                            @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[4] == 1)
-                                    <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}"
-                                        style="text-align:right;">مدیریت اطلاعات پایه</a>
-                                @endif
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -162,11 +156,12 @@
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[0] == 1)
-                                <a class="collapse-item" href="{{URL::to('/sendmessage')}}"
+                                <a class="collapse-item" href="{{ URL::to('/sendmessage') }}"
                                     style="text-align:right;">ارسال پیام</a>
                             @endif
                             @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
-                                <a class="collapse-item" href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}"
+                                <a class="collapse-item"
+                                    href="{{ sprintf('%s/%s', URL::to('/messages'), auth()->user()->NidUser) }}"
                                     style="text-align:right;">صندوق پیام</a>
                             @endif
                         </div>
@@ -195,11 +190,40 @@
                                 style="text-align:right;">مدیریت دسترسی ها</a> --}}
                             <a class="collapse-item" href="{{ route('user.ManageSessions') }}"
                                 style="text-align:right;">مدیریت نشست ها</a>
+                            @if (in_array('6', $sharedData['UserAccessedEntities']))
+                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[4] == 1)
+                                    <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}"
+                                        style="text-align:right;">مدیریت اطلاعات پایه</a>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>
                 <hr class="sidebar-divider d-none d-md-block">
-            @endif
+            @else
+                @if (in_array('6', $sharedData['UserAccessedEntities']))
+                    @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[4] == 1)
+                        <div class="sidebar-heading">
+                            بخش تنظیمات
+                        </div>
+                        <div class="nav-item collapsed">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#SettingPart"
+                                aria-expanded="true" aria-controls="SettingPart">
+                                <i class="fas fa-fw fa-cog"></i>
+                                <span>تنظیمات امنیتی</span>
+                            </a>
+                            <div id="SettingPart" class="collapse" aria-labelledby="SettingHeading"
+                                data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <a class="collapse-item" href="{{ route('project.ManageBaseInfo') }}"
+                                        style="text-align:right;">مدیریت اطلاعات پایه</a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="sidebar-divider d-none d-md-block">
+                    @endif
+                @endif
+            @endforelse
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
@@ -276,7 +300,8 @@
                                 <h6 class="dropdown-header" style="text-align:center;">
                                     اعلان ها
                                 </h6>
-                                <a class="dropdown-item text-center small text-gray-500" href="{{URL::to('/alarms/0')}}">نمایش تمامی
+                                <a class="dropdown-item text-center small text-gray-500"
+                                    href="{{ URL::to('/alarms/0') }}">نمایش تمامی
                                     اعلان ها</a>
                             </div>
                         </li>
@@ -297,7 +322,8 @@
                                 @if (in_array('5', $sharedData['UserAccessedEntities']))
                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 5)->pluck('rowValue')[0])[4] == 1)
                                         <a class="dropdown-item text-center small text-gray-500"
-                                            href="{{ sprintf("%s/%s",URL::to('/messages'),auth()->user()->NidUser) }}">نمایش تمامی پیام ها</a>
+                                            href="{{ sprintf('%s/%s', URL::to('/messages'), auth()->user()->NidUser) }}">نمایش
+                                            تمامی پیام ها</a>
                                     @endif
                                 @endif
                             </div>
@@ -333,7 +359,9 @@
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     تنظیمات
                                 </a> --}}
-                                <a class="dropdown-item" href="{{ sprintf("%s/%s",URL::to('/profileuseractivityreport'),auth()->user()->NidUser) }}" style="text-align:right;">
+                                <a class="dropdown-item"
+                                    href="{{ sprintf('%s/%s', URL::to('/profileuseractivityreport'), auth()->user()->NidUser) }}"
+                                    style="text-align:right;">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     گزارش کاربری
                                 </a>
@@ -460,7 +488,8 @@
             GetUsersMessages();
             setInterval(function() {
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/getrecievemessageneeded/' + $("#txtUserId").text(),
+                    url: '{{ URL::to('/') }}' + '/getrecievemessageneeded/' + $("#txtUserId")
+                        .text(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -504,7 +533,7 @@
                         formData.append('fileName', document.getElementById("ProfilePictureUpload").files[0].name);
                         formData.append('fileType', typo);
                         $.ajax({
-                            url: '{{URL::to('/')}}' + '/uploadthisfile',
+                            url: '{{ URL::to('/') }}' + '/uploadthisfile',
                             type: 'post',
                             datatype: 'json',
                             data: formData,
@@ -595,7 +624,7 @@
                 }
             });
             $.ajax({
-                url: '{{URL::to('/')}}' + '/complexsearch/' + textVal,
+                url: '{{ URL::to('/') }}' + '/complexsearch/' + textVal,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -622,7 +651,7 @@
 
         function CheckForMessages() {
             $.ajax({
-                url: '{{URL::to('/')}}' + '/getrecievemessageneeded/' + $("#txtUserId").text(),
+                url: '{{ URL::to('/') }}' + '/getrecievemessageneeded/' + $("#txtUserId").text(),
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -635,7 +664,7 @@
 
         function GetUsersMessages() {
             $.ajax({
-                url: '{{URL::to('/')}}' + '/getmessages/' + $("#txtUserId").text(),
+                url: '{{ URL::to('/') }}' + '/getmessages/' + $("#txtUserId").text(),
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
@@ -655,7 +684,7 @@
                 }
             });
             $.ajax({
-                url: '{{URL::to('/')}}' + '/getalarms/',
+                url: '{{ URL::to('/') }}' + '/getalarms/',
                 type: 'get',
                 datatype: 'json',
                 data: {},
@@ -677,7 +706,7 @@
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/scholardetail/' + Nid,
+                    url: '{{ URL::to('/') }}' + '/scholardetail/' + Nid,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -695,7 +724,7 @@
                 $("#btnOk").attr('hidden', 'hidden');
                 $("#DeleteQuestion").attr('hidden', 'hidden');
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/userdetail/' + Nid,
+                    url: '{{ URL::to('/') }}' + '/userdetail/' + Nid,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

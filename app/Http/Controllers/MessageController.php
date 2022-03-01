@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Api\NPMSController;
 use App\Http\Requests\MessageRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class MessageController extends Controller
 {
@@ -13,20 +14,56 @@ class MessageController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
-    public function GetMessages(string $NidUser)
+    private function CheckAuthority(bool $checkSub, int $sub, string $cookie, int $entity = 5)
     {
         try {
-            $api = new NPMSController();
-            $messages = $api->GetAllUsersMessages($NidUser);
-            foreach ($messages as $key => $msg) {
-                if(!$msg->IsRecieved)
-                $api->RecieveMessage($msg->NidMessage);
+            $row = explode('#', $cookie);
+            $AccessedEntities = new Collection();
+            foreach ($row as $r) {
+                $AccessedEntities->push(explode(',', $r)[0]);
             }
-            $result = new JsonResults();
-            $result->HasValue = true;
-            $result->Html = view('Message._MessageSection',compact('messages'))->render();
-            $result->Message = $messages->count();
-            return response()->json($result);
+            if ($checkSub) {
+                $AccessedSub = new Collection();
+                foreach ($row as $r) {
+                    $AccessedSub->push(["entity" => explode(',', $r)[0], "rowValue" => substr($r, 2, strlen($r) - 2)]);
+                }
+                if (in_array($entity, $AccessedEntities->toArray())) {
+                    if (explode(',', $AccessedSub->where('entity', '=', $entity)->pluck('rowValue')[0])[$sub] == 1)
+                        return true;
+                    else
+                        return false;
+                } else
+                    return false;
+            } else {
+                if (in_array($entity, $AccessedEntities->toArray()))
+                    return true;
+                else
+                    return false;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    public function GetMessages(string $NidUser,Request $request)
+    {
+        try {
+            if ($this->CheckAuthority(false, 4, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $messages = $api->GetAllUsersMessages($NidUser);
+                foreach ($messages as $key => $msg) {
+                    if(!$msg->IsRecieved)
+                    $api->RecieveMessage($msg->NidMessage);
+                }
+                $result = new JsonResults();
+                $result->HasValue = true;
+                $result->Html = view('Message._MessageSection',compact('messages'))->render();
+                $result->Message = $messages->count();
+                return response()->json($result);
+            }else
+            {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -34,10 +71,16 @@ class MessageController extends Controller
     public function SendMessage(Request $request)
     {
         try {
-            $api = new NPMSController();
-            $Recievers = $api->GetAllUserPermissionUsers();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"ارسال پیام");
-            return view('Message.SendMessage',compact('Recievers'));
+            if ($this->CheckAuthority(true, 0, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $Recievers = $api->GetAllUserPermissionUsers();
+                $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"ارسال پیام");
+                return view('Message.SendMessage',compact('Recievers'));
+            }else
+            {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -54,12 +97,18 @@ class MessageController extends Controller
     public function Messages(Request $request,string $NidUser)
     {
         try {
-            $api = new NPMSController();
-            $Inbox = $api->GetAllUsersMessages($NidUser,true,200);
-            $SendMessage = $api->GetAllUsersSendMessages($NidUser,200);
-            $Recievers = $api->GetAllUserPermissionUsers();
-            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"پیام ها");
-            return view('Message.Messages',compact('Inbox','SendMessage','Recievers'));
+            if ($this->CheckAuthority(true, 4, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $Inbox = $api->GetAllUsersMessages($NidUser,true,200);
+                $SendMessage = $api->GetAllUsersSendMessages($NidUser,200);
+                $Recievers = $api->GetAllUserPermissionUsers();
+                $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"پیام ها");
+                return view('Message.Messages',compact('Inbox','SendMessage','Recievers'));
+            }else
+            {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -81,13 +130,18 @@ class MessageController extends Controller
     public function SingleMessage(Request $request,string $NidMessage,int $ReadBy)
     {
         try {
-            $api = new NPMSController();
-            $Inbox = $api->GetMessageHirarchyById($NidMessage);
-            $SingleMessage = $api->GetMessageDTOById($NidMessage);
-            $Recievers = $api->GetAllUserPermissionUsers();
-            $readby = $ReadBy;
-            $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"پیام");
-            return view('Message.SingleMessage',compact('Inbox','SingleMessage','Recievers','readby'));
+            if ($this->CheckAuthority(false, 4, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $Inbox = $api->GetMessageHirarchyById($NidMessage);
+                $SingleMessage = $api->GetMessageDTOById($NidMessage);
+                $Recievers = $api->GetAllUserPermissionUsers();
+                $readby = $ReadBy;
+                $api->AddLog(auth()->user(),$request->ip(),1,0,1,1,"پیام");
+                return view('Message.SingleMessage',compact('Inbox','SingleMessage','Recievers','readby'));
+            }else{
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

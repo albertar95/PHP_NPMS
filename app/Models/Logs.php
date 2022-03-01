@@ -17,6 +17,6 @@ class Logs extends Model
     // protected $hidden = [];
     public function actionTypes()
     {
-        return $this->belongsTo(LogActionTypes::class);
+        return $this->belongsTo(LogActionTypes::class,'ActionId','NidAction');
     }
 }

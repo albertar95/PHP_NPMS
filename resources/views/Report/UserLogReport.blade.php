@@ -72,9 +72,9 @@
             </div>
         </div>
     </div>
-    <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
+    <div class="card shadow" style="margin-bottom:1rem;">
         <!-- Card Header - Accordion -->
-        <a href="#collapseSearchResultItems" class="d-block card-header py-3" data-toggle="collapse" role="button"
+        <a href="#collapseSearchResultItems" class="d-block card-header py-3" style="text-align:right;" data-toggle="collapse" role="button"
             aria-expanded="true" aria-controls="collapseSearchResultItems">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:center;">نتیجه گزارش</h6>
         </a>

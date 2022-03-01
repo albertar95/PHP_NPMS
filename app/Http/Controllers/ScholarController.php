@@ -139,7 +139,8 @@ class ScholarController extends Controller
                 return view('errors.401');
             }
         } catch (\Exception $e) {
-            throw new \App\Exceptions\LogExecptions($e);
+            // throw new \App\Exceptions\LogExecptions($e);
+            return view('errors.401');
         }
     }
     public function ScholarDetail(string $NidScholar,Request $request)

@@ -22,6 +22,36 @@ class ReportController extends Controller
         $this->middleware('auth');
         $this->middleware('XSS');
     }
+    private function CheckAuthority(bool $checkSub, int $sub, string $cookie, int $entity = 4)
+    {
+        try {
+            $row = explode('#', $cookie);
+            $AccessedEntities = new Collection();
+            foreach ($row as $r) {
+                $AccessedEntities->push(explode(',', $r)[0]);
+            }
+            if ($checkSub) {
+                $AccessedSub = new Collection();
+                foreach ($row as $r) {
+                    $AccessedSub->push(["entity" => explode(',', $r)[0], "rowValue" => substr($r, 2, strlen($r) - 2)]);
+                }
+                if (in_array($entity, $AccessedEntities->toArray())) {
+                    if (explode(',', $AccessedSub->where('entity', '=', $entity)->pluck('rowValue')[0])[$sub] == 1)
+                        return true;
+                    else
+                        return false;
+                } else
+                    return false;
+            } else {
+                if (in_array($entity, $AccessedEntities->toArray()))
+                    return true;
+                else
+                    return false;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
     public function GetReportParameterInfos()
     {
         try {
@@ -201,10 +231,14 @@ class ReportController extends Controller
     public function StatisticReports(Request $request)
     {
         try {
-            $api = new NPMSController();
-            $Report = $api->GetStatisticsReports();
-            $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارشات آماری");
-            return view('Report.StatisticReports', compact('Report'));
+            if ($this->CheckAuthority(true, 4, $request->cookie('NPMS_Permissions'))) {
+                $api = new NPMSController();
+                $Report = $api->GetStatisticsReports();
+                $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارشات آماری");
+                return view('Report.StatisticReports', compact('Report'));
+            } else {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -212,10 +246,14 @@ class ReportController extends Controller
     public function UserLogReport(Request $request)
     {
         try {
-            $api = new NPMSController();
-            $LogActionTypes = $api->GetLogActionTypes();
-            $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارش عملکرد کاربران");
-            return view('Report.UserLogReport', compact('LogActionTypes'));
+            if ($this->CheckAuthority(false, 4, $request->cookie('NPMS_Permissions'))) {
+                $api = new NPMSController();
+                $LogActionTypes = $api->GetLogActionTypes();
+                $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارش عملکرد کاربران");
+                return view('Report.UserLogReport', compact('LogActionTypes'));
+            } else {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -244,44 +282,48 @@ class ReportController extends Controller
     public function ExecuteReport(string $NidReport, Request $request)
     {
         try {
-            $api = new NPMSController();
-            $report = $api->GetReportById($NidReport);
-            $inputs = $api->GetReportsInput($NidReport);
-            $outputs = $api->GetReportsOutput($NidReport);
-            $inputHtml = "";
-            $ReportType = $report->ContextId;
-            if (!is_null($inputs)) {
-                $Grades = $api->GetGrades();
-                $Majors = $api->GetMajors();
-                $Orientations = $api->GetOrientations();
-                $MillitaryStatuses = $api->GetMillitaryStatuses();
-                $units = $api->GetAllUnits();
-                $unitgroups = $api->GetAllUnitGroups();
-                $users = $api->GetAllUsers();
-                $roles = $api->GetAllRoles();
-                for ($i = 0; $i <= $inputs->count() / 3; $i++) {
-                    $inputHtml = $inputHtml . '<div class="form-group row" style="display:flex;">';
-                    foreach ($inputs->sortBy('ParameterValue')->skip($i * 3)->take(3) as $inp) {
-                        $inputHtml = $inputHtml . '<div class="col-sm-4" style="text-align:right;"> <div style="display:flex;">';
-                        $tmpparam = $this->GetReportParameterInfos()->where('ParameterType', '=', 0)->where('TypeId', '=', $ReportType)->where('FieldName', '=', $inp->ParameterKey)->firstOrFail();
-                        $tmpview = view('Report._ExecuteReportPartial', compact('tmpparam', 'ReportType', 'units', 'unitgroups', 'users', 'roles', 'Grades', 'Majors', 'Orientations', 'MillitaryStatuses'))->render();
-                        $inputHtml = $inputHtml . $tmpview;
-                        $inputHtml = $inputHtml . '</div></div>';
+            if ($this->CheckAuthority(false, 4, $request->cookie('NPMS_Permissions'))) {
+                $api = new NPMSController();
+                $report = $api->GetReportById($NidReport);
+                $inputs = $api->GetReportsInput($NidReport);
+                $outputs = $api->GetReportsOutput($NidReport);
+                $inputHtml = "";
+                $ReportType = $report->ContextId;
+                if (!is_null($inputs)) {
+                    $Grades = $api->GetGrades();
+                    $Majors = $api->GetMajors();
+                    $Orientations = $api->GetOrientations();
+                    $MillitaryStatuses = $api->GetMillitaryStatuses();
+                    $units = $api->GetAllUnits();
+                    $unitgroups = $api->GetAllUnitGroups();
+                    $users = $api->GetAllUsers();
+                    $roles = $api->GetAllRoles();
+                    for ($i = 0; $i <= $inputs->count() / 3; $i++) {
+                        $inputHtml = $inputHtml . '<div class="form-group row" style="display:flex;">';
+                        foreach ($inputs->sortBy('ParameterValue')->skip($i * 3)->take(3) as $inp) {
+                            $inputHtml = $inputHtml . '<div class="col-sm-4" style="text-align:right;"> <div style="display:flex;">';
+                            $tmpparam = $this->GetReportParameterInfos()->where('ParameterType', '=', 0)->where('TypeId', '=', $ReportType)->where('FieldName', '=', $inp->ParameterKey)->firstOrFail();
+                            $tmpview = view('Report._ExecuteReportPartial', compact('tmpparam', 'ReportType', 'units', 'unitgroups', 'users', 'roles', 'Grades', 'Majors', 'Orientations', 'MillitaryStatuses'))->render();
+                            $inputHtml = $inputHtml . $tmpview;
+                            $inputHtml = $inputHtml . '</div></div>';
+                        }
+                        $inputHtml = $inputHtml . '</div>';
                     }
-                    $inputHtml = $inputHtml . '</div>';
                 }
-            }
-            $outputHtml = "";
-            foreach ($outputs->sortBy('ParameterValue') as $outy) {
-                if ($this->GetReportParameterInfos()->where('ParameterType', '=', 1)->where('FieldName', '=', $outy->ParameterKey)->count() > 0) {
-                    $outputHtml = $outputHtml . '<div class="col-sm-4"><div class="row" style="display:flex;">';
-                    $outputHtml = $outputHtml . sprintf("<input type=\"checkbox\" style=\"width:1rem;margin:unset !important;\" id=\"%s\" class=\"form-control checkbox\" alt=\"out\" checked />", $outy->ParameterKey);
-                    $outputHtml = $outputHtml . sprintf("<label for=\"%s\" style=\"margin:.45rem .45rem 0 0\">%s</label>", $outy->ParameterKey, $this->GetReportParameterInfos()->where('ParameterType', '=', 1)->where('FieldName', '=', $outy->ParameterKey)->firstOrFail()->PersianName);
-                    $outputHtml = $outputHtml . '</div></div>';
+                $outputHtml = "";
+                foreach ($outputs->sortBy('ParameterValue') as $outy) {
+                    if ($this->GetReportParameterInfos()->where('ParameterType', '=', 1)->where('FieldName', '=', $outy->ParameterKey)->count() > 0) {
+                        $outputHtml = $outputHtml . '<div class="col-sm-4"><div class="row" style="display:flex;">';
+                        $outputHtml = $outputHtml . sprintf("<input type=\"checkbox\" style=\"width:1rem;margin:unset !important;\" id=\"%s\" class=\"form-control checkbox\" alt=\"out\" checked />", $outy->ParameterKey);
+                        $outputHtml = $outputHtml . sprintf("<label for=\"%s\" style=\"margin:.45rem .45rem 0 0\">%s</label>", $outy->ParameterKey, $this->GetReportParameterInfos()->where('ParameterType', '=', 1)->where('FieldName', '=', $outy->ParameterKey)->firstOrFail()->PersianName);
+                        $outputHtml = $outputHtml . '</div></div>';
+                    }
                 }
+                $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارش آماری");
+                return view('Report.ExecuteReport', compact('report', 'inputs', 'outputs', 'inputHtml', 'outputHtml'));
+            } else {
+                return view('errors.401');
             }
-            $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارش آماری");
-            return view('Report.ExecuteReport', compact('report', 'inputs', 'outputs', 'inputHtml', 'outputHtml'));
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -319,15 +361,14 @@ class ReportController extends Controller
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
             $ConfidentLevel = 0;
-            if(($Scholars->count() + $Projects->count() + $Users->count()) > 2500)
-            {
+            if (($Scholars->count() + $Projects->count() + $Users->count()) > 2500) {
                 try {
                     ini_set("pcre.backtrack_limit", "100000000");
                 } catch (\Throwable $th) {
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime','ConfidentLevel'));
+            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime', 'ConfidentLevel'));
             $api->AddLog(auth()->user(), $report->ip(), 29, 0, 3, 2, $ReportName);
             return $pdf->stream($ReportName . '.pdf');
             // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
@@ -338,22 +379,29 @@ class ReportController extends Controller
     public function PrintStatisticsReport(Request $report) //string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
         try {
-            $api = new NPMSController();
             $result = new JsonResults();
-            $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
-            $OutputKey = collect($report->OutPutValues);
-            $Scholars = $reportresult->Scholars;
-            $Projects = $reportresult->Projects;
-            $Users = $reportresult->Users;
-            $ReportName = $reportresult->ReportName;
-            $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
-            $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
-            $ConfidentLevel = 0;
-            // $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
-            $result->Html = view('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime','ConfidentLevel'))->render();
-            $result->HasValue = true;
-            $api->AddLog(auth()->user(), $report->ip(), 30, 0, 3, 2, $ReportName);
-            return response()->json($result);
+            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
+                $OutputKey = collect($report->OutPutValues);
+                $Scholars = $reportresult->Scholars;
+                $Projects = $reportresult->Projects;
+                $Users = $reportresult->Users;
+                $ReportName = $reportresult->ReportName;
+                $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
+                $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+                $ConfidentLevel = 0;
+                // $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime'));
+                $result->Html = view('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime', 'ConfidentLevel'))->render();
+                $result->HasValue = true;
+                $api->AddLog(auth()->user(), $report->ip(), 30, 0, 3, 2, $ReportName);
+                return response()->json($result);
+            }else
+            {
+                $result->HasValue = false;
+                return response()->json($result);
+            }
             // return $pdf->stream($ReportName.'.pdf');
             // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
         } catch (\Exception $e) {
@@ -368,15 +416,14 @@ class ReportController extends Controller
             $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
             $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
             $ConfidentLevel = 0;
-            if($logs->count() > 2500)
-            {
+            if ($logs->count() > 2500) {
                 try {
                     ini_set("pcre.backtrack_limit", "100000000");
                 } catch (\Throwable $th) {
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime','ConfidentLevel'));
+            $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime', 'ConfidentLevel'));
             $api->AddLog(auth()->user(), $report->ip(), 31, 0, 3, 2, '');
             return $pdf->stream('userActivityLog.pdf');
         } catch (\Exception $e) {
@@ -386,16 +433,23 @@ class ReportController extends Controller
     public function PrintUserLogReport(Request $report) //string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
         try {
-            $api = new NPMSController();
             $result = new JsonResults();
-            $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
-            $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
-            $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
-            $ConfidentLevel = 0;
-            $result->HasValue = true;
-            $result->Html = view('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime','ConfidentLevel'))->render();
-            $api->AddLog(auth()->user(), $report->ip(), 32, 0, 3, 2, '');
-            return response()->json($result);
+            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
+                $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
+                $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+                $ConfidentLevel = 0;
+                $result->HasValue = true;
+                $result->Html = view('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime', 'ConfidentLevel'))->render();
+                $api->AddLog(auth()->user(), $report->ip(), 32, 0, 3, 2, '');
+                return response()->json($result);
+            }else
+            {
+                $result->HasValue = false;
+                return response()->json($result);
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -413,9 +467,15 @@ class ReportController extends Controller
     public function CustomReports(Request $request)
     {
         try {
-            $api = new NPMSController();
-            $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "ایجاد گزارش");
-            return view('Report.CustomReports');
+            if ($this->CheckAuthority(true, 0, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "ایجاد گزارش");
+                return view('Report.CustomReports');
+            }else
+            {
+                return view('errors.401');
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -487,17 +547,25 @@ class ReportController extends Controller
     public function DeleteReport(string $NidReport, Request $request)
     {
         try {
-            $api = new NPMSController();
-            if ($api->DeleteReport($NidReport)) {
-                $result = new JsonResults();
-                $result->HasValue = true;
-                $result->Message = "گزارش با موفقیت حذف گردید";
-                $api->AddLog(auth()->user(), $request->ip(), 26, 0, 3, 2, $NidReport);
-                return response()->json($result);
-            } else {
+            if ($this->CheckAuthority(true, 2, $request->cookie('NPMS_Permissions')))
+            {
+                $api = new NPMSController();
+                if ($api->DeleteReport($NidReport)) {
+                    $result = new JsonResults();
+                    $result->HasValue = true;
+                    $result->Message = "گزارش با موفقیت حذف گردید";
+                    $api->AddLog(auth()->user(), $request->ip(), 26, 0, 3, 2, $NidReport);
+                    return response()->json($result);
+                } else {
+                    $result = new JsonResults();
+                    $result->HasValue = false;
+                    $api->AddLog(auth()->user(), $request->ip(), 26, 1, 3, 2, $NidReport);
+                    return response()->json($result);
+                }
+            }else
+            {
                 $result = new JsonResults();
                 $result->HasValue = false;
-                $api->AddLog(auth()->user(), $request->ip(), 26, 1, 3, 2, $NidReport);
                 return response()->json($result);
             }
         } catch (\Exception $e) {
