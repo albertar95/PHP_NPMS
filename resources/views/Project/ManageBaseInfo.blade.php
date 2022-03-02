@@ -12,8 +12,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseUnitItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-                                role="button" aria-expanded="false" aria-controls="collapseUnitItems">
+                            <a href="#collapseUnitItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
+                                data-toggle="collapse" role="button" aria-expanded="false"
+                                aria-controls="collapseUnitItems">
                                 <h6 class="m-0 font-weight-bold text-primary">یگان تخصصی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -56,55 +57,55 @@
                                     @endif
                                 @endif
                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                <div class="table-responsive" dir="ltr" id="UnitTableWrapper">
-                                    <table class="table table-bordered" id="UnitdataTable"
-                                        style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>ردیف</th>
-                                                <th>عنوان یگان</th>
-                                                <th>عملیات</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>ردیف</th>
-                                                <th>عنوان یگان</th>
-                                                <th>عملیات</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                            @foreach ($Units as $key => $unit)
+                                    <div class="table-responsive" dir="ltr" id="UnitTableWrapper">
+                                        <table class="table table-bordered" id="UnitdataTable"
+                                            style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $unit->Title }}</td>
-                                                    <td>
-                                                        @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
-                                                                <button class="btn btn-danger"
-                                                                    onclick="DeleteModal(1,'{{ $unit->NidUnit }}')">حذف</button>
-                                                            @endif
-                                                        @endif
-                                                        @if (in_array('6', $sharedData['UserAccessedEntities']))
-                                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
-                                                                <button class="btn btn-warning"
-                                                                    onclick="EditThis(1,'{{ $unit->NidUnit }}','{{ $unit->Title }}','')">ویرایش</button>
-                                                            @endif
-                                                        @endif
-                                                    </td>
+                                                    <th>ردیف</th>
+                                                    <th>عنوان یگان</th>
+                                                    <th>عملیات</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>ردیف</th>
+                                                    <th>عنوان یگان</th>
+                                                    <th>عملیات</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                @foreach ($Units as $key => $unit)
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>{{ $unit->Title }}</td>
+                                                        <td>
+                                                            @if (in_array('6', $sharedData['UserAccessedEntities']))
+                                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
+                                                                    <button class="btn btn-danger"
+                                                                        onclick="DeleteModal(1,'{{ $unit->NidUnit }}')">حذف</button>
+                                                                @endif
+                                                            @endif
+                                                            @if (in_array('6', $sharedData['UserAccessedEntities']))
+                                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[1] == 1)
+                                                                    <button class="btn btn-warning"
+                                                                        onclick="EditThis(1,'{{ $unit->NidUnit }}','{{ $unit->Title }}','')">ویرایش</button>
+                                                                @endif
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 @endif
                             </div>
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseUnitGroupsItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
-                                data-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="collapseUnitGroupsItems">
+                            <a href="#collapseUnitGroupsItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseUnitGroupsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">گروه تخصصی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -134,10 +135,12 @@
                                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                                     <input type="text" value="" id="NidGroup" name="NidGroup" hidden />
                                                     <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                        id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
+                                                        id="UnitGroupsUnitId" name="UnitId" style="padding:0 .75rem;"
+                                                        placeholder="انتخاب یگان">
                                                         <option value="0" disabled selected>انتخاب یگان</option>
                                                         @foreach ($Units->sortBy('Title') as $uni)
-                                                            <option value="{{ $uni->NidUnit }}" data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
+                                                            <option value="{{ $uni->NidUnit }}"
+                                                                data-tokens="{{ $uni->Title }}">{{ $uni->Title }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -207,8 +210,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseGradesItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-                                role="button" aria-expanded="false" aria-controls="collapseGradesItems">
+                            <a href="#collapseGradesItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseGradesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">مقطع تحصیلی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -307,8 +311,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseMajorsItems" style="text-align:right;" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-                                role="button" aria-expanded="false" aria-controls="collapseMajorsItems">
+                            <a href="#collapseMajorsItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseMajorsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">رشته تحصیلی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -399,9 +404,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseOreintationsItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
-                                data-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="collapseOreintationsItems">
+                            <a href="#collapseOreintationsItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseOreintationsItems">
                                 <h6 class="m-0 font-weight-bold text-primary">گرایش</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -433,11 +438,12 @@
                                                         <input type="text" value="" id="NidOreintation"
                                                             name="NidOreintation" hidden />
                                                         <select class="form-control allWidth" data-ng-style="btn-primary"
-                                                            name="MajorId" id="OreintationMajorId" placeholder="انتخاب رشته تحصیلی"
-                                                            style="padding:0 .75rem;">
+                                                            name="MajorId" id="OreintationMajorId"
+                                                            placeholder="انتخاب رشته تحصیلی" style="padding:0 .75rem;">
                                                             <option value="0" disabled selected>انتخاب رشته تحصیلی</option>
                                                             @foreach ($Majors as $ore)
-                                                                <option value="{{ $ore->NidMajor }}" data-tokens="{{ $ore->Title }}">{{ $ore->Title }}
+                                                                <option value="{{ $ore->NidMajor }}"
+                                                                    data-tokens="{{ $ore->Title }}">{{ $ore->Title }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -508,9 +514,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseCollegesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
-                                data-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="collapseCollegesItems">
+                            <a href="#collapseCollegesItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseCollegesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">محل تحصیل</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -609,9 +615,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseMillitaryStatusesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
-                                data-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="collapseMillitaryStatusesItems">
+                            <a href="#collapseMillitaryStatusesItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseMillitaryStatusesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">وضعیت خدمتی</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -710,9 +716,9 @@
                         </div>
                         <div class="card shadow" style="margin-bottom:1rem;">
                             <!-- Card Header - Accordion -->
-                            <a href="#collapseCollaborationTypesItems" style="text-align:right;" class="d-block card-header py-3 collapsed"
-                                data-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="collapseCollaborationTypesItems">
+                            <a href="#collapseCollaborationTypesItems" style="text-align:right;"
+                                class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="collapseCollaborationTypesItems">
                                 <h6 class="m-0 font-weight-bold text-primary">نوع همکاری</h6>
                             </a>
                             <!-- Card Content - Collapse -->
@@ -854,9 +860,9 @@
     <title>سامانه مدیریت تحقیقات - مدیریت اطلاعات پایه</title>
 @endsection
 @section('scripts')
-<script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $("#UnitdataTable").dataTable();
@@ -885,7 +891,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitunitform',
+                    url: '{{ URL::to('/') }}' + '/submitunitform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -899,19 +905,20 @@
                             });
                             $("#UnitSuccessMessage").text(result.Message);
                             $("#UnitSuccessAlert").removeAttr('hidden');
-                            window.setTimeout(function() {
-                                $("#UnitSuccessAlert").attr('hidden', 'hidden');
-                            }, 3000);
                             $("#btnAddUnit").html('ایجاد یگان');
                             $("#btnAddUnit").removeClass('btn-warning');
                             $("#btnAddUnit").addClass('btn-primary');
-                            $("#UnitGroupsUnitId option").each(function() {
-                                if ($(this).val() == model.NidUnit) {
-                                    $(this).remove();
-                                }
-                            });
-                            $("#UnitGroupsUnitId").append(new Option(model.Title, result
-                                .AltProp));
+                            window.setTimeout(function() {
+                                $("#UnitSuccessAlert").attr('hidden', 'hidden');
+                                location.reload();
+                            }, 3000);
+                            // $("#UnitGroupsUnitId option").each(function() {
+                            //     if ($(this).val() == model.NidUnit) {
+                            //         $(this).remove();
+                            //     }
+                            // });
+                            // $("#UnitGroupsUnitId").append(new Option(model.Title, result
+                            //     .AltProp));
                         } else {
                             $("#UnitErrorMessage").text(result.Message);
                             $("#UnitErrorAlert").removeAttr('hidden');
@@ -947,7 +954,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitunitgroupform',
+                    url: '{{ URL::to('/') }}' + '/submitunitgroupform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1004,7 +1011,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitgradeform',
+                    url: '{{ URL::to('/') }}' + '/submitgradeform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1053,7 +1060,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitmajorform',
+                    url: '{{ URL::to('/') }}' + '/submitmajorform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1067,19 +1074,20 @@
                             });
                             $("#MajorSuccessMessage").text(result.Message);
                             $("#MajorSuccessAlert").removeAttr('hidden');
-                            window.setTimeout(function() {
-                                $("#MajorSuccessAlert").attr('hidden', 'hidden');
-                            }, 3000);
                             $("#btnAddMajor").html('ایجاد رشته تحصیلی');
                             $("#btnAddMajor").removeClass('btn-warning');
                             $("#btnAddMajor").addClass('btn-primary');
-                            $("#OreintationMajorId option").each(function() {
-                                if ($(this).val() == model.NidMajor) {
-                                    $(this).remove();
-                                }
-                            });
-                            $("#OreintationMajorId").append(new Option(model.Title, result
-                                .AltProp));
+                            window.setTimeout(function() {
+                                $("#MajorSuccessAlert").attr('hidden', 'hidden');
+                                location.reload();
+                            }, 3000);
+                            // $("#OreintationMajorId option").each(function() {
+                            //     if ($(this).val() == model.NidMajor) {
+                            //         $(this).remove();
+                            //     }
+                            // });
+                            // $("#OreintationMajorId").append(new Option(model.Title, result
+                            //     .AltProp));
                         } else {
                             $("#MajorErrorMessage").text(result.Message);
                             $("#MajorErrorAlert").removeAttr('hidden');
@@ -1115,7 +1123,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitoreintationform',
+                    url: '{{ URL::to('/') }}' + '/submitoreintationform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1173,7 +1181,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitcollegeform',
+                    url: '{{ URL::to('/') }}' + '/submitcollegeform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1225,7 +1233,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitmillitform',
+                    url: '{{ URL::to('/') }}' + '/submitmillitform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1277,7 +1285,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/submitcollabform',
+                    url: '{{ URL::to('/') }}' + '/submitcollabform',
                     type: 'post',
                     datatype: 'json',
                     data: JSON.stringify(model),
@@ -1414,7 +1422,7 @@
             switch (CurrentDeleteTypo) {
                 case 1:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeleteunit/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeleteunit/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1450,7 +1458,7 @@
                     break;
                 case 2:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeleteunitgroup/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeleteunitgroup/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1481,7 +1489,7 @@
                     break;
                 case 3:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeletegrade/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeletegrade/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1512,7 +1520,7 @@
                     break;
                 case 4:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeletemajor/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeletemajor/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1548,7 +1556,7 @@
                     break;
                 case 5:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeleteoreintation/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeleteoreintation/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1579,7 +1587,7 @@
                     break;
                 case 6:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeletecollege/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeletecollege/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1610,7 +1618,7 @@
                     break;
                 case 7:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeletemillit/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeletemillit/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -1641,7 +1649,7 @@
                     break;
                 case 8:
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitdeletecollab/' + CurrentDeleteNid,
+                        url: '{{ URL::to('/') }}' + '/submitdeletecollab/' + CurrentDeleteNid,
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {

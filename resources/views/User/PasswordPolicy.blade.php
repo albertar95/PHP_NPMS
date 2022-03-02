@@ -11,7 +11,7 @@
                             <h1 class="h4 text-gray-900 mb-4">تنظیمات امنیتی کلمه عبور کاربران</h1>
                         </div>
                         @if (in_array('0', $sharedData['UserAccessedEntities']))
-                            <form class="user" id="PasswordPolicyForm"
+                            <form class="user" id="PasswordPolicyForm" style="text-align: right;"
                                 action="{{ route('user.SubmitPasswordPolicy') }}" method="POST">
                                 @csrf
                                 @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->count() > 0)
@@ -29,126 +29,147 @@
                                     <input id="FullLockoutUser" name="FullLockoutUser" value="0" type="number" hidden>
                                 @endforelse
                                 <div class="form-group row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label>حداقل طول کلمه عبور : </label>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         @if ($Policies->where('SettingKey', '=', 'PasswordLength')->count() > 0)
-                                            <input type="text" class="form-control form-control-user" id="PasswordLength"
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="PasswordLength"
                                                 name="PasswordLength" placeholder=""
                                                 value="{{ $Policies->where('SettingKey', '=', 'PasswordLength')->firstOrFail()->SettingValue ?? '' }}">
                                         @else
-                                            <input type="text" class="form-control form-control-user" id="PasswordLength"
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="PasswordLength"
                                                 name="PasswordLength" placeholder="" value="4">
                                         @endforelse
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label>دوره تغییر کلمه عبور : </label>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         @if ($Policies->where('SettingKey', '=', 'ChangePasswordDuration')->count() > 0)
-                                            <input type="text" class="form-control form-control-user"
-                                                id="ChangePasswordDuration" name="ChangePasswordDuration" placeholder="روز"
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="ChangePasswordDuration"
+                                                name="ChangePasswordDuration" placeholder="روز"
                                                 value="{{ $Policies->where('SettingKey', '=', 'ChangePasswordDuration')->firstOrFail()->SettingValue ?? '' }}">
                                         @else
-                                            <input type="text" class="form-control form-control-user"
-                                                id="ChangePasswordDuration" name="ChangePasswordDuration" placeholder="روز"
-                                                value="45">
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="ChangePasswordDuration"
+                                                name="ChangePasswordDuration" placeholder="روز" value="45">
                                         @endforelse
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label>تعداد کلمات عبور قبلی : </label>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         @if ($Policies->where('SettingKey', '=', 'LastPasswordCount')->count() > 0)
-                                            <input type="text" class="form-control form-control-user" id="LastPasswordCount"
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="LastPasswordCount"
                                                 name="LastPasswordCount" placeholder=""
                                                 value="{{ $Policies->where('SettingKey', '=', 'LastPasswordCount')->firstOrFail()->SettingValue ?? '' }}">
                                         @else
-                                            <input type="text" class="form-control form-control-user" id="LastPasswordCount"
+                                            <input type="text" style="margin-bottom: 10px;"
+                                                class="form-control form-control-user" id="LastPasswordCount"
                                                 name="LastPasswordCount" placeholder="" value="3">
                                         @endforelse
                                     </div>
                                 </div>
                                 <div class="form-group row" style="margin-top: 3rem;">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label>پیچیدگی کلمه عبور : </label>
                                     </div>
                                     @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->count() > 0)
                                         @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->firstOrFail()->SettingValue == 1)
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" checked
-                                                    value="1" name="DificultyChoose" id="NoDifficulty"
-                                                    class="form-control" alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;" checked
+                                                        value="1" name="DificultyChoose" id="NoDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="NoDifficulty" style="margin:.45rem .45rem 0 0">بدون
                                                     پیچیدگی</label>
                                             </div>
                                         @else
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" value="1"
-                                                    name="DificultyChoose" id="NoDifficulty" class="form-control"
-                                                    alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;"
+                                                        value="1" name="DificultyChoose" id="NoDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="NoDifficulty" style="margin:.45rem .45rem 0 0">بدون
                                                     پیچیدگی</label>
                                             </div>
                                         @endforelse
                                         @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->firstOrFail()->SettingValue == 2)
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" checked
-                                                    value="2" name="DificultyChoose" id="NAndCDifficulty"
-                                                    class="form-control" alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;" checked
+                                                        value="2" name="DificultyChoose" id="NAndCDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="NAndCDifficulty" style="margin:.45rem .45rem 0 0">ترکیب حروف و
-                                                    عدد
-                                                    باشد</label>
+                                                    عدد باشد</label>
                                             </div>
                                         @else
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" value="2"
-                                                    name="DificultyChoose" id="NAndCDifficulty" class="form-control"
-                                                    alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;"
+                                                        value="2" name="DificultyChoose" id="NAndCDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="NAndCDifficulty" style="margin:.45rem .45rem 0 0">ترکیب حروف و
-                                                    عدد
-                                                    باشد</label>
+                                                    عدد باشد</label>
                                             </div>
                                         @endforelse
                                         @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->firstOrFail()->SettingValue == 3)
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" checked
-                                                    value="3" name="DificultyChoose" id="SpecialsDifficulty"
-                                                    class="form-control" alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;" checked
+                                                        value="3" name="DificultyChoose" id="SpecialsDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="ContainSpecialsDifficulty"
                                                     style="margin:.45rem .45rem 0 0">دارای
                                                     حروف خاص باشد</label>
                                             </div>
                                         @else
-                                            <div class="col-sm-2" style="display: flex;">
-                                                <input type="radio" style="width:1rem;margin:unset !important;" value="3"
-                                                    name="DificultyChoose" id="SpecialsDifficulty" class="form-control"
-                                                    alt="" />
+                                            <div class="col-sm-3" style="display: flex;">
+                                                <div class="col-sm-1">
+                                                    <input type="radio" style="width:1rem;margin:unset !important;"
+                                                        value="3" name="DificultyChoose" id="SpecialsDifficulty"
+                                                        class="form-control" alt="" />
+                                                </div>
                                                 <label for="ContainSpecialsDifficulty"
                                                     style="margin:.45rem .45rem 0 0">دارای
                                                     حروف خاص باشد</label>
                                             </div>
                                         @endforelse
                                     @else
-                                        <div class="col-sm-2" style="display: flex;">
-                                            <input type="radio" style="width:1rem;margin:unset !important;" checked
-                                                value="1" name="DificultyChoose" id="NoDifficulty" class="form-control"
-                                                alt="" />
+                                        <div class="col-sm-3" style="display: flex;">
+                                            <div class="col-sm-1">
+                                                <input type="radio" style="width:1rem;margin:unset !important;" checked
+                                                    value="1" name="DificultyChoose" id="NoDifficulty"
+                                                    class="form-control" alt="" />
+                                            </div>
                                             <label for="NoDifficulty" style="margin:.45rem .45rem 0 0">بدون
                                                 پیچیدگی</label>
                                         </div>
-                                        <div class="col-sm-2" style="display: flex;">
-                                            <input type="radio" style="width:1rem;margin:unset !important;" value="2"
-                                                name="DificultyChoose" id="NAndCDifficulty" class="form-control" alt="" />
-                                            <label for="NAndCDifficulty" style="margin:.45rem .45rem 0 0">ترکیب حروف و
-                                                عدد
+                                        <div class="col-sm-3" style="display: flex;">
+                                            <div class="col-sm-1">
+                                                <input type="radio" style="width:1rem;margin:unset !important;" value="2"
+                                                    name="DificultyChoose" id="NAndCDifficulty" class="form-control"
+                                                    alt="" />
+                                            </div>
+                                            <label for="NAndCDifficulty" style="margin:.45rem .45rem 0 0">ترکیب حروف و عدد
                                                 باشد</label>
                                         </div>
-                                        <div class="col-sm-2" style="display: flex;">
-                                            <input type="radio" style="width:1rem;margin:unset !important;" value="3"
-                                                name="DificultyChoose" id="SpecialsDifficulty" class="form-control"
-                                                alt="" />
+                                        <div class="col-sm-3" style="display: flex;">
+                                            <div class="col-sm-1">
+                                                <input type="radio" style="width:1rem;margin:unset !important;" value="3"
+                                                    name="DificultyChoose" id="SpecialsDifficulty" class="form-control"
+                                                    alt="" />
+                                            </div>
                                             <label for="ContainSpecialsDifficulty" style="margin:.45rem .45rem 0 0">دارای
                                                 حروف خاص باشد</label>
                                         </div>
@@ -158,7 +179,7 @@
                                     <div class="col-sm-2">
                                         <label>تعداد تلاش ناموفق : </label>
                                     </div>
-                                    <div class="col-sm-2" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Policies->where('SettingKey', '=', 'IncorrectAttemptCount')->count() > 0)
                                             <input type="text" class="form-control form-control-user"
                                                 id="IncorrectAttemptCount" name="IncorrectAttemptCount" placeholder=""
@@ -172,7 +193,7 @@
                                     <div class="col-sm-2" style="display: flex;">
                                         <label>مدت زمان تعلیق کاربر : </label>
                                     </div>
-                                    <div class="col-sm-2" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Policies->where('SettingKey', '=', 'LockoutDuration')->count() > 0)
                                             <input type="text" class="form-control form-control-user" id="LockoutDuration"
                                                 name="LockoutDuration" placeholder="دقیقه"
@@ -185,31 +206,37 @@
                                     @if ($Policies->where('SettingKey', '=', 'FullLockoutUser')->count() > 0)
                                         @if ($Policies->where('SettingKey', '=', 'FullLockoutUser')->firstOrFail()->SettingValue == 0)
                                             <div class="col-sm-2" style="display: flex;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="FullLockout" class="form-control" alt=""
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <div class="col-sm-1">
+                                                    <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                        id="FullLockout" class="form-control" alt=""
+                                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                </div>
                                                 <label for="FullLockout" style="margin:.45rem .45rem 0 0">تعلیق کامل
                                                     کاربر</label>
                                             </div>
                                         @else
                                             <div class="col-sm-2" style="display: flex;">
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;" checked
-                                                    id="FullLockout" class="form-control" alt=""
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <div class="col-sm-1">
+                                                    <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                        checked id="FullLockout" class="form-control" alt=""
+                                                        onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                </div>
                                                 <label for="FullLockout" style="margin:.45rem .45rem 0 0">تعلیق کامل
                                                     کاربر</label>
                                             </div>
                                         @endforelse
                                     @else
                                         <div class="col-sm-2" style="display: flex;">
-                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                id="FullLockout" class="form-control" alt=""
-                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <div class="col-sm-1">
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="FullLockout" class="form-control" alt=""
+                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            </div>
                                             <label for="FullLockout" style="margin:.45rem .45rem 0 0">تعلیق کامل
                                                 کاربر</label>
                                         </div>
                                     @endforelse
-                                    <div class="col-sm-2" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                     </div>
                                 </div>
                                 <div class="form-group row">

@@ -63,10 +63,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row" style="margin-top: 3rem;">
-                                    <div class="col-sm-2" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         <label>دسترسی ها : </label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Create)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="Create"
                                                 name="Create" class="form-control" value="false" alt=""
@@ -78,7 +78,7 @@
                                         @endforelse
                                         <label for="Create" style="margin:.45rem .45rem 0 0">ایجاد</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Edit)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="Edit"
                                                 name="Edit" class="form-control" value="false" alt=""
@@ -90,7 +90,7 @@
                                         @endforelse
                                         <label for="Edit" style="margin:.45rem .45rem 0 0">ویرایش</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Delete)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="Delete"
                                                 name="Delete" class="form-control" value="false" alt=""
@@ -102,7 +102,7 @@
                                         @endforelse
                                         <label for="Delete" style="margin:.45rem .45rem 0 0">حذف</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Detail)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="Detail"
                                                 name="Detail" class="form-control" value="false" alt=""
@@ -114,7 +114,7 @@
                                         @endforelse
                                         <label for="Detail" style="margin:.45rem .45rem 0 0">جزییات</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Confident)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;"
                                                 id="Confident" name="Confident" class="form-control" value="false" alt=""
@@ -126,7 +126,7 @@
                                         @endforelse
                                         <label for="Confident" style="margin:.45rem .45rem 0 0">محرمانه</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->List)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="List"
                                                 name="List" class="form-control" value="false" alt=""
@@ -138,7 +138,7 @@
                                         @endforelse
                                         <label for="List" style="margin:.45rem .45rem 0 0">لیست</label>
                                     </div>
-                                    <div class="col-sm-1" style="display: flex;">
+                                    <div class="col-sm-3" style="display: flex;">
                                         @if ($Role->Print)
                                             <input type="checkbox" style="width:1rem;margin:unset !important;" id="Print"
                                                 name="Print" class="form-control" value="false" alt=""

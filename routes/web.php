@@ -27,6 +27,7 @@ use Symfony\Component\Mime\MessageConverter;
 // })->middleware('auth')->name('index');
 Route::get("/",[UserController::class,"Index"])->name('index');
 Route::get("pagination/{TypeId}/{LoadCount}/{includeConfident?}",[ProjectController::class,"Pagination"])->name('project.Pagination');
+Route::get("dashboard",[UserController::class,"Index"])->name('index2');
 
 
 //alarm routes

@@ -52,7 +52,7 @@
                                         <p class="lead text-gray-800 mb-5">یافت نشد</p>
                                         <p class="text-gray-500 mb-0" style="text-align: center;">آدرس مورد نظر شما در سامانه یافت نشد.لطفا مجدد بررسی نمایید
                                         </p>
-                                        <a href="{{URL::to('/')}}">&larr; بازگشت به صفحه اصلی</a>
+                                        <a href="{{URL::to('/dashboard')}}">&larr; بازگشت به صفحه اصلی</a>
                                     </div>
                                 </div>
                             </div>

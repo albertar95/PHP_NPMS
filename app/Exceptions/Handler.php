@@ -44,29 +44,7 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof \App\Exceptions\LogExecptions)  {
             return $e->render($request, $e);
-        }else if ($e instanceof HttpException) {
-            switch ($e->getStatusCode()) {
-
-                // not authorized
-                case '403':
-                    return view('errors.401');
-                    break;
-
-                // not found
-                case '404':
-                    return view('errors.404');
-                    break;
-
-                // internal error
-                case '500':
-                    return view('errors.500');
-                    break;
-
-                default:
-                    return $this->renderHttpException($e);
-                    break;
-            }
-        } else {
+        }else {
             return parent::render($request, $e);
         }
     }

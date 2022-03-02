@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode','HashPassword','SubmitHashPassword']]);
+        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode','HashPassword','SubmitHashPassword','GetPasswordPolicy']]);
         $this->middleware('XSS');
     }
     private function CheckAuthority(bool $checkSub, int $sub, string $cookie, int $entity = 3)
@@ -574,7 +574,7 @@ class UserController extends Controller
                 $output = join('#', $tmpPerms->toArray());
             }
             // $api->HandleAlarms();
-            return redirect('')->withCookie(cookie('NPMS_Permissions', $output, 60*24*365));
+            return redirect('dashboard')->withCookie(cookie('NPMS_Permissions', $output, 60*24*365));
         } catch (\Throwable $th) {
             //throw $th;
         }

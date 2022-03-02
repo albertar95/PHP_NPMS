@@ -857,7 +857,8 @@ class NPMSController extends Controller
             $repo->AddProject($Project);
             $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
             $repo->UpdateProject($Project);
-            return $repo2->HandleAlarmsByProjectId($Project->NidProject);
+            $repo2->HandleAlarmsByProjectId($Project->NidProject);
+            return true;
         } catch (\Throwable $th) {
             return false;
         }

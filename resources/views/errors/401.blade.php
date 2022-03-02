@@ -52,7 +52,7 @@
                                         <p class="lead text-gray-800 mb-5">فاقد دسترسی</p>
                                         <p class="text-gray-500 mb-0" style="text-align: center;">شما به صفحه مورد نظر دسترسی ندارید.لطفا با مدیر سیستم تماس بگیرید
                                         </p>
-                                        <a href="{{URL::to('/')}}">&larr; بازگشت به صفحه اصلی</a>
+                                        <a href="{{URL::to('/dashboard')}}">&larr; بازگشت به صفحه اصلی</a>
                                     </div>
                                 </div>
                             </div>

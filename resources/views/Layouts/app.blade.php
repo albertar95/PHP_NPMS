@@ -17,7 +17,7 @@
             <p style="text-align:center;color:whitesmoke;">سامانه مدیریت تحقیقات</p>
             <hr class="sidebar-divider my-0">
             <div class="nav-item">
-                <a class="nav-link" href="{{ route('index') }}">
+                <a class="nav-link" href="{{ route('index2') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>میز کار</span>
                 </a>
