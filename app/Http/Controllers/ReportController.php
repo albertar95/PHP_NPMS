@@ -248,7 +248,7 @@ class ReportController extends Controller
         try {
             if ($this->CheckAuthority(false, 4, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
-                $LogActionTypes = $api->GetLogActionTypes();
+                $LogActionTypes = $api->GetLogActionTypes(1000);
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "گزارش عملکرد کاربران");
                 return view('Report.UserLogReport', compact('LogActionTypes'));
             } else {

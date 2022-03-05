@@ -111,6 +111,7 @@ Route::post("printadvancesearchresult",[SearchController::class,"PrintAdvanceSea
 Route::get("adduser",[UserController::class,"AddUser"])->name('user.AddUser');
 Route::post("submitadduser",[UserController::class,"SubmitAddUser"])->name('user.SubmitAddUser');
 Route::get("users",[UserController::class,"Users"])->name('user.Users');
+Route::get("usermanual",[UserController::class,"UserManual"])->name('user.UserManual');
 Route::get("userdetail/{NidUser}",[UserController::class,"UserDetail"])->name('user.UserDetail');
 Route::get("uploadthisfile",[UserController::class,"UploadThisFile"])->name('user.UploadThisFile');
 Route::get("disableuser/{NidUser}",[UserController::class,"DisableUser"])->name('user.DisableUser');

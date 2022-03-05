@@ -26,6 +26,11 @@
                                 <form class="user" id="EditScholarForm" method="POST"
                                     action="{{ route('scholar.SubmitEditScholar') }}">
                                     @csrf
+                                    <input type="text" id="txtCollab" value="{{ $Scholar->CollaborationType }}" hidden>
+                                    <input type="text" id="txtMillit" value="{{ $Scholar->MillitaryStatus }}" hidden>
+                                    <input type="text" id="txtGrade" value="{{ $Scholar->GradeId }}" hidden>
+                                    <input type="text" id="txtMajor" value="{{ $Scholar->MajorId }}" hidden>
+                                    <input type="text" id="txtcollege" value="{{ $Scholar->college }}" hidden>
                                     <input type="text" id="NidScholar" name="NidScholar"
                                         value="{{ $Scholar->NidScholar }}" hidden />
                                     <input type="text" id="UserId" name="UserId" value="{{ $Scholar->UserId }}" hidden />
@@ -326,21 +331,11 @@
     <script src="{{ URL('Content/vendor/PersianDate/js/persian-datepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-            $('#GradeSlt').selectize({
-                sortField: 'value'
-            });
-            $('#MillitaryStatusSlt').selectize({
-                sortField: 'value'
-            });
-            $('#MajorSlt').selectize({
-                sortField: 'value'
-            });
-            $('#collegeSlt').selectize({
-                sortField: 'value'
-            });
-            $('#CollaborationTypeSlt').selectize({
-                sortField: 'value'
-            });
+            $('#CollaborationTypeSlt').selectize()[0].selectize.setValue($("#txtCollab").val(), false);
+            $('#GradeSlt').selectize()[0].selectize.setValue($("#txtGrade").val(), false);
+            $('#MillitaryStatusSlt').selectize()[0].selectize.setValue($("#txtMillit").val(), false);
+            $('#MajorSlt').selectize()[0].selectize.setValue($("#txtMajor").val(), false);
+            $('#collegeSlt').selectize()[0].selectize.setValue($("#txtcollege").val(), false);
             $("#observer").persianDatepicker({
                 altField: '#observer',
                 altFormat: "YYYY/MM/DD",
@@ -357,7 +352,7 @@
             $("#MajorSlt").on('change', function() {
                 $("#OrentationSlt").html('')
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/majorselectchanged/' + this.value,
+                    url: '{{ URL::to('/') }}' + '/majorselectchanged/' + this.value,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

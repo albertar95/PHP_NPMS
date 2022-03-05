@@ -36,6 +36,9 @@
                                     <input id="ProjectStatus" name="ProjectStatus" value="{{ $Project->ProjectStatus }}"
                                         hidden />
                                     <input id="UserId" name="UserId" value="{{ $Project->UserId }}" hidden />
+                                    <input id="txtScholar" value="{{ $Project->ScholarId }}" hidden />
+                                    <input id="txtUnit" value="{{ $Project->UnitId }}" hidden />
+                                    <input id="txtGroup" value="{{ $Project->GroupId }}" hidden />
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="text" class="form-control form-control-user" id="Subject"
@@ -445,15 +448,9 @@
     <script type="text/javascript">
         var ValiditiyMessage = "";
         $(function() {
-            $('#ScholarId').selectize({
-                sortField: 'value'
-            });
-            $('#UnitId').selectize({
-                sortField: 'value'
-            });
-            $('#GroupId').selectize({
-                sortField: 'value'
-            });
+            $('#ScholarId').selectize()[0].selectize.setValue($("#txtScholar").val(), false);
+            $('#UnitId').selectize()[0].selectize.setValue($("#txtUnit").val(), false);
+            $('#GroupId').selectize()[0].selectize.setValue($("#txtGroup").val(), false);
             $("#TenPercentLetterDate").persianDatepicker({
                 altField: '#TenPercentLetterDate',
                 altFormat: "YYYY/MM/DD",

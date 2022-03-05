@@ -365,6 +365,12 @@
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     گزارش کاربری
                                 </a>
+                                <a class="dropdown-item"
+                                href="{{ URL::to('/usermanual') }}"
+                                style="text-align:right;">
+                                <i class="fas fa-question-circle fa-sm fa-fw mr-2 text-gray-400"></i>
+                                راهنما
+                            </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"
                                     style="text-align:right;">

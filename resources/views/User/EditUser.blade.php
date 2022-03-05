@@ -120,6 +120,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" id="txtRole" value="{{ $User->RoleId }}" hidden>
                                             <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
                                                 placeholder="نقش" name="RoleId" style="padding:0 .75rem;">
                                                 <option value="0" disabled>نقش</option>
@@ -222,9 +223,7 @@
 @section('scripts')
     <script type="text/javascript">
         $(function() {
-            $('#RoleId').selectize({
-                sortField: 'value'
-            });
+            $('#RoleId').selectize()[0].selectize.setValue($("#txtRole").val(), false);
             window.setTimeout(function() {
                 $("#errorAlert2").attr('hidden', 'hidden')
             }, 10000);

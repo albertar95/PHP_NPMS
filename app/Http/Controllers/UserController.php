@@ -10,6 +10,7 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -21,7 +22,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode','HashPassword','SubmitHashPassword','GetPasswordPolicy']]);
+        $this->middleware('auth', ['except' => ['Login', 'SubmitLogin', 'SetLoginData', 'ChangePassword', 'SubmitChangePassword', 'getUsersPassCode', 'HashPassword', 'SubmitHashPassword', 'GetPasswordPolicy']]);
         $this->middleware('XSS');
     }
     private function CheckAuthority(bool $checkSub, int $sub, string $cookie, int $entity = 3)
@@ -88,7 +89,7 @@ class UserController extends Controller
             $api = new NPMSController();
             $briefs = $api->IndexBriefReport();
             $charts = $api->IndexChartReport();
-            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser,false,5);
+            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser, false, 5);
             $chartarrays = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             foreach ($charts as $key => $value) {
                 $chartarrays[$key - 1] = $value;
@@ -100,6 +101,10 @@ class UserController extends Controller
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
+    }
+    public function UserManual()
+    {
+        return view('User.UserManual');
     }
     public function AddUser(Request $request)
     {
@@ -323,7 +328,7 @@ class UserController extends Controller
             else
                 $jsonresult->Message = 4;
 
-                return response()->json($jsonresult);
+            return response()->json($jsonresult);
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }
@@ -376,7 +381,7 @@ class UserController extends Controller
             $result = new JsonResults();
             $result->HasValue = true;
             $sourceid = $SourceId;
-            $result->Html = view('User._UserTable', compact('Users','sourceid'))->render();
+            $result->Html = view('User._UserTable', compact('Users', 'sourceid'))->render();
             return response()->json($result);
         } catch (\Throwable $th) {
             //throw $th;
@@ -564,17 +569,18 @@ class UserController extends Controller
                 $tmpPerms->push('0,1,1,1,1,1,1,1');
             }
             foreach ($perms as $perm) {
-                $tmpPerms->push($perm->EntityId . ',' . $perm->Create . ',' . $perm->Edit . ',' . $perm->Delete . ',' . $perm->Detail . ',' . $perm->List . ',' . $perm->Print. ',' . $perm->Confident);
+                $tmpPerms->push($perm->EntityId . ',' . $perm->Create . ',' . $perm->Edit . ',' . $perm->Delete . ',' . $perm->Detail . ',' . $perm->List . ',' . $perm->Print . ',' . $perm->Confident);
             }
             foreach ($perms2 as $perm2) {
-                $tmpPerms->push($perm2->EntityId . ',' . $perm2->Create . ',' . $perm2->Edit . ',' . $perm2->Delete . ',' . $perm2->Detail . ',' . $perm2->List . ',' . $perm2->Print. ',' . $perm->Confident);
+                $tmpPerms->push($perm2->EntityId . ',' . $perm2->Create . ',' . $perm2->Edit . ',' . $perm2->Delete . ',' . $perm2->Detail . ',' . $perm2->List . ',' . $perm2->Print . ',' . $perm->Confident);
             }
             $output = "";
             if ($tmpPerms->count() > 0) {
                 $output = join('#', $tmpPerms->toArray());
             }
-            // $api->HandleAlarms();
-            return redirect('dashboard')->withCookie(cookie('NPMS_Permissions', $output, 60*24*365));
+            if(env('HandleAlarmInLogin'))
+                $api->HandleAlarms();
+            return redirect('dashboard')->withCookie(cookie('NPMS_Permissions', $output, 60 * 24 * 365));
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -828,7 +834,7 @@ class UserController extends Controller
         try {
             config([
                 'session.lifetime' => $request->SessionTimeout
-              ]);
+            ]);
             $api = new NPMSController();
             $api->UpdateSessionsSettings($request->SessionTimeout);
             $api->AddLog(auth()->user(), $request->ip(), 37, 0, 2, 3, "ثبت تغییرات نشست");
