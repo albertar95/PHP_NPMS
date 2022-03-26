@@ -578,8 +578,12 @@ class UserController extends Controller
             if ($tmpPerms->count() > 0) {
                 $output = join('#', $tmpPerms->toArray());
             }
-            if(env('HandleAlarmInLogin'))
-                $api->HandleAlarms();
+            try {
+                if (env('HandleAlarmInLogin'))
+                    $api->HandleAlarms();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             return redirect('dashboard')->withCookie(cookie('NPMS_Permissions', $output, 60 * 24 * 365));
         } catch (\Throwable $th) {
             //throw $th;
