@@ -56,6 +56,14 @@
                 <td>{{ $Scholar->BirthDate }}</td>
             </tr>
             <tr>
+                <td style="font: bolder;color: cornflowerblue;width: 50%;">تاییدیه حفاظت</td>
+                @if($Scholar->IsSecurityApproved)
+                <td>دارد</td>
+                @else
+                <td>ندارد</td>
+                @endforelse
+            </tr>
+            <tr>
                 <td style="font: bolder;color: cornflowerblue;width: 50%;">کد ملی</td>
                 <td>{{ $Scholar->NationalCode }}</td>
             </tr>
@@ -190,7 +198,7 @@
             </tr>
             <tr>
                 <td style="font: bolder;color: cornflowerblue;width: 50%;">تاریخ نامه حفاظت</td>
-                <td>{{ $Project->SecurityLetterDate }}</td>
+                <td>{{ $Scholar->SecurityApproveDate }}</td>
             </tr>
             <tr>
                 <td style="font: bolder;color: cornflowerblue;width: 50%;">تاریخ دفاع</td>

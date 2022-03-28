@@ -47,6 +47,7 @@
                                     <th class="priority-2">رشته</th>
                                     <th class="priority-3">گرایش</th>
                                     <th class="priority-4">محل تحصیل</th>
+                                    <th class="priority-4">تاییدیه حفاظت</th>
                                     <th>عملیات</th>
                                 </tr>
                             </thead>
@@ -58,6 +59,7 @@
                                     <th class="priority-2">رشته</th>
                                     <th class="priority-3">گرایش</th>
                                     <th class="priority-4">محل تحصیل</th>
+                                    <th class="priority-4">تاییدیه حفاظت</th>
                                     <th>عملیات</th>
                                 </tr>
                             </tfoot>
@@ -72,6 +74,19 @@
                                                 <td class="priority-2">{{ $sch->MajorName }}</td>
                                                 <td class="priority-3">{{ $sch->OreintationName }}</td>
                                                 <td class="priority-4">{{ $sch->collegeName ?? '' }}</td>
+                                                @if($sch->IsSecurityApproved)
+                                                <td>
+                                                <div class="btn btn-success btn-circle">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                                </td>
+                                                @else
+                                                <td>
+                                                <div class="btn btn-danger btn-circle">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                                </td>
+                                                @endforelse
                                                 <td>
                                                     @if (in_array('1', $sharedData['UserAccessedEntities']))
                                                         @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[1] == 1)

@@ -1,142 +1,165 @@
 <html>
+
 <head>
     <style>
-        body {font-family: 'fa', sans-serif !important;}
+        body {
+            font-family: 'fa', sans-serif !important;
+        }
+
         tr:nth-child(even) {
-  background-color: #e3e3e3;
-}
-        </style>
+            background-color: #e3e3e3;
+        }
+
+    </style>
 </head>
+
 <body>
-<div id="Reportheader" style="display: flex;margin-bottom: 5px;">
-    <div style="border: grey 1px solid;width: 20%;text-align: right;padding: 3px;">
-        {{ auth()->user()->UserName }} : کاربر <br />
-        تاریخ گزارش : {{ $ReportDate }}<br />
-        زمان گزارش : {{ $ReportTime }}<br />
-        @if($ConfidentLevel == 0)
-        طبقه بندی : عادی
-        @else
-        طبقه بندی : محرمانه
-        @endforelse
+    <div id="Reportheader" style="display: flex;margin-bottom: 5px;">
+        <div style="border: grey 1px solid;width: 20%;text-align: right;padding: 3px;">
+            {{ auth()->user()->UserName }} : کاربر <br />
+            تاریخ گزارش : {{ $ReportDate }}<br />
+            زمان گزارش : {{ $ReportTime }}<br />
+            @if ($ConfidentLevel == 0)
+                طبقه بندی : عادی
+            @else
+                طبقه بندی : محرمانه
+            @endforelse
+        </div>
+        <div style="text-align: center;margin: 0 auto;width: 60%;">
+            <h1>{{ $ReportName }}</h1>
+        </div>
+        <div style="width: 20%;"></div>
     </div>
-    <div style="text-align: center;margin: 0 auto;width: 60%;">
-        <h1>{{ $ReportName }}</h1>
-    </div>
-    <div style="width: 20%;"></div>
-</div>
-<div style="border: cornflowerblue 2px solid;margin-bottom: 25px;"></div>
-@if ($Scholars->count() > 0)
-<div class="table-responsive" dir="ltr">
-    <table class="table table-bordered" border="1" id="ScholarDataTable" style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
-        <thead>
-            <tr style="background-color: #d2ebfa;">
-                @if ($OutputKey->contains("FirstName") || $OutputKey->contains("LastName"))
+    <div style="border: cornflowerblue 2px solid;margin-bottom: 25px;"></div>
+    @if ($Scholars->count() > 0)
+        <div class="table-responsive" dir="ltr">
+            <table class="table table-bordered" border="1" id="ScholarDataTable"
+                style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                <thead>
+                    <tr style="background-color: #d2ebfa;">
+                        @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
 
-                    <th>نام محقق</th>
-                @endif
-                @if ($OutputKey->contains("NationalCode"))
+                            <th>نام محقق</th>
+                        @endif
+                        @if ($OutputKey->contains('NationalCode'))
 
-                    <th>کد ملی</th>
-                @endif
-                @if ($OutputKey->contains("GradeId"))
+                            <th>کد ملی</th>
+                        @endif
+                        @if ($OutputKey->contains('GradeId'))
 
-                    <th>مقطع تحصیلی</th>
-                @endif
-                @if ($OutputKey->contains("MajorId"))
+                            <th>مقطع تحصیلی</th>
+                        @endif
+                        @if ($OutputKey->contains('MajorId'))
 
-                    <th>رشته</th>
-                @endif
-                @if ($OutputKey->contains("OreintationId"))
+                            <th>رشته</th>
+                        @endif
+                        @if ($OutputKey->contains('OreintationId'))
 
-                    <th>گرایش</th>
-                @endif
-                @if ($OutputKey->contains("college"))
+                            <th>گرایش</th>
+                        @endif
+                        @if ($OutputKey->contains('college'))
 
-                    <th>محل تحصیل</th>
-                @endif
-                @if ($OutputKey->contains("BirthDate"))
+                            <th>محل تحصیل</th>
+                        @endif
+                        @if ($OutputKey->contains('BirthDate'))
 
-                    <th>تاریخ تولد</th>
-                @endif
-                @if ($OutputKey->contains("CollaborationType"))
+                            <th>تاریخ تولد</th>
+                        @endif
+                        @if ($OutputKey->contains('IsSecurityApproved'))
 
-                    <th>نوع همکاری</th>
-                @endif
-                @if ($OutputKey->contains("FatherName"))
+                            <th>تاییدیه حفاظت</th>
+                        @endif
+                        @if ($OutputKey->contains('SecurityApproveDate'))
 
-                    <th>نام پدر</th>
-                @endif
-                @if ($OutputKey->contains("MillitaryStatus"))
+                            <th>تاریخ نامه حفاظت</th>
+                        @endif
+                        @if ($OutputKey->contains('CollaborationType'))
 
-                    <th>وضعیت خدمتی</th>
-                @endif
-                @if ($OutputKey->contains("Mobile"))
+                            <th>نوع همکاری</th>
+                        @endif
+                        @if ($OutputKey->contains('FatherName'))
 
-                    <th>شماره همراه</th>
-                @endif
-                @if ($OutputKey->contains("ProjectCount"))
+                            <th>نام پدر</th>
+                        @endif
+                        @if ($OutputKey->contains('MillitaryStatus'))
 
-                    <th>پروژه ها</th>
-                @endif
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($Scholars as $sch)
-                <tr>
-                    @if ($OutputKey->contains("FirstName") || $OutputKey->contains("LastName"))
+                            <th>وضعیت خدمتی</th>
+                        @endif
+                        @if ($OutputKey->contains('Mobile'))
 
-                        @if ($OutputKey->contains("FirstName") && $OutputKey->contains("LastName"))
+                            <th>شماره همراه</th>
+                        @endif
+                        @if ($OutputKey->contains('ProjectCount'))
 
-                            <td>{{ $sch->FirstName ?? ""}} {{ $sch->LastName ?? "" }}</td>
-                        @elseif ($OutputKey->contains("FirstName"))
+                            <th>پروژه ها</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($Scholars as $sch)
+                        <tr>
+                            @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
 
-                            <td>{{ $sch->FirstName ?? "" }}</td>
-                        @else
+                                @if ($OutputKey->contains('FirstName') && $OutputKey->contains('LastName'))
 
-                            <td>{{ $sch->LastName ?? "" }}</td>
-                        @endforelse
-                    @endif
-                    @if ($OutputKey->contains("NationalCode"))
+                                    <td>{{ $sch->FirstName ?? '' }} {{ $sch->LastName ?? '' }}</td>
+                                @elseif ($OutputKey->contains('FirstName'))
+                                    <td>{{ $sch->FirstName ?? '' }}</td>
+                                @else
+                                    <td>{{ $sch->LastName ?? '' }}</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('NationalCode'))
 
-                        <td>{{ $sch->NationalCode ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("GradeId"))
+                                <td>{{ $sch->NationalCode ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('GradeId'))
 
-                        <td>{{ $sch->GradeTitle ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("MajorId"))
+                                <td>{{ $sch->GradeTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('MajorId'))
 
-                        <td>{{ $sch->MajorTitle }}</td>
-                    @endif
-                    @if ($OutputKey->contains("OreintationId"))
+                                <td>{{ $sch->MajorTitle }}</td>
+                            @endif
+                            @if ($OutputKey->contains('OreintationId'))
 
-                        <td>{{ $sch->OreintationTitle }}</td>
-                    @endif
-                    @if ($OutputKey->contains("college"))
+                                <td>{{ $sch->OreintationTitle }}</td>
+                            @endif
+                            @if ($OutputKey->contains('college'))
 
-                        <td>{{ $sch->CollegeTitle ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("BirthDate"))
+                                <td>{{ $sch->CollegeTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('BirthDate'))
 
-                        <td>{{ $sch->BirthDate ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("CollaborationType"))
+                                <td>{{ $sch->BirthDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('IsSecurityApproved'))
+                                @if ($sch->IsSecurityApproved)
+                                    <td>دارد</td>
+                                @else
+                                    <td>ندارد</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('SecurityApproveDate'))
+                                <td>{{ $sch->SecurityApproveDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('CollaborationType'))
 
-                        <td>{{ $sch->CollaborationTypeTitle ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("FatherName"))
+                                <td>{{ $sch->CollaborationTypeTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('FatherName'))
 
-                        <td>{{ $sch->FatherName ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("MillitaryStatus"))
+                                <td>{{ $sch->FatherName ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('MillitaryStatus'))
 
-                        <td>{{ $sch->MillitaryStatusTitle ?? "" }}</td>
-                    @endif
-                    @if ($OutputKey->contains("Mobile"))
+                                <td>{{ $sch->MillitaryStatusTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Mobile'))
 
-                        <td>{{ $sch->Mobile ?? "" }}</td>
-                    @endif
-                    {{-- @if ($OutputKey->contains("ProjectCount"))
+                                <td>{{ $sch->Mobile ?? '' }}</td>
+                            @endif
+                            {{-- @if ($OutputKey->contains('ProjectCount'))
 
                         <td>
                             @foreach ($Projects as $prj)
@@ -145,366 +168,366 @@
                             @endforeach
                         </td>
                     @endif --}}
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-@endif
-@if ($Projects->count() > 0)
-    <div class="table-responsive" dir="ltr">
-        <table class="table table-bordered" border="1" id="ProjectDataTable"
-            style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
-            <thead>
-                <tr>
-                    @if ($OutputKey->contains('ProjectNumber'))
-
-                        <th>شماره پرونده</th>
-                    @endif
-                    @if ($OutputKey->contains('Subject'))
-
-                        <th>عنوان</th>
-                    @endif
-                    @if ($OutputKey->contains('ScholarTitle'))
-
-                        <th>نام محقق</th>
-                    @endif
-                    @if ($OutputKey->contains('UnitTitle'))
-
-                        <th>یگان تخصصی</th>
-                    @endif
-                    @if ($OutputKey->contains('GroupTitle'))
-
-                        <th>گروه تخصصی</th>
-                    @endif
-                    @if ($OutputKey->contains('PersianCreateDate'))
-
-                        <th>تاریخ ایجاد</th>
-                    @endif
-                    @if ($OutputKey->contains('Supervisor'))
-
-                        <th>استاد راهنما</th>
-                    @endif
-                    @if ($OutputKey->contains('Advisor'))
-
-                        <th>استاد مشاور</th>
-                    @endif
-                    @if ($OutputKey->contains('Referee'))
-
-                        <th>داوران</th>
-                    @endif
-                    @if ($OutputKey->contains('ProjectStatus'))
-
-                        <th>وضعیت طرح</th>
-                    @endif
-                    @if ($OutputKey->contains('TenPercentLetterDate'))
-
-                        <th>تاریخ نامه 10 درصد</th>
-                    @endif
-                    @if ($OutputKey->contains('PreImploymentLetterDate'))
-
-                        <th>تاریخ نامه روگرفت</th>
-                    @endif
-                    @if ($OutputKey->contains('ImploymentDate'))
-
-                        <th>تاریخ بکارگیری</th>
-                    @endif
-                    @if ($OutputKey->contains('SecurityLetterDate'))
-
-                        <th>تاریخ نامه حفاظت</th>
-                    @endif
-                    @if ($OutputKey->contains('ThirtyPercentLetterDate'))
-
-                        <th>تاریخ نامه 30 درصد</th>
-                    @endif
-                    @if ($OutputKey->contains('SixtyPercentLetterDate'))
-
-                        <th>تاریخ نامه 60 درصد</th>
-                    @endif
-                    @if ($OutputKey->contains('ATFLetterDate'))
-
-                        <th>تاریخ نامه عتف</th>
-                    @endif
-                    @if ($OutputKey->contains('ThesisDefenceDate'))
-
-                        <th>تاریخ دفاعیه</th>
-                    @endif
-                    @if ($OutputKey->contains('ThesisDefenceLetterDate'))
-
-                        <th>تاریخ نامه دفاعیه</th>
-                    @endif
-                    @if ($OutputKey->contains('ReducePeriod'))
-
-                        <th>مدت کسری</th>
-                    @endif
-                    @if ($OutputKey->contains('SupervisorMobile'))
-
-                        <th>شماره همراه راهنما</th>
-                    @endif
-                    @if ($OutputKey->contains('AdvisorMobile'))
-
-                        <th>شماره همراه مشاور</th>
-                    @endif
-                    @if ($OutputKey->contains('Editor'))
-
-                        <th>ویراستار</th>
-                    @endif
-                    @if ($OutputKey->contains('TitleApproved'))
-
-                        <th>تایید عنوان</th>
-                    @endif
-                    @if ($OutputKey->contains('HasBookPublish'))
-
-                        <th>چاپ کتاب</th>
-                    @endif
-                    @if ($OutputKey->contains('FinalApprove'))
-
-                        <th>تایید نهایی</th>
-                    @endif
-                    @if ($OutputKey->contains('IsConfident'))
-
-                        <th>محرمانه</th>
-                    @endif
-                    @if ($OutputKey->contains('UserTitle'))
-
-                        <th>کاربر ایجاد کننده</th>
-                    @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($Projects as $sch)
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+    @if ($Projects->count() > 0)
+        <div class="table-responsive" dir="ltr">
+            <table class="table table-bordered" border="1" id="ProjectDataTable"
+                style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                <thead>
                     <tr>
                         @if ($OutputKey->contains('ProjectNumber'))
 
-                            <td>{{ $sch->ProjectNumber ?? '' }}</td>
+                            <th>شماره پرونده</th>
                         @endif
                         @if ($OutputKey->contains('Subject'))
 
-                            <td>{{ $sch->Subject ?? '' }}</td>
+                            <th>عنوان</th>
                         @endif
                         @if ($OutputKey->contains('ScholarTitle'))
 
-                            <td>{{ $sch->ScholarTitle ?? '' }}</td>
+                            <th>نام محقق</th>
                         @endif
                         @if ($OutputKey->contains('UnitTitle'))
 
-                            <td>{{ $sch->UnitTitle ?? '' }}</td>
+                            <th>یگان تخصصی</th>
                         @endif
                         @if ($OutputKey->contains('GroupTitle'))
 
-                            <td>{{ $sch->GroupTitle ?? '' }}</td>
+                            <th>گروه تخصصی</th>
                         @endif
                         @if ($OutputKey->contains('PersianCreateDate'))
 
-                            <td>{{ $sch->PersianCreateDate ?? '' }}</td>
+                            <th>تاریخ ایجاد</th>
                         @endif
                         @if ($OutputKey->contains('Supervisor'))
 
-                            <td>{{ $sch->Supervisor ?? '' }}</td>
+                            <th>استاد راهنما</th>
                         @endif
                         @if ($OutputKey->contains('Advisor'))
 
-                            <td>{{ $sch->Advisor ?? '' }}</td>
+                            <th>استاد مشاور</th>
                         @endif
                         @if ($OutputKey->contains('Referee'))
 
-                            <td>{{ $sch->Referee1 ?? '' }} | {{ $sch->Referee2 ?? '' }}</td>
+                            <th>داوران</th>
                         @endif
                         @if ($OutputKey->contains('ProjectStatus'))
 
-                            <td>{{ $sch->ProjectStatus ?? '' }} %</td>
+                            <th>وضعیت طرح</th>
                         @endif
                         @if ($OutputKey->contains('TenPercentLetterDate'))
 
-                            <td>{{ $sch->TenPercentLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه 10 درصد</th>
                         @endif
                         @if ($OutputKey->contains('PreImploymentLetterDate'))
 
-                            <td>{{ $sch->PreImploymentLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه روگرفت</th>
                         @endif
                         @if ($OutputKey->contains('ImploymentDate'))
 
-                            <td>{{ $sch->ImploymentDate ?? '' }}</td>
+                            <th>تاریخ بکارگیری</th>
                         @endif
                         @if ($OutputKey->contains('SecurityLetterDate'))
 
-                            <td>{{ $sch->SecurityLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه حفاظت</th>
                         @endif
                         @if ($OutputKey->contains('ThirtyPercentLetterDate'))
 
-                            <td>{{ $sch->ThirtyPercentLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه 30 درصد</th>
                         @endif
                         @if ($OutputKey->contains('SixtyPercentLetterDate'))
 
-                            <td>{{ $sch->SixtyPercentLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه 60 درصد</th>
                         @endif
                         @if ($OutputKey->contains('ATFLetterDate'))
 
-                            <td>{{ $sch->ATFLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه عتف</th>
                         @endif
                         @if ($OutputKey->contains('ThesisDefenceDate'))
 
-                            <td>{{ $sch->ThesisDefenceDate ?? '' }}</td>
+                            <th>تاریخ دفاعیه</th>
                         @endif
                         @if ($OutputKey->contains('ThesisDefenceLetterDate'))
 
-                            <td>{{ $sch->ThesisDefenceLetterDate ?? '' }}</td>
+                            <th>تاریخ نامه دفاعیه</th>
                         @endif
                         @if ($OutputKey->contains('ReducePeriod'))
 
-                            <td>{{ $sch->ReducePeriod ?? '' }}</td>
+                            <th>مدت کسری</th>
                         @endif
                         @if ($OutputKey->contains('SupervisorMobile'))
 
-                            <td>{{ $sch->SupervisorMobile ?? '' }}</td>
+                            <th>شماره همراه راهنما</th>
                         @endif
                         @if ($OutputKey->contains('AdvisorMobile'))
 
-                            <td>{{ $sch->AdvisorMobile ?? '' }}</td>
+                            <th>شماره همراه مشاور</th>
                         @endif
                         @if ($OutputKey->contains('Editor'))
 
-                            <td>{{ $sch->Editor ?? '' }}</td>
+                            <th>ویراستار</th>
                         @endif
                         @if ($OutputKey->contains('TitleApproved'))
-                            @if ($sch->TitleApproved)
-                                <td>دارد</td>
-                            @else
-                                <td>ندارد</td>
-                            @endforelse
+
+                            <th>تایید عنوان</th>
                         @endif
                         @if ($OutputKey->contains('HasBookPublish'))
-                            @if ($sch->HasBookPublish)
-                                <td>دارد</td>
-                            @else
-                                <td>ندارد</td>
-                            @endforelse
+
+                            <th>چاپ کتاب</th>
                         @endif
                         @if ($OutputKey->contains('FinalApprove'))
-                            @if ($sch->FinalApprove)
-                                <td>دارد</td>
-                            @else
-                                <td>ندارد</td>
-                            @endforelse
+
+                            <th>تایید نهایی</th>
                         @endif
                         @if ($OutputKey->contains('IsConfident'))
-                            @if ($sch->IsConfident)
-                                <td>دارد</td>
-                            @else
-                                <td>ندارد</td>
-                            @endforelse
+
+                            <th>محرمانه</th>
                         @endif
                         @if ($OutputKey->contains('UserTitle'))
 
-                            <td>{{ $sch->UserTitle ?? '' }}</td>
+                            <th>کاربر ایجاد کننده</th>
                         @endif
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-@endif
-@if ($Users->count() > 0)
-    <div class="table-responsive" dir="ltr">
-        <table class="table table-bordered" border="1" id="ScholarDataTable"
-            style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
-            <thead>
-                <tr>
-                    @if ($OutputKey->contains('ProfilePicture'))
+                </thead>
+                <tbody>
+                    @foreach ($Projects as $sch)
+                        <tr>
+                            @if ($OutputKey->contains('ProjectNumber'))
 
-                        <th>نمایه</th>
-                    @endif
-                    @if ($OutputKey->contains('Username'))
+                                <td>{{ $sch->ProjectNumber ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Subject'))
 
-                        <th>نام کاربری</th>
-                    @endif
-                    @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
+                                <td>{{ $sch->Subject ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ScholarTitle'))
 
-                        <th>نام کاربر</th>
-                    @endif
-                    @if ($OutputKey->contains('RoleTitle'))
+                                <td>{{ $sch->ScholarTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('UnitTitle'))
 
-                        <th>نقش</th>
-                    @endif
-                    @if ($OutputKey->contains('IsLockedOut'))
+                                <td>{{ $sch->UnitTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('GroupTitle'))
 
-                        <th>قفل شدن</th>
-                    @endif
-                    @if ($OutputKey->contains('IsDisabled'))
+                                <td>{{ $sch->GroupTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('PersianCreateDate'))
 
-                        <th>غیرفعال شدن</th>
-                    @endif
-                    @if ($OutputKey->contains('LastLoginDate'))
+                                <td>{{ $sch->PersianCreateDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Supervisor'))
 
-                        <th>آخرین ورود</th>
-                    @endif
-                    @if ($OutputKey->contains('IncorrectPasswordCount'))
+                                <td>{{ $sch->Supervisor ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Advisor'))
 
-                        <th>تعداد کلمه عبور اشتباه</th>
-                    @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($Users as $usr)
+                                <td>{{ $sch->Advisor ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Referee'))
+
+                                <td>{{ $sch->Referee1 ?? '' }} | {{ $sch->Referee2 ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ProjectStatus'))
+
+                                <td>{{ $sch->ProjectStatus ?? '' }} %</td>
+                            @endif
+                            @if ($OutputKey->contains('TenPercentLetterDate'))
+
+                                <td>{{ $sch->TenPercentLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('PreImploymentLetterDate'))
+
+                                <td>{{ $sch->PreImploymentLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ImploymentDate'))
+
+                                <td>{{ $sch->ImploymentDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('SecurityLetterDate'))
+
+                                <td>{{ $sch->SecurityLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ThirtyPercentLetterDate'))
+
+                                <td>{{ $sch->ThirtyPercentLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('SixtyPercentLetterDate'))
+
+                                <td>{{ $sch->SixtyPercentLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ATFLetterDate'))
+
+                                <td>{{ $sch->ATFLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ThesisDefenceDate'))
+
+                                <td>{{ $sch->ThesisDefenceDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ThesisDefenceLetterDate'))
+
+                                <td>{{ $sch->ThesisDefenceLetterDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('ReducePeriod'))
+
+                                <td>{{ $sch->ReducePeriod ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('SupervisorMobile'))
+
+                                <td>{{ $sch->SupervisorMobile ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('AdvisorMobile'))
+
+                                <td>{{ $sch->AdvisorMobile ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('Editor'))
+
+                                <td>{{ $sch->Editor ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('TitleApproved'))
+                                @if ($sch->TitleApproved)
+                                    <td>دارد</td>
+                                @else
+                                    <td>ندارد</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('HasBookPublish'))
+                                @if ($sch->HasBookPublish)
+                                    <td>دارد</td>
+                                @else
+                                    <td>ندارد</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('FinalApprove'))
+                                @if ($sch->FinalApprove)
+                                    <td>دارد</td>
+                                @else
+                                    <td>ندارد</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('IsConfident'))
+                                @if ($sch->IsConfident)
+                                    <td>دارد</td>
+                                @else
+                                    <td>ندارد</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('UserTitle'))
+
+                                <td>{{ $sch->UserTitle ?? '' }}</td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+    @if ($Users->count() > 0)
+        <div class="table-responsive" dir="ltr">
+            <table class="table table-bordered" border="1" id="ScholarDataTable"
+                style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                <thead>
                     <tr>
                         @if ($OutputKey->contains('ProfilePicture'))
-                            <td>
-                                @if (!empty($usr->ProfilePicture))
-                                    <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50" width="50" />
-                                @else
-                                    <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
-                                @endforelse
-                            </td>
+
+                            <th>نمایه</th>
                         @endif
                         @if ($OutputKey->contains('Username'))
 
-                            <td>{{ $usr->UserName ?? '' }}</td>
+                            <th>نام کاربری</th>
                         @endif
                         @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
 
-                            @if ($OutputKey->contains('FirstName') && $OutputKey->contains('LastName'))
-
-                                <td>{{ $usr->FirstName ?? '' }} {{ $usr->LastName ?? '' }}</td>
-                            @elseif ($OutputKey->contains('FirstName'))
-
-                                <td>{{ $usr->FirstName ?? '' }}</td>
-                            @else
-
-                                <td>{{ $usr->LastName ?? '' }}</td>
-                            @endforelse
+                            <th>نام کاربر</th>
                         @endif
                         @if ($OutputKey->contains('RoleTitle'))
 
-                            <td>{{ $usr->RoleTitle ?? '' }}</td>
+                            <th>نقش</th>
                         @endif
                         @if ($OutputKey->contains('IsLockedOut'))
-                            @if ($usr->IsLockedOut)
-                                <td>بلی</td>
-                            @else
-                                <td>خیر</td>
-                            @endforelse
+
+                            <th>قفل شدن</th>
                         @endif
                         @if ($OutputKey->contains('IsDisabled'))
-                            @if ($usr->IsDisabled)
-                                <td>بلی</td>
-                            @else
-                                <td>خیر</td>
-                            @endforelse
+
+                            <th>غیرفعال شدن</th>
                         @endif
                         @if ($OutputKey->contains('LastLoginDate'))
 
-                            <td>{{ $usr->LastLoginDate ?? '' }}</td>
+                            <th>آخرین ورود</th>
                         @endif
                         @if ($OutputKey->contains('IncorrectPasswordCount'))
 
-                            <td>{{ $usr->IncorrectPasswordCount ?? '' }}</td>
+                            <th>تعداد کلمه عبور اشتباه</th>
                         @endif
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-@endif
+                </thead>
+                <tbody>
+                    @foreach ($Users as $usr)
+                        <tr>
+                            @if ($OutputKey->contains('ProfilePicture'))
+                                <td>
+                                    @if (!empty($usr->ProfilePicture))
+                                        <img src="/storage/images/{{ $usr->ProfilePicture }}" height="50"
+                                            width="50" />
+                                    @else
+                                        <img height="50" width="50" src="{{ URL('Content/img/User/user3.png') }}">
+                                    @endforelse
+                                </td>
+                            @endif
+                            @if ($OutputKey->contains('Username'))
+
+                                <td>{{ $usr->UserName ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('FirstName') || $OutputKey->contains('LastName'))
+
+                                @if ($OutputKey->contains('FirstName') && $OutputKey->contains('LastName'))
+
+                                    <td>{{ $usr->FirstName ?? '' }} {{ $usr->LastName ?? '' }}</td>
+                                @elseif ($OutputKey->contains('FirstName'))
+                                    <td>{{ $usr->FirstName ?? '' }}</td>
+                                @else
+                                    <td>{{ $usr->LastName ?? '' }}</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('RoleTitle'))
+
+                                <td>{{ $usr->RoleTitle ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('IsLockedOut'))
+                                @if ($usr->IsLockedOut)
+                                    <td>بلی</td>
+                                @else
+                                    <td>خیر</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('IsDisabled'))
+                                @if ($usr->IsDisabled)
+                                    <td>بلی</td>
+                                @else
+                                    <td>خیر</td>
+                                @endforelse
+                            @endif
+                            @if ($OutputKey->contains('LastLoginDate'))
+
+                                <td>{{ $usr->LastLoginDate ?? '' }}</td>
+                            @endif
+                            @if ($OutputKey->contains('IncorrectPasswordCount'))
+
+                                <td>{{ $usr->IncorrectPasswordCount ?? '' }}</td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
 
 </body>
+
 </html>

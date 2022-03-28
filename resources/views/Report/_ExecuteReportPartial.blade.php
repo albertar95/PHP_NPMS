@@ -48,6 +48,14 @@
                     <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
                         name="{{ $tmpparam->FieldName }}">
                 @break
+                @case (7)
+                <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
+                <select class="form-control allWidth inputParams" data-ng-style="btn-primary"
+                    id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}" style="padding:0 .75rem;">
+                    <option value="1" selected>دارد</option>
+                    <option value="0">ندارد</option>
+                </select>
+            @break
             @endswitch
         @break
         @case (2)

@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card shadow" style="margin-bottom:1rem;">
+                            {{-- <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSecurityItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSecurityItems">
@@ -90,7 +90,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseThirtyItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
@@ -368,7 +368,7 @@
                             </div>
                             @break
                         @case (2)
-                            <div class="card shadow" style="margin-bottom:1rem;">
+                            {{-- <div class="card shadow" style="margin-bottom:1rem;">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseSecurityItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse"
                                    role="button" aria-expanded="true" aria-controls="collapseSecurityItems">
@@ -406,7 +406,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             @break
                         @case (3)
                             <div class="card shadow" style="margin-bottom:1rem;">

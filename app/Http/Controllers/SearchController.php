@@ -47,6 +47,7 @@ class SearchController extends Controller
                             $result = Str::of($result)->append("<option value='7'>گرایش تحصیلی</option>");
                             $result = Str::of($result)->append("<option value='8'>مقطع تحصیلی</option>");
                             $result = Str::of($result)->append("<option value='9'>دانشکده</option>");
+                            $result = Str::of($result)->append("<option value='10'>تاریخ نامه حفاظت</option>");
                             break;
                         case 1:
                             $result = Str::of($result)->append("<option value='1'>نام محقق</option>");
@@ -54,6 +55,7 @@ class SearchController extends Controller
                             $result = Str::of($result)->append("<option value='3'>شماره همراه</option>");
                             $result = Str::of($result)->append("<option value='4'>وضعیت خدمتی</option>");
                             $result = Str::of($result)->append("<option value='5'>نوع همکاری</option>");
+                            $result = Str::of($result)->append("<option value='10'>تاریخ نامه حفاظت</option>");
                             break;
                         case 2:
                             $result = Str::of($result)->append("<option value='6'>رشته تحصیلی</option>");
@@ -77,7 +79,7 @@ class SearchController extends Controller
                             $result = Str::of($result)->append("<option value='8'>تاریخ روگرفت</option>");
                             $result = Str::of($result)->append("<option value='9'>تاریخ فرم 30 درصد</option>");
                             $result = Str::of($result)->append("<option value='10'>تاریخ فرم 60 درصد</option>");
-                            $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
+                            // $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
                             $result = Str::of($result)->append("<option value='12'>استاد راهنما</option>");
                             $result = Str::of($result)->append("<option value='13'>استاد مشاور</option>");
                             $result = Str::of($result)->append("<option value='14'>داور 1</option>");
@@ -97,7 +99,7 @@ class SearchController extends Controller
                             $result = Str::of($result)->append("<option value='8'>تاریخ روگرفت</option>");
                             $result = Str::of($result)->append("<option value='9'>تاریخ فرم 30 درصد</option>");
                             $result = Str::of($result)->append("<option value='10'>تاریخ فرم 60 درصد</option>");
-                            $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
+                            // $result = Str::of($result)->append("<option value='11'>تاریخ نامه حفاظت</option>");
                             break;
                         case 3:
                             $result = Str::of($result)->append("<option value='12'>استاد راهنما</option>");

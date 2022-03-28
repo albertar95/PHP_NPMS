@@ -79,6 +79,8 @@
                         <th>کد ملی</th>
                         <th class="priority-2">رشته</th>
                         <th class="priority-3">گرایش</th>
+                        <th class="priority-3">تاییدیه حفاظت</th>
+                        <th class="priority-3">تاریخ نامه حفاظت</th>
                         <th>عملیات</th>
                     </tr>
                 </thead>
@@ -88,6 +90,8 @@
                         <th>کد ملی</th>
                         <th class="priority-2">رشته</th>
                         <th class="priority-3">گرایش</th>
+                        <th class="priority-3">تاییدیه حفاظت</th>
+                        <th class="priority-3">تاریخ نامه حفاظت</th>
                         <th>عملیات</th>
                     </tr>
                 </tfoot>
@@ -98,6 +102,12 @@
                             <td>{{ $sch->NationalCode }}</td>
                             <td class="priority-2">{{ $sch->MajorName }}</td>
                             <td class="priority-3">{{ $sch->OreintationName }}</td>
+                            @if($sch->IsSecurityApproved)
+                            <td class="priority-3">دارد</td>
+                            @else
+                            <td class="priority-3">ندارد</td>
+                            @endforelse
+                            <td class="priority-3">{{ $sch->SecurityApproveDate }}</td>
                             <td>
                                 <button class="btn btn-secondary"
                                     onclick="ShowDetailModal(1,'{{ $sch->NidScholar }}')">جزییات</button>

@@ -18,7 +18,7 @@
                 </a>
                 @break
             @case ('SecurityLetter')
-                <a class="dropdown-item d-flex align-items-center" href="{{URL::to('/alarms/2')}}">
+                {{-- <a class="dropdown-item d-flex align-items-center" href="{{URL::to('/alarms/2')}}">
                     <div class="mr-3">
                         <div class="icon-circle bg-gradient-warning">
                             <i class="fas fa-file-signature text-white"></i>
@@ -28,7 +28,7 @@
                         <div class="small text-gray-500">نامه حفاظت</div>
                         <span class="font-weight-bold">{{ sprintf("%d پروژه نامه حفاظت شان دریافت نشده است",$alm->Description) }}</span>
                     </div>
-                </a>
+                </a> --}}
                 @break
             @case ('ThirtyLetter')
                 <a class="dropdown-item d-flex align-items-center" href="{{URL::to('/alarms/3')}}">

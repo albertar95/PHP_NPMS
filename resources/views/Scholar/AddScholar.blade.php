@@ -123,6 +123,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0"  style="display:flex;padding-right:10%;">
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                            id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
+                                            onclick="SecurityApproveChanged(this)" />
+                                        <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت دارد؟</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control form-control-user" id="SecurityApproveDate"
+                                            name="SecurityApproveDate" placeholder="تاریخ نامه حفاظت" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="file" accept="image/*" class="custom-file-input"
                                                 onchange="UploadFile(1)" id="ProfilePictureUpload"
@@ -238,11 +250,31 @@
                 responsive: true,
                 maxDate: new persianDate()
             });
+            $("#SecurityApproveDate").persianDatepicker({
+                altField: '#SecurityApproveDate',
+                altFormat: "YYYY/MM/DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                timePicker: {
+                    enabled: false
+                },
+                initialValue: false,
+                autoClose: true,
+                responsive: true,
+                maxDate: new persianDate()
+            });
             $("#observer").on('change', function() {
                 if (!
-                    /^[1-4]\d{3}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
                     .test($("#observer").val())) {
                     $("#observer").val('');
+                }
+            });
+            $("#SecurityApproveDate").on('change', function() {
+                if (!
+                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    .test($("#SecurityApproveDate").val())) {
+                    $("#SecurityApproveDate").val('');
                 }
             });
             $("#NationalCode").change(function() {
@@ -353,7 +385,17 @@
                 });
             });
         });
-
+        function SecurityApproveChanged(cb)
+        {
+            $(cb).attr('value', cb.checked ? 'true' : 'false')
+            if(cb.checked)
+            $("#SecurityApproveDate").removeAttr('disabled')
+            else
+            {
+                $("#SecurityApproveDate").attr('disabled','disabled')
+                $("#SecurityApproveDate").val('')
+            }
+        }
         function isValidNationalCode(input) {
             if (!/^\d{10}$/.test(input)) return false;
             const check = +input[9];

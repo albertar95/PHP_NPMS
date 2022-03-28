@@ -23,4 +23,15 @@ class Casts
         $persian = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
         return str_replace($newNumbers, $persian, $string);
     }
+    public static function hasPersianDigit($string){
+        $res = false;
+        $persian = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        foreach ($persian as $digit) {
+            //if (strstr($string, $url)) { // mine version
+            if (strpos($string, $digit) !== FALSE) { // Yoshi version
+                $res = true;
+            }
+        }
+        return $res;
+    }
 }

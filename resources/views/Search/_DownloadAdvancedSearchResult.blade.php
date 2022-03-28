@@ -75,6 +75,8 @@
                         <th>کد ملی</th>
                         <th>رشته</th>
                         <th>گرایش</th>
+                        <th>تاییدیه حفاظت</th>
+                        <th>تاریخ نامه حفاظت</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,6 +86,12 @@
                             <td>{{ $sch->NationalCode }}</td>
                             <td>{{ $sch->MajorName }}</td>
                             <td>{{ $sch->OreintationName }}</td>
+                            @if($sch->IsSecurityApproved)
+                            <td class="priority-3">دارد</td>
+                            @else
+                            <td class="priority-3">ندارد</td>
+                            @endforelse
+                            <td>{{ $sch->SecurityApproveDate }}</td>
                         </tr>
                     @endforeach
                 </tbody>

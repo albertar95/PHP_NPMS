@@ -119,11 +119,11 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
         if ($pagesize != 0)
         {
             // $tmpScholars = Scholars::all()->where('IsDeleted','=',0)->take($Pagesize);
-            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get()->take($pagesize));
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->where('IsSecurityApproved','=','1')->get()->take($pagesize));
         }
         else
         {
-            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->get());
+            return DataMapper::MapToScholarListDTO2(Scholars::with('major','orientation')->where('IsDeleted','=',0)->where('IsSecurityApproved','=','1')->get());
         }
     }
     public function GetProjectById(string $NidProject):Projects

@@ -25,6 +25,19 @@
                                             <div class="form-group row" style="text-align:right;">
                                                 <div class="col-lg-12">
                                                     <div class="row" style="margin: 2px;">
+                                                        @if ($Scholar->IsSecurityApproved)
+                                                            <div class="btn btn-success btn-circle">
+                                                                <i class="fas fa-check"></i>
+                                                            </div>
+                                                            <h5>تاییدیه حفاظت</h5>
+                                                        @else
+                                                            <div class="btn btn-danger btn-circle">
+                                                                <i class="fas fa-times"></i>
+                                                            </div>
+                                                            <h5>تاییدیه حفاظت</h5>
+                                                        @endforelse
+                                                    </div>
+                                                    <div class="row" style="margin: 2px;">
                                                         @if ($Project->TitleApproved)
                                                             <div class="btn btn-success btn-circle">
                                                                 <i class="fas fa-check"></i>
@@ -35,19 +48,6 @@
                                                                 <i class="fas fa-times"></i>
                                                             </div>
                                                             <h5>تاییدیه عنوان</h5>
-                                                        @endforelse
-                                                    </div>
-                                                    <div class="row" style="margin: 2px;">
-                                                        @if (!empty($Project->SecurityLetterDate))
-                                                            <div class="btn btn-success btn-circle">
-                                                                <i class="fas fa-check"></i>
-                                                            </div>
-                                                            <h5>نامه حفاظت</h5>
-                                                        @else
-                                                            <div class="btn btn-danger btn-circle">
-                                                                <i class="fas fa-times"></i>
-                                                            </div>
-                                                            <h5>نامه حفاظت</h5>
                                                         @endforelse
                                                     </div>
                                                     <div class="row" style="margin: 2px;">
@@ -206,6 +206,24 @@
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <label class="form-control">{{ $Scholar->BirthDate }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" style="text-align:right;">
+                                                <div class="col-sm-2" style="padding:.5rem;">
+                                                    <label>تاییدیه حفاظت : </label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    @if($Scholar->IsSecurityApproved)
+                                                    <label class="form-control">دارد</label>
+                                                    @else
+                                                    <label class="form-control">ندارد</label>
+                                                    @endforelse
+                                                </div>
+                                                <div class="col-sm-2" style="padding:.5rem;">
+                                                    <label>تاریخ نامه حفاظت : </label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="form-control">{{ $Scholar->SecurityApproveDate }}</label>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="text-align:right;">
@@ -439,13 +457,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row" style="text-align:right;">
-                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                    {{-- <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>تاریخ نامه حفاظت : </label>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <label
                                                             class="form-control">{{ $Project->SecurityLetterDate }}</label>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>تاریخ دفاع : </label>
                                                     </div>
@@ -453,8 +471,6 @@
                                                         <label
                                                             class="form-control">{{ $Project->ThesisDefenceDate }}</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row" style="text-align:right;">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>تاریخ ارسال نامه دفاعیه : </label>
                                                     </div>
@@ -462,6 +478,8 @@
                                                         <label
                                                             class="form-control">{{ $Project->ThesisDefenceLetterDate }}</label>
                                                     </div>
+                                                </div>
+                                                <div class="form-group row" style="text-align:right;">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>مدت کسری : </label>
                                                     </div>
@@ -469,13 +487,12 @@
                                                         <label
                                                             class="form-control">{{ $Project->ReducePeriod }}</label>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <textarea class="form-control" id="Commision" name="Commision"
-                                                            placeholder="کمیسیون" rows="5"
+                                                    <div class="col-sm-6">
+                                                        <textarea class="form-control" id="Commision" name="Commision" placeholder="کمیسیون" rows="5"
                                                             readonly>{{ $Project->Commision }}</textarea>
                                                     </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>وضعیت چاپ کتاب : </label>
                                                     </div>
@@ -490,8 +507,6 @@
                                                                 class="form-control">ندارد</label>
                                                         @endforelse
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>تایید نهایی : </label>
                                                     </div>
@@ -504,6 +519,8 @@
                                                             <label for="FinalApprove" class="form-control">ندارد</label>
                                                         @endforelse
                                                     </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>وضعیت محرمانگی : </label>
                                                     </div>
@@ -516,8 +533,6 @@
                                                             <label for="IsConfident" class="form-control">ندارد</label>
                                                         @endforelse
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
                                                     <div class="col-sm-2" style="padding:.5rem;">
                                                         <label>غیر فعال : </label>
                                                     </div>
@@ -610,7 +625,8 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/printprojectdetail/' + $("#txtNidProject").val(),
+                    url: '{{ URL::to('/') }}' + '/printprojectdetail/' + $("#txtNidProject")
+                    .val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {

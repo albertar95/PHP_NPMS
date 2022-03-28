@@ -265,6 +265,8 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
                 'DeleteDate' => $Scholar->DeleteDate,
                 'DeleteUser' => $Scholar->DeleteUser,
                 'IsConfident' => $Scholar->IsConfident ?? 0,
+                'IsSecurityApproved' => $Scholar->IsSecurityApproved ?? 0,
+                'SecurityApproveDate' => $Scholar->SecurityApproveDate,
             ]
             );
         return true;

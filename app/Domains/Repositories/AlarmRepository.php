@@ -43,17 +43,17 @@ class AlarmRepository extends BaseRepository implements IAlarmRepository
                 $res->push($this->AlarmCancelation($CurrentProj->NidProject, 1));
             }
         }
-        if (empty($CurrentProj->SecurityLetterDate))
-        {
-            // $cdate = $this->PersianDateToGeorgian($CurrentProj->CreateDate);
-            // $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
-            $diff = $nowDate->diffInDays($CurrentProj->CreateDate);
-            $res->push($this->AlarmProcess($CurrentProj->NidProject, 2, $diff, $CurrentProj->Subject));
-        }
-        else
-        {
-            $res->push($this->AlarmCancelation($CurrentProj->NidProject, 2));
-        }
+        // if (empty($CurrentProj->SecurityLetterDate))
+        // {
+        //     // $cdate = $this->PersianDateToGeorgian($CurrentProj->CreateDate);
+        //     // $parsedDate = $cdate[0].'-'.$cdate[1].'-'.$cdate[2].' 01:00:00';
+        //     $diff = $nowDate->diffInDays($CurrentProj->CreateDate);
+        //     $res->push($this->AlarmProcess($CurrentProj->NidProject, 2, $diff, $CurrentProj->Subject));
+        // }
+        // else
+        // {
+        //     $res->push($this->AlarmCancelation($CurrentProj->NidProject, 2));
+        // }
         if (!empty($CurrentProj->ImploymentDate))
         {
             if (empty($CurrentProj->ThirtyPercentLetterDate))

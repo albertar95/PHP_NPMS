@@ -14,4 +14,5 @@ class scholarListDTO extends Model
     public string $MajorName;
     public string $OreintationName;
     public string $CollegeName;
+    public bool $IsSecurityApproved;
 }

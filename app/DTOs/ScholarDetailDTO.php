@@ -23,4 +23,6 @@ class scholarDetailDTO extends Model
     public Collection $Projects;
     public string $ProfilePicture;
     public bool $IsConfident;
+    public bool $IsSecurityApproved;
+    public string $SecurityApproveDate;
 }

@@ -26,6 +26,12 @@
                     @if ($OutputKey->contains('BirthDate'))
                         <th>تاریخ تولد</th>
                     @endif
+                    @if ($OutputKey->contains('IsSecurityApproved'))
+                        <th>تاییدیه حفاظت</th>
+                    @endif
+                    @if ($OutputKey->contains('SecurityApproveDate'))
+                        <th>تاریخ نامه حفاظت</th>
+                    @endif
                     @if ($OutputKey->contains('CollaborationType'))
                         <th>نوع همکاری</th>
                     @endif
@@ -52,10 +58,8 @@
 
                                 <td>{{ $sch->FirstName ?? '' }} {{ $sch->LastName ?? '' }}</td>
                             @elseif ($OutputKey->contains('FirstName'))
-
                                 <td>{{ $sch->FirstName ?? '' }}</td>
                             @else
-
                                 <td>{{ $sch->LastName ?? '' }}</td>
                             @endforelse
                         @endif
@@ -76,6 +80,16 @@
                         @endif
                         @if ($OutputKey->contains('BirthDate'))
                             <td>{{ $sch->BirthDate ?? '' }}</td>
+                        @endif
+                        @if ($OutputKey->contains('IsSecurityApproved'))
+                            @if($sch->IsSecurityApproved)
+                            <td>دارد</td>
+                            @else
+                            <td>ندارد</td>
+                            @endforelse
+                        @endif
+                        @if ($OutputKey->contains('SecurityApproveDate'))
+                            <td>{{ $sch->SecurityApproveDate ?? '' }}</td>
                         @endif
                         @if ($OutputKey->contains('CollaborationType'))
                             <td>{{ $sch->CollaborationTypeTitle ?? '' }}</td>
@@ -360,10 +374,8 @@
 
                                 <td>{{ $usr->FirstName ?? '' }} {{ $usr->LastName ?? '' }}</td>
                             @elseif ($OutputKey->contains('FirstName'))
-
                                 <td>{{ $usr->FirstName ?? '' }}</td>
                             @else
-
                                 <td>{{ $usr->LastName ?? '' }}</td>
                             @endforelse
                         @endif
@@ -426,7 +438,8 @@
             پرینت
         </span>
     </button>
-    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2" hidden>لطفا منتظر بمانید</p>
+    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2" hidden>لطفا منتظر
+        بمانید</p>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

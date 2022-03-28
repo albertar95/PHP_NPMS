@@ -69,6 +69,8 @@ class ReportController extends Controller
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(1, 6, "NationalCode", 0, 'کد ملی');
             $infos->push($tmpinfo);
+            $tmpinfo = new ReportParameterInfo(1, 7, "IsSecurityApproved", 0, 'تاییدیه حفاظت');
+            $infos->push($tmpinfo);
             //project inputs
             $tmpinfo = new ReportParameterInfo(2, 1, "ProjectStatus", 0, 'وضعیت طرح');
             $infos->push($tmpinfo);
@@ -90,8 +92,8 @@ class ReportController extends Controller
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 10, "ImploymentDate", 0, 'تاریخ بکارگیری');
             $infos->push($tmpinfo);
-            $tmpinfo = new ReportParameterInfo(2, 11, "SecurityLetterDate", 0, 'تاریخ نامه حفاظت');
-            $infos->push($tmpinfo);
+            // $tmpinfo = new ReportParameterInfo(2, 11, "SecurityLetterDate", 0, 'تاریخ نامه حفاظت');
+            // $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 12, "ThesisDefenceDate", 0, 'تاریخ دفاعیه');
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 13, "ThesisDefenceLetterDate", 0, 'تاریخ نامه دفاعیه');
@@ -146,6 +148,10 @@ class ReportController extends Controller
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(1, 13, "GradeId", 1, 'مقطع تحصیلی');
             $infos->push($tmpinfo);
+            $tmpinfo = new ReportParameterInfo(1, 14, "IsSecurityApproved", 1, 'تاییدیه حفاظت');
+            $infos->push($tmpinfo);
+            $tmpinfo = new ReportParameterInfo(1, 15, "SecurityApproveDate", 1, 'تاریخ نامه حفاظت');
+            $infos->push($tmpinfo);
             //project output
             $tmpinfo = new ReportParameterInfo(2, 1, "ProjectStatus", 1, 'وضعیت طرح'); //
             $infos->push($tmpinfo);
@@ -167,8 +173,8 @@ class ReportController extends Controller
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 11, "ImploymentDate", 1, 'تاریخ بکارگیری'); //
             $infos->push($tmpinfo);
-            $tmpinfo = new ReportParameterInfo(2, 11, "SecurityLetterDate", 1, 'تاریخ نامه حفاظت'); //
-            $infos->push($tmpinfo);
+            // $tmpinfo = new ReportParameterInfo(2, 11, "SecurityLetterDate", 1, 'تاریخ نامه حفاظت'); //
+            // $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 12, "ThesisDefenceDate", 1, 'تاریخ دفاعیه'); //
             $infos->push($tmpinfo);
             $tmpinfo = new ReportParameterInfo(2, 13, "ThesisDefenceLetterDate", 1, 'تاریخ نامه دفاعیه'); //

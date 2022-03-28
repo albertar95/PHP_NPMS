@@ -192,28 +192,27 @@ class DataMapper
     }
     public static function MapToProjectInitialDTO(Projects $project)
     {
-        try
-        {
+        try {
             $result = new projectInitialDTO();
             $result->NidProject = $project->NidProject;
             $result->ProjectNumber = BigInteger::of($project->ProjectNumber);
             $result->Subject = $project->Subject;
             $result->ProjectStatus = $project->ProjectStatus;
             $result->ScholarId = $project->ScholarId;
-            if(Scholars::all()->where('NidScholar','=',$project->ScholarId)->count() > 0)
-            $result->ScholarName = Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->FirstName.' '.Scholars::all()->where('NidScholar','=',$project->ScholarId)->firstOrFail()->LastName;
+            if (Scholars::all()->where('NidScholar', '=', $project->ScholarId)->count() > 0)
+                $result->ScholarName = Scholars::all()->where('NidScholar', '=', $project->ScholarId)->firstOrFail()->FirstName . ' ' . Scholars::all()->where('NidScholar', '=', $project->ScholarId)->firstOrFail()->LastName;
             else
-            $result->ScholarName = "";
+                $result->ScholarName = "";
             $result->UnitId = $project->UnitId;
-            if(Units::all()->where('NidUnit','=',$project->UnitId)->count() > 0)
-            $result->UnitName = Units::all()->where('NidUnit','=',$project->UnitId)->firstOrFail()->Title;
+            if (Units::all()->where('NidUnit', '=', $project->UnitId)->count() > 0)
+                $result->UnitName = Units::all()->where('NidUnit', '=', $project->UnitId)->firstOrFail()->Title;
             else
-            $result->UnitName = "";
+                $result->UnitName = "";
             $result->GroupId = $project->GroupId;
-            if(UnitGroups::all()->where('NidGroup','=',$project->GroupId)->count() > 0)
-            $result->GroupName = UnitGroups::all()->where('NidGroup','=',$project->GroupId)->firstOrFail()->Title;
+            if (UnitGroups::all()->where('NidGroup', '=', $project->GroupId)->count() > 0)
+                $result->GroupName = UnitGroups::all()->where('NidGroup', '=', $project->GroupId)->firstOrFail()->Title;
             else
-            $result->GroupName = "";
+                $result->GroupName = "";
             $result->Supervisor = $project->Supervisor ?? "";
             $result->SupervisorMobile = $project->SupervisorMobile ?? "";
             $result->Advisor = $project->Advisor ?? "";
@@ -224,9 +223,7 @@ class DataMapper
             $result->ATFLetterDate = $project->ATFLetterDate ?? "";
             $result->IsDisabled = boolval($project->IsDisabled) ?? false;
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -309,6 +306,8 @@ class DataMapper
             $result->DeleteDate = $scholar->DeleteDate;
             $result->DeleteUser = $scholar->DeleteUser;
             $result->IsConfident = boolval($scholar->IsConfident);
+            $result->IsSecurityApproved = boolval($scholar->IsSecurityApproved);
+            $result->SecurityApproveDate = $scholar->SecurityApproveDate ?? "";
             return $result;
         } catch (\Exception) {
             return null;
@@ -316,33 +315,31 @@ class DataMapper
     }
     public static function MapToScholarListDTO(Scholars $scholar)
     {
-        try
-        {
+        try {
             $result = new scholarListDTO();
             $result->NidScholar = $scholar->NidScholar;
             $result->FirstName = $scholar->FirstName;
             $result->LastName = $scholar->LastName;
             $result->NationalCode = $scholar->NationalCode;
-            if(Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->count() > 0)
-            $result->Grade = Settings::all()->where('SettingKey','=','GradeId')->where('SettingValue','=',$scholar->GradeId)->firstOrFail()->SettingTitle;
+            if (Settings::all()->where('SettingKey', '=', 'GradeId')->where('SettingValue', '=', $scholar->GradeId)->count() > 0)
+                $result->Grade = Settings::all()->where('SettingKey', '=', 'GradeId')->where('SettingValue', '=', $scholar->GradeId)->firstOrFail()->SettingTitle;
             else
-            $result->Grade = "";
-            if(Majors::all()->where('NidMajor','=',$scholar->MajorId)->count() > 0)
-            $result->MajorName = Majors::all()->where('NidMajor','=',$scholar->MajorId)->firstOrFail()->Title;//check
+                $result->Grade = "";
+            if (Majors::all()->where('NidMajor', '=', $scholar->MajorId)->count() > 0)
+                $result->MajorName = Majors::all()->where('NidMajor', '=', $scholar->MajorId)->firstOrFail()->Title; //check
             else
-            $result->MajorName = "";
-            if(Oreintations::all()->where('NidOrientation','=',$scholar->OrientationId)->count() > 0)
-            $result->OreintationName = Oreintations::all()->where('NidOrientation','=',$scholar->OrientationId)->firstOrFail()->Title;//check
+                $result->MajorName = "";
+            if (Oreintations::all()->where('NidOrientation', '=', $scholar->OrientationId)->count() > 0)
+                $result->OreintationName = Oreintations::all()->where('NidOrientation', '=', $scholar->OrientationId)->firstOrFail()->Title; //check
             else
-            $result->OreintationName = "";
-            if(Settings::all()->where('SettingKey','=','College')->where('SettingValue','=',$scholar->college)->count() > 0)
-            $result->collegeName = Settings::all()->where('SettingKey','=','College')->where('SettingValue','=',$scholar->college)->firstOrFail()->SettingTitle;
+                $result->OreintationName = "";
+            if (Settings::all()->where('SettingKey', '=', 'College')->where('SettingValue', '=', $scholar->college)->count() > 0)
+                $result->collegeName = Settings::all()->where('SettingKey', '=', 'College')->where('SettingValue', '=', $scholar->college)->firstOrFail()->SettingTitle;
             else
-            $result->collegeName = "";
+                $result->collegeName = "";
+            $result->IsSecurityApproved = boolval($scholar->IsSecurityApproved);
             return $result;
-        }
-        catch (\Exception)
-        {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -372,6 +369,7 @@ class DataMapper
                         $result->collegeName = $colleges->where('SettingValue', '=', $scholar->college)->firstOrFail()->SettingTitle; //$scholar->GradeId ?? "";
                     else
                         $result->collegeName = "";
+                    $result->IsSecurityApproved = boolval($scholar->IsSecurityApproved);
                     $res->push($result);
                 }
             }
@@ -399,6 +397,8 @@ class DataMapper
             $result->CollaborationTypeTitle = $scholar->CollaborationType;
             $result->ProfilePicture = $scholar->ProfilePicture ?? "";
             $result->IsConfident = boolval($scholar->IsConfident) ?? false;
+            $result->IsSecurityApproved = boolval($scholar->IsSecurityApproved) ?? false;
+            $result->SecurityApproveDate = $scholar->SecurityApproveDate ?? "";
             $result->Projects = new Collection(); //check
             return $result;
         } catch (\Exception) {
@@ -803,6 +803,11 @@ class DataMapper
                 $result->IsConfident = 1;
             else
                 $result->IsConfident = 0;
+            if ($scholar->IsSecurityApproved)
+                $result->IsSecurityApproved = 1;
+            else
+                $result->IsSecurityApproved = 0;
+            $result->SecurityApproveDate = $scholar->SecurityApproveDate;
             return $result;
         } catch (\Exception) {
             return null;
