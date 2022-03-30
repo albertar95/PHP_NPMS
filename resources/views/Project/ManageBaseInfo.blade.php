@@ -46,7 +46,7 @@
                                                     <input type="text" class="form-control form-control-user" id="UnitTitle"
                                                         name="Title" placeholder="عنوان یگان">
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-4">
                                                     <button class="btn btn-primary btn-user btn-block" type="submit"
                                                         id="btnAddUnit">
                                                         ایجاد یگان
@@ -149,7 +149,7 @@
                                                     <input type="text" class="form-control form-control-user"
                                                         id="GroupTitle" name="GroupTitle" placeholder="عنوان گروه">
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-4">
                                                     <button class="btn btn-primary btn-user btn-block" type="submit"
                                                         id="btnAddGroup">
                                                         ایجاد گروه
@@ -253,7 +253,7 @@
                                                             id="GradeSettingTitle" name="SettingTitle"
                                                             placeholder="عنوان مقطع تحصیلی">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddGrade">
                                                             ایجاد مقطع تحصیلی
@@ -346,7 +346,7 @@
                                                         <input type="text" class="form-control form-control-user"
                                                             id="MajorTitle" name="Title" placeholder="عنوان رشته تحصیلی">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddMajor">
                                                             ایجاد رشته تحصیلی
@@ -452,7 +452,7 @@
                                                         <input type="text" class="form-control form-control-user"
                                                             id="OreintationTitle" name="Title" placeholder="عنوان گرایش">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddOreintation">
                                                             ایجاد گرایش
@@ -557,7 +557,7 @@
                                                             id="CollegeSettingTitle" name="SettingTitle"
                                                             placeholder="عنوان دانشکده">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddCollege">
                                                             ایجاد دانشکده
@@ -658,7 +658,7 @@
                                                             id="MillitSettingTitle" name="SettingTitle"
                                                             placeholder="عنوان وضعیت خدمتی">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddMillit">
                                                             ایجاد وضعیت خدمتی
@@ -759,7 +759,7 @@
                                                             id="CollabSettingTitle" name="SettingTitle"
                                                             placeholder="عنوان نوع همکاری">
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="col-sm-4">
                                                         <button class="btn btn-primary btn-user btn-block" type="submit"
                                                             id="btnAddCollab">
                                                             ایجاد نوع همکاری

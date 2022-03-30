@@ -27,19 +27,19 @@
                         </div>
                         <form class="user" id="RolesForm" enctype="multipart/form-data">
                             <div class="form-group row">
-                                <div class="col-sm-2 mb-3 mb-sm-0">
+                                <div class="col-sm-4 col-mb-4 col-lg-4">
                                     <input type="text" value="" id="NidRole" name="NidRole" hidden />
                                     <input type="datetime" value="" id="CreateDate" name="CreateDate" hidden />
                                     <input type="text" class="form-control form-control-user" id="Title" name="Title"
                                         placeholder="عنوان نقش">
                                 </div>
-                                <div class="col-sm-2" style="display: flex;">
+                                <div class="col-sm-4 col-mb-4 col-lg-4" style="display: flex;">
                                     <input type="checkbox" style="width:1rem;margin:unset !important;" id="IsAdmin"
                                         name="IsAdmin" class="form-control" alt=""
                                         onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                     <label for="IsAdmin" style="margin:.45rem .45rem 0 0">نقش مدیر باشد؟</label>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-4 col-mb-4 col-lg-4">
                                     <button class="btn btn-primary btn-user btn-block" type="submit" id="btnAddRole">
                                         ایجاد نقش
                                     </button>

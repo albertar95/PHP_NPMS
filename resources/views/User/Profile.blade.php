@@ -5,7 +5,7 @@
     <div class="row">
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-6 col-md-6 mb-6">
+        <div class="col-md-12 col-sm-12 mb-6">
             <div class="card shadow border-left-success" style="margin-bottom:1rem;">
                 <!-- Card Header - Accordion -->
                 <a href="#collapsePersonalInfo" style="text-align:right;" class="d-block card-header py-3 collapsed"
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-6 col-md-6 mb-6">
+        <div class="col-md-12 col-sm-12 mb-6">
             <div class="card shadow border-left-danger" style="margin-bottom:1rem;">
                 <!-- Card Header - Accordion -->
                 <a href="#collapseSecurity" style="text-align:right;" class="d-block card-header py-3 collapsed"
@@ -153,7 +153,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-6 col-md-6 mb-6">
+        <div class="col-md-12 col-sm-12 mb-6">
             <div class="card shadow border-left-primary" style="margin-bottom:1rem;">
                 <!-- Card Header - Accordion -->
                 <a href="#collapseUserLog" style="text-align:right;" class="d-block card-header py-3 collapsed"
@@ -201,7 +201,7 @@
         </div>
 
         <!-- Pending Requests Card Example -->
-        <div class="col-xl-6 col-md-6 mb-6">
+        <div class="col-md-12 col-sm-12 mb-6">
             <div class="card shadow border-left-warning" style="margin-bottom:1rem;">
                 <!-- Card Header - Accordion -->
                 <a href="#collapsePermissions" style="text-align:right;" class="d-block card-header py-3 collapsed"

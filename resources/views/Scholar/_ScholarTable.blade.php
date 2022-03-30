@@ -11,7 +11,7 @@
                     <th class="priority-2">رشته</th>
                     <th class="priority-3">گرایش</th>
                     <th class="priority-4">محل تحصیل</th>
-                    <th class="priority-4">تاییدیه حفاظت</th>
+                    <th>تاییدیه حفاظت</th>
                     <th>عملیات</th>
                 </tr>
             </thead>
@@ -23,7 +23,7 @@
                     <th class="priority-2">رشته</th>
                     <th class="priority-3">گرایش</th>
                     <th class="priority-4">محل تحصیل</th>
-                    <th class="priority-4">تاییدیه حفاظت</th>
+                    <th>تاییدیه حفاظت</th>
                     <th>عملیات</th>
                 </tr>
             </tfoot>

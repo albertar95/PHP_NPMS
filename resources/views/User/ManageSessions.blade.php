@@ -4,7 +4,7 @@
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
-            <div class="row">
+            <div class="row" style="text-align: right;">
                 <div class="col-lg-12">
                     <div class="p-5">
                         <div class="text-center">
@@ -15,29 +15,25 @@
                                 action="{{ route('user.SubmitSessionSetting') }}" method="POST">
                                 @csrf
                                 <div class="form-group row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="display: flex;">
                                         <label>مدت زمان پایان نشست کاربر : </label>
-                                    </div>
-                                    <div class="col-sm-2">
                                         @if ($sets->count() > 0)
-                                            <input type="text" class="form-control form-control-user" id="SessionTimeout"
-                                                name="SessionTimeout" placeholder=""
-                                                value="{{ $sets->where('SettingKey', '=', 'SessionTimeout')->firstOrFail()->SettingValue ?? config('session.lifetime') }}">
-                                        @else
-                                            <input type="text" class="form-control form-control-user" id="SessionTimeout"
-                                                name="SessionTimeout" placeholder=""
-                                                value="{{ config('session.lifetime') }}">
-                                        @endforelse
+                                        <input type="text" class="form-control form-control-user" id="SessionTimeout"
+                                            name="SessionTimeout" placeholder=""
+                                            value="{{ $sets->where('SettingKey', '=', 'SessionTimeout')->firstOrFail()->SettingValue ?? config('session.lifetime') }}">
+                                    @else
+                                        <input type="text" class="form-control form-control-user" id="SessionTimeout"
+                                            name="SessionTimeout" placeholder=""
+                                            value="{{ config('session.lifetime') }}">
+                                    @endforelse
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
-                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                    {{-- <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                    </div> --}}
+                                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
                                             ذخیره اطلاعات
                                         </button>
                                     </div>
-                                    <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                 </div>
                                 <hr />
                             </form>

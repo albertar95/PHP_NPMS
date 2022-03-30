@@ -37,7 +37,7 @@
                                         <form class="user" id="SendMessageForm"
                                             enctype="application/x-www-form-urlencoded">
                                             <div class="form-group row">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col-sm-12 mb-6 col-lg-6">
                                                     <select class="form-control allWidth" data-ng-style="btn-primary"
                                                         name="RecieverId" id="RecieverId" style="padding:0 .75rem;" placeholder="انتخاب دریافت کننده">
                                                         <option value="0" selected>انتخاب دریافت کننده</option>
@@ -52,7 +52,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col-sm-12 mb-6 col-lg-6">
                                                     <input type="text" value="" id="NidMessage" name="NidMessage" hidden />
                                                     <input type="text" value="{{ auth()->user()->NidUser }}" id="SenderId"
                                                         name="SenderId" hidden />
@@ -63,7 +63,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col-sm-12 mb-6 col-lg-6">
                                                     <textarea class="form-control" id="MessageContent"
                                                         name="MessageContent" placeholder="متن پیام" rows="5"></textarea>
                                                 </div>
@@ -71,7 +71,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col-sm-12 mb-6 col-lg-6">
                                                     <button class="btn btn-primary btn-user btn-block" type="submit"
                                                         id="btnSendMessage">
                                                         ارسال پیام
