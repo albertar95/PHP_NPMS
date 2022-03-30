@@ -86,17 +86,17 @@ class ReportRepository extends BaseRepository implements IReportRepository
         }
         return true;
     }
-    public function StatisticsReport(string $NidReport, array $paramsKey, array $paramsValue)
+    public function StatisticsReport(string $NidReport, array $paramsKey, array $paramsValue, bool $showConfidents)
     {
         $CurrentReport = Reports::all()->where('NidReport', '=', $NidReport)->firstOrFail();
-        return $this->ExecuteReport(1, $this->QueryBuilder($NidReport, $paramsKey, $paramsValue, $CurrentReport), $CurrentReport);
+        return $this->ExecuteReport(1, $this->QueryBuilder($showConfidents, $paramsKey, $paramsValue, $CurrentReport), $CurrentReport);
         // return $paramsValue;
     }
     public function PersianDateToGeorgian(string $Datee)
     {
         return Verta::getGregorian(intval(Casts::PersianToEnglishDigits(substr($Datee, 0, 8))), intval(Casts::PersianToEnglishDigits(substr(substr($Datee, 0, 13), -4))), intval(Casts::PersianToEnglishDigits(substr($Datee, -4))));
     }
-    private function QueryBuilder(string $NidReport, array $paramsKey, array $paramsValue, Reports $CurrentReport)
+    private function QueryBuilder(bool $showConfident, array $paramsKey, array $paramsValue, Reports $CurrentReport)
     {
         $query = "select ";
         // $query = Str::of($query)->append('* ');
@@ -111,7 +111,10 @@ class ReportRepository extends BaseRepository implements IReportRepository
                 $query = Str::of($query)->append('NidUser from user ');
                 break;
         }
-        $query = Str::of($query)->append('where ');
+        if (!$showConfident && ($CurrentReport->ContextId == 1 || $CurrentReport->ContextId == 2))
+            $query = Str::of($query)->append('where IsConfident = false and ');
+        else
+            $query = Str::of($query)->append('where ');
         $PersianDateFileds = ["BirthDate", "TenPercentLetterDate", "PreImploymentLetterDate", "ImploymentDate", "SecurityLetterDate", "ThesisDefenceDate", "ThesisDefenceLetterDate", "ThirtyPercentLetterDate", "SixtyPercentLetterDate", "ATFLetterDate"];
         $tmpConstaintAdd = false;
         for ($i = 0; $i < count($paramsKey); $i++) {
@@ -228,10 +231,10 @@ class ReportRepository extends BaseRepository implements IReportRepository
                 return collect(DB::select("select FirstName,LastName,NationalCode,BirthDate,FatherName,Mobile,IsSecurityApproved,SecurityApproveDate,t2.SettingTitle as GradeTitle,t3.SettingTitle as CollegeTitle,t4.SettingTitle as CollaborationTypeTitle,t5.SettingTitle as MillitaryStatusTitle,t6.Title as MajorTitle,t7.Title as OreintationTitle from scholars t1 join settings t2 on t1.GradeId = t2.SettingValue and t2.SettingKey = 'GradeId' join settings t3 on t1.college = t3.SettingValue and t3.SettingKey = 'College' join settings t4 on t1.CollaborationType = t4.SettingValue and t4.SettingKey = 'CollaborationType' join settings t5 on t1.MillitaryStatus = t5.SettingValue and t5.SettingKey = 'MillitaryStatus' join majors t6 on t1.MajorId = t6.NidMajor join oreintations t7 on t1.OreintationId = t7.NidOreintation where NidScholar in " . '( ' . $whereStatement . ' )'));
                 break;
             case 2:
-                return collect(DB::select("select ProjectNumber,Subject,PersianCreateDate,Supervisor,Advisor,Referee1,Referee2,ProjectStatus,TenPercentLetterDate,PreImploymentLetterDate,ImploymentDate,SecurityLetterDate,ThirtyPercentLetterDate,SixtyPercentLetterDate,ATFLetterDate,ThesisDefenceDate,ThesisDefenceLetterDate,ReducePeriod,SupervisorMobile,AdvisorMobile,Editor,TitleApproved,HasBookPublish,FinalApprove,t1.IsConfident,concat(t2.FirstName,' ',t2.LastName) as ScholarTitle,t3.Title as UnitTitle,t4.Title as GroupTitle,concat(t5.FirstName,' ',t5.LastName) as UserTitle from projects t1 join scholars t2 on t1.ScholarId = t2.NidScholar join units t3 on t1.UnitId = t3.NidUnit join unit_groups t4 on t1.GroupId = t4.NidGroup join user t5 on t1.UserId = t5.NidUser where NidProject in ".'( '.$whereStatement.' )'));
+                return collect(DB::select("select ProjectNumber,Subject,PersianCreateDate,Supervisor,Advisor,Referee1,Referee2,ProjectStatus,TenPercentLetterDate,PreImploymentLetterDate,ImploymentDate,SecurityLetterDate,ThirtyPercentLetterDate,SixtyPercentLetterDate,ATFLetterDate,ThesisDefenceDate,ThesisDefenceLetterDate,ReducePeriod,SupervisorMobile,AdvisorMobile,Editor,TitleApproved,HasBookPublish,FinalApprove,t1.IsConfident,concat(t2.FirstName,' ',t2.LastName) as ScholarTitle,t3.Title as UnitTitle,t4.Title as GroupTitle,concat(t5.FirstName,' ',t5.LastName) as UserTitle from projects t1 join scholars t2 on t1.ScholarId = t2.NidScholar join units t3 on t1.UnitId = t3.NidUnit join unit_groups t4 on t1.GroupId = t4.NidGroup join user t5 on t1.UserId = t5.NidUser where NidProject in " . '( ' . $whereStatement . ' )'));
                 break;
             case 4:
-                return collect(DB::select("select UserName,FirstName,LastName,ProfilePicture,IsLockedOut,IsDisabled,LastLoginDate,IncorrectPasswordCount,t2.Title as RoleTitle FROM user t1 JOIN roles t2 on t1.RoleId = t2.NidRole where NidUser in ".'( '.$whereStatement.' )'));
+                return collect(DB::select("select UserName,FirstName,LastName,ProfilePicture,IsLockedOut,IsDisabled,LastLoginDate,IncorrectPasswordCount,t2.Title as RoleTitle FROM user t1 JOIN roles t2 on t1.RoleId = t2.NidRole where NidUser in " . '( ' . $whereStatement . ' )'));
                 break;
             default:
                 # code...

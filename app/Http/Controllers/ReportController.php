@@ -338,7 +338,11 @@ class ReportController extends Controller
     {
         try {
             $api = new NPMSController();
-            $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
+            $reportresult = null;
+            if ($this->CheckAuthority(true, 6, $report->cookie('NPMS_Permissions')))
+                $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues, true);
+            else
+                $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
             $OutputKey = collect($report->OutPutValues);
             $Scholars = $reportresult->Scholars;
             $Projects = $reportresult->Projects;
@@ -386,8 +390,7 @@ class ReportController extends Controller
     {
         try {
             $result = new JsonResults();
-            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions')))
-            {
+            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
                 $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
                 $OutputKey = collect($report->OutPutValues);
@@ -403,8 +406,7 @@ class ReportController extends Controller
                 $result->HasValue = true;
                 $api->AddLog(auth()->user(), $report->ip(), 30, 0, 3, 2, $ReportName);
                 return response()->json($result);
-            }else
-            {
+            } else {
                 $result->HasValue = false;
                 return response()->json($result);
             }
@@ -440,8 +442,7 @@ class ReportController extends Controller
     {
         try {
             $result = new JsonResults();
-            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions')))
-            {
+            if ($this->CheckAuthority(true, 5, $report->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
                 $logs = $api->GetUserLogReport($this->PersianDateToGeorgian($report->FromDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->FromDate)[2]), $this->PersianDateToGeorgian($report->ToDate)[0] . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[1]) . '-' . sprintf("%02d", $this->PersianDateToGeorgian($report->ToDate)[2]), $report->LogActionId, $report->UserName);
                 $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
@@ -451,8 +452,7 @@ class ReportController extends Controller
                 $result->Html = view('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime', 'ConfidentLevel'))->render();
                 $api->AddLog(auth()->user(), $report->ip(), 32, 0, 3, 2, '');
                 return response()->json($result);
-            }else
-            {
+            } else {
                 $result->HasValue = false;
                 return response()->json($result);
             }
@@ -473,13 +473,11 @@ class ReportController extends Controller
     public function CustomReports(Request $request)
     {
         try {
-            if ($this->CheckAuthority(true, 0, $request->cookie('NPMS_Permissions')))
-            {
+            if ($this->CheckAuthority(true, 0, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 1, 1, "ایجاد گزارش");
                 return view('Report.CustomReports');
-            }else
-            {
+            } else {
                 return view('errors.401');
             }
         } catch (\Exception $e) {
@@ -553,8 +551,7 @@ class ReportController extends Controller
     public function DeleteReport(string $NidReport, Request $request)
     {
         try {
-            if ($this->CheckAuthority(true, 2, $request->cookie('NPMS_Permissions')))
-            {
+            if ($this->CheckAuthority(true, 2, $request->cookie('NPMS_Permissions'))) {
                 $api = new NPMSController();
                 if ($api->DeleteReport($NidReport)) {
                     $result = new JsonResults();
@@ -568,8 +565,7 @@ class ReportController extends Controller
                     $api->AddLog(auth()->user(), $request->ip(), 26, 1, 3, 2, $NidReport);
                     return response()->json($result);
                 }
-            }else
-            {
+            } else {
                 $result = new JsonResults();
                 $result->HasValue = false;
                 return response()->json($result);

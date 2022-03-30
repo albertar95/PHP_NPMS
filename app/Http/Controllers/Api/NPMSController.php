@@ -1202,12 +1202,12 @@ class NPMSController extends Controller
         }
     }
     //report section
-    public function GetStatisticsReport(string $NidReport, array $paramsKey, array $paramsValue)
+    public function GetStatisticsReport(string $NidReport, array $paramsKey, array $paramsValue,bool $showConfidents = false)
     {
         try {
             $repo = new ReportRepository(new Reports());
             // $reportraw = DataMapper::MapToReportRawData($reportraw);
-            return $repo->StatisticsReport($NidReport, $paramsKey, $paramsValue);
+            return $repo->StatisticsReport($NidReport, $paramsKey, $paramsValue,$showConfidents);
         } catch (\Throwable $th) {
             return null;
         }

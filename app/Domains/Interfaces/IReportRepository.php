@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 interface IReportRepository
 {
-    public function StatisticsReport(string $NidReport,array $paramsKey,array $paramsValue);
+    public function StatisticsReport(string $NidReport,array $paramsKey,array $paramsValue,bool $showConfidents);
     public function AddReport(Reports $report):bool;
     public function AddReportParameterList(Collection $parameters) :bool;
     public function GetReport(string $NidReport):reportDTO;
