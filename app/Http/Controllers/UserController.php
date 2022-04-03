@@ -259,8 +259,9 @@ class UserController extends Controller
     public function SubmitHashPassword(Request $request)
     {
         $result = new JsonResults();
+        $newEncrypter = new \Illuminate\Encryption\Encrypter('1234567890123456');
         $result->HasValue = true;
-        $result->Message = Crypt::encryptString($request->Password);
+        $result->Message = $newEncrypter->encryptString($request->Password);
         return response()->json($result);
     }
     public function EditUser(string $NidUser, Request $request)
@@ -530,7 +531,7 @@ class UserController extends Controller
             return response()->json($result);
             // return $loginresult;
         } catch (\Throwable $th) {
-            //throw $th;
+            // throw $th;
         }
     }
     public function ChangePassword(string $Niduser)

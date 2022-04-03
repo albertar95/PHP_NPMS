@@ -346,6 +346,7 @@ class NPMSController extends Controller
             return $repo->LoginUser($Username, $Password);
         } catch (\Throwable $th) {
             return null;
+            // throw $th;
         }
     }
     public function GetThisUserByUsername(string $Username)
