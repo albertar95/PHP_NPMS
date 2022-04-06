@@ -356,17 +356,24 @@
                             });
                             $.ajax({
                                 url: '{{URL::to('/')}}' + '/downloadstatisticsreport',
-                                type: 'post',
-                                datatype: 'json',
+                                type: 'GET',
+                                xhrFields: {
+                                    responseType: 'blob'
+                                },
                                 data: {
                                     NidReport: $("#NidReport").val(),
                                     PrameterKeys: paramKeys,
                                     ParameterValues: paramVals,
                                     OutPutValues: selectedOutputs
                                 },
-                                success: function()
+                                success: function(response)
                                 {
                                     $("#waitText2").attr('hidden', 'hidden');
+                                    var blob = new Blob([response]);
+                                    var link = document.createElement('a');
+                                    link.href = window.URL.createObjectURL(blob);
+                                    link.download = '{{ $report->ReportName }}' + '.pdf';
+                                    link.click();
                                 },
                                 error: function()
                                 {

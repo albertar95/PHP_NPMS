@@ -282,38 +282,38 @@ class UserRepository extends BaseRepository implements IUserRepository
                 if ($tmpUser->IsLockedOut && $dateNow->lt($tmpUser->LockoutDeadLine)) {
                     $resultFlag = 4;
                 } else {
-                    if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > $changePassDuration)
-                        $resultFlag = 5;
-                    else {
-                        if (Hash::check($Password, $tmpUser->Password)) {
+                    if (Hash::check($Password, $tmpUser->Password)) {
+                        if (is_null($tmpUser->LastPasswordChangeDate) || $dateNow->diffInDays($tmpUser->LastPasswordChangeDate) > $changePassDuration)
+                            $resultFlag = 5;
+                        else {
                             $tmpUser->IsLockedOut = 0;
                             $tmpUser->LastLoginDate = Carbon::now();
                             $tmpUser->IncorrectPasswordCount = 0;
                             $this->UpdateUser($tmpUser);
                             $resultFlag = 1;
-                        } else {
-                            $incorrectPassAttempt = 20;
-                            $lockoutDuration = 5;
-                            $fullLockout = 0;
-                            if (Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                                $incorrectPassAttempt = Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                            if (Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                                $lockoutDuration = Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                            if (Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
-                                $fullLockout = Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
-                            $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
-                            if ($tmpUser->IncorrectPasswordCount >= $incorrectPassAttempt) {
-                                $tmpUser->IsLockedOut = 1;
-                                if (!$fullLockout) {
-                                    $tmpUser->LockoutDeadLine = $dateNow->addMinutes($lockoutDuration);
-                                } else {
-                                    $tmpUser->LockoutDeadLine = $dateNow->addDays(365);
-                                }
-                                $tmpUser->IncorrectPasswordCount = 0;
-                            }
-                            $this->UpdateUser($tmpUser);
-                            $resultFlag = 2;
                         }
+                    } else {
+                        $incorrectPassAttempt = 20;
+                        $lockoutDuration = 5;
+                        $fullLockout = 0;
+                        if (Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $incorrectPassAttempt = Settings::all()->where('SettingKey', '=', 'IncorrectAttemptCount')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                        if (Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $lockoutDuration = Settings::all()->where('SettingKey', '=', 'LockoutDuration')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                        if (Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->count() > 0)
+                            $fullLockout = Settings::all()->where('SettingKey', '=', 'FullLockoutUser')->where('SettingTitle', '=', 'PasswordPolicies')->firstOrFail()->SettingValue;
+                        $tmpUser->IncorrectPasswordCount = $tmpUser->IncorrectPasswordCount + 1;
+                        if ($tmpUser->IncorrectPasswordCount >= $incorrectPassAttempt) {
+                            $tmpUser->IsLockedOut = 1;
+                            if (!$fullLockout) {
+                                $tmpUser->LockoutDeadLine = $dateNow->addMinutes($lockoutDuration);
+                            } else {
+                                $tmpUser->LockoutDeadLine = $dateNow->addDays(365);
+                            }
+                            $tmpUser->IncorrectPasswordCount = 0;
+                        }
+                        $this->UpdateUser($tmpUser);
+                        $resultFlag = 2;
                     }
                 }
             }
@@ -564,14 +564,14 @@ class UserRepository extends BaseRepository implements IUserRepository
     }
     public function UpdateRole(Roles $role)
     {
-        if (Roles::all()->where('NidRole', '=', $role->NidRole)->count() > 0) {
-            Roles::all()->where('NidRole', '=', $role->NidRole)->firstOrFail()->update(
-                [
-                    'Title' => $role->Title,
-                    'IsAdmin' => $role->IsAdmin
-                ]
-            );
-        }
+        // if (Roles::all()->where('NidRole', '=', $role->NidRole)->count() > 0) {
+        // }
+        Roles::where('NidRole', $role->NidRole)->update(
+            [
+                'Title' => $role->Title,
+                'IsAdmin' => $role->IsAdmin
+            ]
+        );
     }
     public function DeleteRole(string $NidRole)
     {
@@ -697,6 +697,14 @@ class UserRepository extends BaseRepository implements IUserRepository
             return collect($item)->count();
         });
         return $groupCount;
+    }
+    public function DeleteUsersProfile(string $NidUser)
+    {
+        User::where('NidUser', $NidUser)->update(
+            [
+                'ProfilePicture' => ''
+            ]
+        );
     }
 }
 

@@ -701,6 +701,7 @@ class DataMapper
             $result->UserId = $log->UserId;
             $result->Username = $log->Username;
             $result->LogDate = $log->LogDate;
+            $result->PersianLogDate = '';
             $result->IP = $log->IP;
             $result->LogTime = $log->LogTime;
             $result->ActionId = $log->ActionId;
@@ -724,6 +725,7 @@ class DataMapper
                 $result->UserId = $log->UserId;
                 $result->Username = $log->Username;
                 $result->LogDate = $log->LogDate;
+                $result->PersianLogDate = join('-',VertaVerta::getJalali(explode('-',$log->LogDate)[0],explode('-',$log->LogDate)[1],explode('-',$log->LogDate)[2]));
                 $result->IP = $log->IP;
                 $result->LogTime = $log->LogTime;
                 $result->ActionId = $log->ActionId;

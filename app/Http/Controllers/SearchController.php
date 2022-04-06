@@ -172,7 +172,7 @@ class SearchController extends Controller
             }
             $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel'));
             $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");
-            return $pdf->stream('AdvancedSearchResult.pdf');
+            return response()->download($pdf->download());
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

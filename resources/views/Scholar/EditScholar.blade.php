@@ -243,49 +243,60 @@
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             @if (!empty($Scholar->ProfilePicture))
-                                                <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                     id="uploadedframe">
+                                                    <a class="remove-image" id="btnDeleteImage" href="#"
+                                                        style="display: inline;">&#215;</a>
                                                     <img src="{{ sprintf('/storage/images/%s', $Scholar->ProfilePicture) }}"
-                                                        id="userImg" style="width:100%;height:200px;" />
+                                                        id="uploadedImage" />
                                                 </div>
                                             @else
-                                                <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                     id="uploadedframe" hidden>
-                                                    <img src="" id="uploadedImage" style="width:100%;height:200px;" />
+                                                    <a class="remove-image" id="btnDeleteImage" href="#"
+                                                        style="display: inline;">&#215;</a>
+                                                    <img src="" id="uploadedImage" />
                                                 </div>
                                             @endforelse
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0"  style="display:flex;padding-right:10%;">
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
                                             @if (!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 1)
-                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                            id="IsSecurityApproved" name="IsSecurityApproved" class="form-control" value="true" checked
-                                            onclick="SecurityApproveChanged(this)" />
-                                        <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت دارد؟</label>
-                                        @elseif(!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 0)
-                                        <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                        id="IsSecurityApproved" name="IsSecurityApproved" class="form-control" value="false"
-                                        onclick="SecurityApproveChanged(this)" />
-                                    <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت دارد؟</label>
-                                        @else
-                                        <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                        id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
-                                        onclick="SecurityApproveChanged(this)" />
-                                    <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت دارد؟</label>
-                                        @endforelse
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
+                                                    value="true" checked onclick="SecurityApproveChanged(this)" />
+                                                <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه
+                                                    حفاظت دارد؟</label>
+                                            @elseif(!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 0)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
+                                                    value="false" onclick="SecurityApproveChanged(this)" />
+                                                <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه
+                                                    حفاظت دارد؟</label>
+                                            @else
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
+                                                    onclick="SecurityApproveChanged(this)" />
+                                                <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه
+                                                    حفاظت دارد؟</label>
+                                            @endforelse
                                         </div>
                                         <div class="col-sm-6">
                                             @if (!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 1)
-                                            <input type="text" class="form-control form-control-user" id="SecurityApproveDate"
-                                            name="SecurityApproveDate" placeholder="تاریخ نامه حفاظت" value="{{ $Scholar->SecurityApproveDate }}" >
-                                        @elseif(!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 0)
-                                        <input type="text" class="form-control form-control-user" id="SecurityApproveDate"
-                                        name="SecurityApproveDate" placeholder="تاریخ نامه حفاظت" disabled>
-                                        @else
-                                        <input type="text" class="form-control form-control-user" id="SecurityApproveDate"
-                                        name="SecurityApproveDate" placeholder="تاریخ نامه حفاظت" disabled>
-                                        @endforelse
+                                                <input type="text" class="form-control form-control-user"
+                                                    id="SecurityApproveDate" name="SecurityApproveDate"
+                                                    placeholder="تاریخ نامه حفاظت"
+                                                    value="{{ $Scholar->SecurityApproveDate }}">
+                                            @elseif(!is_null($Scholar->IsSecurityApproved) && $Scholar->IsSecurityApproved == 0)
+                                                <input type="text" class="form-control form-control-user"
+                                                    id="SecurityApproveDate" name="SecurityApproveDate"
+                                                    placeholder="تاریخ نامه حفاظت" disabled>
+                                            @else
+                                                <input type="text" class="form-control form-control-user"
+                                                    id="SecurityApproveDate" name="SecurityApproveDate"
+                                                    placeholder="تاریخ نامه حفاظت" disabled>
+                                            @endforelse
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -428,15 +439,47 @@
                     }
                 });
             });
-        });
-        function SecurityApproveChanged(cb)
-        {
-            $(cb).attr('value', cb.checked ? 'true' : 'false')
-            if(cb.checked)
-            $("#SecurityApproveDate").removeAttr('disabled')
-            else
+            $("#btnDeleteImage").click(function(e)
             {
-                $("#SecurityApproveDate").attr('disabled','disabled')
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ URL::to('/') }}' + '/deleteuploadedimage/' + $("#ProfilePicture")
+                        .val(),
+                    type: 'post',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#ProfilePicture").val('');
+                            $("#uploadedframe").attr('hidden', 'hidden');
+                            $("#uploadedImage").attr('hidden', 'hidden');
+                            $.ajax({
+                                url: '{{ URL::to('/') }}' + '/deletescholarprofile/' + $("#NidScholar").val(),
+                                type: 'post',
+                                datatype: 'json',
+                                success: function(result) {},
+                                error: function() {}
+                            });
+                        }else
+                        {
+                            $("#UploadMessage").text('خطا در حذف فایل')
+                            $("#UploadMessage").removeAttr('hidden');
+                        }
+                    },
+                    error: function() {
+                        $("#UploadMessage").text('خطا در حذف فایل')
+                        $("#UploadMessage").removeAttr('hidden');
+                    }
+                });
+
+            });
+        });
+
+        function SecurityApproveChanged(cb) {
+            $(cb).attr('value', cb.checked ? 'true' : 'false')
+            if (cb.checked)
+                $("#SecurityApproveDate").removeAttr('disabled')
+            else {
+                $("#SecurityApproveDate").attr('disabled', 'disabled')
                 $("#SecurityApproveDate").val('')
             }
         }

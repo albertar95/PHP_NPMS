@@ -90,7 +90,8 @@
                                 </div>
                             </div>
                         </form>
-                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText"
+                            hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -98,8 +99,8 @@
     </div>
     <div class="card shadow" style="margin-bottom:1rem;">
         <!-- Card Header - Accordion -->
-        <a href="#collapseSearchResultItems" style="text-align:right;" class="d-block card-header py-3" data-toggle="collapse" role="button"
-            aria-expanded="true" aria-controls="collapseSearchResultItems">
+        <a href="#collapseSearchResultItems" style="text-align:right;" class="d-block card-header py-3"
+            data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseSearchResultItems">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:center;">نتیجه جستجو</h6>
         </a>
         <!-- Card Content - Collapse -->
@@ -180,7 +181,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/searchsectionchange',
+                        url: '{{ URL::to('/') }}' + '/searchsectionchange',
                         type: 'get',
                         datatype: 'json',
                         data: {
@@ -212,7 +213,7 @@
                     }
                 });
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/searchsectionchange',
+                    url: '{{ URL::to('/') }}' + '/searchsectionchange',
                     type: 'get',
                     datatype: 'json',
                     data: {
@@ -260,20 +261,19 @@
                 }
             });
             $.ajax({
-                url: '{{URL::to('/')}}' + '/submitadvancesearch/' + SearchInp,
+                url: '{{ URL::to('/') }}' + '/submitadvancesearch/' + SearchInp,
                 type: 'get',
                 datatype: 'json',
                 success: function(result) {
                     $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue)
                         $("#Resultwrapper").html(result.Html);
-                        $("#projectdataTable").dataTable();
-                        $("#scholardataTable").dataTable();
-                        $("#userdataTable").dataTable();
-                        $("#BaseInfodataTable").dataTable();
+                    $("#projectdataTable").dataTable();
+                    $("#scholardataTable").dataTable();
+                    $("#userdataTable").dataTable();
+                    $("#BaseInfodataTable").dataTable();
                 },
-                error: function()
-                {
+                error: function() {
                     $("#waitText").attr('hidden', 'hidden');
                 }
             });
@@ -301,27 +301,32 @@
                         }
                     });
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/downloadadvancesearchresult',
-                        type: 'post',
-                        datatype: 'json',
+                        url: '{{ URL::to('/') }}' + '/downloadadvancesearchresult',
+                        type: 'GET',
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
                         data: {
                             searchText: stext,
                             Section: document.getElementById("SearchSection").value,
                             SearchBy: document.getElementById("SearchBy").value,
                             Similar: $("#cbSimilar").val()
                         },
-                        success: function()
-                        {
+                        success: function(response) {
                             $("#waitText2").attr('hidden', 'hidden');
+                            var blob = new Blob([response]);
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'AdvancedSearchResult.pdf';
+                            link.click();
                         },
-                        error: function()
-                        {
+                        error: function() {
                             $("#waitText2").attr('hidden', 'hidden');
                         }
                     });
                     break;
                 case 2:
-                $("#waitText2").attr('hidden', 'hidden');
+                    $("#waitText2").attr('hidden', 'hidden');
                     // $("#ScholarDataTable").tableHTMLExport({
                     //     type: 'csv',
                     //     filename: searchResult + '.csv'
@@ -345,7 +350,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/printadvancesearchresult',
+                        url: '{{ URL::to('/') }}' + '/printadvancesearchresult',
                         type: 'post',
                         datatype: 'json',
                         data: {

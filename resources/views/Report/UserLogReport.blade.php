@@ -74,8 +74,8 @@
     </div>
     <div class="card shadow" style="margin-bottom:1rem;">
         <!-- Card Header - Accordion -->
-        <a href="#collapseSearchResultItems" class="d-block card-header py-3" style="text-align:right;" data-toggle="collapse" role="button"
-            aria-expanded="true" aria-controls="collapseSearchResultItems">
+        <a href="#collapseSearchResultItems" class="d-block card-header py-3" style="text-align:right;"
+            data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseSearchResultItems">
             <h6 class="m-0 font-weight-bold text-primary" style="text-align:center;">نتیجه گزارش</h6>
         </a>
         <!-- Card Content - Collapse -->
@@ -147,7 +147,7 @@
                         }
                     });
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submituserlogreport',
+                        url: '{{ URL::to('/') }}' + '/submituserlogreport',
                         type: 'post',
                         datatype: 'json',
                         data: {
@@ -191,18 +191,41 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 }
                             });
+                            // $.ajax({
+                            //     url: '{{ URL::to('/') }}' + '/downloaduserlogreport',
+                            //     type: 'post',
+                            //     datatype: 'json',
+                            //     data: {
+                            //         FromDate: $("#FromDate").val(),
+                            //         ToDate: $("#ToDate").val(),
+                            //         LogActionId: $("#LogActionId").val(),
+                            //         UserName: $("#UserName").val()
+                            //     },
+                            //     success: function() {},
+                            //     error: function() {}
+                            // });
                             $.ajax({
-                                url: '{{URL::to('/')}}' + '/downloaduserlogreport',
-                                type: 'post',
-                                datatype: 'json',
+                                type: 'GET',
+                                url: '{{ URL::to('/') }}' + '/downloaduserlogreport',
                                 data: {
                                     FromDate: $("#FromDate").val(),
                                     ToDate: $("#ToDate").val(),
                                     LogActionId: $("#LogActionId").val(),
                                     UserName: $("#UserName").val()
                                 },
-                                success: function() {},
-                                error: function() {}
+                                xhrFields: {
+                                    responseType: 'blob'
+                                },
+                                success: function(response) {
+                                    var blob = new Blob([response]);
+                                    var link = document.createElement('a');
+                                    link.href = window.URL.createObjectURL(blob);
+                                    link.download = "userlogreport.pdf";
+                                    link.click();
+                                },
+                                error: function(blob) {
+                                    console.log(blob);
+                                }
                             });
                             break;
                         case 2:
@@ -218,7 +241,7 @@
                                 }
                             });
                             $.ajax({
-                                url: '{{URL::to('/')}}' + '/printuserlogreport',
+                                url: '{{ URL::to('/') }}' + '/printuserlogreport',
                                 type: 'post',
                                 datatype: 'json',
                                 data: {

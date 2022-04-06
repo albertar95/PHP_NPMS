@@ -271,6 +271,18 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
             );
         return true;
     }
+    public function GetUploadedImages()
+    {
+        return Scholars::all()->where('ProfilePicture','!=','')->groupBy('ProfilePicture');
+    }
+    public function DeleteScholarsProfile(string $ScholarId)
+    {
+        Scholars::where('NidScholar',$ScholarId)->update(
+            [
+                'ProfilePicture' => ''
+            ]
+            );
+    }
 }
 
 class ScholarRepositoryFactory

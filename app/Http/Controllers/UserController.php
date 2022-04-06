@@ -942,4 +942,17 @@ class UserController extends Controller
             throw new \App\Exceptions\LogExecptions($e);
         }
     }
+    public function DeleteUserProfile(string $NidUser)
+    {
+        try {
+            $api = new NPMSController();
+            $result = new JsonResults();
+            $api->DeleteProfile($NidUser, 1);
+            $result->HasValue = true;
+            // $api->AddLog(auth()->user(), $request->ip(), 39, 0, 3, 3, "حذف دسترسی کاربر موفق");
+            return response()->json($result);
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
+    }
 }

@@ -123,15 +123,17 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0"  style="display:flex;padding-right:10%;">
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
                                             <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                            id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
-                                            onclick="SecurityApproveChanged(this)" />
-                                        <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت دارد؟</label>
+                                                id="IsSecurityApproved" name="IsSecurityApproved" class="form-control"
+                                                onclick="SecurityApproveChanged(this)" />
+                                            <label for="IsSecurityApproved" style="margin:.25rem .25rem 0 0">تاییدیه حفاظت
+                                                دارد؟</label>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control form-control-user" id="SecurityApproveDate"
-                                            name="SecurityApproveDate" placeholder="تاریخ نامه حفاظت" disabled>
+                                            <input type="text" class="form-control form-control-user"
+                                                id="SecurityApproveDate" name="SecurityApproveDate"
+                                                placeholder="تاریخ نامه حفاظت" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -146,9 +148,11 @@
                                                 تصویر پروفایل محقق
                                             </label>
                                             <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
-                                            <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                            <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                 id="uploadedframe" hidden>
-                                                <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                                                <a class="remove-image" id="btnDeleteImage" href="#"
+                                                    style="display: inline;">&#215;</a>
+                                                <img src="" id="uploadedImage" hidden />
                                             </div>
                                         </div>
                                         <div class="col-sm-6" style="display:flex;padding-right:10%;">
@@ -163,8 +167,8 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                                            <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
-                                                ذخیره اطلاعات
+                                            <button type="submit" id="btnSubmit"
+                                                class="btn btn-primary btn-user btn-block">ذخیره اطلاعات
                                             </button>
                                         </div>
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
@@ -173,12 +177,12 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                                    @if (in_array('1', $sharedData['UserAccessedEntities']))
-                                        @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
-                                            <a class="btn btn-outline-secondary btn-user btn-block"
-                                                href="{{ route('scholar.Scholars') }}">لیست محققان</a>
-                                        @endif
-                                    @endif
+                                            @if (in_array('1', $sharedData['UserAccessedEntities']))
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
+                                                    <a class="btn btn-outline-secondary btn-user btn-block"
+                                                        href="{{ route('scholar.Scholars') }}">لیست محققان</a>
+                                                @endif
+                                            @endif
                                         </div>
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                     </div>
@@ -200,7 +204,8 @@
                                     aria-hidden="true">&times;</span></button>
                             <p style="text-align:right;" id="ErrorMessage"></p>
                         </div>
-                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText" hidden>لطفا منتظر بمانید</p>
+                        <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText"
+                            hidden>لطفا منتظر بمانید</p>
                     </div>
                 </div>
             </div>
@@ -318,7 +323,7 @@
                     //     }
                     // }
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitaddscholar',
+                        url: '{{ URL::to('/') }}' + '/submitaddscholar',
                         type: 'post',
                         datatype: 'json',
                         data: $("#AddScholarForm").serialize(),
@@ -335,7 +340,8 @@
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
                             window.setTimeout(function() {
-                                window.location.href = '{{URL::to('/')}}' + '/scholars';
+                                window.location.href = '{{ URL::to('/') }}' +
+                                    '/scholars';
                             }, 3000);
                         },
                         error: function(response) {
@@ -368,7 +374,7 @@
             $("#MajorSlt").on('change', function() {
                 $("#OrentationSlt").html('')
                 $.ajax({
-                    url: '{{URL::to('/')}}' + '/majorselectchanged/' + this.value,
+                    url: '{{ URL::to('/') }}' + '/majorselectchanged/' + this.value,
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
@@ -384,18 +390,42 @@
                     }
                 });
             });
+            $("#btnDeleteImage").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ URL::to('/') }}' + '/deleteuploadedimage/' + $("#ProfilePicture")
+                        .val(),
+                    type: 'post',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#ProfilePicture").val('');
+                            $("#uploadedframe").attr('hidden', 'hidden');
+                            $("#uploadedImage").attr('hidden', 'hidden');
+                        }else
+                        {
+                            $("#UploadMessage").text('خطا در حذف فایل')
+                            $("#UploadMessage").removeAttr('hidden');
+                        }
+                    },
+                    error: function() {
+                        $("#UploadMessage").text('خطا در حذف فایل')
+                        $("#UploadMessage").removeAttr('hidden');
+                    }
+                });
+            });
         });
-        function SecurityApproveChanged(cb)
-        {
+
+        function SecurityApproveChanged(cb) {
             $(cb).attr('value', cb.checked ? 'true' : 'false')
-            if(cb.checked)
-            $("#SecurityApproveDate").removeAttr('disabled')
-            else
-            {
-                $("#SecurityApproveDate").attr('disabled','disabled')
+            if (cb.checked)
+                $("#SecurityApproveDate").removeAttr('disabled')
+            else {
+                $("#SecurityApproveDate").attr('disabled', 'disabled')
                 $("#SecurityApproveDate").val('')
             }
         }
+
         function isValidNationalCode(input) {
             if (!/^\d{10}$/.test(input)) return false;
             const check = +input[9];

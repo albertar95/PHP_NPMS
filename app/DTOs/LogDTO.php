@@ -10,6 +10,7 @@ class LogDTO extends Model
     public string $UserId;
     public string $Username;
     public string $LogDate;
+    public string $PersianLogDate;
     public string $IP;
     public string $LogTime;
     public string $ActionId;

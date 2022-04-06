@@ -62,14 +62,14 @@
                                             style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>ردیف</th>
+                                                    {{-- <th>ردیف</th> --}}
                                                     <th>عنوان یگان</th>
                                                     <th>عملیات</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>ردیف</th>
+                                                    {{-- <th>ردیف</th> --}}
                                                     <th>عنوان یگان</th>
                                                     <th>عملیات</th>
                                                 </tr>
@@ -77,7 +77,7 @@
                                             <tbody>
                                                 @foreach ($Units as $key => $unit)
                                                     <tr>
-                                                        <td>{{ $key + 1 }}</td>
+                                                        {{-- <td>{{ $key + 1 }}</td> --}}
                                                         <td>{{ $unit->Title }}</td>
                                                         <td>
                                                             @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -165,7 +165,7 @@
                                             style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>ردیف</th>
+                                                    {{-- <th>ردیف</th> --}}
                                                     <th>یگان</th>
                                                     <th>عنوان گروه</th>
                                                     <th>عملیات</th>
@@ -173,7 +173,7 @@
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                    <th>ردیف</th>
+                                                    {{-- <th>ردیف</th> --}}
                                                     <th>یگان</th>
                                                     <th>عنوان گروه</th>
                                                     <th>عملیات</th>
@@ -182,7 +182,7 @@
                                             <tbody>
                                                 @foreach ($UnitGroups as $key => $unitgroup)
                                                     <tr>
-                                                        <td>{{ $key + 1 }}</td>
+                                                        {{-- <td>{{ $key + 1 }}</td> --}}
                                                         <td>{{ $Units->Where('NidUnit', '=', $unitgroup->UnitId)->firstOrFail()->Title }}
                                                         </td>
                                                         <td>{{ $unitgroup->Title }}</td>
@@ -269,14 +269,14 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان مقطع تحصیلی</th>
                                                         <th>عملیات</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان مقطع تحصیلی</th>
                                                         <th>عملیات</th>
                                                     </tr>
@@ -284,13 +284,13 @@
                                                 <tbody>
                                                     @foreach ($Grades as $key => $grade)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $grade->SettingTitle }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
                                                                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 6)->pluck('rowValue')[0])[2] == 1)
                                                                         <button class="btn btn-danger"
-                                                                            onclick="DeleteModal(3,{{ $grade->NidSetting }})">حذف</button>
+                                                                            onclick="DeleteModal(3,'{{ $grade->NidSetting }}')">حذف</button>
                                                                     @endif
                                                                 @endif
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -362,14 +362,14 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان رشته تحصیلی</th>
                                                         <th>عملیات</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان رشته تحصیلی</th>
                                                         <th>عملیات</th>
                                                     </tr>
@@ -377,7 +377,7 @@
                                                 <tbody>
                                                     @foreach ($Majors as $key => $major)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $major->Title }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -468,7 +468,7 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>رشته تحصیلی</th>
                                                         <th>عنوان گرایش</th>
                                                         <th>عملیات</th>
@@ -476,7 +476,7 @@
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>رشته تحصیلی</th>
                                                         <th>عنوان گرایش</th>
                                                         <th>عملیات</th>
@@ -573,14 +573,14 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان دانشکده</th>
                                                         <th>عملیات</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان دانشکده</th>
                                                         <th>عملیات</th>
                                                     </tr>
@@ -588,7 +588,7 @@
                                                 <tbody>
                                                     @foreach ($Colleges as $key => $college)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $college->SettingTitle }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -674,14 +674,14 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان وضعیت خدمتی</th>
                                                         <th>عملیات</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان وضعیت خدمتی</th>
                                                         <th>عملیات</th>
                                                     </tr>
@@ -689,7 +689,7 @@
                                                 <tbody>
                                                     @foreach ($MillitaryStatuses as $key => $millit)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $millit->SettingTitle }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -775,14 +775,14 @@
                                                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان نوع همکاری</th>
                                                         <th>عملیات</th>
                                                     </tr>
                                                 </thead>
                                                 <tfoot>
                                                     <tr>
-                                                        <th>ردیف</th>
+                                                        {{-- <th>ردیف</th> --}}
                                                         <th>عنوان نوع همکاری</th>
                                                         <th>عملیات</th>
                                                     </tr>
@@ -790,7 +790,7 @@
                                                 <tbody>
                                                     @foreach ($CollaborationTypes as $key => $collab)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $collab->SettingTitle }}</td>
                                                             <td>
                                                                 @if (in_array('6', $sharedData['UserAccessedEntities']))
@@ -844,10 +844,18 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">آیا برای حذف اطمینان دارید ؟</div>
+                <div class="modal-body">
+                    <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;text-align: right;">
+                        آیا برای حذف اطمینان دارید ؟
+                    </p>
+                </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">خیر</button>
-                    <a class="btn btn-primary" id="btnDeleteModalSubmit" href="#">بله</a>
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;"
+                            id="btnDeleteModalSubmit">بلی</button>
+                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
+                            data-dismiss="modal" id="btnCancel">خیر</button>
+                    </div>
                     <input type="text" id="CurrentDeleteNid" value="" hidden />
                     <input type="text" id="CurrentDeleteTypo" value="" hidden />
                 </div>

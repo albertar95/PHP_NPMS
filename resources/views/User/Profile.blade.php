@@ -30,7 +30,7 @@
                                 <label>نام کاربری : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->Username }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->Username }}</label>
                             </div>
                         </div>
                         <div class="form-group row" style="text-align:right;">
@@ -38,13 +38,13 @@
                                 <label>نام : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->FirstName }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->FirstName }}</label>
                             </div>
                             <div class="col-sm-2" style="padding:.5rem;">
                                 <label>نام خانوادگی : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->LastName }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->LastName }}</label>
                             </div>
                         </div>
                         <div class="form-group row" style="text-align:right;">
@@ -57,14 +57,14 @@
                                 <label>تاریخ ایجاد کاربر : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->CreateDate }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->CreateDate }}</label>
                             </div>
                             <div class="col-sm-2" style="padding:.5rem;">
                                 <label>تاریخ آخرین ورود به سیستم : </label>
                             </div>
                             <div class="col-sm-4">
                                 @if (!empty($Users->LastLoginDate))
-                                    <label class="form-control">{{ $Users->LastLoginDate }}</label>
+                                    <label style="height: auto;" class="form-control">{{ $Users->LastLoginDate }}</label>
                                 @endif
                             </div>
                         </div>
@@ -73,13 +73,13 @@
                                 <label>نقش کاربر : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->RoleTitle }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->RoleTitle }}</label>
                             </div>
                             <div class="col-sm-2" style="padding:.5rem;">
                                 <label>تعداد کلمه عبور اشتباه وارد شده : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label class="form-control">{{ $Users->IncorrectPasswordCount }}</label>
+                                <label style="height: auto;" class="form-control">{{ $Users->IncorrectPasswordCount }}</label>
                             </div>
                         </div>
                         <div class="form-group row" style="text-align:right;">
@@ -88,11 +88,11 @@
                             </div>
                             <div class="col-sm-4">
                                 @if ($Users->IsDisabled)
-                                    <label class="form-control">غیر فعال</label>
+                                    <label style="height: auto;" class="form-control">غیر فعال</label>
                                 @elseif ($Users->IsLockedOut)
-                                    <label class="form-control">کاربر تعلیق شده</label>
+                                    <label style="height: auto;" class="form-control">کاربر تعلیق شده</label>
                                 @elseif (!$Users->IsDisabled)
-                                    <label class="form-control">فعال</label>
+                                    <label style="height: auto;" class="form-control">فعال</label>
                                 @endforelse
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                                     <tbody>
                                         @foreach ($logs as $lg)
                                             <tr>
-                                                <td>{{ $lg->LogDate ?? '' }}</td>
+                                                <td>{{ $lg->PersianLogDate ?? '' }}</td>
                                                 <td>{{ $lg->LogTime ?? '' }}</td>
                                                 <td>{{ $lg->Username ?? '' }}</td>
                                                 <td>{{ $lg->ActionName ?? '' }}</td>

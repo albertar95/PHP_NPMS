@@ -47,18 +47,21 @@
                                                 انتخاب تصویر کاربر
                                             </label>
                                             <p id="UploadMessage" style="text-align:center;color:tomato;" hidden></p>
-                                            <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                            <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                 id="uploadedframe" hidden>
-                                                <img src="" id="uploadedImage" style="width:100%;height:200px;" hidden />
+                                                <a class="remove-image" id="btnDeleteImage" href="#"
+                                                    style="display: inline;">&#215;</a>
+                                                <img src="" id="uploadedImage" hidden />
                                             </div>
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             {{-- <label>نقش کاربر : </label> --}}
-                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId" placeholder="نقش کاربر"
-                                                name="RoleId" style="padding:0 0 0 .75rem;">
+                                            <select class="form-control allWidth" data-ng-style="btn-primary" id="RoleId"
+                                                placeholder="نقش کاربر" name="RoleId" style="padding:0 0 0 .75rem;">
                                                 <option value="0" selected>نقش کاربر</option>
                                                 @foreach ($Roles as $rls)
-                                                    <option value="{{ $rls->NidRole }}" data-tokens="{{ $rls->Title }}">{{ $rls->Title }}</option>
+                                                    <option value="{{ $rls->NidRole }}" data-tokens="{{ $rls->Title }}">
+                                                        {{ $rls->Title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -67,8 +70,8 @@
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                             <button type="submit" id="btnSubmit" class="btn btn-primary btn-user btn-block">
-                                            ذخیره اطلاعات
-                                        </button>
+                                                ذخیره اطلاعات
+                                            </button>
                                         </div>
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                     </div>
@@ -77,12 +80,13 @@
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                             @if (in_array('3', $sharedData['UserAccessedEntities']))
-                                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
-                                                <a href="{{ route('user.Users') }}" class="btn btn-outline-secondary btn-user btn-block">
-                                                    لیست کاربران
-                                                </a>
+                                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
+                                                    <a href="{{ route('user.Users') }}"
+                                                        class="btn btn-outline-secondary btn-user btn-block">
+                                                        لیست کاربران
+                                                    </a>
+                                                @endif
                                             @endif
-                                        @endif
                                         </div>
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                     </div>
@@ -111,7 +115,7 @@
         </div>
     </div>
 @section('styles')
-<title>سامانه مدیریت تحقیقات - ایجاد کاربر</title>
+    <title>سامانه مدیریت تحقیقات - ایجاد کاربر</title>
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -126,7 +130,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitadduser',
+                        url: '{{ URL::to('/') }}' + '/submitadduser',
                         type: 'post',
                         datatype: 'json',
                         data: $("#AddUserForm").serialize(),
@@ -144,7 +148,7 @@
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('src', '');
                             window.setTimeout(function() {
-                                window.location.href = '{{URL::to('/')}}' + '/users';
+                                window.location.href = '{{ URL::to('/') }}' + '/users';
                             }, 3000);
                         },
                         error: function(response) {
@@ -172,6 +176,30 @@
                     }, 5000);
                     ValiditiyMessage = "";
                 }
+            });
+            $("#btnDeleteImage").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ URL::to('/') }}' + '/deleteuploadedimage/' + $("#ProfilePicture")
+                        .val(),
+                    type: 'post',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#ProfilePicture").val('');
+                            $("#uploadedframe").attr('hidden', 'hidden');
+                            $("#uploadedImage").attr('hidden', 'hidden');
+                        }else
+                        {
+                            $("#UploadMessage").text('خطا در حذف فایل')
+                            $("#UploadMessage").removeAttr('hidden');
+                        }
+                    },
+                    error: function() {
+                        $("#UploadMessage").text('خطا در حذف فایل')
+                        $("#UploadMessage").removeAttr('hidden');
+                    }
+                });
             });
         });
 

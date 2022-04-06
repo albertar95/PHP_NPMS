@@ -360,27 +360,28 @@ class ReportController extends Controller
     }
     public function DownloadStatisticsReport(Request $report) //string $NidReport,array $PrameterKeys,array $ParameterValues,array $OutPutValues
     {
-        try {
-            $api = new NPMSController();
-            $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
-            $OutputKey = collect($report->OutPutValues);
-            $Scholars = $reportresult->Scholars;
-            $Projects = $reportresult->Projects;
-            $Users = $reportresult->Users;
-            $ReportName = $reportresult->ReportName;
-            $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
-            $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
-            $ConfidentLevel = 0;
-            if (($Scholars->count() + $Projects->count() + $Users->count()) > 2500) {
-                try {
-                    ini_set("pcre.backtrack_limit", "100000000");
-                } catch (\Throwable $th) {
-                    //throw $th;
-                }
+        $api = new NPMSController();
+        $reportresult = $api->GetStatisticsReport($report->NidReport, $report->PrameterKeys, $report->ParameterValues);
+        $OutputKey = collect($report->OutPutValues);
+        $Scholars = $reportresult->Scholars;
+        $Projects = $reportresult->Projects;
+        $Users = $reportresult->Users;
+        $ReportName = $reportresult->ReportName;
+        $ReportDate = substr(new Verta(Carbon::now()), 0, 10);
+        $ReportTime = substr(new Verta(Carbon::now()), 10, 10);
+        $ConfidentLevel = 0;
+        if (($Scholars->count() + $Projects->count() + $Users->count()) > 2500) {
+            try {
+                ini_set("pcre.backtrack_limit", "100000000");
+            } catch (\Throwable $th) {
+                //throw $th;
             }
-            $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime', 'ConfidentLevel'));
-            $api->AddLog(auth()->user(), $report->ip(), 29, 0, 3, 2, $ReportName);
-            return $pdf->stream($ReportName . '.pdf');
+        }
+        $pdf = PDF::loadView('Report._DownloadReportResult', compact('Scholars', 'Projects', 'Users', 'OutputKey', 'ReportName', 'ReportDate', 'ReportTime', 'ConfidentLevel'));
+        $api->AddLog(auth()->user(), $report->ip(), 29, 0, 3, 2, $ReportName);
+        return response()->download($pdf->download());
+        try {
+
             // return view('Report._DownloadReportResult',compact('Scholars','Projects','Users','OutputKey','ReportName','ReportDate','ReportTime'));
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
@@ -433,7 +434,7 @@ class ReportController extends Controller
             }
             $pdf = PDF::loadView('Report._DownloadActivityLogReport', compact('logs', 'ReportDate', 'ReportTime', 'ConfidentLevel'));
             $api->AddLog(auth()->user(), $report->ip(), 31, 0, 3, 2, '');
-            return $pdf->stream('userActivityLog.pdf');
+            return response()->download($pdf->download());
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

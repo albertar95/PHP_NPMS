@@ -105,15 +105,19 @@
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             @if (!empty($User->ProfilePicture))
-                                                <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                     id="uploadedframe">
+                                                    <a class="remove-image" id="btnDeleteImage" href="#"
+                                                        style="display: inline;">&#215;</a>
                                                     <img src="/storage/images/{{ $User->ProfilePicture }}"
-                                                        id="uploadedImage" style="width:100%;height:200px;" />
+                                                        id="uploadedImage" />
                                                 </div>
                                             @else
-                                                <div class="frame" style="margin:.5rem;width:50%;margin-left:25%;"
+                                                <div class="image-area" style="margin:.5rem;margin-right:25%;"
                                                     id="uploadedframe" hidden>
-                                                    <img src="" id="uploadedImage" style="width:100%;height:200px;" />
+                                                    <a class="remove-image" id="btnDeleteImage" href="#"
+                                                        style="display: inline;">&#215;</a>
+                                                    <img src="" id="uploadedImage" />
                                                 </div>
                                             @endforelse
                                         </div>
@@ -138,8 +142,9 @@
                                         </div>
                                         <div class="col-sm-6" style="display:flex;">
                                             <a data-toggle="modal" data-target="#UserPasswordModal"
-                                                class="btn btn-outline-primary btn-block" style="margin-right: 2rem;margin-left: 2rem;"
-                                                href="#"><i class="fa fa-lock"></i> تغییر کلمه عبور</a>
+                                                class="btn btn-outline-primary btn-block"
+                                                style="margin-right: 2rem;margin-left: 2rem;" href="#"><i
+                                                    class="fa fa-lock"></i> تغییر کلمه عبور</a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -218,7 +223,7 @@
         </div>
     </div>
 @section('styles')
-<title>سامانه مدیریت تحقیقات - ویرایش کاربر</title>
+    <title>سامانه مدیریت تحقیقات - ویرایش کاربر</title>
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -227,6 +232,37 @@
             window.setTimeout(function() {
                 $("#errorAlert2").attr('hidden', 'hidden')
             }, 10000);
+            $("#btnDeleteImage").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ URL::to('/') }}' + '/deleteuploadedimage/' + $("#ProfilePicture")
+                        .val(),
+                    type: 'post',
+                    datatype: 'json',
+                    success: function(result) {
+                        if (result.HasValue) {
+                            $("#ProfilePicture").val('');
+                            $("#uploadedframe").attr('hidden', 'hidden');
+                            $("#uploadedImage").attr('hidden', 'hidden');
+                            $.ajax({
+                                url: '{{ URL::to('/') }}' + '/deleteuserprofile/' + $("#NidUser").val(),
+                                type: 'post',
+                                datatype: 'json',
+                                success: function(result) {},
+                                error: function() {}
+                            });
+                        } else {
+                            $("#UploadMessage").text('خطا در حذف فایل')
+                            $("#UploadMessage").removeAttr('hidden');
+                        }
+                    },
+                    error: function() {
+                        $("#UploadMessage").text('خطا در حذف فایل')
+                        $("#UploadMessage").removeAttr('hidden');
+                    }
+                });
+
+            });
         });
 
         function ChangePassword() {
@@ -238,7 +274,8 @@
                         }
                     });
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/submitchangepassword/' + $("#NidUser").val() + '/' + $("#NewPassword").val(),
+                        url: '{{ URL::to('/') }}' + '/submitchangepassword/' + $("#NidUser").val() + '/' + $(
+                            "#NewPassword").val(),
                         type: 'post',
                         datatype: 'json',
                         success: function(result) {
@@ -250,21 +287,28 @@
                                     $("#successAlert").attr('hidden', 'hidden')
                                 }, 10000);
                             } else {
-                                if(result.AltProp == "1")
-                                {
-                                $("#ErrorMessage").text('کلمه عبور جدید قبلا استفاده شده است.لطفا کلمه عبور دیگری انتخاب نمایید');
-                                $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
-                                }else if(result.AltProp == "3")
-                                {
-                                $("#ErrorMessage").text('کلمه عبور جدید با خط مشی تعریف شده در سامانه مطابقت ندارد.لطفا کلمه عبور قوی تر وارد نمایید');
-                                $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
-                                }else
-                                {
-                                $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
-                                $("#errorAlert").removeAttr('hidden');
-                                window.setTimeout(function () { $("#errorAlert").attr('hidden', 'hidden') }, 10000);
+                                if (result.AltProp == "1") {
+                                    $("#ErrorMessage").text(
+                                        'کلمه عبور جدید قبلا استفاده شده است.لطفا کلمه عبور دیگری انتخاب نمایید'
+                                    );
+                                    $("#errorAlert").removeAttr('hidden');
+                                    window.setTimeout(function() {
+                                        $("#errorAlert").attr('hidden', 'hidden')
+                                    }, 10000);
+                                } else if (result.AltProp == "3") {
+                                    $("#ErrorMessage").text(
+                                        'کلمه عبور جدید با خط مشی تعریف شده در سامانه مطابقت ندارد.لطفا کلمه عبور قوی تر وارد نمایید'
+                                    );
+                                    $("#errorAlert").removeAttr('hidden');
+                                    window.setTimeout(function() {
+                                        $("#errorAlert").attr('hidden', 'hidden')
+                                    }, 10000);
+                                } else {
+                                    $("#ErrorMessage").text('خطا در سرور.لطفا مجدد امتحان کنید');
+                                    $("#errorAlert").removeAttr('hidden');
+                                    window.setTimeout(function() {
+                                        $("#errorAlert").attr('hidden', 'hidden')
+                                    }, 10000);
                                 }
                             }
                         },

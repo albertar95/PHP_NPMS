@@ -30,7 +30,7 @@
                                     <tbody>
                                         @foreach ($logs as $lg)
                                             <tr>
-                                                <td>{{ $lg->LogDate ?? '' }}</td>
+                                                <td>{{ $lg->PersianLogDate ?? '' }}</td>
                                                 <td>{{ $lg->LogTime ?? '' }}</td>
                                                 <td>{{ $lg->Username ?? '' }}</td>
                                                 <td>{{ $lg->ActionName ?? '' }}</td>

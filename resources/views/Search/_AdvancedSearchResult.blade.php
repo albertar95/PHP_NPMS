@@ -183,14 +183,14 @@
                 style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>ردیف</th>
+                        {{-- <th>ردیف</th> --}}
                         <th>نوع</th>
                         <th>عنوان</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>ردیف</th>
+                        {{-- <th>ردیف</th> --}}
                         <th>نوع</th>
                         <th>عنوان</th>
                     </tr>
@@ -198,7 +198,7 @@
                 <tbody>
                     @foreach ($BaseInfo->sortBy('SettingKey') as $key => $bi)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            {{-- <td>{{ $key + 1 }}</td> --}}
                             @switch ($bi->SettingKey)
                                 @case ('CollaborationType')
                                     <td>نوع همکاری</td>

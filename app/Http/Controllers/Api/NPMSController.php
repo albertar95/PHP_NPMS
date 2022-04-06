@@ -37,6 +37,7 @@ use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
@@ -144,11 +145,11 @@ class NPMSController extends Controller
             return null;
         }
     }
-    public function GetAllScholarLists(int $Pagesize = 10,bool $includeConfident = true)
+    public function GetAllScholarLists(int $Pagesize = 10, bool $includeConfident = true)
     {
         try {
             $repo = new ScholarRepository(new Scholars());
-            return $repo->GetScholarList($Pagesize,$includeConfident);
+            return $repo->GetScholarList($Pagesize, $includeConfident);
         } catch (\Throwable $th) {
             return null;
         }
@@ -407,6 +408,13 @@ class NPMSController extends Controller
         } catch (\Exception) {
         }
     }
+    public function HandleUploadedImages()
+    {
+        $repo = new ScholarRepository(new Scholars());
+        $currentImages = $repo->GetUploadedImages();
+        $allFiles = File::allFiles(public_path('storage/Images'));
+        return [$currentImages, $allFiles];
+    }
     public static function AddLog(User $user, string $ip, int $action, int $status, int $importance, int $confident, string $description = "")
     {
         try {
@@ -447,11 +455,11 @@ class NPMSController extends Controller
             return null;
         }
     }
-    public static function GetCurrentUserLogReport(string $NidUser,int $pagesize = 200)
+    public static function GetCurrentUserLogReport(string $NidUser, int $pagesize = 200)
     {
         try {
             $repo = new LogRepository();
-            return $repo->CurrentUserLogReport($NidUser,$pagesize);
+            return $repo->CurrentUserLogReport($NidUser, $pagesize);
         } catch (\Throwable $th) {
             return null;
         }
@@ -748,11 +756,24 @@ class NPMSController extends Controller
             return null;
         }
     }
+    public function DeleteProfile(string $Nid, int $Typo)
+    {
+        switch ($Typo) {
+            case 1:
+                $repo = new UserRepository(new User());
+                return $repo->DeleteUsersProfile($Nid);
+                break;
+            case 2:
+                $repo = new ScholarRepository(new Scholars());
+                return $repo->DeleteScholarsProfile($Nid);
+                break;
+        }
+    }
     //Project section
-    public function GetAllProjectInitials(int $pagesize = 0,bool $includeConfident = true,int $toskip = 0)
+    public function GetAllProjectInitials(int $pagesize = 0, bool $includeConfident = true, int $toskip = 0)
     {
         $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectInitials($pagesize,$toskip,$includeConfident);
+        return $repo->GetProjectInitials($pagesize, $toskip, $includeConfident);
     }
     public function AddProjectInitial(Request $ProjectInitial, string $NidUser)
     {
@@ -775,14 +796,14 @@ class NPMSController extends Controller
     }
     public function ProjectProgress(Request $project)
     {
+        $repo = new ProjectRepository(new Projects());
+        $repo2 = new AlarmRepository(new Alarms());
+        $project = DataMapper::MapToProject($project);
+        $project->ProjectStatus = $repo->ProjectStatusCalc($project);
+        $res = $repo->UpdateProject($project);
+        $repo2->HandleAlarmsByProjectId($project->NidProject);
+        return $res;
         try {
-            $repo = new ProjectRepository(new Projects());
-            $repo2 = new AlarmRepository(new Alarms());
-            $project = DataMapper::MapToProject($project);
-            $project->ProjectStatus = $repo->ProjectStatusCalc($project);
-            $res = $repo->UpdateProject($project);
-            $repo2->HandleAlarmsByProjectId($project->NidProject);
-            return $res;
         } catch (\Throwable $th) {
             return false;
         }
@@ -1203,12 +1224,12 @@ class NPMSController extends Controller
         }
     }
     //report section
-    public function GetStatisticsReport(string $NidReport, array $paramsKey, array $paramsValue,bool $showConfidents = false)
+    public function GetStatisticsReport(string $NidReport, array $paramsKey, array $paramsValue, bool $showConfidents = false)
     {
         try {
             $repo = new ReportRepository(new Reports());
             // $reportraw = DataMapper::MapToReportRawData($reportraw);
-            return $repo->StatisticsReport($NidReport, $paramsKey, $paramsValue,$showConfidents);
+            return $repo->StatisticsReport($NidReport, $paramsKey, $paramsValue, $showConfidents);
         } catch (\Throwable $th) {
             return null;
         }
