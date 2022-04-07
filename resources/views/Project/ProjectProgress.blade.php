@@ -69,7 +69,7 @@
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <select class="form-control allWidth" data-ng-style="btn-primary" name="UnitId"
                                                 id="UnitId" style="padding:0 .75rem;" placeholder="انتخاب یگان">
-                                                <option value="0" disabled>انتخاب یگان</option>
+                                                <option value="0" disabled>انتخاب یگان کاربر</option>
                                                 @foreach ($Units->sortBy('Title') as $uni)
                                                     @if ($uni->NidUnit == $Project->UnitId)
                                                         <option value="{{ $uni->NidUnit }}" selected

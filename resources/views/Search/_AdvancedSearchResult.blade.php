@@ -1,23 +1,4 @@
-<div class="form-group row">
-    <button class="btn btn-danger btn-icon-split" style="margin:5px;" onclick="ExportResult(1)">
-        <span class="icon text-white-50">
-            <i class="fas fa-file-pdf"></i>
-        </span>
-        <span class="text">
-            خروجی
-            pdf
-        </span>
-    </button>
-    <button class="btn btn-primary btn-icon-split" style="margin:5px;" onclick="ExportResult(3)">
-        <span class="icon text-white-50">
-            <i class="fas fa-print"></i>
-        </span>
-        <span class="text">
-            پرینت
-        </span>
-    </button>
-    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2" hidden>لطفا منتظر بمانید</p>
-</div>
+
 @if (in_array('2', $sharedData['UserAccessedEntities']))
     <h3 style="text-align: right;">طرح ها</h3>
     @if ($Projects->count() > 0)

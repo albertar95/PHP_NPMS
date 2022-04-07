@@ -36,7 +36,23 @@
                                                 <td>{{ $lg->ActionName ?? '' }}</td>
                                                 <td>{{ $lg->Description ?? '' }}</td>
                                                 <td>{{ $lg->IP ?? '' }}</td>
-                                                <td>{{ $lg->ImportanceLevel ?? '' }}</td>
+                                                @switch($lg->ImportanceLevel)
+                                                    @case(1)
+                                                        <td>عادی</td>
+                                                    @break
+
+                                                    @case(2)
+                                                        <td>مهم</td>
+                                                    @break
+
+                                                    @case(3)
+                                                        <td>خیلی مهم</td>
+                                                    @break
+
+                                                    @default
+                                                        <td></td>
+                                                @endswitch
+                                                {{-- <td>{{ $lg->ImportanceLevel ?? '' }}</td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -52,46 +68,46 @@
         </div>
     </div>
 
-@section('styles')
-    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <title>سامانه مدیریت تحقیقات - گزارش کاربری</title>
-@endsection
-@section('scripts')
-    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#userlogdataTable').DataTable({
-                "order": [
-                    [0, "desc"],
-                    [1, "desc"]
-                ],
-            });
+    @section('styles')
+        <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+        <title>سامانه مدیریت تحقیقات - گزارش کاربری</title>
+    @endsection
+    @section('scripts')
+        <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+        <script type="text/javascript">
+            $(function() {
+                $('#userlogdataTable').DataTable({
+                    "order": [
+                        [0, "desc"],
+                        [1, "desc"]
+                    ],
+                });
 
-            $("#btnMorePage").click(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '{{ URL::to('/') }}' + '/pagination/5/' + $("#LoadCount").val(),
-                    type: 'get',
-                    datatype: 'json',
-                    success: function(result) {
-                        if (result.HasValue == true) {
-                            $("#TableContainer").html(result.Html);
-                            $('#userlogdataTable').DataTable({
-                                "order": [
-                                    [0, "desc"],
-                                    [1, "desc"]
-                                ],
-                            });
-                        } else {
-                            $("#btnMorePage").attr('hidden', 'hidden');
-                        }
-                    },
-                    error: function() {}
+                $("#btnMorePage").click(function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '{{ URL::to('/') }}' + '/pagination/5/' + $("#LoadCount").val(),
+                        type: 'get',
+                        datatype: 'json',
+                        success: function(result) {
+                            if (result.HasValue == true) {
+                                $("#TableContainer").html(result.Html);
+                                $('#userlogdataTable').DataTable({
+                                    "order": [
+                                        [0, "desc"],
+                                        [1, "desc"]
+                                    ],
+                                });
+                            } else {
+                                $("#btnMorePage").attr('hidden', 'hidden');
+                            }
+                        },
+                        error: function() {}
+                    });
                 });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection
 @endsection

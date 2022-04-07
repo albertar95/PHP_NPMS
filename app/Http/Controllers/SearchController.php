@@ -159,6 +159,7 @@ class SearchController extends Controller
             $Scholars = $response[0];
             $Users = $response[2];
             $BaseInfo = $response[3];
+            $exportOptions = $SearchInputs->ExportOptions;
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
             $ConfidentLevel = 0;
@@ -170,7 +171,7 @@ class SearchController extends Controller
                     //throw $th;
                 }
             }
-            $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel'));
+            $pdf = PDF::loadView('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel','exportOptions'));
             $api->AddLog(auth()->user(),$SearchInputs->ip(),34,0,3,1,"");
             return response()->download($pdf->download());
         } catch (\Exception $e) {

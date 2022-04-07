@@ -1,6 +1,6 @@
 <input type="number" value="{{ $txtLoadCount }}" id="LoadCount" hidden>
-<table class="table table-bordered" id="userlogdataTable"
-    style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+<table class="table table-bordered" id="userlogdataTable" style="width:100%;direction:rtl;text-align:center;"
+    cellspacing="0">
     <thead>
         <tr>
             <th>تاریخ</th>
@@ -21,7 +21,23 @@
                 <td>{{ $lg->ActionName ?? '' }}</td>
                 <td>{{ $lg->Description ?? '' }}</td>
                 <td>{{ $lg->IP ?? '' }}</td>
-                <td>{{ $lg->ImportanceLevel ?? '' }}</td>
+                @switch($lg->ImportanceLevel)
+                    @case(1)
+                        <td>عادی</td>
+                    @break
+
+                    @case(2)
+                        <td>مهم</td>
+                    @break
+
+                    @case(3)
+                        <td>خیلی مهم</td>
+                    @break
+
+                    @default
+                        <td></td>
+                @endswitch
+                {{-- <td>{{ $lg->ImportanceLevel ?? '' }}</td> --}}
             </tr>
         @endforeach
     </tbody>

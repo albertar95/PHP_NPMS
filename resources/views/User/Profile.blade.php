@@ -64,7 +64,8 @@
                             </div>
                             <div class="col-sm-4">
                                 @if (!empty($Users->LastLoginDate))
-                                    <label style="height: auto;" class="form-control">{{ $Users->LastLoginDate }}</label>
+                                    <label style="height: auto;"
+                                        class="form-control">{{ $Users->LastLoginDate }}</label>
                                 @endif
                             </div>
                         </div>
@@ -79,7 +80,8 @@
                                 <label>تعداد کلمه عبور اشتباه وارد شده : </label>
                             </div>
                             <div class="col-sm-4">
-                                <label style="height: auto;" class="form-control">{{ $Users->IncorrectPasswordCount }}</label>
+                                <label style="height: auto;"
+                                    class="form-control">{{ $Users->IncorrectPasswordCount }}</label>
                             </div>
                         </div>
                         <div class="form-group row" style="text-align:right;">
@@ -188,7 +190,23 @@
                                                 <td>{{ $lg->ActionName ?? '' }}</td>
                                                 <td>{{ $lg->Description ?? '' }}</td>
                                                 <td>{{ $lg->IP ?? '' }}</td>
-                                                <td>{{ $lg->ImportanceLevel ?? '' }}</td>
+                                                @switch($lg->ImportanceLevel)
+                                                    @case(1)
+                                                        <td>عادی</td>
+                                                    @break
+
+                                                    @case(2)
+                                                        <td>مهم</td>
+                                                    @break
+
+                                                    @case(3)
+                                                        <td>خیلی مهم</td>
+                                                    @break
+
+                                                    @default
+                                                        <td></td>
+                                                @endswitch
+                                                {{-- <td>{{ $lg->ImportanceLevel ?? '' }}</td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -212,142 +230,143 @@
                 <div class="collapse" style="padding:.75rem;" id="collapsePermissions">
                     <div class="card-body">
                         <div class="table-responsive" dir="ltr">
-                        <table class="table table-bordered" id="permdataTable" cellspacing="0" style="width:100%;direction:rtl;text-align:center;">
-                            <thead>
-                                <tr>
-                                    <th>نام نقش / کاربر</th>
-                                    <th>نام موجودیت</th>
-                                    <th>دسترسی ایجاد</th>
-                                    <th>دسترسی ویرایش</th>
-                                    <th>دسترسی حذف</th>
-                                    <th>دسترسی جزییات</th>
-                                    <th>دسترسی محرمانه</th>
-                                    <th>دسترسی لیست</th>
-                                    <th>دسترسی چاپ</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>نام نقش / کاربر</th>
-                                    <th>نام موجودیت</th>
-                                    <th>دسترسی ایجاد</th>
-                                    <th>دسترسی ویرایش</th>
-                                    <th>دسترسی حذف</th>
-                                    <th>دسترسی جزییات</th>
-                                    <th>دسترسی محرمانه</th>
-                                    <th>دسترسی لیست</th>
-                                    <th>دسترسی چاپ</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                @foreach ($Permissions as $perm)
+                            <table class="table table-bordered" id="permdataTable" cellspacing="0"
+                                style="width:100%;direction:rtl;text-align:center;">
+                                <thead>
                                     <tr>
-                                        <td>{{ $perm->RoleTitle }}</td>
-                                        @if ($perm->EntityId == 1)
-                                            <td>محقق</td>
-                                        @elseif($perm->EntityId == 2)
-                                            <td>پروژه</td>
-                                        @elseif($perm->EntityId == 3)
-                                            <td>کاربر</td>
-                                        @elseif($perm->EntityId == 4)
-                                            <td>گزارش</td>
-                                        @elseif($perm->EntityId == 5)
-                                            <td>پیام</td>
-                                        @elseif($perm->EntityId == 6)
-                                            <td>اطلاعات پایه</td>
-                                        @endforelse
-                                        @if ($perm->Create)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->Edit)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->Delete)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->Detail)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->Confident)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->List)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm->Print)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
+                                        <th>نام نقش / کاربر</th>
+                                        <th>نام موجودیت</th>
+                                        <th>دسترسی ایجاد</th>
+                                        <th>دسترسی ویرایش</th>
+                                        <th>دسترسی حذف</th>
+                                        <th>دسترسی جزییات</th>
+                                        <th>دسترسی محرمانه</th>
+                                        <th>دسترسی لیست</th>
+                                        <th>دسترسی چاپ</th>
                                     </tr>
-                                @endforeach
-                                @foreach ($userPermissions as $perm2)
+                                </thead>
+                                <tfoot>
                                     <tr>
-                                        <td>{{ $Users->Username }}</td>
-                                        @if ($perm2->EntityId == 1)
-                                            <td>محقق</td>
-                                        @elseif($perm2->EntityId == 2)
-                                            <td>پروژه</td>
-                                        @elseif($perm2->EntityId == 3)
-                                            <td>کاربر</td>
-                                        @elseif($perm2->EntityId == 4)
-                                            <td>گزارش</td>
-                                        @elseif($perm2->EntityId == 5)
-                                            <td>پیام</td>
-                                        @elseif($perm2->EntityId == 6)
-                                            <td>اطلاعات پایه</td>
-                                        @endforelse
-                                        @if ($perm2->Create)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->Edit)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->Delete)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->Detail)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->Confident)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->List)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
-                                        @if ($perm2->Print)
-                                            <td>دارد</td>
-                                        @else
-                                            <td>ندارد</td>
-                                        @endforelse
+                                        <th>نام نقش / کاربر</th>
+                                        <th>نام موجودیت</th>
+                                        <th>دسترسی ایجاد</th>
+                                        <th>دسترسی ویرایش</th>
+                                        <th>دسترسی حذف</th>
+                                        <th>دسترسی جزییات</th>
+                                        <th>دسترسی محرمانه</th>
+                                        <th>دسترسی لیست</th>
+                                        <th>دسترسی چاپ</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </tfoot>
+                                <tbody>
+                                    @foreach ($Permissions as $perm)
+                                        <tr>
+                                            <td>{{ $perm->RoleTitle }}</td>
+                                            @if ($perm->EntityId == 1)
+                                                <td>محقق</td>
+                                            @elseif($perm->EntityId == 2)
+                                                <td>پروژه</td>
+                                            @elseif($perm->EntityId == 3)
+                                                <td>کاربر</td>
+                                            @elseif($perm->EntityId == 4)
+                                                <td>گزارش</td>
+                                            @elseif($perm->EntityId == 5)
+                                                <td>پیام</td>
+                                            @elseif($perm->EntityId == 6)
+                                                <td>اطلاعات پایه</td>
+                                            @endforelse
+                                            @if ($perm->Create)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->Edit)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->Delete)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->Detail)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->Confident)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->List)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm->Print)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                        </tr>
+                                    @endforeach
+                                    @foreach ($userPermissions as $perm2)
+                                        <tr>
+                                            <td>{{ $Users->Username }}</td>
+                                            @if ($perm2->EntityId == 1)
+                                                <td>محقق</td>
+                                            @elseif($perm2->EntityId == 2)
+                                                <td>پروژه</td>
+                                            @elseif($perm2->EntityId == 3)
+                                                <td>کاربر</td>
+                                            @elseif($perm2->EntityId == 4)
+                                                <td>گزارش</td>
+                                            @elseif($perm2->EntityId == 5)
+                                                <td>پیام</td>
+                                            @elseif($perm2->EntityId == 6)
+                                                <td>اطلاعات پایه</td>
+                                            @endforelse
+                                            @if ($perm2->Create)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->Edit)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->Delete)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->Detail)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->Confident)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->List)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                            @if ($perm2->Print)
+                                                <td>دارد</td>
+                                            @else
+                                                <td>ندارد</td>
+                                            @endforelse
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -356,31 +375,31 @@
     </div>
 
 
-@section('styles')
-    <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <title>سامانه مدیریت تحقیقات - پروفایل</title>
-    <style>
-        label {
-            overflow: hidden;
-        }
+    @section('styles')
+        <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+        <title>سامانه مدیریت تحقیقات - پروفایل</title>
+        <style>
+            label {
+                overflow: hidden;
+            }
 
-    </style>
-@endsection
-@section('scripts')
-    <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#userlogdataTable').DataTable({
-                "order": [
-                    [0, "desc"],
-                    [1, "desc"]
-                ],
+        </style>
+    @endsection
+    @section('scripts')
+        <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ URL('Content/js/demo/datatables-demo.js') }}"></script>
+        <script type="text/javascript">
+            $(function() {
+                $('#userlogdataTable').DataTable({
+                    "order": [
+                        [0, "desc"],
+                        [1, "desc"]
+                    ],
+                });
+                $('#permdataTable').DataTable();
             });
-            $('#permdataTable').DataTable();
-        });
-    </script>
-@endsection
+        </script>
+    @endsection
 
 @endsection

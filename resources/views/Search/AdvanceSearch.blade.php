@@ -105,7 +105,83 @@
         </a>
         <!-- Card Content - Collapse -->
         <div class="collapse show" style="padding:.75rem;" id="collapseSearchResultItems">
-            <div class="card-body" id="Resultwrapper">
+            <div class="card-body">
+                <div class="form-group row" id="ExportDiv" hidden>
+                    <button class="btn btn-danger btn-icon-split" style="margin:5px;" id="btnPdfExport">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span class="text">
+                            خروجی
+                            pdf
+                        </span>
+                    </button>
+                    <button class="btn btn-primary btn-icon-split" style="margin:5px;" onclick="ExportResult(3)">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-print"></i>
+                        </span>
+                        <span class="text">
+                            پرینت
+                        </span>
+                    </button>
+                    <p style="font-size:large;text-align: center;color: lightcoral;margin-top: 0.5rem;" id="waitText2"
+                        hidden>لطفا منتظر بمانید</p>
+                </div>
+                <div id="Resultwrapper"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="ExportModal" tabindex="-1" role="dialog" aria-labelledby="ExportModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ExportModalLabel">خروجی</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="Question" style="margin:0 auto;font-size:xx-large;font-weight:bolder;text-align: right;">
+                        بخش های مورد نظر را انتخاب نمایید
+                    </p>
+                    <div class="col-sm-3" style="display: flex;">
+                        <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbProject" name="cbProject"
+                            class="form-control" value="true" alt="" checked
+                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                        <label for="cbProject" style="margin:.45rem .45rem 0 0">طرح</label>
+                    </div>
+                    <div class="col-sm-3" style="display: flex;">
+                        <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbScholar" name="cbScholar"
+                            class="form-control" value="true" alt="" checked
+                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                        <label for="cbScholar" style="margin:.45rem .45rem 0 0">محقق</label>
+                    </div>
+                    <div class="col-sm-3" style="display: flex;">
+                        <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbUser" name="cbUser"
+                            class="form-control" value="true" alt="" checked
+                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                        <label for="cbUser" style="margin:.45rem .45rem 0 0">کاربر</label>
+                    </div>
+                    <div class="col-sm-3" style="display: flex;">
+                        <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbBase" name="cbBase"
+                            class="form-control" value="true" alt="" checked
+                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                        <label for="cbBase" style="margin:.45rem .45rem 0 0">اطلاعات پایه</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" type="button" style="margin:0 auto;width:15%;"
+                            id="btnExportModalSubmit" onclick="ExportResult(1)">خروجی</button>
+                        <button class="btn btn-danger" type="button" style="margin:0 0 0 35%;width:15%;"
+                            data-dismiss="modal" id="btnCancel">انصراف</button>
+                    </div>
+                    <input type="text" id="ProjectVal" value="1" name="ProjectVal" hidden>
+                    <input type="text" id="ScholarVal" value="1" name="ScholarVal" hidden>
+                    <input type="text" id="UserVal" value="1" name="UserVal" hidden>
+                    <input type="text" id="BaseVal" value="1" name="BaseVal" hidden>
+                </div>
             </div>
         </div>
     </div>
@@ -239,6 +315,38 @@
                 e.preventDefault();
                 SearchThis();
             });
+            $("#cbProject").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#ProjectVal").val(1);
+                } else {
+                    $("#ProjectVal").val(0);
+                }
+            });
+            $("#cbScholar").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#ScholarVal").val(1);
+                } else {
+                    $("#ScholarVal").val(0);
+                }
+            });
+            $("#cbUser").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#UserVal").val(1);
+                } else {
+                    $("#UserVal").val(0);
+                }
+            });
+            $("#cbBase").change(function() {
+                if ($(this).is(':checked')) {
+                    $("#BaseVal").val(1);
+                } else {
+                    $("#BaseVal").val(0);
+                }
+            });
+            $("#btnPdfExport").click(function(e) {
+                e.preventDefault();
+                $("#ExportModal").modal('show')
+            });
         });
 
         function SearchThis() {
@@ -267,7 +375,14 @@
                 success: function(result) {
                     $("#waitText").attr('hidden', 'hidden');
                     if (result.HasValue)
+                    {
                         $("#Resultwrapper").html(result.Html);
+                        $("#ExportDiv").removeAttr('hidden')
+                    }else
+                    {
+                        $("#ExportDiv").attr('hidden','hidden')
+                    }
+
                     $("#projectdataTable").dataTable();
                     $("#scholardataTable").dataTable();
                     $("#userdataTable").dataTable();
@@ -275,9 +390,9 @@
                 },
                 error: function() {
                     $("#waitText").attr('hidden', 'hidden');
+                    $("#ExportDiv").attr('hidden','hidden')
                 }
             });
-
         }
 
         function ExportResult(typo) {
@@ -310,7 +425,9 @@
                             searchText: stext,
                             Section: document.getElementById("SearchSection").value,
                             SearchBy: document.getElementById("SearchBy").value,
-                            Similar: $("#cbSimilar").val()
+                            Similar: $("#cbSimilar").val(),
+                            ExportOptions: $("#ProjectVal").val() + "," + $("#ScholarVal").val() + "," + $(
+                                "#UserVal").val() + "," + $("#BaseVal").val()
                         },
                         success: function(response) {
                             $("#waitText2").attr('hidden', 'hidden');
@@ -324,6 +441,7 @@
                             $("#waitText2").attr('hidden', 'hidden');
                         }
                     });
+                    $("#ExportModal").modal('hide')
                     break;
                 case 2:
                     $("#waitText2").attr('hidden', 'hidden');

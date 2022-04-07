@@ -32,6 +32,7 @@
         <div style="width: 20%;"></div>
     </div>
     <div style="border: cornflowerblue 2px solid;margin-bottom: 25px;"></div>
+    @if(explode(',',$exportOptions)[0] == 1)
     <h3>طرح ها</h3>
     @if ($Projects->count() > 0)
         <div class="table-responsive" dir="ltr">
@@ -64,6 +65,8 @@
     @else
         <p>موردی یافت نشد</p>
     @endforelse
+    @endif
+    @if(explode(',',$exportOptions)[1] == 1)
     <h3>محققان</h3>
     @if ($Scholars->count() > 0)
         <div class="table-responsive" dir="ltr">
@@ -100,6 +103,8 @@
     @else
         <p>موردی یافت نشد</p>
     @endforelse
+    @endif
+    @if(explode(',',$exportOptions)[2] == 1)
     <h3>کاربران</h3>
     @if ($Users->count() > 0)
         <div class="table-responsive" dir="ltr" id="tableWrapper">
@@ -130,6 +135,8 @@
     @else
         <p>موردی یافت نشد</p>
     @endforelse
+    @endif
+    @if(explode(',',$exportOptions)[3] == 1)
     <h3>اطلاعات پایه</h3>
 
     @if ($BaseInfo->count() > 0)
@@ -170,7 +177,7 @@
     @else
         <p>موردی یافت نشد</p>
     @endforelse
-
+    @endif
 </body>
 
 </html>

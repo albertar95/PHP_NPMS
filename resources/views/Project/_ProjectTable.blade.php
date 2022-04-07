@@ -6,7 +6,7 @@
             <th>شماره پرونده</th>
             <th>نام محقق</th>
             <th>موضوع</th>
-            <th class="priority-1">یگان</th>
+            <th class="priority-1">یگان کاربر</th>
             <th class="priority-2">گروه</th>
             <th class="priority-3">وضعیت</th>
             <th>عملیات</th>
@@ -17,7 +17,7 @@
             <th>شماره پرونده</th>
             <th>نام محقق</th>
             <th>موضوع</th>
-            <th class="priority-1">یگان</th>
+            <th class="priority-1">یگان کاربر</th>
             <th class="priority-2">گروه</th>
             <th class="priority-3">وضعیت</th>
             <th>عملیات</th>
