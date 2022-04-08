@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\DTOs\DataMapper;
 use App\Http\Controllers\Api\NPMSController;
 use App\Http\Requests\ScholarRequest;
+use App\Models\DataFiles;
 use App\Models\Scholars;
+use Carbon\Carbon;
 use Facade\FlareClient\Api;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
 use resources\ViewModels;
 use Resources\ViewModels\ScholarViewModel;
 use Illuminate\Support\Str;
@@ -230,7 +233,46 @@ class ScholarController extends Controller
                         return response()->json($result);
                     }
                     break;
-
+                case '2':
+                    // $validatedData = $request->validate([
+                    //     'files' => 'required',
+                    //     'files.*' => 'mimes:csv,txt,xlx,xls,pdf'
+                    // ]);
+                    $result = new JsonResults();
+                    $api = new NPMSController();
+                    $uploadeds = new Collection();
+                    $Ids = new Collection();
+                    $filenames = new Collection();
+                    $Dpath = '/public/FileUpload/Project/' . time();
+                    File::makeDirectory($Dpath, $mode = 0777, true, true);
+                    if ($file->TotalFiles > 0) {
+                        for ($x = 0; $x < $file->TotalFiles; $x++) {
+                            if ($file->hasFile('files' . $x)) {
+                                $f    = $file->file('files' . $x);
+                                $name = $f->getClientOriginalName();
+                                $path = $f->storeAs($Dpath, $name);
+                                $currentFile = new DataFiles();
+                                $currentFile->NidFile = Str::uuid();
+                                $currentFile->MasterType = 1; //project
+                                $currentFile->FilePath = 'storage/'.substr($path,7,strlen($path) - 7);
+                                $currentFile->FileName = $name;
+                                $currentFile->FileExtension = $f->getClientOriginalExtension();
+                                $currentFile->IsDeleted = 0;
+                                $currentFile->CreateDate = Carbon::now();
+                                $uploadeds->push($currentFile);
+                                $Ids->push($currentFile->NidFile);
+                                $filenames->push('<div class="image-area"><a class="remove-image removeFile" href="#" onclick="btnRemoveFile'."(event)".'" id="'.$currentFile->NidFile.'" style="display: inline;">&#215;</a> <a href="'.URL($currentFile->FilePath).'" target="_blank" style="padding:25px;">'. $name.'</a> </div>');
+                            }
+                        }
+                    }
+                    if ($api->AddDataFiles($uploadeds))
+                        $result->HasValue = true;
+                    else
+                        $result->HasValue = false;
+                    $result->Message = join(',',$Ids->toArray());
+                    $result->AltProp = join(',',$filenames->toArray());
+                    return response()->json($result);
+                    break;
                 default:
                     # code...
                     break;
@@ -238,6 +280,16 @@ class ScholarController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+    public function DeleteThisFile(string $NidFile)
+    {
+        $api = new NPMSController();
+        $file = $api->GetDataFileById($NidFile);
+        File::delete(public_path($file->FilePath));
+        $api->DeleteFile($NidFile);
+        $result = new JsonResults();
+        $result->HasValue = true;
+        return response()->json($result);
     }
     public function DeleteUploadedImage(string $FileName)
     {
@@ -283,7 +335,7 @@ class ScholarController extends Controller
         try {
             $api = new NPMSController();
             $result = new JsonResults();
-            $api->DeleteProfile($NidScholar,2);
+            $api->DeleteProfile($NidScholar, 2);
             $result->HasValue = true;
             // $api->AddLog(auth()->user(), $request->ip(), 39, 0, 3, 3, "حذف دسترسی کاربر موفق");
             return response()->json($result);

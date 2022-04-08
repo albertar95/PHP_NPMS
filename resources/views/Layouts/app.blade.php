@@ -365,12 +365,11 @@
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     گزارش کاربری
                                 </a>
-                                <a class="dropdown-item"
-                                href="{{ URL::to('/usermanual') }}"
-                                style="text-align:right;">
-                                <i class="fas fa-question-circle fa-sm fa-fw mr-2 text-gray-400"></i>
-                                راهنما
-                            </a>
+                                <a class="dropdown-item" href="{{ URL::to('/usermanual') }}"
+                                    style="text-align:right;">
+                                    <i class="fas fa-question-circle fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    راهنما
+                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"
                                     style="text-align:right;">
@@ -486,6 +485,36 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="DeleteFileModal" tabindex="-1" role="dialog" aria-labelledby="DeleteFileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="DeleteFileModalLabel">حذف</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="DetailModalBody">
+                    <input type="text" id="ModalcurrentId" hidden />
+                </div>
+                <p id="DeleteQuestion" style="margin:0 auto;font-size:xx-large;font-weight:bolder;">آیا برای حذف اطمینان
+                    دارید؟</p>
+                <div class="modal-footer">
+                    <div class="col-lg-12" style="display: flex;">
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4">
+                            <button class="btn btn-success" type="button" onclick="deleteFile()"
+                                 id="btnOk">بلی</button>
+                            <button class="btn btn-danger" type="button"
+                                data-dismiss="modal" id="btnCancel">خیر</button>
+                        </div>
+                        <div class="col-lg-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('Layouts.Footer')
     @yield('scripts')
     <script type="text/javascript">
@@ -578,12 +607,98 @@
                         }, 3000);
                     }
                     break;
+                case 2:
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    var formData = new FormData();
+                    let TotalFiles = $('#FileUpload')[0].files.length; //Total files
+                    let files = $('#FileUpload')[0];
+                    for (let i = 0; i < TotalFiles; i++) {
+                        formData.append('files' + i, files.files[i]);
+                    }
+                    formData.append('TotalFiles', TotalFiles);
+                    formData.append('fileType', typo);
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ URL::to('/') }}' + '/uploadthisfile',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result.HasValue) {
+                                window.setTimeout(function() {
+                                    AdvanceInProgressBar(100);
+                                }, 1000);
+                                var prev = $("#FileUploadIds").val().split(',');
+                                var news = result.Message.split(',');
+                                $("#FileUploadIds").val(prev.concat(news).join(','));
+                                var names = result.AltProp.split(',');
+                                // $("#uploadedFileDemo").html('');
+                                $.each(names, function() {
+                                    $("#uploadedFileDemo").append(this);
+                                });
+                                // window.setTimeout(function() {
+                                //     $("#uploadedImage").attr('src', '/storage/images/' + result
+                                //         .Message);
+                                //     $("#uploadedframe").removeAttr('hidden');
+                                //     $("#uploadedImage").removeAttr('hidden');
+                                // }, 3000);
+                            } else {
+                                window.setTimeout(function() {
+                                    $("#FileUploadMessage").removeAttr('hidden');
+                                    $("#FileUploadMessage").text(result.Message);
+                                }, 3000);
+                            }
+                        },
+                        error: function() {
+                            window.setTimeout(function() {
+                                $("#FileUploadMessage").removeAttr('hidden');
+                                $("#FileUploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
+                            }, 3000);
+                        }
+                    });
+                    break;
                 default:
                     break;
             }
             window.setTimeout(function() {
                 $("#UploadModal").modal('hide');
             }, 3000);
+        }
+
+        function btnRemoveFile(e) {
+            e.preventDefault();
+            $("#ModalcurrentId").val(e.target.id);
+            $("#DeleteFileModal").modal('show');
+        }
+
+        function deleteFile() {
+            var current = $("#ModalcurrentId").val();
+            $.ajax({
+                url: '{{ URL::to('/') }}' + '/deletethisfile/' + current,
+                type: 'post',
+                datatype: 'json',
+                success: function(result) {
+                    if (result.HasValue) {
+                        var ids = $("#FileUploadIds").val().split(',');
+                        var newids = [];
+                        $.each(ids, function() {
+                            if (this != current)
+                                newids.push(this);
+                        });
+                        $("#FileUploadIds").val(newids.join(','));
+                        var elem = document.getElementById(current);
+                        elem.parentElement.remove();
+                    }
+                },
+                error: function() {}
+            });
+            $("#DeleteFileModal").modal('hide');
         }
 
         function SearchAll() {

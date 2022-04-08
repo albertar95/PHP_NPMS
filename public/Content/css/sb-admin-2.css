@@ -5870,7 +5870,7 @@ a.badge-dark.focus {
 .image-area {
         position: relative;
         width: 50%;
-        background: #333;
+        background: #fff;
       }
     .image-area img{
         max-width: 100%;

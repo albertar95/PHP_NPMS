@@ -247,7 +247,7 @@
                                                     id="uploadedframe">
                                                     <a class="remove-image" id="btnDeleteImage" href="#"
                                                         style="display: inline;">&#215;</a>
-                                                    <img src="{{ sprintf('/storage/images/%s', $Scholar->ProfilePicture) }}"
+                                                    <img src="/storage/images/{{ $Scholar->ProfilePicture }}"
                                                         id="uploadedImage" />
                                                 </div>
                                             @else

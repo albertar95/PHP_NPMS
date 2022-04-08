@@ -99,6 +99,7 @@ Route::get("majorselectchanged/{NidMajor}",[ScholarController::class,"MajorSelec
 Route::post("submitaddscholar",[ScholarController::class,"SubmitAddScholar"])->name('scholar.SubmitAddScholar');
 Route::post("uploadthisfile",[ScholarController::class,"UploadThisFile"])->name('scholar.UploadThisFile');
 Route::post("deleteuploadedimage/{FileName}",[ScholarController::class,"DeleteUploadedImage"])->name('scholar.DeleteUploadedImage');
+Route::post("deletethisfile/{NidFile}",[ScholarController::class,"DeleteThisFile"])->name('scholar.DeleteThisFile');
 Route::post("deletescholarprofile/{NidScholar}",[ScholarController::class,"DeleteScholarProfile"])->name('scholar.DeleteScholarProfile');
 
 //search routes

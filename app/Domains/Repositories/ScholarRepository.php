@@ -10,6 +10,7 @@ use App\DTOs\projectDTO;
 use App\DTOs\scholarDetailDTO;
 use App\DTOs\scholarDTO;
 use App\DTOs\scholarListDTO;
+use App\Models\DataFiles;
 use App\Models\Majors;
 use App\Models\Oreintations;
 use App\Models\Projects;
@@ -282,6 +283,18 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
                 'ProfilePicture' => ''
             ]
             );
+    }
+    public function AddDataFile(DataFiles $file)
+    {
+        return $file->save();
+    }
+    public function GetDataFile(string $NidFile)
+    {
+        return DataFiles::all()->where('NidFile','=',$NidFile)->firstOrFail();
+    }
+    public function DeleteDataFile(string $NidFile)
+    {
+        DataFiles::where('NidFile',$NidFile)->delete();
     }
 }
 

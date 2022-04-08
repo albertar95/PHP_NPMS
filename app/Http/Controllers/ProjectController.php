@@ -13,6 +13,7 @@ use Dotenv\Util\Str;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use resources\ViewModels\ManageBaseInfoViewModel;
 
 class ProjectController extends Controller
@@ -182,8 +183,9 @@ class ProjectController extends Controller
                     }
                 }
                 $Scholar = $api->GetAllScholarDetails($Project->ScholarId);
+                $datafiles = $api->GetProjectFiles($NidProject);
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, sprintf("جزییات طرح %s", $Project->Subject));
-                return view('Project.ProjectDetail', compact('Project', 'Scholar'));
+                return view('Project.ProjectDetail', compact('Project', 'Scholar','datafiles'));
             } else {
                 return view('errors.401');
             }
@@ -228,8 +230,9 @@ class ProjectController extends Controller
                 $Scholars = $api->GetAllProjectScholars();
                 $UnitGroups = $api->GetAllUnitGroups();
                 $Units = $api->GetAllUnits();
+                $datafiles = $api->GetProjectFiles($NidProject);
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, "پیشرفت طرح");
-                return view('Project.ProjectProgress', compact('Scholars', 'UnitGroups', 'Units', 'Project'));
+                return view('Project.ProjectProgress', compact('Scholars', 'UnitGroups', 'Units', 'Project','datafiles'));
             } else {
                 return view('errors.401');
             }
@@ -266,6 +269,11 @@ class ProjectController extends Controller
             $api = new NPMSController();
             $result = new JsonResults();
             $result->HasValue = $api->DeleteProject($NidProject);
+            $files = $api->GetProjectFiles($NidProject);
+            foreach ($files as $file) {
+                File::delete(public_path($file->FilePath));
+                $api->DeleteFile($file->NidFile);
+            }
             return response()->json($result);
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);

@@ -217,6 +217,22 @@
                                                         شود؟</label>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="file" multiple class="custom-file-input"
+                                                            onchange="UploadFile(2)" id="FileUpload" name="FileUpload">
+                                                        <input type="text" class="custom-file-input" id="FileUploadIds"
+                                                            name="FileUploadIds" hidden>
+                                                        <label class="custom-file-label" for="FileUpload"
+                                                            data-browse="انتخاب فایل ها"
+                                                            style="width:75%;margin:0 auto;">انتخاب فایل ها
+                                                        </label>
+                                                        <p id="FileUploadMessage" style="text-align:center;color:tomato;"
+                                                            hidden></p>
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;" id="uploadedFileDemo">
+                                                    </div>
+                                                </div>
                                                 {{-- <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0"
                                                         style="display:flex;padding-right:10%;">

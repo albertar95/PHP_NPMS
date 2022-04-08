@@ -236,32 +236,32 @@
                                                             id="SecurityLetterDate" name="SecurityLetterDate"
                                                             value="{{ $Project->SecurityLetterDate }}"
                                                             placeholder="تاریخ نامه حفاظت"> --}}
-                                                            <input type="text" class="form-control form-control-user"
+                                                        <input type="text" class="form-control form-control-user"
                                                             id="ThesisDefenceDate" name="ThesisDefenceDate"
                                                             value="{{ $Project->ThesisDefenceDate }}"
                                                             placeholder="تاریخ دفاعیه">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <input type="text" class="form-control form-control-user"
-                                                        id="ThesisDefenceLetterDate" name="ThesisDefenceLetterDate"
-                                                        value="{{ $Project->ThesisDefenceLetterDate }}"
-                                                        placeholder="تاریخ ارسال نامه دفاعیه">
+                                                            id="ThesisDefenceLetterDate" name="ThesisDefenceLetterDate"
+                                                            value="{{ $Project->ThesisDefenceLetterDate }}"
+                                                            placeholder="تاریخ ارسال نامه دفاعیه">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                                         <input type="number" class="form-control form-control-user"
-                                                        id="ReducePeriod" name="ReducePeriod"
-                                                        value="{{ $Project->ReducePeriod }}" placeholder="مدت کسری">
+                                                            id="ReducePeriod" name="ReducePeriod"
+                                                            value="{{ $Project->ReducePeriod }}" placeholder="مدت کسری">
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <textarea class="form-control" id="Commision" name="Commision"
-                                                            placeholder="کمیسیون"
+                                                        <textarea class="form-control" id="Commision" name="Commision" placeholder="کمیسیون"
                                                             rows="5">{{ $Project->Commision }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0"
+                                                        style="display:flex;padding-right:10%;">
                                                         @if (!is_null($Project->HasBookPublish) && $Project->HasBookPublish == true)
                                                             <input type="checkbox"
                                                                 style="width:1rem;margin:unset !important;margin-right:10%;"
@@ -293,32 +293,32 @@
                                                     </div>
                                                     <div class="col-sm-6" style="display:flex;padding-right:10%;">
                                                         @if (!is_null($Project->FinalApprove) && $Project->FinalApprove == true)
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;"
-                                                            id="FinalApprove" name="FinalApprove" class="form-control"
-                                                            value="true" checked
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                            نهایی
-                                                            طرح</label>
-                                                    @elseif(!is_null($Project->FinalApprove) && $Project->FinalApprove == false)
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;"
-                                                            id="FinalApprove" name="FinalApprove" value="false"
-                                                            class="form-control"
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                            نهایی
-                                                            طرح</label>
-                                                    @else
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;"
-                                                            id="FinalApprove" name="FinalApprove" class="form-control"
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                            نهایی
-                                                            طرح</label>
-                                                    @endforelse
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" class="form-control"
+                                                                value="true" checked
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @elseif(!is_null($Project->FinalApprove) && $Project->FinalApprove == false)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" value="false"
+                                                                class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -353,31 +353,60 @@
                                                     </div>
                                                     <div class="col-sm-6" style="display:flex;padding-right:10%;">
                                                         @if (!is_null($Project->IsDisabled) && $Project->IsDisabled == true)
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                            name="IsDisabled" class="form-control" value="true"
-                                                            checked
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                            فعال
-                                                            شود؟</label>
-                                                    @elseif(!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                            name="IsDisabled" value="false" class="form-control"
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                            فعال
-                                                            شود؟</label>
-                                                    @else
-                                                        <input type="checkbox"
-                                                            style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                            name="IsDisabled" class="form-control"
-                                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                        <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                            فعال
-                                                            شود؟</label>
-                                                    @endforelse
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" class="form-control" value="true"
+                                                                checked
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @elseif(!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" value="false" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="file" multiple class="custom-file-input"
+                                                            onchange="UploadFile(2)" id="FileUpload" name="FileUpload">
+                                                        <input type="text" class="custom-file-input" id="FileUploadIds"
+                                                            name="FileUploadIds" hidden>
+                                                        <label class="custom-file-label" for="FileUpload"
+                                                            data-browse="انتخاب فایل ها"
+                                                            style="width:75%;margin:0 auto;">انتخاب فایل ها
+                                                        </label>
+                                                        <p id="FileUploadMessage" style="text-align:center;color:tomato;"
+                                                            hidden></p>
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;"
+                                                        id="uploadedFileDemo">
+                                                        @foreach ($datafiles as $file)
+                                                            {{-- <a href="{{ URL($file->FilePath) }}" target="_blank"
+                                                                style="margin: 5px;">{{ $file->FileName }}</a> --}}
+                                                            <div class="image-area">
+                                                                <a class="remove-image removeFile" href="#"
+                                                                    onclick="btnRemoveFile(event);"
+                                                                    id="{{ $file->NidFile }}"
+                                                                    style="display: inline;">&#215;</a>
+                                                                <a href="{{ URL($file->FilePath) }}" target="_blank"
+                                                                    style="padding: 25px;">{{ $file->FileName }}</a>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                                 {{-- <div class="form-group row">
@@ -394,7 +423,8 @@
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                                            <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block">
+                                            <button type="submit" id="btnSubmit"
+                                                class="btn btn-warning btn-user btn-block">
                                                 ویرایش اطلاعات
                                             </button>
                                         </div>
@@ -664,7 +694,7 @@
                 e.preventDefault();
                 if (CheckInputValidity()) {
                     $.ajax({
-                        url: '{{URL::to('/')}}' + '/updateproject',
+                        url: '{{ URL::to('/') }}' + '/updateproject',
                         type: 'post',
                         datatype: 'json',
                         data: $("#EditProjectForm").serialize(),
@@ -679,7 +709,8 @@
                                 $("#SuccessMessage").text("طرح با موفقیت ویرایش گردید")
                                 $("#successAlert").removeAttr('hidden')
                                 window.setTimeout(function() {
-                                    window.location.href = '{{URL::to('/')}}' + '/projects'
+                                    window.location.href = '{{ URL::to('/') }}' +
+                                        '/projects'
                                 }, 1200);
                             }
                         },

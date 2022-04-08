@@ -201,7 +201,20 @@ class NPMSController extends Controller
             return null;
         }
     }
-
+    public function AddDataFiles(Collection $files)
+    {
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            $res = true;
+            foreach ($files as $file) {
+                if(!$repo->AddDataFile($file))
+                $res = false;
+            }
+            return $res;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
     //user section
     public function AddUser(Request $User)
     {
@@ -769,6 +782,16 @@ class NPMSController extends Controller
                 break;
         }
     }
+    public function DeleteFile(string $NidFile)
+    {
+        $repo = new ScholarRepository(new Scholars());
+        return $repo->DeleteDataFile($NidFile);
+    }
+    public function GetDataFileById(string $NidFile)
+    {
+        $repo = new ScholarRepository(new Scholars());
+        return $repo->GetDataFile($NidFile);
+    }
     //Project section
     public function GetAllProjectInitials(int $pagesize = 0, bool $includeConfident = true, int $toskip = 0)
     {
@@ -798,9 +821,13 @@ class NPMSController extends Controller
     {
         $repo = new ProjectRepository(new Projects());
         $repo2 = new AlarmRepository(new Alarms());
+        $ids = $project->FileUploadIds;
         $project = DataMapper::MapToProject($project);
         $project->ProjectStatus = $repo->ProjectStatusCalc($project);
         $res = $repo->UpdateProject($project);
+        foreach (explode(',',$ids) as $nidfile) {
+            $repo->UpdateProjectDataFile($nidfile,$project->NidProject);
+        }
         $repo2->HandleAlarmsByProjectId($project->NidProject);
         return $res;
         try {
@@ -869,6 +896,7 @@ class NPMSController extends Controller
         try {
             $repo = new ProjectRepository(new Projects());
             $repo2 = new AlarmRepository(new Alarms());
+            $ids = $Project->FileUploadIds;
             $Project->CreateDate = Carbon::now();
             // $tmpPersian = new Verta($Project->CreateDate);
             $Project->PersianCreateDate = strval(verta($Project->CreateDate));
@@ -879,6 +907,9 @@ class NPMSController extends Controller
             $repo->AddProject($Project);
             $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
             $repo->UpdateProject($Project);
+            foreach (explode(',',$ids) as $nidfile) {
+                $repo->UpdateProjectDataFile($nidfile,$Project->NidProject);
+            }
             $repo2->HandleAlarmsByProjectId($Project->NidProject);
             return true;
         } catch (\Throwable $th) {
@@ -891,6 +922,17 @@ class NPMSController extends Controller
             $repo = new ProjectRepository(new Projects());
             return $repo->GetProjectById($NidProject);
         } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public function GetProjectFiles(string $NidProject)
+    {
+        try
+        {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectDataFiles($NidProject);
+        }catch(\Throwable $t)
+        {
             return null;
         }
     }

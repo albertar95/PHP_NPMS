@@ -213,17 +213,18 @@
                                                     <label>تاییدیه حفاظت : </label>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    @if($Scholar->IsSecurityApproved)
-                                                    <label class="form-control">دارد</label>
+                                                    @if ($Scholar->IsSecurityApproved)
+                                                        <label class="form-control">دارد</label>
                                                     @else
-                                                    <label class="form-control">ندارد</label>
+                                                        <label class="form-control">ندارد</label>
                                                     @endforelse
                                                 </div>
                                                 <div class="col-sm-2" style="padding:.5rem;">
                                                     <label>تاریخ نامه حفاظت : </label>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <label class="form-control">{{ $Scholar->SecurityApproveDate }}</label>
+                                                    <label
+                                                        class="form-control">{{ $Scholar->SecurityApproveDate }}</label>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="text-align:right;">
@@ -546,6 +547,21 @@
                                                         @endforelse
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                        <label>فایل ها : </label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        @foreach ($datafiles as $file)
+                                                            <a href="{{ URL($file->FilePath) }}" target="_blank"
+                                                                style="margin: 5px;">{{ $file->FileName }}</a>
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="col-sm-2" style="padding:.5rem;">
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -626,7 +642,7 @@
                 });
                 $.ajax({
                     url: '{{ URL::to('/') }}' + '/printprojectdetail/' + $("#txtNidProject")
-                    .val(),
+                        .val(),
                     type: 'get',
                     datatype: 'json',
                     success: function(result) {
