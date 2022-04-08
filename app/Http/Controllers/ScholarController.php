@@ -325,13 +325,18 @@ class ScholarController extends Controller
     }
     public function DeleteThisFile(string $NidFile)
     {
-        $api = new NPMSController();
-        $file = $api->GetDataFileById($NidFile);
-        File::delete(public_path($file->FilePath));
-        $api->DeleteFile($NidFile);
         $result = new JsonResults();
-        $result->HasValue = true;
-        return response()->json($result);
+        try {
+            $api = new NPMSController();
+            $file = $api->GetDataFileById($NidFile);
+            File::delete(public_path($file->FilePath));
+            $api->DeleteFile($NidFile);
+            $result->HasValue = true;
+            return response()->json($result);
+        } catch (\Throwable $th) {
+            $result->HasValue = false;
+            return response()->json($result);
+        }
     }
     public function DeleteUploadedImage(string $FileName)
     {

@@ -433,10 +433,14 @@ class NPMSController extends Controller
     }
     public function HandleUploadedImages()
     {
-        $repo = new ScholarRepository(new Scholars());
-        $currentImages = $repo->GetUploadedImages();
-        $allFiles = File::allFiles(public_path('storage/Images'));
-        return [$currentImages, $allFiles];
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            $currentImages = $repo->GetUploadedImages();
+            $allFiles = File::allFiles(public_path('storage/Images'));
+            return [$currentImages, $allFiles];
+        } catch (\Throwable $th) {
+            return [];
+        }
     }
     public static function AddLog(User $user, string $ip, int $action, int $status, int $importance, int $confident, string $description = "")
     {
@@ -781,32 +785,48 @@ class NPMSController extends Controller
     }
     public function DeleteProfile(string $Nid, int $Typo)
     {
-        switch ($Typo) {
-            case 1:
-                $repo = new UserRepository(new User());
-                return $repo->DeleteUsersProfile($Nid);
-                break;
-            case 2:
-                $repo = new ScholarRepository(new Scholars());
-                return $repo->DeleteScholarsProfile($Nid);
-                break;
+        try {
+            switch ($Typo) {
+                case 1:
+                    $repo = new UserRepository(new User());
+                    return $repo->DeleteUsersProfile($Nid);
+                    break;
+                case 2:
+                    $repo = new ScholarRepository(new Scholars());
+                    return $repo->DeleteScholarsProfile($Nid);
+                    break;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
     public function DeleteFile(string $NidFile)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->DeleteDataFile($NidFile);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->DeleteDataFile($NidFile);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
     public function GetDataFileById(string $NidFile)
     {
-        $repo = new ScholarRepository(new Scholars());
-        return $repo->GetDataFile($NidFile);
+        try {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetDataFile($NidFile);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     //Project section
     public function GetAllProjectInitials(int $pagesize = 0, bool $includeConfident = true, int $toskip = 0)
     {
-        $repo = new ProjectRepository(new Projects());
-        return $repo->GetProjectInitials($pagesize, $toskip, $includeConfident);
+        try {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->GetProjectInitials($pagesize, $toskip, $includeConfident);
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
     public function AddProjectInitial(Request $ProjectInitial, string $NidUser)
     {
@@ -829,18 +849,18 @@ class NPMSController extends Controller
     }
     public function ProjectProgress(Request $project)
     {
-        $repo = new ProjectRepository(new Projects());
-        $repo2 = new AlarmRepository(new Alarms());
-        $ids = $project->FileUploadIds;
-        $project = DataMapper::MapToProject($project);
-        $project->ProjectStatus = $repo->ProjectStatusCalc($project);
-        $res = $repo->UpdateProject($project);
-        foreach (explode(',',$ids) as $nidfile) {
-            $repo->UpdateDataFileMaster($nidfile,$project->NidProject);
-        }
-        $repo2->HandleAlarmsByProjectId($project->NidProject);
-        return $res;
         try {
+            $repo = new ProjectRepository(new Projects());
+            $repo2 = new AlarmRepository(new Alarms());
+            $ids = $project->FileUploadIds;
+            $project = DataMapper::MapToProject($project);
+            $project->ProjectStatus = $repo->ProjectStatusCalc($project);
+            $res = $repo->UpdateProject($project);
+            foreach (explode(',',$ids) as $nidfile) {
+                $repo->UpdateDataFileMaster($nidfile,$project->NidProject);
+            }
+            $repo2->HandleAlarmsByProjectId($project->NidProject);
+            return $res;
         } catch (\Throwable $th) {
             return false;
         }
@@ -1149,9 +1169,9 @@ class NPMSController extends Controller
     //search section
     public function AdvancedSearch(string $FsearchText, int $FSectionId = 0, int $FById = 0, int $FSimilar = 1)
     {
-        $repo = new SearchRepository();
-        return $repo->AdvancedSearchProcess($FsearchText, $FSectionId, $FSimilar, $FById);
         try {
+            $repo = new SearchRepository();
+            return $repo->AdvancedSearchProcess($FsearchText, $FSectionId, $FSimilar, $FById);
         } catch (\Throwable $th) {
             return null;
         }

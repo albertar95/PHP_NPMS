@@ -129,21 +129,19 @@ class SearchController extends Controller
     }
     public function SubmitAdvanceSearch(Request $request,string $SearchInputs)
     {
-        $api = new NPMSController();
-        $result = new JsonResults();
-        $result->HasValue = true;
-        $inps = explode(',',$SearchInputs);
-        $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
-        $Projects = $response[1];
-        $Scholars = $response[0];
-        $Users = $response[2];
-        $BaseInfo = $response[3];
-        $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
-        $api->AddLog(auth()->user(),$request->ip(),33,0,3,1,"");
-        return response()->json($result);
-        // dd($response);
         try {
-
+            $api = new NPMSController();
+            $result = new JsonResults();
+            $result->HasValue = true;
+            $inps = explode(',',$SearchInputs);
+            $response = $api->AdvancedSearch($inps[0],$inps[1],$inps[2],$inps[3]);
+            $Projects = $response[1];
+            $Scholars = $response[0];
+            $Users = $response[2];
+            $BaseInfo = $response[3];
+            $result->Html = view('Search._AdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo'))->render();
+            $api->AddLog(auth()->user(),$request->ip(),33,0,3,1,"");
+            return response()->json($result);
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

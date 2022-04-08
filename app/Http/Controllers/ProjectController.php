@@ -242,22 +242,21 @@ class ProjectController extends Controller
     }
     public function UpdateProject(ProjectRequest $Project)
     {
-        $Project->validated();
-        $api = new NPMSController();
-        $result = new JsonResults();
-        if ($api->ProjectProgress($Project)) {
-            $result->HasValue = true;
-            $result->Message = "طرح با موفقیت ویرایش گردید";
-            $api->AddLog(auth()->user(), $Project->ip(), 3, 0, 3, 1, sprintf("پیشرفت طرح موفق.نام طرح : %s", $Project->Subject));
-            return response()->json($result);
-        } else {
-            $result->HasValue = false;
-            $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
-            $api->AddLog(auth()->user(), $Project->ip(), 3, 1, 3, 1, "پیشرفت طرح ناموفق");
-            return response()->json($result);
-        }
         try {
-
+            $Project->validated();
+            $api = new NPMSController();
+            $result = new JsonResults();
+            if ($api->ProjectProgress($Project)) {
+                $result->HasValue = true;
+                $result->Message = "طرح با موفقیت ویرایش گردید";
+                $api->AddLog(auth()->user(), $Project->ip(), 3, 0, 3, 1, sprintf("پیشرفت طرح موفق.نام طرح : %s", $Project->Subject));
+                return response()->json($result);
+            } else {
+                $result->HasValue = false;
+                $result->Message = "خطا در انجام عملیات.لطفا مجدد امتحان کنید";
+                $api->AddLog(auth()->user(), $Project->ip(), 3, 1, 3, 1, "پیشرفت طرح ناموفق");
+                return response()->json($result);
+            }
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

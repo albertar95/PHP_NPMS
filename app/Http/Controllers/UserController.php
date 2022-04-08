@@ -104,7 +104,11 @@ class UserController extends Controller
     }
     public function UserManual()
     {
-        return view('User.UserManual');
+        try {
+            return view('User.UserManual');
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
     }
     public function AddUser(Request $request)
     {
@@ -254,15 +258,24 @@ class UserController extends Controller
     }
     public function HashPassword()
     {
-        return view('User.HashPassword');
+        try {
+            return view('User.HashPassword');
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
     }
     public function SubmitHashPassword(Request $request)
     {
         $result = new JsonResults();
-        $newEncrypter = new \Illuminate\Encryption\Encrypter('1234567890123456');
-        $result->HasValue = true;
-        $result->Message = $newEncrypter->encryptString($request->Password);
-        return response()->json($result);
+        try {
+            $newEncrypter = new \Illuminate\Encryption\Encrypter('1234567890123456');
+            $result->HasValue = true;
+            $result->Message = $newEncrypter->encryptString($request->Password);
+            return response()->json($result);
+        } catch (\Throwable $th) {
+            $result->HasValue = false;
+            return response()->json($result);
+        }
     }
     public function EditUser(string $NidUser, Request $request)
     {
