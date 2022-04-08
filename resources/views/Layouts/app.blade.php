@@ -505,9 +505,9 @@
                         <div class="col-lg-4"></div>
                         <div class="col-lg-4">
                             <button class="btn btn-success" type="button" onclick="deleteFile()"
-                                 id="btnOk">بلی</button>
-                            <button class="btn btn-danger" type="button"
-                                data-dismiss="modal" id="btnCancel">خیر</button>
+                                id="btnOk">بلی</button>
+                            <button class="btn btn-danger" type="button" data-dismiss="modal"
+                                id="btnCancel">خیر</button>
                         </div>
                         <div class="col-lg-4"></div>
                     </div>
@@ -625,6 +625,62 @@
                         type: 'POST',
                         url: '{{ URL::to('/') }}' + '/uploadthisfile',
                         data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result.HasValue) {
+                                window.setTimeout(function() {
+                                    AdvanceInProgressBar(100);
+                                }, 1000);
+                                var prev = $("#FileUploadIds").val().split(',');
+                                var news = result.Message.split(',');
+                                $("#FileUploadIds").val(prev.concat(news).join(','));
+                                var names = result.AltProp.split(',');
+                                // $("#uploadedFileDemo").html('');
+                                $.each(names, function() {
+                                    $("#uploadedFileDemo").append(this);
+                                });
+                                // window.setTimeout(function() {
+                                //     $("#uploadedImage").attr('src', '/storage/images/' + result
+                                //         .Message);
+                                //     $("#uploadedframe").removeAttr('hidden');
+                                //     $("#uploadedImage").removeAttr('hidden');
+                                // }, 3000);
+                            } else {
+                                window.setTimeout(function() {
+                                    $("#FileUploadMessage").removeAttr('hidden');
+                                    $("#FileUploadMessage").text(result.Message);
+                                }, 3000);
+                            }
+                        },
+                        error: function() {
+                            window.setTimeout(function() {
+                                $("#FileUploadMessage").removeAttr('hidden');
+                                $("#FileUploadMessage").text('خطا در بارگذاری.لطفا مجدد امتحان کنید');
+                            }, 3000);
+                        }
+                    });
+                    break;
+                case 3:
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    var formData2 = new FormData();
+                    let TotalFiles2 = $('#FileUpload')[0].files.length; //Total files
+                    let files2 = $('#FileUpload')[0];
+                    for (let j = 0; j < TotalFiles2; j++) {
+                        formData2.append('files' + j, files2.files[j]);
+                    }
+                    formData2.append('TotalFiles', TotalFiles2);
+                    formData2.append('fileType', typo);
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ URL::to('/') }}' + '/uploadthisfile',
+                        data: formData2,
                         cache: false,
                         contentType: false,
                         processData: false,

@@ -165,6 +165,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="file" multiple class="custom-file-input" onchange="UploadFile(3)"
+                                                id="FileUpload" name="FileUpload">
+                                            <input type="text" class="custom-file-input" id="FileUploadIds"
+                                                name="FileUploadIds" hidden>
+                                            <label class="custom-file-label" for="FileUpload" data-browse="انتخاب فایل ها"
+                                                style="width:75%;margin:0 auto;">فایل های ضمیمه
+                                            </label>
+                                            <p id="FileUploadMessage" style="text-align:center;color:tomato;" hidden></p>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;"
+                                            id="uploadedFileDemo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                             <button type="submit" id="btnSubmit"
@@ -402,8 +417,7 @@
                             $("#ProfilePicture").val('');
                             $("#uploadedframe").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('hidden', 'hidden');
-                        }else
-                        {
+                        } else {
                             $("#UploadMessage").text('خطا در حذف فایل')
                             $("#UploadMessage").removeAttr('hidden');
                         }

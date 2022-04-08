@@ -346,11 +346,11 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     {
         return $project->save();
     }
-    public function UpdateProjectDataFile(string $NidFile, string $NidProject)
+    public function UpdateDataFileMaster(string $NidFile, string $NidMaster)
     {
         DataFiles::where('NidFile', $NidFile)->update(
             [
-                'NidMaster' => $NidProject
+                'NidMaster' => $NidMaster
             ]
         );
     }

@@ -1,18 +1,19 @@
 <style>
-label
-{
-    overflow: hidden;
-}
+    label {
+        overflow: hidden;
+    }
+
 </style>
 <form class="user">
     <div class="form-group row" style="text-align:right;">
         <div class="col-sm-6" style="padding:.5rem;">
             @if (!empty($Scholar->ProfilePicture))
-            <div class="frame">
-                    <img src="{{ sprintf("/storage/images/%s", $Scholar->ProfilePicture) }}" style="width:100%;height:10rem;" />
-            </div>
+                <div class="frame">
+                    <img src="{{ sprintf('/storage/images/%s', $Scholar->ProfilePicture) }}"
+                        style="width:100%;height:10rem;" />
+                </div>
             @else
-            <label>نمایه : </label>
+                <label>نمایه : </label>
             @endforelse
 
         </div>
@@ -108,6 +109,22 @@ label
                 <label class="form-control">{{ $proj->Subject }}</label>
             @endforeach
         </div>
+    </div>
+    <div class="form-group row" style="text-align:right;">
+        <div class="col-sm-2" style="padding:.5rem;">
+            <label>فایل های ضمیمه : </label>
+        </div>
+        <div class="col-sm-4" style="display:table-column">
+            @foreach ($datafiles as $file)
+                <a href="{{ URL($file->FilePath) }}" target="_blank"
+                    style="margin: 5px;">{{ $file->FileName }}</a>
+            @endforeach
+        </div>
+        <div class="col-sm-2" style="padding:.5rem;">
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
     </div>
     <hr>
 </form>

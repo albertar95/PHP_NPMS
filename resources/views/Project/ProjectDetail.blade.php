@@ -549,7 +549,7 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-2" style="padding:.5rem;">
-                                                        <label>فایل ها : </label>
+                                                        <label>فایل های ضمیمه : </label>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         @foreach ($datafiles as $file)

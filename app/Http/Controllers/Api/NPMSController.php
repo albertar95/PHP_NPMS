@@ -48,8 +48,13 @@ class NPMSController extends Controller
     {
         try {
             $scholar->NidScholar = Str::uuid();
+            $ids = $scholar->FileUploadIds;
             $scholar = DataMapper::MapToScholar($scholar);
             $repo = new ScholarRepository(new Scholars());
+            $repo2 = new ProjectRepository(new Projects());
+            foreach (explode(',',$ids) as $nidfile) {
+                $repo2->UpdateDataFileMaster($nidfile,$scholar->NidScholar);
+            }
             return $repo->AddScholar($scholar);
         } catch (\Throwable $th) {
             return false;
@@ -167,8 +172,13 @@ class NPMSController extends Controller
     {
         try {
             $repo = new ScholarRepository(new Scholars());
+            $ids = $scholar->FileUploadIds;
             $scholar = DataMapper::MapToScholar($scholar);
             $repo->UpdateScholar($scholar);
+            $repo2 = new ProjectRepository(new Projects());
+            foreach (explode(',',$ids) as $nidfile) {
+                $repo2->UpdateDataFileMaster($nidfile,$scholar->NidScholar);
+            }
             return response()->json(['FirstName' => $scholar->FirstName, 'LastName' => $scholar->LastName]);
         } catch (\Throwable $th) {
             return null;
@@ -826,7 +836,7 @@ class NPMSController extends Controller
         $project->ProjectStatus = $repo->ProjectStatusCalc($project);
         $res = $repo->UpdateProject($project);
         foreach (explode(',',$ids) as $nidfile) {
-            $repo->UpdateProjectDataFile($nidfile,$project->NidProject);
+            $repo->UpdateDataFileMaster($nidfile,$project->NidProject);
         }
         $repo2->HandleAlarmsByProjectId($project->NidProject);
         return $res;
@@ -908,7 +918,7 @@ class NPMSController extends Controller
             $Project->ProjectStatus = $repo->ProjectStatusCalc($Project);
             $repo->UpdateProject($Project);
             foreach (explode(',',$ids) as $nidfile) {
-                $repo->UpdateProjectDataFile($nidfile,$Project->NidProject);
+                $repo->UpdateDataFileMaster($nidfile,$Project->NidProject);
             }
             $repo2->HandleAlarmsByProjectId($Project->NidProject);
             return true;
@@ -931,6 +941,17 @@ class NPMSController extends Controller
         {
             $repo = new ProjectRepository(new Projects());
             return $repo->GetProjectDataFiles($NidProject);
+        }catch(\Throwable $t)
+        {
+            return null;
+        }
+    }
+    public function GetScholarFiles(string $NidScholar)
+    {
+        try
+        {
+            $repo = new ScholarRepository(new Scholars());
+            return $repo->GetScholarDataFiles($NidScholar);
         }catch(\Throwable $t)
         {
             return null;

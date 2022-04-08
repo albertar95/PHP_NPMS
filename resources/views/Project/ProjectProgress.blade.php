@@ -388,7 +388,7 @@
                                                             name="FileUploadIds" hidden>
                                                         <label class="custom-file-label" for="FileUpload"
                                                             data-browse="انتخاب فایل ها"
-                                                            style="width:75%;margin:0 auto;">انتخاب فایل ها
+                                                            style="width:75%;margin:0 auto;">فایل های ضمیمه
                                                         </label>
                                                         <p id="FileUploadMessage" style="text-align:center;color:tomato;"
                                                             hidden></p>

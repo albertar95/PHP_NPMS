@@ -327,6 +327,32 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="file" multiple class="custom-file-input" onchange="UploadFile(3)"
+                                                id="FileUpload" name="FileUpload">
+                                            <input type="text" class="custom-file-input" id="FileUploadIds"
+                                                name="FileUploadIds" hidden>
+                                            <label class="custom-file-label" for="FileUpload" data-browse="انتخاب فایل ها"
+                                                style="width:75%;margin:0 auto;">فایل های ضمیمه
+                                            </label>
+                                            <p id="FileUploadMessage" style="text-align:center;color:tomato;" hidden></p>
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;"
+                                            id="uploadedFileDemo">
+                                            @foreach ($datafiles as $file)
+                                                {{-- <a href="{{ URL($file->FilePath) }}" target="_blank"
+                                                    style="margin: 5px;">{{ $file->FileName }}</a> --}}
+                                                <div class="image-area">
+                                                    <a class="remove-image removeFile" href="#"
+                                                        onclick="btnRemoveFile(event);" id="{{ $file->NidFile }}"
+                                                        style="display: inline;">&#215;</a>
+                                                    <a href="{{ URL($file->FilePath) }}" target="_blank"
+                                                        style="padding: 25px;">{{ $file->FileName }}</a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <div class="col-sm-3 col-md-3 col-lg-4 col-xl-4"></div>
                                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                                             <button type="submit" id="btnSubmit" class="btn btn-warning btn-user btn-block">
@@ -439,8 +465,7 @@
                     }
                 });
             });
-            $("#btnDeleteImage").click(function(e)
-            {
+            $("#btnDeleteImage").click(function(e) {
                 e.preventDefault();
                 $.ajax({
                     url: '{{ URL::to('/') }}' + '/deleteuploadedimage/' + $("#ProfilePicture")
@@ -453,14 +478,14 @@
                             $("#uploadedframe").attr('hidden', 'hidden');
                             $("#uploadedImage").attr('hidden', 'hidden');
                             $.ajax({
-                                url: '{{ URL::to('/') }}' + '/deletescholarprofile/' + $("#NidScholar").val(),
+                                url: '{{ URL::to('/') }}' +
+                                    '/deletescholarprofile/' + $("#NidScholar").val(),
                                 type: 'post',
                                 datatype: 'json',
                                 success: function(result) {},
                                 error: function() {}
                             });
-                        }else
-                        {
+                        } else {
                             $("#UploadMessage").text('خطا در حذف فایل')
                             $("#UploadMessage").removeAttr('hidden');
                         }

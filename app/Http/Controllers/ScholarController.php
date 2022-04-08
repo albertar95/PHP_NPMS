@@ -143,14 +143,15 @@ class ScholarController extends Controller
                 $result = new JsonResults();
                 $result->HasValue = true;
                 $Scholar = $api->GetAllScholarDetails($NidScholar);
+                $datafiles = $api->GetScholarFiles($NidScholar);
                 if ($Scholar->IsConfident) {
                     if ($this->CheckAuthority(true, 6, $request->cookie('NPMS_Permissions'))) {
-                        $result->Html = view('Scholar._ScholarDetail', compact('Scholar'))->render();
+                        $result->Html = view('Scholar._ScholarDetail', compact('Scholar','datafiles'))->render();
                     } else {
                         $result->Html = "";
                     }
                 } else {
-                    $result->Html = view('Scholar._ScholarDetail', compact('Scholar'))->render();
+                    $result->Html = view('Scholar._ScholarDetail', compact('Scholar','datafiles'))->render();
                 }
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, sprintf("جزییات محقق.نام محقق : %s", $Scholar->FirstName . ' ' . $Scholar->LastName));
                 return response()->json($result);
@@ -177,13 +178,14 @@ class ScholarController extends Controller
                 $Grades = $api->GetGrades();
                 $MillitaryStatuses = $api->GetMillitaryStatuses();
                 $Colleges = $api->GetColleges();
+                $datafiles = $api->GetScholarFiles($NidScholar);
                 if (!is_null($Scholar)) {
                     $Oreintations = $api->GetOreintationsByMajorId($Scholar->MajorId);
                 } else {
                     $Oreintations = new Collection();
                 }
                 $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 1, "ویرایش محقق");
-                return view('Scholar.EditScholar', compact('Majors', 'CollaborationTypes', 'Grades', 'MillitaryStatuses', 'Colleges', 'Scholar', 'Oreintations'));
+                return view('Scholar.EditScholar', compact('Majors', 'CollaborationTypes', 'Grades', 'MillitaryStatuses', 'Colleges', 'Scholar', 'Oreintations','datafiles'));
             } else {
                 return view('errors.401');
             }
@@ -254,14 +256,14 @@ class ScholarController extends Controller
                                 $currentFile = new DataFiles();
                                 $currentFile->NidFile = Str::uuid();
                                 $currentFile->MasterType = 1; //project
-                                $currentFile->FilePath = 'storage/'.substr($path,7,strlen($path) - 7);
+                                $currentFile->FilePath = 'storage/' . substr($path, 7, strlen($path) - 7);
                                 $currentFile->FileName = $name;
                                 $currentFile->FileExtension = $f->getClientOriginalExtension();
                                 $currentFile->IsDeleted = 0;
                                 $currentFile->CreateDate = Carbon::now();
                                 $uploadeds->push($currentFile);
                                 $Ids->push($currentFile->NidFile);
-                                $filenames->push('<div class="image-area"><a class="remove-image removeFile" href="#" onclick="btnRemoveFile'."(event)".'" id="'.$currentFile->NidFile.'" style="display: inline;">&#215;</a> <a href="'.URL($currentFile->FilePath).'" target="_blank" style="padding:25px;">'. $name.'</a> </div>');
+                                $filenames->push('<div class="image-area"><a class="remove-image removeFile" href="#" onclick="btnRemoveFile' . "(event)" . '" id="' . $currentFile->NidFile . '" style="display: inline;">&#215;</a> <a href="' . URL($currentFile->FilePath) . '" target="_blank" style="padding:25px;">' . $name . '</a> </div>');
                             }
                         }
                     }
@@ -269,8 +271,48 @@ class ScholarController extends Controller
                         $result->HasValue = true;
                     else
                         $result->HasValue = false;
-                    $result->Message = join(',',$Ids->toArray());
-                    $result->AltProp = join(',',$filenames->toArray());
+                    $result->Message = join(',', $Ids->toArray());
+                    $result->AltProp = join(',', $filenames->toArray());
+                    return response()->json($result);
+                    break;
+                case '3':
+                    // $validatedData = $request->validate([
+                    //     'files' => 'required',
+                    //     'files.*' => 'mimes:csv,txt,xlx,xls,pdf'
+                    // ]);
+                    $result = new JsonResults();
+                    $api = new NPMSController();
+                    $uploadeds = new Collection();
+                    $Ids = new Collection();
+                    $filenames = new Collection();
+                    $Dpath = '/public/FileUpload/Scholar/' . time();
+                    File::makeDirectory($Dpath, $mode = 0777, true, true);
+                    if ($file->TotalFiles > 0) {
+                        for ($x = 0; $x < $file->TotalFiles; $x++) {
+                            if ($file->hasFile('files' . $x)) {
+                                $f    = $file->file('files' . $x);
+                                $name = $f->getClientOriginalName();
+                                $path = $f->storeAs($Dpath, $name);
+                                $currentFile = new DataFiles();
+                                $currentFile->NidFile = Str::uuid();
+                                $currentFile->MasterType = 2; //scholar
+                                $currentFile->FilePath = 'storage/' . substr($path, 7, strlen($path) - 7);
+                                $currentFile->FileName = $name;
+                                $currentFile->FileExtension = $f->getClientOriginalExtension();
+                                $currentFile->IsDeleted = 0;
+                                $currentFile->CreateDate = Carbon::now();
+                                $uploadeds->push($currentFile);
+                                $Ids->push($currentFile->NidFile);
+                                $filenames->push('<div class="image-area"><a class="remove-image removeFile" href="#" onclick="btnRemoveFile' . "(event)" . '" id="' . $currentFile->NidFile . '" style="display: inline;">&#215;</a> <a href="' . URL($currentFile->FilePath) . '" target="_blank" style="padding:25px;">' . $name . '</a> </div>');
+                            }
+                        }
+                    }
+                    if ($api->AddDataFiles($uploadeds))
+                        $result->HasValue = true;
+                    else
+                        $result->HasValue = false;
+                    $result->Message = join(',', $Ids->toArray());
+                    $result->AltProp = join(',', $filenames->toArray());
                     return response()->json($result);
                     break;
                 default:
@@ -313,6 +355,11 @@ class ScholarController extends Controller
             $state = 0;
             $Scholar = $api->DeleteScholar($NidScholar);
             if (json_decode($Scholar->getContent(), true)['Message'] == "-1") {
+                $files = $api->GetScholarFiles($NidScholar);
+                foreach ($files as $file) {
+                    File::delete(public_path($file->FilePath));
+                    $api->DeleteFile($file->NidFile);
+                }
                 $result->Message = "1";
                 $result->Html = sprintf('محقق با نام %s با موفقیت حذف گردید', json_decode($Scholar->getContent(), true)['Html']);
                 $api->AddLog(auth()->user(), $request->ip(), 9, 0, 3, 1, sprintf("حذف محقق موفق.نام محقق : %s", json_decode($Scholar->getContent(), true)['Html']));

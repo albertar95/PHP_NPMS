@@ -296,6 +296,10 @@ class ScholarRepository extends BaseRepository implements IScholarRepository{
     {
         DataFiles::where('NidFile',$NidFile)->delete();
     }
+    public function GetScholarDataFiles(string $NidScholar)
+    {
+        return DataFiles::all()->where('NidMaster','=',$NidScholar)->where('IsDeleted','=',0);
+    }
 }
 
 class ScholarRepositoryFactory
