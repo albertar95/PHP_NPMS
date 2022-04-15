@@ -485,7 +485,6 @@
                                                 <tbody>
                                                     @foreach ($Oreintations as $key => $oreintation)
                                                         <tr>
-                                                            <td>{{ $key }}</td>
                                                             <td>{{ $Majors->Where('NidMajor', '=', $oreintation->MajorId)->firstOrFail()->Title }}
                                                             </td>
                                                             <td>{{ $oreintation->Title }}</td>
