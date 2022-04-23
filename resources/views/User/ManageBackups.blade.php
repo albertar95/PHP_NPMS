@@ -11,23 +11,23 @@
                             <h1 class="h4 text-gray-900 mb-4">تنظیمات</h1>
                         </div>
                         @if (in_array('0', $sharedData['UserAccessedEntities']))
-                            <form class="user" id="SessionSettingForm"
-                                action="{{ route('user.SubmitSessionSetting') }}" method="POST">
+                            <form class="user" id="BackupSettingForm"
+                                action="{{ route('user.SubmitBackupPath') }}" method="POST">
                                 @csrf
                                 <div class="form-group row">
                                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6" style="display: flex;">
-                                        <label>مدت زمان پایان نشست کاربر : </label>
-                                        <input type="text" class="form-control form-control-user" dir="ltr" id="SessionTimeout"
-                                        name="SessionTimeout" placeholder=""
-                                        value="{{ config('session.lifetime') }}">
+                                        <label>مسیر پشتیبان گیری : </label>
+                                        <input type="text" dir="ltr" class="form-control form-control-user" id="BackupPath"
+                                        name="BackupPath" placeholder=""
+                                        value="{{ config('filesystems.disks.alter.root') }}">
                                         {{-- @if ($sets->count() > 0)
-                                        <input type="text" class="form-control form-control-user" id="SessionTimeout"
-                                            name="SessionTimeout" placeholder=""
-                                            value="{{ $sets->where('SettingKey', '=', 'SessionTimeout')->firstOrFail()->SettingValue ?? config('session.lifetime') }}">
+                                        <input type="text" class="form-control form-control-user" id="BackupPath"
+                                            name="BackupPath" placeholder=""
+                                            value="{{ $sets->where('SettingKey', '=', 'BackupPath')->firstOrFail()->SettingValue ?? config('filesystems.disks.alter.root') }}">
                                     @else
-                                        <input type="text" class="form-control form-control-user" dir="ltr" id="SessionTimeout"
-                                            name="SessionTimeout" placeholder=""
-                                            value="{{ config('session.lifetime') }}">
+                                        <input type="text" dir="ltr" class="form-control form-control-user" id="BackupPath"
+                                            name="BackupPath" placeholder=""
+                                            value="{{ config('filesystems.disks.alter.root') }}">
                                     @endforelse --}}
                                     </div>
                                     {{-- <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -47,6 +47,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">سوابق پشتیبان گیری</h1>
+                        </div>
                         <div class="alert alert-success alert-dismissible" role="alert" id="successAlert" hidden>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>
@@ -63,66 +66,48 @@
                             <p style="text-align:right;" id="ErrorMessage"></p>
                         </div>
                         <div class="table-responsive" dir="ltr" id="tableWrapper">
-                            @if (in_array('3', $sharedData['UserAccessedEntities']))
-                                @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 3)->pluck('rowValue')[0])[4] == 1)
-                                    <table class="table table-bordered" id="dataTable"
-                                        style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>تصویر</th>
-                                                <th>مشخصات کاربر</th>
-                                                <th>نام کاربری</th>
-                                                <th>وضعیت</th>
-                                                <th>عملیات</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>تصویر</th>
-                                                <th>مشخصات کاربر</th>
-                                                <th>نام کاربری</th>
-                                                <th>وضعیت</th>
-                                                <th>عملیات</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                            @foreach ($users as $usr)
-                                                <tr>
-                                                    <td>
-                                                        @if (!empty($usr->ProfilePicture))
-                                                            <img src="/storage/images/{{ $usr->ProfilePicture }}"
-                                                                height="50" width="50" />
-                                                        @else
-                                                            <img height="50" width="50"
-                                                                src="{{ URL('Content/img/User/user3.png') }}">
-                                                        @endforelse
-                                                    </td>
-                                                    <td>{{ $usr->FirstName }} {{ $usr->LastName }}</td>
-                                                    <td>{{ $usr->Username }}</td>
-                                                    <td>
-                                                        @if (Cache::has('user-is-online-' . $usr->NidUser))
-                                                            <span class="badge badge-success">آنلاین</span>
-                                                        @else
-                                                            <span class="badge badge-danger">آفلاین</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if (Cache::has('user-is-online-' . $usr->NidUser))
-                                                            <button class="btn btn-danger btn-icon-split"
-                                                                onclick="ShowModal('{{ $usr->NidUser }}')">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-sign-out-alt"></i>
-                                                                </span>
-                                                                <span class="text">خروج</span>
-                                                            </button>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                @endif
-                            @endif
+                            <table class="table table-bordered" id="dataTable"
+                            style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>مسیر</th>
+                                    <th>حجم فایل</th>
+                                    <th>مدت زمان (دقیقه)</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>مسیر</th>
+                                    <th>حجم فایل</th>
+                                    <th>مدت زمان (دقیقه)</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach ($backuplogs as $lg)
+                                    <tr>
+                                        <td dir="ltr">{{ $lg->CreateDate }}</td>
+                                        <td dir="ltr">{{ $lg->Path }}</td>
+                                        <td dir="ltr">
+                                            {{ $lg->Size }}
+                                        </td>
+                                        <td>
+                                            {{ $lg->Duration }}
+                                        </td>
+                                        <td>
+                                            @if ($lg->BackupStatus)
+                                                <span class="badge badge-success">موفق</span>
+                                            @else
+                                                <span class="badge badge-danger">ناموفق</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                 </div>
@@ -154,7 +139,7 @@
     </div>
 @section('styles')
     <link href="{{ URL('Content/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-    <title>سامانه مدیریت تحقیقات - مدیریت نشست ها</title>
+    <title>سامانه مدیریت تحقیقات - مدیریت پشتیبان گیری</title>
 @endsection
 @section('scripts')
     <script src="{{ URL('Content/vendor/datatables/jquery.dataTables.min.js') }}"></script>

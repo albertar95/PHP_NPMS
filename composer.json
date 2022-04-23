@@ -14,7 +14,8 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "niklasravnsborg/laravel-pdf": "^4.1",
-        "persian-validator/national-code": "^1.0"
+        "persian-validator/national-code": "^1.0",
+        "spatie/laravel-backup": "7.0.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

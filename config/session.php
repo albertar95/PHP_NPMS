@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\NPMSController;
 use Illuminate\Support\Str;
 
 return [
@@ -31,7 +32,8 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    // 'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => NPMSController::GetSessionsSettingsStatic(),
 
     'expire_on_close' => true,
 

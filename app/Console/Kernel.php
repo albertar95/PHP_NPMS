@@ -29,8 +29,15 @@ class Kernel extends ConsoleKernel
         {
             $api = new NPMSController();
             $api->HandleAlarms();
-        })->dailyAt('07:00');
-        // $schedule->command('inspire')->hourly();
+        })->timezone('Asia/Tehran')->dailyAt('05:00');
+        $schedule->command('backup:clean')->timezone('Asia/Tehran')->weeklyOn(Schedule::FRIDAY,'07:00');
+        $schedule->command('backup:run')->timezone('Asia/Tehran')->weeklyOn([Schedule::FRIDAY],'07:30')->onFailure(function()
+        {
+            NPMSController::AddBackupLog(false);
+        })->onSuccess(function()
+        {
+            NPMSController::AddBackupLog(true);
+        });
     }
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use resources\ViewModels\ManagePermissionViewModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -855,7 +856,10 @@ class UserController extends Controller
             ]);
             $api = new NPMSController();
             $api->UpdateSessionsSettings($request->SessionTimeout);
-            $api->AddLog(auth()->user(), $request->ip(), 37, 0, 2, 3, "ثبت تغییرات نشست");
+            $tmpuser = auth()->user();
+            $tmpip = $request->ip();
+            Artisan::call('optimize');
+            $api->AddLog($tmpuser, $tmpip, 37, 0, 2, 3, "ثبت تغییرات نشست");
             return redirect('/managesessions');
             // return $request->SessionTimeout;
         } catch (\Exception $e) {
@@ -964,6 +968,38 @@ class UserController extends Controller
             $result->HasValue = true;
             // $api->AddLog(auth()->user(), $request->ip(), 39, 0, 3, 3, "حذف دسترسی کاربر موفق");
             return response()->json($result);
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
+    }
+        public function ManageBackups(Request $request)
+    {
+        try {
+            if ($this->CheckAuthority(false, 1, $request->cookie('NPMS_Permissions'), 0)) {
+                $api = new NPMSController();
+                $sets = $api->GetBackupSettings();
+                $backuplogs = $api->GetAllBackupLogs();
+                $api->AddLog(auth()->user(), $request->ip(), 1, 0, 2, 3, "مدیریت پشتیبان گیری");
+                return view('User.ManageBackups', compact('sets', 'backuplogs'));
+            } else {
+                return view('errors.401');
+            }
+        } catch (\Exception $e) {
+            throw new \App\Exceptions\LogExecptions($e);
+        }
+    }
+    public function SubmitBackupPath(Request $request)
+    {
+        try {
+            Config::set('filesystems.disks.alter.root', $request->BackupPath);
+            // config([
+            //     'filesystems.disks.alter.root' => $request->BackupPath
+            // ]);
+            $api = new NPMSController();
+            $api->UpdateBackupPathSettings($request->BackupPath);
+            $api->AddLog(auth()->user(), $request->ip(), 43, 0, 2, 3, $request->BackupPath);
+            return redirect('/managebackups');
+            // return $request->SessionTimeout;
         } catch (\Exception $e) {
             throw new \App\Exceptions\LogExecptions($e);
         }

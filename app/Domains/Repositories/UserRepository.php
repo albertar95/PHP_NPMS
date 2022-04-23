@@ -671,7 +671,11 @@ class UserRepository extends BaseRepository implements IUserRepository
     }
     public function GetSessionSettings()
     {
-        return Settings::all()->where('SettingTitle', '=', 'SessionSetting');
+        return Settings::all()->where('SettingTitle', '=', 'SessionSetting')->where('SettingKey', '=', 'SessionTimeout');
+    }
+    public function GetBackupSettings()
+    {
+        return Settings::all()->where('SettingTitle', '=', 'BackupSetting')->where('SettingKey','=','BackupPath');
     }
     public function GetIndexBriefReport(): array
     {
@@ -705,6 +709,24 @@ class UserRepository extends BaseRepository implements IUserRepository
                 'ProfilePicture' => ''
             ]
         );
+    }
+    public function UpdateBackupPathInSetting(string $newValue)
+    {
+        if (Settings::all()->where('SettingTitle', '=', 'BackupSetting')->where('SettingKey', '=', 'BackupPath')->count() > 0) {
+            Settings::all()->where('SettingTitle', '=', 'BackupSetting')->where('SettingKey', '=', 'BackupPath')->firstOrFail()->update(
+                [
+                    'SettingValue' => $newValue
+                ]
+            );
+        } else {
+            $newSet = new Settings();
+            $newSet->NidSetting = Str::uuid();
+            $newSet->SettingKey = 'BackupPath';
+            $newSet->SettingValue = $newValue;
+            $newSet->SettingTitle = 'BackupSetting';
+            $newSet->IsDeleted = boolval(0);
+            $newSet->save();
+        }
     }
 }
 

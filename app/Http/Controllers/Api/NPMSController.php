@@ -20,6 +20,7 @@ use App\Helpers\Casts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ScholarRequest;
 use App\Models\Alarms;
+use App\Models\BackupLogs;
 use App\Models\Logs;
 use App\Models\Messages;
 use App\Models\Projects;
@@ -275,6 +276,15 @@ class NPMSController extends Controller
         try {
             $repo = new UserRepository(new User());
             return $repo->GetUserDTOs(0);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public function GetAllBackupLogs()
+    {
+        try {
+            $repo = new LogRepository(new Logs());
+            return $repo->GetBackupLogs(0);
         } catch (\Throwable $th) {
             return null;
         }
@@ -579,6 +589,19 @@ class NPMSController extends Controller
             return null;
         }
     }
+    public static function GetSessionsSettingsStatic()
+    {
+        try {
+            $repo = new UserRepository(new User());
+            $sessions = $repo->GetSessionSettings();
+            if($sessions->count() > 0)
+            return $sessions->where('SettingKey', '=', 'SessionTimeout')->firstOrFail()->SettingValue;
+            else
+            return 120;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
     public function AddRole(Request $role)
     {
         try {
@@ -814,6 +837,67 @@ class NPMSController extends Controller
         try {
             $repo = new ScholarRepository(new Scholars());
             return $repo->GetDataFile($NidFile);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public function UpdateBackupPathSettings(string $value)
+    {
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->UpdateBackupPathInSetting($value);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+    public function GetBackupSettings()
+    {
+        try {
+            $repo = new UserRepository(new User());
+            return $repo->GetBackupSettings();
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public static function GetBackupSettingsStatic()
+    {
+        try {
+            $repo = new UserRepository(new User());
+            $backs = $repo->GetBackupSettings();
+            if($backs->count() > 0)
+            return $backs->where('SettingKey', '=', 'BackupPath')->firstOrFail()->SettingValue;
+            else
+            return "Z:\\";
+
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public static function AddBackupLog(bool $status)
+    {
+        try {
+            $newlog = new BackupLogs();
+            $repo = new LogRepository();
+            $newlog->NidLog = Str::uuid();
+            $newlog->CreateDate = Carbon::now();
+            $newlog->Duration = Carbon::now()->diffInMinutes(Carbon::parse('today 7am','Asia/Tehran'));
+            $newlog->Path = config('filesystems.disks.alter.root');
+            if($status)
+            {
+                $filename = scandir(config('filesystems.disks.alter.root')."\\laravel", SCANDIR_SORT_DESCENDING)[0];
+                $filesize = File::size(config('filesystems.disks.alter.root')."\\laravel\\".$filename);
+                if($filesize > 1073741824)
+                $newlog->Size = round($filesize/1073741824,2)." GB";
+                else if($filesize > 1048576)
+                $newlog->Size = round($filesize/1048576,2)." MB";
+                else if($filesize > 1024)
+                $newlog->Size = round($filesize/1024,2)." KB";
+                else
+                $newlog->Size = $filesize." bytes";
+            }else
+            $newlog->Size = "";
+            $newlog->BackupStatus = boolval($status);
+            return $repo->AddBackupLog($newlog);
         } catch (\Throwable $th) {
             return null;
         }

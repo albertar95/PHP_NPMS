@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\NPMSController;
+
 return [
 
     /*
@@ -52,7 +54,10 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
-
+        'alter' => [
+            'driver' => 'local',
+            'root' => NPMSController::GetBackupSettingsStatic(),
+        ],
     ],
 
     /*

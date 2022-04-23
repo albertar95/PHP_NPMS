@@ -4,6 +4,7 @@ namespace App\Domains\Repositories;
 
 use App\Domains\Interfaces\ILogRepository;
 use App\DTOs\DataMapper;
+use App\Models\BackupLogs;
 use App\Models\LogActionTypes;
 use App\Models\Logs;
 use App\Models\User;
@@ -16,6 +17,17 @@ class LogRepository implements ILogRepository{
     public function AddLog(Logs $log)
     {
         return $log->save();
+    }
+    public function AddBackupLog(BackupLogs $log)
+    {
+        return $log->save();
+    }
+    public function GetBackupLogs(int $pagesize = 10)
+    {
+        if($pagesize != 0)
+        return BackupLogs::all()->take($pagesize);
+        else
+        return BackupLogs::all();
     }
     public function GetAllLogActionType(int $pagesize = 10)
     {

@@ -196,6 +196,8 @@
                                         style="text-align:right;">مدیریت اطلاعات پایه</a>
                                 @endif
                             @endif
+                            <a class="collapse-item" href="{{ route('user.ManageBackups') }}"
+                            style="text-align:right;">مدیریت پشتیبان گیری</a>
                         </div>
                     </div>
                 </div>

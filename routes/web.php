@@ -161,3 +161,5 @@ Route::post("submiteditrolepermission",[UserController::class,"SubmitEditRolePer
 Route::post("deleterolepermission/{NidPermission}",[UserController::class,"DeleteRolePermission"])->name('user.DeleteRolePermission');
 Route::post("submitchangepassword/{NidUser}/{NewPassword}",[UserController::class,"SubmitChangePassword"])->name('user.SubmitChangePassword');
 Route::post("deleteuserprofile/{NidUser}",[UserController::class,"DeleteUserProfile"])->name('user.DeleteUserProfile');
+Route::get("managebackups",[UserController::class,"ManageBackups"])->name('user.ManageBackups');
+Route::post("submitbackuppath",[UserController::class,"SubmitBackupPath"])->name('user.SubmitBackupPath');
