@@ -31,8 +31,8 @@
                                     <input id="NidProject" name="NidProject" value="{{ $Project->NidProject }}" hidden />
                                     <input id="PersianCreateDate" name="PersianCreateDate"
                                         value="{{ $Project->PersianCreateDate }}" hidden />
-                                    <input id="ProjectNumber" name="ProjectNumber" value="{{ $Project->ProjectNumber }}"
-                                        hidden />
+                                    {{-- <input id="ProjectNumber" name="ProjectNumber" value="{{ $Project->ProjectNumber }}"
+                                        hidden /> --}}
                                     <input id="ProjectStatus" name="ProjectStatus" value="{{ $Project->ProjectStatus }}"
                                         hidden />
                                     <input id="UserId" name="UserId" value="{{ $Project->UserId }}" hidden />
@@ -41,8 +41,8 @@
                                     <input id="txtGroup" value="{{ $Project->GroupId }}" hidden />
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="Subject"
-                                                name="Subject" value="{{ $Project->Subject }}" placeholder="عنوان طرح" />
+                                            <input type="text" class="form-control form-control-user"
+                                            id="ProjectNumber" name="ProjectNumber" placeholder="شماره پرونده" value="{{ $Project->ProjectNumber }}">
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
@@ -63,6 +63,12 @@
                                                     @endforelse
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 mb-3 mb-sm-0">
+                                            <textarea rows="5" class="form-control form-control-user" id="Subject"
+                                                name="Subject" placeholder="عنوان طرح" >{{ $Project->Subject }}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -102,36 +108,36 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                            @if (!is_null($Project->TitleApproved) && $Project->TitleApproved == true)
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="TitleApproved" name="TitleApproved" class="form-control"
-                                                    value="true" checked
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                    شده
-                                                    است؟</label>
-                                            @elseif(!is_null($Project->TitleApproved) && $Project->TitleApproved == false)
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="TitleApproved" name="TitleApproved" value="false"
-                                                    class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                    شده
-                                                    است؟</label>
-                                            @else
-                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                    id="TitleApproved" name="TitleApproved" class="form-control"
-                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                    شده
-                                                    است؟</label>
-                                            @endforelse
-                                        </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="text" class="form-control form-control-user" id="ATFLetterDate"
                                                 name="ATFLetterDate" value="{{ $Project->ATFLetterDate }}"
                                                 placeholder="تاریخ ارسال نامه به عتف">
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                            @if (!is_null($Project->TitleApproved) && $Project->TitleApproved == true)
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                id="TitleApproved" name="TitleApproved" class="form-control"
+                                                value="true" checked
+                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                شده
+                                                است؟</label>
+                                        @elseif(!is_null($Project->TitleApproved) && $Project->TitleApproved == false)
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                id="TitleApproved" name="TitleApproved" value="false"
+                                                class="form-control"
+                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                شده
+                                                است؟</label>
+                                        @else
+                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                id="TitleApproved" name="TitleApproved" class="form-control"
+                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                شده
+                                                است؟</label>
+                                        @endforelse
                                         </div>
                                     </div>
                                     <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
@@ -714,7 +720,7 @@
                                 }, 1200);
                             }
                         },
-                        error: function() {
+                        error: function(response) {
                             var message = "<ul>";
                             jQuery.each(response.responseJSON.errors, function(i, val) {
                                 message += "<li>";
@@ -750,6 +756,12 @@
             if (!$("#Subject").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "عنوان طرح وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if (!$("#ProjectNumber").val()) {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "شماره پرونده وارد نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }

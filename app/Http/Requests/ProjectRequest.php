@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\MobileFormat;
 use App\Rules\PersianDateFormat;
+use App\Rules\ProjectNumberCheck;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProjectRequest extends FormRequest
@@ -42,7 +43,8 @@ class ProjectRequest extends FormRequest
             "ReducePeriod" => 'integer|min:0',
             "ThirtyPercentLetterDate" => new PersianDateFormat(),
             "SixtyPercentLetterDate" => new PersianDateFormat(),
-            "ATFLetterDate" => new PersianDateFormat()
+            "ATFLetterDate" => new PersianDateFormat(),
+            "ProjectNumber" => new ProjectNumberCheck()
         ];
     }
     public function messages()
@@ -54,6 +56,7 @@ class ProjectRequest extends FormRequest
             'Referee1.max' => 'طول نام داور 1 باید کمتر از 150 کاراکتر باشد',
             'Referee2.max' => 'طول نام داور 2 باید کمتر از 150 کاراکتر باشد',
             'Referee2.required' => 'موضوع طرح الزامی می باشد',
+            'ProjectNumber.required' => 'شماره پرونده الزامی می باشد',
             'ReducePeriod.min' => 'مدت کسری نباید کمتر از 0 باشد',
         ];
     }

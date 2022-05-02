@@ -1015,7 +1015,7 @@ class NPMSController extends Controller
             // $tmpPersian = new Verta($Project->CreateDate);
             $Project->PersianCreateDate = strval(verta($Project->CreateDate));
             $Project->NidProject = Str::uuid();
-            $Project->ProjectNumber = $repo->GenerateProjectNumber();
+            // $Project->ProjectNumber = $repo->GenerateProjectNumber();
             $Project->ProjectStatus = 0;
             $Project = DataMapper::MapToProject($Project);
             $repo->AddProject($Project);
@@ -1056,6 +1056,17 @@ class NPMSController extends Controller
         {
             $repo = new ScholarRepository(new Scholars());
             return $repo->GetScholarDataFiles($NidScholar);
+        }catch(\Throwable $t)
+        {
+            return null;
+        }
+    }
+    public function CheckProjectNumber(string $Value)
+    {
+        try
+        {
+            $repo = new ProjectRepository(new Projects());
+            return $repo->CheckThisProjectNumber($Value);
         }catch(\Throwable $t)
         {
             return null;

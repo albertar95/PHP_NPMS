@@ -19,8 +19,8 @@
                                         hidden />
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="Subject"
-                                                name="Subject" placeholder="عنوان طرح">
+                                            <input type="text" class="form-control form-control-user"
+                                            id="ProjectNumber" name="ProjectNumber" placeholder="شماره پرونده">
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
@@ -35,6 +35,14 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 mb-3 mb-sm-0">
+                                            <textarea rows="5" class="form-control form-control-user" id="Subject"
+                                            name="Subject" placeholder="عنوان طرح"></textarea>
+                                        </div>
+                                        {{-- <div class="col-sm-6">
+                                        </div> --}}
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
@@ -59,17 +67,17 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0" style="display:flex;padding-right:10%;">
-                                            <input type="checkbox"
-                                                style="width:1rem;margin:unset !important;margin-right:10%;"
-                                                id="TitleApproved" name="TitleApproved" class="form-control"
-                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید شده
-                                                است؟</label>
-                                        </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="text" class="form-control form-control-user" id="ATFLetterDate"
                                                 name="ATFLetterDate" placeholder="تاریخ ارسال نامه به عتف">
+                                        </div>
+                                        <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                            <input type="checkbox"
+                                            style="width:1rem;margin:unset !important;margin-right:10%;"
+                                            id="TitleApproved" name="TitleApproved" class="form-control"
+                                            onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                        <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید شده
+                                            است؟</label>
                                         </div>
                                     </div>
                                     <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
@@ -310,7 +318,7 @@
                 sortField: 'value'
             });
             var isvalidSupervisorTel = true;
-            $("#Subject").focus();
+            $("#ProjectNumber").focus();
             $("#TenPercentLetterDate").persianDatepicker({
                 altField: '#TenPercentLetterDate',
                 altFormat: "YYYY/MM/DD",
@@ -578,6 +586,12 @@
             if (!$("#Subject").val()) {
                 ValiditiyMessage += '<li>';
                 ValiditiyMessage += "عنوان طرح وارد نشده است";
+                ValiditiyMessage += '</li>';
+                isValid = false;
+            }
+            if (!$("#ProjectNumber").val()) {
+                ValiditiyMessage += '<li>';
+                ValiditiyMessage += "شماره پرونده وارد نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
             }

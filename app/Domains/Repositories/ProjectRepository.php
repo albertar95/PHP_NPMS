@@ -123,6 +123,17 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
             return BigInteger::of(1001);
         }
     }
+    public function CheckThisProjectNumber(string $value)
+    {
+        if ($this->model->all()->count() > 0) {
+            if($this->model->all()->where('ProjectNumber','=',$value)->count() > 0)
+            return false;
+            else
+            return true;
+        } else {
+            return true;
+        }
+    }
     public function CheckForUnitGroupExist(string $NidUnit): bool
     {
         if (UnitGroups::all()->where('UnitId', '=', $NidUnit)->count() > 0) {

@@ -11075,7 +11075,8 @@ a.text-dark:focus {
     visibility: hidden !important;
 }
 
-@media print {
+@media print
+{
 
     *,
     *::before,
@@ -11089,7 +11090,7 @@ a.text-dark:focus {
     }
 
     abbr[title]::after {
-        content: " ("attr(title) ")";
+        content: ' ("attr(title) ")';
     }
 
     pre {
