@@ -39,13 +39,13 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="number" class="form-control form-control-user" id="NationalCode"
+                                            <input type="text" class="form-control form-control-user" id="NationalCode"
                                                 name="NationalCode" placeholder="کد ملی">
                                             <p id="NationalcodeError"
                                                 style="font-size:.75rem;text-align:center;color:tomato;" hidden></p>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="number" class="form-control form-control-user" id="Mobile"
+                                            <input type="text" class="form-control form-control-user" id="Mobile"
                                                 name="Mobile" placeholder="شماره همراه">
                                             <p id="MobileError" style="font-size:.75rem;text-align:center;color:tomato;"
                                                 hidden></p>

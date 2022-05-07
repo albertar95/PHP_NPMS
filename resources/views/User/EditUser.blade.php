@@ -66,7 +66,7 @@
                                     <input id="last_seen" name="last_seen" value="{{ $User->last_seen }}" type="datetime"
                                         hidden>
                                     <input id="Force_logout" name="Force_logout" value="{{ $User->Force_logout }}"
-                                        type="number" hidden>
+                                        type="text" hidden>
                                     <input id="NidUser" name="NidUser" value="{{ $User->NidUser }}" type="text" hidden>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">

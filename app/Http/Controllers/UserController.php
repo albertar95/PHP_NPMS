@@ -997,7 +997,10 @@ class UserController extends Controller
             // ]);
             $api = new NPMSController();
             $api->UpdateBackupPathSettings($request->BackupPath);
-            $api->AddLog(auth()->user(), $request->ip(), 43, 0, 2, 3, $request->BackupPath);
+            $tmpuser = auth()->user();
+            $tmpip = $request->ip();
+            Artisan::call('optimize');
+            $api->AddLog($tmpuser, $tmpip, 43, 0, 2, 3, $request->BackupPath);
             return redirect('/managebackups');
             // return $request->SessionTimeout;
         } catch (\Exception $e) {

@@ -292,9 +292,10 @@
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
+                                <i class="fas fa-bell fa-fw">
+                                    <span class="badge badge-danger badge-counter" id="alarmCount">0</span>
+                                </i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter" id="alarmCount">0</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
@@ -311,9 +312,10 @@
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
+                                <i class="fas fa-envelope fa-fw">
+                                    <span class="badge badge-danger badge-counter" id="messageCount">0</span>
+                                </i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter" id="messageCount">0</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"

@@ -1,4 +1,4 @@
-<input type="number" value="{{ $txtLoadCount }}" id="LoadCount" hidden>
+<input type="text" value="{{ $txtLoadCount }}" id="LoadCount" hidden>
 @if (in_array('1', $sharedData['UserAccessedEntities']))
     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
         <table class="table table-bordered" id="dataTable1"

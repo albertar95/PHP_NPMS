@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\DataMapper;
 use App\Http\Controllers\Api\NPMSController;
+use App\Http\Requests\ProjectProgressRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\TitleRequest;
 use App\Models\Projects;
@@ -157,6 +158,8 @@ class ProjectController extends Controller
             $Project->validated();
             $api = new NPMSController();
             $result = new JsonResults();
+            if(is_numeric($Project->ReducePeriodMonth) || is_numeric($Project->ReducePeriodDay))
+            $Project->ReducePeriod = (int)($Project->ReducePeriodMonth ?? 0) * 30 + (int)($Project->ReducePeriodDay ?? 0);
             if ($api->AddProject($Project)) {
                 $result->HasValue = true;
                 $api->AddLog(auth()->user(), $Project->ip(), 2, 0, 3, 1, sprintf("ایجاد طرح موفق.نام طرح : %s", $Project->Subject));
@@ -240,12 +243,14 @@ class ProjectController extends Controller
             throw new \App\Exceptions\LogExecptions($e);
         }
     }
-    public function UpdateProject(ProjectRequest $Project)
+    public function UpdateProject(ProjectProgressRequest $Project)
     {
         try {
             $Project->validated();
             $api = new NPMSController();
             $result = new JsonResults();
+            if(is_numeric($Project->ReducePeriodMonth) || is_numeric($Project->ReducePeriodDay))
+            $Project->ReducePeriod = ((int)($Project->ReducePeriodMonth ?? 0) * 30) + (int)($Project->ReducePeriodDay ?? 0);
             if ($api->ProjectProgress($Project)) {
                 $result->HasValue = true;
                 $result->Message = "طرح با موفقیت ویرایش گردید";

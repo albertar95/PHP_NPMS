@@ -1,4 +1,4 @@
-<input type="number" value="{{ $txtLoadCount }}" id="LoadCount" hidden>
+<input type="text" value="{{ $txtLoadCount }}" id="LoadCount" hidden>
 <table class="table table-bordered" id="userlogdataTable" style="width:100%;direction:rtl;text-align:center;"
     cellspacing="0">
     <thead>

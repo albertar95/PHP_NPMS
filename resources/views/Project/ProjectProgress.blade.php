@@ -256,9 +256,10 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <input type="number" class="form-control form-control-user"
-                                                            id="ReducePeriod" name="ReducePeriod"
-                                                            value="{{ $Project->ReducePeriod }}" placeholder="مدت کسری">
+                                                        <input type="text" class="form-control form-control-user" style="margin-bottom: 5px;" value="{{ (int)($Project->ReducePeriod/30) }}"
+                                                        id="ReducePeriodMonth" name="ReducePeriodMonth" placeholder="مدت کسری (ماه)">
+                                                        <input type="text" class="form-control form-control-user" value="{{ (int)($Project->ReducePeriod%30) }}"
+                                                        id="ReducePeriodDay" name="ReducePeriodDay" placeholder="مدت کسری (روز)">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <textarea class="form-control" id="Commision" name="Commision" placeholder="کمیسیون"

@@ -101,7 +101,7 @@
                             <!-- Card Content - Collapse -->
                             <div class="collapse show" id="collapseMessagesItems" style="padding:.75rem;">
                                 <div class="table-responsive" dir="ltr" id="MessagesTableWrapper">
-                                    <input type="number" value="1" id="LoadCount2" hidden>
+                                    <input type="text" value="1" id="LoadCount2" hidden>
                                     <table class="table table-bordered" id="MessagesdataTable"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>
@@ -167,7 +167,7 @@
                             <!-- Card Content - Collapse -->
                             <div class="collapse show" id="collapseSendMessagesItems" style="padding:.75rem;">
                                 <div class="table-responsive" dir="ltr" id="SendMessagesTableWrapper">
-                                    <input type="number" value="1" id="LoadCount" hidden>
+                                    <input type="text" value="1" id="LoadCount" hidden>
                                     <table class="table table-bordered" id="SendMessagesdataTable"
                                         style="width:100%;direction:rtl;text-align:center;" cellspacing="0">
                                         <thead>

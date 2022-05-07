@@ -17,16 +17,16 @@
                                 @if ($Policies->where('SettingKey', '=', 'PasswordDificulty')->count() > 0)
                                     <input id="PasswordDificulty" name="PasswordDificulty"
                                         value="{{ $Policies->where('SettingKey', '=', 'PasswordDificulty')->firstOrFail()->SettingValue ?? '' }}"
-                                        type="number" hidden>
+                                        type="text" hidden>
                                 @else
-                                    <input id="PasswordDificulty" name="PasswordDificulty" value="1" type="number" hidden>
+                                    <input id="PasswordDificulty" name="PasswordDificulty" value="1" type="text" hidden>
                                 @endforelse
                                 @if ($Policies->where('SettingKey', '=', 'FullLockoutUser')->count() > 0)
                                     <input id="FullLockoutUser" name="FullLockoutUser"
                                         value="{{ $Policies->where('SettingKey', '=', 'FullLockoutUser')->firstOrFail()->SettingValue ?? '' }}"
-                                        type="number" hidden>
+                                        type="text" hidden>
                                 @else
-                                    <input id="FullLockoutUser" name="FullLockoutUser" value="0" type="number" hidden>
+                                    <input id="FullLockoutUser" name="FullLockoutUser" value="0" type="text" hidden>
                                 @endforelse
                                 <div class="form-group row">
                                     <div class="col-sm-3">

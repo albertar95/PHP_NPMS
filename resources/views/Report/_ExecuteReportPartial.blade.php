@@ -62,7 +62,7 @@
             @switch ($tmpparam->FieldId)
                 @case (1)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="number" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
+                    <input type="text" class="form-control form-control-user inputParams" id="{{ $tmpparam->FieldName }}"
                         name="{{ $tmpparam->FieldName }}"><label style="font-size: xx-large;">%</label>
                 @break
                 @case (2)
@@ -214,7 +214,7 @@
                 @break
                 @case (5)
                     <label style="text-align:right;margin-top:.45rem;">{{ $tmpparam->PersianName }}</label>
-                    <input type="number" min="0" class="form-control form-control-user inputParams"
+                    <input type="text" min="0" class="form-control form-control-user inputParams"
                         id="{{ $tmpparam->FieldName }}" name="{{ $tmpparam->FieldName }}">
                 @break
             @endswitch

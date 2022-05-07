@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="table-responsive" dir="ltr" id="TableContainer">
-                <input type="number" value="1" id="LoadCount" hidden>
+                <input type="text" value="1" id="LoadCount" hidden>
                 <table class="table table-bordered" id="dataTable1" style="width:100%;direction:rtl;text-align:center;"
                     cellspacing="0">
                     <thead>

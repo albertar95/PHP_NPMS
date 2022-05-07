@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="table-responsive" dir="ltr" id="TableContainer">
-                <input type="number" value="1" id="LoadCount" hidden>
+                <input type="text" value="1" id="LoadCount" hidden>
                 @if (in_array('1', $sharedData['UserAccessedEntities']))
                     @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 1)->pluck('rowValue')[0])[4] == 1)
                         <table class="table table-bordered" id="dataTable1"

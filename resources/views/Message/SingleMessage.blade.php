@@ -102,7 +102,7 @@
                                                     <input type="text" class="form-control form-control-user"
                                                         value="{{ $SingleMessage->NidMessage }}" id="NidCurrentMessage"
                                                         hidden>
-                                                    <input type="number" value="{{ $readby }}" id="ReadBy" hidden>
+                                                    <input type="text" value="{{ $readby }}" id="ReadBy" hidden>
                                                     <input type="text" value="" id="NidMessage" name="NidMessage" hidden />
                                                     <input type="text" value="{{ $SingleMessage->NidMessage }}"
                                                         id="RelatedId" name="RelatedId" hidden />
