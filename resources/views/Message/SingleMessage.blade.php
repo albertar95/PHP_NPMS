@@ -57,7 +57,7 @@
                                             </div>
                                             <div class="col-sm-6" style="display:flex;">
                                                 <label style="padding-top:.8rem;">تاریخ : </label>
-                                                <input type="text" class="form-control form-control-user"
+                                                <input type="text" class="form-control form-control-user" dir="ltr" style="text-align: right;"
                                                     value="{{ $msg->PersianCreateDate }}" readonly>
                                             </div>
                                         </div>

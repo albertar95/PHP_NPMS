@@ -196,8 +196,8 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
     public function ProjectStatusCalc(Projects $project): int
     {
         $result = 0;
-        if (!empty($project->SecurityLetterDate))
-            $result += 5;
+        // if (!empty($project->SecurityLetterDate))
+        //     $result += 5;
         if (!empty($project->Advisor) && !empty($project->Supervisor))
             $result += 5;
         if (!empty($project->ImploymentDate))
@@ -215,7 +215,7 @@ class ProjectRepository extends BaseRepository implements IProjectRepository
         if (!empty($project->Commision))
             $result += 5;
         if ($project->TitleApproved != null && $project->TitleApproved == true)
-            $result += 5;
+            $result += 10;
         if ($project->HasBookPublish != null && $project->HasBookPublish == true)
             $result += 5;
         if ($project->FinalApprove != null && $project->FinalApprove == true)

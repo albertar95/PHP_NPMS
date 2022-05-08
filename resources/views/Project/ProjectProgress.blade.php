@@ -41,8 +41,9 @@
                                     <input id="txtGroup" value="{{ $Project->GroupId }}" hidden />
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user"
-                                            id="ProjectNumber" name="ProjectNumber" placeholder="شماره پرونده" value="{{ $Project->ProjectNumber }}">
+                                            <input type="text" class="form-control form-control-user" id="ProjectNumber"
+                                                name="ProjectNumber" placeholder="شماره پرونده"
+                                                value="{{ $Project->ProjectNumber }}">
                                         </div>
                                         <div class="col-sm-6">
                                             <select class="form-control allWidth" data-ng-style="btn-primary"
@@ -67,8 +68,8 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-12 mb-3 mb-sm-0">
-                                            <textarea rows="5" class="form-control form-control-user" id="Subject"
-                                                name="Subject" placeholder="عنوان طرح" >{{ $Project->Subject }}</textarea>
+                                            <textarea rows="5" class="form-control form-control-user" id="Subject" name="Subject"
+                                                placeholder="عنوان طرح">{{ $Project->Subject }}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -115,29 +116,29 @@
                                         </div>
                                         <div class="col-sm-6" style="display:flex;padding-right:10%;">
                                             @if (!is_null($Project->TitleApproved) && $Project->TitleApproved == true)
-                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                id="TitleApproved" name="TitleApproved" class="form-control"
-                                                value="true" checked
-                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                شده
-                                                است؟</label>
-                                        @elseif(!is_null($Project->TitleApproved) && $Project->TitleApproved == false)
-                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                id="TitleApproved" name="TitleApproved" value="false"
-                                                class="form-control"
-                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                شده
-                                                است؟</label>
-                                        @else
-                                            <input type="checkbox" style="width:1rem;margin:unset !important;"
-                                                id="TitleApproved" name="TitleApproved" class="form-control"
-                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                            <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
-                                                شده
-                                                است؟</label>
-                                        @endforelse
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="TitleApproved" name="TitleApproved" class="form-control"
+                                                    value="true" checked
+                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                    شده
+                                                    است؟</label>
+                                            @elseif(!is_null($Project->TitleApproved) && $Project->TitleApproved == false)
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="TitleApproved" name="TitleApproved" value="false"
+                                                    class="form-control"
+                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                    شده
+                                                    است؟</label>
+                                            @else
+                                                <input type="checkbox" style="width:1rem;margin:unset !important;"
+                                                    id="TitleApproved" name="TitleApproved" class="form-control"
+                                                    onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                <label for="TitleApproved" style="margin:.25rem .25rem 0 0">عنوان طرح تایید
+                                                    شده
+                                                    است؟</label>
+                                            @endforelse
                                         </div>
                                     </div>
                                     <div class="card shadow" style="text-align:right;margin-bottom:1rem;">
@@ -256,10 +257,15 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <input type="text" class="form-control form-control-user" style="margin-bottom: 5px;" value="{{ (int)($Project->ReducePeriod/30) }}"
-                                                        id="ReducePeriodMonth" name="ReducePeriodMonth" placeholder="مدت کسری (ماه)">
-                                                        <input type="text" class="form-control form-control-user" value="{{ (int)($Project->ReducePeriod%30) }}"
-                                                        id="ReducePeriodDay" name="ReducePeriodDay" placeholder="مدت کسری (روز)">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            style="margin-bottom: 5px;"
+                                                            value="{{ (int) ($Project->ReducePeriod / 30) }}"
+                                                            id="ReducePeriodMonth" name="ReducePeriodMonth"
+                                                            placeholder="مدت کسری (ماه)">
+                                                        <input type="text" class="form-control form-control-user"
+                                                            value="{{ (int) ($Project->ReducePeriod % 30) }}"
+                                                            id="ReducePeriodDay" name="ReducePeriodDay"
+                                                            placeholder="مدت کسری (روز)">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <textarea class="form-control" id="Commision" name="Commision" placeholder="کمیسیون"
@@ -299,38 +305,6 @@
                                                         @endforelse
                                                     </div>
                                                     <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                                        @if (!is_null($Project->FinalApprove) && $Project->FinalApprove == true)
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;"
-                                                                id="FinalApprove" name="FinalApprove" class="form-control"
-                                                                value="true" checked
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                                نهایی
-                                                                طرح</label>
-                                                        @elseif(!is_null($Project->FinalApprove) && $Project->FinalApprove == false)
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;"
-                                                                id="FinalApprove" name="FinalApprove" value="false"
-                                                                class="form-control"
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                                نهایی
-                                                                طرح</label>
-                                                        @else
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;"
-                                                                id="FinalApprove" name="FinalApprove" class="form-control"
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
-                                                                نهایی
-                                                                طرح</label>
-                                                        @endforelse
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0"
-                                                        style="display:flex;padding-right:10%;">
                                                         @if (!is_null($Project->IsConfident) && $Project->IsConfident == true)
                                                             <input type="checkbox"
                                                                 style="width:1rem;margin:unset !important;" id="IsConfident"
@@ -356,34 +330,6 @@
                                                             <label for="IsConfident" style="margin:.25rem .25rem 0 0">آیا
                                                                 اطلاعات
                                                                 محرمانه است ؟</label>
-                                                        @endforelse
-                                                    </div>
-                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
-                                                        @if (!is_null($Project->IsDisabled) && $Project->IsDisabled == true)
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                                name="IsDisabled" class="form-control" value="true"
-                                                                checked
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                                فعال
-                                                                شود؟</label>
-                                                        @elseif(!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                                name="IsDisabled" value="false" class="form-control"
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                                فعال
-                                                                شود؟</label>
-                                                        @else
-                                                            <input type="checkbox"
-                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
-                                                                name="IsDisabled" class="form-control"
-                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
-                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
-                                                                فعال
-                                                                شود؟</label>
                                                         @endforelse
                                                     </div>
                                                 </div>
@@ -414,6 +360,66 @@
                                                                     style="padding: 25px;">{{ $file->FileName }}</a>
                                                             </div>
                                                         @endforeach
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0"
+                                                        style="display:flex;padding-right:10%;">
+                                                        @if (!is_null($Project->FinalApprove) && $Project->FinalApprove == true)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" class="form-control"
+                                                                value="true" checked
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @elseif(!is_null($Project->FinalApprove) && $Project->FinalApprove == false)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" value="false"
+                                                                class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;"
+                                                                id="FinalApprove" name="FinalApprove" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="FinalApprove" style="margin:.25rem .25rem 0 0">تایید
+                                                                نهایی
+                                                                طرح</label>
+                                                        @endforelse
+                                                    </div>
+                                                    <div class="col-sm-6" style="display:flex;padding-right:10%;">
+                                                        @if (!is_null($Project->IsDisabled) && $Project->IsDisabled == true)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" class="form-control" value="true"
+                                                                checked
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @elseif(!is_null($Project->IsDisabled) && $Project->IsDisabled == false)
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" value="false" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                style="width:1rem;margin:unset !important;" id="IsDisabled"
+                                                                name="IsDisabled" class="form-control"
+                                                                onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
+                                                            <label for="IsDisabled" style="margin:.25rem .25rem 0 0">طرح غیر
+                                                                فعال
+                                                                شود؟</label>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                                 {{-- <div class="form-group row">
@@ -608,63 +614,64 @@
             });
             $("#TenPercentLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#TenPercentLetterDate").val())) {
                     $("#TenPercentLetterDate").val('');
                 }
             });
             $("#ThirtyPercentLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#ThirtyPercentLetterDate").val())) {
                     $("#ThirtyPercentLetterDate").val('');
                 }
             });
             $("#SixtyPercentLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#SixtyPercentLetterDate").val())) {
                     $("#SixtyPercentLetterDate").val('');
                 }
             });
             $("#PreImploymentLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#PreImploymentLetterDate").val())) {
                     $("#PreImploymentLetterDate").val('');
                 }
             });
             $("#ImploymentDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#ImploymentDate").val())) {
                     $("#ImploymentDate").val('');
                 }
             });
             $("#SecurityLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#SecurityLetterDate").val())) {
                     $("#SecurityLetterDate").val('');
                 }
             });
             $("#ThesisDefenceDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#ThesisDefenceDate").val())) {
                     $("#ThesisDefenceDate").val('');
                 }
             });
             $("#ThesisDefenceLetterDate").on('change', function() {
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#ThesisDefenceLetterDate").val())) {
                     $("#ThesisDefenceLetterDate").val('');
                 }
             });
             $("#ATFLetterDate").on('change', function() {
+                var id = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
                 if (!
-                    /^[1-4]\d{3,4}\/((0[1-6]\/((3[0-1])|([1-2][0-9])|(0[1-9])))|((1[0-2]|(0[7-9]))\/(30|([1-2][0-9])|(0[1-9]))))$/
+                    /^[1۱][34۳۴][0123456789۰۱۲۳۴۵۶۷۸۹][0123456789۰۱۲۳۴۵۶۷۸۹]\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[1۱][012۰۱۲])\/([0۰]?[123456789۱۲۳۴۵۶۷۸۹]|[12۱۲][0123456789۰۱۲۳۴۵۶۷۸۹]|[3۳][01۰۱])$/
                     .test($("#ATFLetterDate").val())) {
                     $("#ATFLetterDate").val('');
                 }
@@ -765,6 +772,18 @@
                 ValiditiyMessage += "شماره پرونده وارد نشده است";
                 ValiditiyMessage += '</li>';
                 isValid = false;
+            }
+            if ($('#FinalApprove').is(":checked")) {
+                if (!$("#Advisor").val() || !$("#Supervisor").val() || !$("#ImploymentDate").val() || !$(
+                        "#TenPercentLetterDate").val() || !$("#ThirtyPercentLetterDate").val() || !$(
+                        "#SixtyPercentLetterDate").val() || !$("#ThesisDefenceDate").val() || !$("#Editor").val() || !$(
+                        "#Commision").val() || !$('#TitleApproved').is(":checked") || !$('#HasBookPublish').is(
+                    ":checked")) {
+                    ValiditiyMessage += '<li>';
+                    ValiditiyMessage += "اطلاعات طرح کامل نمی باشد بنابراین امکان تایید نهایی وجود ندارد";
+                    ValiditiyMessage += '</li>';
+                    isValid = false;
+                }
             }
             ValiditiyMessage = "<ul>" + ValiditiyMessage + "</ul>";
             return isValid;

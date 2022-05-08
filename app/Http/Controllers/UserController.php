@@ -90,7 +90,7 @@ class UserController extends Controller
             $api = new NPMSController();
             $briefs = $api->IndexBriefReport();
             $charts = $api->IndexChartReport();
-            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser, false, 5);
+            $messages = $api->GetAllUsersMessages(auth()->user()->NidUser, true, 5);
             $chartarrays = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             foreach ($charts as $key => $value) {
                 $chartarrays[$key - 1] = $value;

@@ -27,13 +27,13 @@
                                 action="{{ route('user.SubmitAddUserPermission') }}" method="POST">
                                 @csrf
                                 <input type="text" id="NidPermission" name="NidPermission" hidden>
-                                <input type="text" id="CreateVal" value="0" name="CreateVal" hidden>
-                                <input type="text" id="EditVal" value="0" name="EditVal" hidden>
-                                <input type="text" id="DeleteVal" value="0" name="DeleteVal" hidden>
-                                <input type="text" id="DetailVal" value="0" name="DetailVal" hidden>
-                                <input type="text" id="ListVal" value="0" name="ListVal" hidden>
-                                <input type="text" id="ConfidentVal" value="0" name="ConfidentVal" hidden>
-                                <input type="text" id="PrintVal" value="0" name="PrintVal" hidden>
+                                <input type="text" id="CreateVal" value="1" name="CreateVal" hidden>
+                                <input type="text" id="EditVal" value="1" name="EditVal" hidden>
+                                <input type="text" id="DeleteVal" value="1" name="DeleteVal" hidden>
+                                <input type="text" id="DetailVal" value="1" name="DetailVal" hidden>
+                                <input type="text" id="ListVal" value="1" name="ListVal" hidden>
+                                <input type="text" id="ConfidentVal" value="1" name="ConfidentVal" hidden>
+                                <input type="text" id="PrintVal" value="1" name="PrintVal" hidden>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <select class="form-control allWidth" data-ng-style="btn-primary" id="UserId"
@@ -60,43 +60,43 @@
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Create"
-                                            name="Create" class="form-control" value="false" alt=""
+                                            name="Create" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Create" style="margin:.45rem .45rem 0 0">ایجاد</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Edit"
-                                            name="Edit" class="form-control" value="false" alt=""
+                                            name="Edit" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Edit" style="margin:.45rem .45rem 0 0">ویرایش</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Delete"
-                                            name="Delete" class="form-control" value="false" alt=""
+                                            name="Delete" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Delete" style="margin:.45rem .45rem 0 0">حذف</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Detail"
-                                            name="Detail" class="form-control" value="false" alt=""
+                                            name="Detail" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Detail" style="margin:.45rem .45rem 0 0">جزییات</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Confident"
-                                            name="Confident" class="form-control" value="false" alt=""
+                                            name="Confident" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Confident" style="margin:.45rem .45rem 0 0">محرمانه</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="List"
-                                            name="List" class="form-control" value="false" alt=""
+                                            name="List" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="List" style="margin:.45rem .45rem 0 0">لیست</label>
                                     </div>
                                     <div class="col-sm-3" style="display: flex;">
                                         <input type="checkbox" style="width:1rem;margin:unset !important;" id="Print"
-                                            name="Print" class="form-control" value="false" alt=""
+                                            name="Print" class="form-control" value="true" checked alt=""
                                             onclick="$(this).attr('value', this.checked ? 'true' : 'false')" />
                                         <label for="Print" style="margin:.45rem .45rem 0 0">چاپ</label>
                                     </div>

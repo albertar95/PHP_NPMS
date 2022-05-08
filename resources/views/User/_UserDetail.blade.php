@@ -41,15 +41,17 @@ label
             <label>تاریخ ایجاد کاربر : </label>
         </div>
         <div class="col-sm-4">
-            <label class="form-control">{{ $Users->CreateDate }}</label>
+            <label class="form-control" dir="ltr" style="text-align: right;">{{ $Users->CreateDate }}</label>
         </div>
         <div class="col-sm-2" style="padding:.5rem;">
             <label>تاریخ آخرین ورود به سیستم : </label>
         </div>
         <div class="col-sm-4">
             @if (!empty($Users->LastLoginDate))
-                <label class="form-control">{{ $Users->LastLoginDate }}</label>
-            @endif
+                <label class="form-control" dir="ltr" style="text-align: right;">{{ $Users->LastLoginDate }}</label>
+            @else
+            <label class="form-control"></label>
+            @endforelse
         </div>
     </div>
     <div class="form-group row" style="text-align:right;">
