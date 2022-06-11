@@ -195,7 +195,7 @@
                                 });
                                 $("#InputDiv").html('');
                                 $("#OutputDiv").html('');
-                                // window.setTimeout(function () {window.location.href = '/statisticreports'; }, 3000);
+                                window.setTimeout(function () {window.location.href = '{{URL::to('/')}}' + '/statisticreports'; }, 2000);
                             }
                         },
                         error: function(response) {

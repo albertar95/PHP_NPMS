@@ -6,6 +6,16 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-12">
+                    <div class="row" style="direction: ltr;margin: 10px;">
+                        @if (in_array('2', $sharedData['UserAccessedEntities']))
+                            @if (explode(',', $sharedData['UserAccessedSub']->where('entity', '=', 2)->pluck('rowValue')[0])[4] == 1)
+                                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                    <a id="btnReturn" class="btn btn-outline-info btn-block"
+                                        href="{{ URL::to('/statisticreports') }}">&larr; بازگشت</a>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
                     <div class="p-5">
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">{{ $report->ReportName }}</h1>

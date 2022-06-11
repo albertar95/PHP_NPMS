@@ -186,7 +186,7 @@ class ReportRepository extends BaseRepository implements IReportRepository
                                 $tmpConstaintAdd = false;
                             }
                             $query = Str::of($query)->append($paramsKey[$i]);
-                            $query = Str::of($query)->append(' = ');
+                            $query = Str::of($query)->append(' >= ');
                             $query = Str::of($query)->append("N'");
                             $query = Str::of($query)->append(Casts::EnglishToPersianDigits($paramsValue[$i]));
                             $query = Str::of($query)->append("'");

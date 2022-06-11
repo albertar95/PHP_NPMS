@@ -681,7 +681,7 @@ class UserRepository extends BaseRepository implements IUserRepository
     {
         $res = [];
         $scholarCount = Scholars::all()->where('IsDeleted', '=', false)->count();
-        $ProjectCount = Projects::all()->count();
+        $ProjectCount = Projects::all()->where('IsDisabled', '=', false)->count();
         $DoneProjectCount = Projects::all()->where('FinalApprove', '=', true)->count();
         $res = [$scholarCount, $ProjectCount, $DoneProjectCount, $ProjectCount - $DoneProjectCount];
         return $res;

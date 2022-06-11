@@ -169,7 +169,7 @@ class DataMapper
                 $result->Subject = $project->Subject;
                 $result->ProjectStatus = $project->ProjectStatus;
                 $result->ScholarId = $project->ScholarId;
-                $result->ScholarName = $project->scholar->FirstName;
+                $result->ScholarName = $project->scholar->FirstName." ".$project->scholar->LastName;
                 $result->UnitId = $project->UnitId;
                 $result->UnitName = $project->unit->Title;
                 $result->GroupId = $project->GroupId;

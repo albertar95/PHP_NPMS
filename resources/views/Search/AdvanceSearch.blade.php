@@ -21,7 +21,7 @@
                                         name="Subject" hidden>
                                 </div>
                                 <div class="col-sm-2" style="display:flex;">
-                                    <input type="checkbox" style="width:1rem;margin:unset !important;" id="cbSimilar"
+                                    <input type="checkbox" style="width:18px !important;margin:unset !important;" id="cbSimilar"
                                         class="form-control" onclick="$(this).attr('value', this.checked ? '1' : '0')"
                                         value="1" checked />
                                     <label for="cbSimilar" style="margin:.45rem .45rem 0 0">شامل شود</label>

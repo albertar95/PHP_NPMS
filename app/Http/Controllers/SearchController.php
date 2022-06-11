@@ -187,11 +187,12 @@ class SearchController extends Controller
             $Scholars = $response[0];
             $Users = $response[2];
             $BaseInfo = $response[3];
+            $exportOptions = "1,1,1,1";
             $ReportDate = substr(new VertaVerta(Carbon::now()),0,10);
             $ReportTime = substr(new VertaVerta(Carbon::now()),10,10);
             $ConfidentLevel = 0;
             $result->HasValue = true;
-            $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel'))->render();
+            $result->Html = view('Search._DownloadAdvancedSearchResult',compact('Projects','Scholars','Users','BaseInfo','ReportDate','ReportTime','ConfidentLevel','exportOptions'))->render();
             $api->AddLog(auth()->user(),$SearchInputs->ip(),35,0,3,1,"");
             return response()->json($result);
         } catch (\Exception $e) {
